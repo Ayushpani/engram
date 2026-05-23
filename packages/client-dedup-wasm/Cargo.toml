@@ -16,6 +16,11 @@ tract-onnx = "0.21.6"
 tokenizers = { version = "0.19.1", default-features = false }
 wasm-math = { path = "../wasm-math" }
 
+# getrandom must be explicitly enabled for wasm32-unknown-unknown targets.
+[dependencies.getrandom]
+version = "0.2"
+features = ["js"]
+
 [profile.release]
 opt-level = "s"     # Size optimization is critical for browser payload
 lto = true
