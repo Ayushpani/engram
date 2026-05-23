@@ -17,6 +17,9 @@ wasm-math = { path = "../wasm-math" }
 # Note: tract-onnx and tokenizers are native-only libraries and cannot compile
 # to wasm32-unknown-unknown. Embedding generation is handled server-side.
 
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
 [profile.release]
 opt-level = "s"
 lto = true

@@ -19,6 +19,12 @@ wasm-math = { path = "../wasm-math" }
 # to wasm32-unknown-unknown. ONNX inference is handled in the Cloudflare Worker
 # via @huggingface/transformers (ONNX Runtime Web), not in Rust WASM.
 
+[package.metadata.wasm-pack.profile.release]
+# wasm-opt from wasm-pack's bundled Binaryen doesn't enable bulk-memory/SIMD
+# features by default, causing validation failures. Rust's LTO + opt-level="s"
+# is sufficient optimization without the post-processing step.
+wasm-opt = false
+
 [profile.release]
 opt-level = "s"
 lto = true
