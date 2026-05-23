@@ -66,6 +66,7 @@ app.post('/v3/search/rerank', async (c) => {
       results: ranked,
       latencyMs: Date.now() - start,
       model: '@cf/baai/bge-reranker-base',
+      debugAiResult: rawAiResult, // Let's see EXACTLY what it's returning
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
