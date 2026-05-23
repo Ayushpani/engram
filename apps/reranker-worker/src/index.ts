@@ -29,7 +29,7 @@ app.post('/v3/search/rerank', async (c) => {
       '@cf/baai/bge-reranker-base' as BaseAiTextClassificationModels,
       {
         query: query,
-        contexts: candidates.map((candidate) => candidate.content),
+        contexts: candidates.map((candidate) => ({ text: candidate.content })),
       } as any
     ) as unknown as Array<{ score: number }>;
 
