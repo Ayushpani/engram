@@ -5,10 +5,11 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "build": "tsc --noEmit"
   },
   "dependencies": {
-    "@engram/edge-reranker": "workspace:*",
+    "@huggingface/transformers": "^3.5.0",
     "hono": "^4.3.0"
   },
   "devDependencies": {

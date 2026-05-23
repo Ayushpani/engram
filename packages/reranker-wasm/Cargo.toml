@@ -2,7 +2,7 @@
 name = "reranker-wasm"
 version = "0.1.0"
 edition = "2021"
-description = "WASM-compatible Cross-Encoder Reranker for SuperMemory"
+description = "WASM-compatible scoring utilities for the Engram Edge Reranker"
 
 [lib]
 crate-type = ["cdylib"]
@@ -12,20 +12,16 @@ wasm-bindgen = "0.2.89"
 serde = { version = "1.0", features = ["derive"] }
 serde-wasm-bindgen = "0.6.3"
 js-sys = "0.3.66"
-tract-onnx = "0.21.6" # Using tract as it's highly optimized and WASM-friendly
-tokenizers = { version = "0.19.1", default-features = false } # Disable default features for WASM compatibility
 serde_json = "1.0"
 wasm-math = { path = "../wasm-math" }
 
-# getrandom must be explicitly enabled for wasm32-unknown-unknown targets.
-# Without this feature flag, any transitive dependency on getrandom fails to compile.
-[dependencies.getrandom]
-version = "0.2"
-features = ["js"]
+# Note: tract-onnx and tokenizers are native-only libraries and cannot compile
+# to wasm32-unknown-unknown. ONNX inference is handled in the Cloudflare Worker
+# via @huggingface/transformers (ONNX Runtime Web), not in Rust WASM.
 
 [profile.release]
-opt-level = "s"     # Optimize for size
-lto = true          # Enable Link Time Optimization
-codegen-units = 1   # Reduce number of codegen units to increase optimizations
-panic = "abort"     # Abort on panic
-strip = true        # Strip symbols from binary
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

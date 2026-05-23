@@ -1,4 +1,4 @@
-name: Deploy Edge Reranker WASM
+name: Deploy Edge Reranker
 
 on:
   push:
@@ -6,15 +6,19 @@ on:
       - main
     paths:
       - 'packages/reranker-wasm/**'
+      - 'packages/client-dedup-wasm/**'
+      - 'packages/wasm-math/**'
       - 'apps/reranker-worker/**'
-      - 'packages/edge-reranker/**'
       - '.github/workflows/deploy-reranker.yml'
   workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -25,12 +29,10 @@ jobs:
           targets: wasm32-unknown-unknown
 
       - name: Install wasm-pack
-        uses: jetli/wasm-pack-action@v0.4.0
-        with:
-          version: 'latest'
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
@@ -41,13 +43,13 @@ jobs:
         working-directory: packages/wasm-math
         run: wasm-pack build --target bundler --release
 
-      - name: Build Reranker WASM
+      - name: Build Reranker WASM Utilities
         working-directory: packages/reranker-wasm
         run: wasm-pack build --target bundler --release
 
-      - name: Build Edge Reranker Wrapper
-        working-directory: packages/edge-reranker
-        run: bun run build
+      - name: Build Client Dedup WASM
+        working-directory: packages/client-dedup-wasm
+        run: wasm-pack build --target bundler --release
 
       - name: Deploy Cloudflare Worker
         working-directory: apps/reranker-worker
