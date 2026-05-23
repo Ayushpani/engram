@@ -1,0 +1,15 @@
+{
+	"apps": {
+		"apps/web": { "name": "app.dev.engram", "script": "dev:app" },
+		"apps/mcp": { "name": "mcp.dev.engram", "script": "dev:app" },
+		"apps/docs": {
+			"name": "docs.dev.engram",
+			"script": "dev:app",
+			"appPort": 3003
+		},
+		"apps/memory-graph-playground": {
+			"name": "graph.dev.engram",
+			"script": "dev:app"
+		}
+	}
+}

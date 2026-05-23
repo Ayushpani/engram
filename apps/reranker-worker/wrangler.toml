@@ -1,0 +1,10 @@
+name = "engram-edge-reranker"
+main = "src/index.ts"
+compatibility_date = "2024-05-20"
+usage_model = "unbound" # Unlocks 2GB memory cap, bypassing the 128MB limit
+
+[placement]
+mode = "smart"
+
+[observability]
+enabled = true

@@ -1,0 +1,32 @@
+import { OpenAI } from "openai"
+import { withEngram } from "@engram/tools/openai"
+
+export const runtime = "nodejs"
+
+export async function POST(req: Request) {
+	const { messages, conversationId } = (await req.json()) as {
+		messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[]
+		conversationId: string
+	}
+
+	const openai = new OpenAI({
+		apiKey: process.env.OPENAI_API_KEY,
+	})
+
+	const openaiWithEngram = withEngram(openai, {
+		containerTag: "user-123",
+		customId: conversationId,
+		mode: "full",
+		addMemory: "always",
+		verbose: true,
+		baseUrl: process.env.ENGRAM_BASE_URL,
+	})
+
+	const completion = await openaiWithEngram.chat.completions.create({
+		model: "gpt-4o-mini",
+		messages,
+	})
+
+	const message = completion.choices?.[0]?.message
+	return Response.json({ message, usage: completion.usage })
+}

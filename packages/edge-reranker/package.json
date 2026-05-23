@@ -1,0 +1,23 @@
+{
+  "name": "@engram/edge-reranker",
+  "version": "1.0.0",
+  "description": "Blazing fast Edge-optimized Cross-Encoder Reranker using WASM",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "wasm",
+    "reranker",
+    "edge",
+    "cloudflare-workers",
+    "agentic-memory"
+  ],
+  "author": "Engram Team",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
