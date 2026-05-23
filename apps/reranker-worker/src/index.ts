@@ -24,11 +24,13 @@ app.post('/v3/search/rerank', async (c) => {
 
     // Use Cloudflare Workers AI's native reranker model.
     // This runs on Cloudflare's GPU infrastructure — no WASM, no ONNX, no external deps.
+    // API schema: { query: string, contexts: string[] }
     const rerankerResponse = await c.env.AI.run(
       '@cf/baai/bge-reranker-base' as BaseAiTextClassificationModels,
       {
-        text: candidates.map((candidate) => [query, candidate.content]),
-      }
+        query: query,
+        contexts: candidates.map((candidate) => candidate.content),
+      } as any
     ) as unknown as Array<{ score: number }>;
 
     // Combine cross-encoder score with the original vector similarity score
