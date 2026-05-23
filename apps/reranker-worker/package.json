@@ -9,7 +9,6 @@
     "build": "tsc --noEmit"
   },
   "dependencies": {
-    "@huggingface/transformers": "^3.5.0",
     "hono": "^4.3.0"
   },
   "devDependencies": {
