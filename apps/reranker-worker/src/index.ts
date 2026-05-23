@@ -33,22 +33,18 @@ app.post('/v3/search/rerank', async (c) => {
       } as any
     );
 
-    // Cloudflare AI run() binding can sometimes wrap the array in a 'result' object, 
-    // and the elements can be either raw numbers or { score: number } objects.
+    // Cloudflare AI run() binding wraps the array in a 'response' object,
+    // and returns results SORTED by score. We must match them back using the 'id' field!
     const scoresArray = Array.isArray(rawAiResult) 
       ? rawAiResult 
-      : (rawAiResult?.result || rawAiResult?.data || rawAiResult || []);
+      : (rawAiResult?.response || rawAiResult?.result || rawAiResult?.data || []);
 
     // Combine cross-encoder score with the original vector similarity score
     const ranked = candidates
       .map((candidate, i) => {
-        const item = scoresArray[i];
-        let cScore = 0;
-        if (typeof item === 'number') {
-          cScore = item;
-        } else if (item && typeof item === 'object' && typeof item.score === 'number') {
-          cScore = item.score;
-        }
+        // Find the score for this specific candidate index
+        const match = scoresArray.find((r: any) => r.id === i);
+        const cScore = match?.score ?? 0;
 
         return {
           ...candidate,
