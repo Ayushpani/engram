@@ -2,9 +2,19 @@ import { Hono } from 'hono';
 import { pipeline, env } from '@huggingface/transformers';
 
 // Configure transformers.js for the Cloudflare Workers environment.
-// Disable local model caching — models are fetched from Hugging Face Hub.
 env.useBrowserCache = false;
 env.allowLocalModels = false;
+
+// CRITICAL FOR CLOUDFLARE WORKERS:
+// Cloudflare isolates do not support WebAssembly threading/pthreads.
+// We must force single-threaded mode and disable SIMD to prevent the runtime
+// from looking for 'ort-wasm-simd-threaded.jsep.mjs'.
+env.backends.onnx.wasm.numThreads = 1;
+env.backends.onnx.wasm.simd = false;
+
+// Tell the ONNX Runtime where to fetch the non-threaded WASM binaries.
+env.backends.onnx.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers/dist/';
+
 
 type Bindings = {
   MODEL_CDN_BASE: string;
