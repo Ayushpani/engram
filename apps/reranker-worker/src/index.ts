@@ -25,25 +25,39 @@ app.post('/v3/search/rerank', async (c) => {
     // Use Cloudflare Workers AI's native reranker model.
     // This runs on Cloudflare's GPU infrastructure — no WASM, no ONNX, no external deps.
     // API schema: { query: string, contexts: string[] }
-    const rerankerResponse = await c.env.AI.run(
+    const rawAiResult: any = await c.env.AI.run(
       '@cf/baai/bge-reranker-base' as BaseAiTextClassificationModels,
       {
         query: query,
         contexts: candidates.map((candidate) => ({ text: candidate.content })),
       } as any
-    ) as unknown as Array<{ score: number }>;
+    );
+
+    // Cloudflare AI run() binding can sometimes wrap the array in a 'result' object, 
+    // and the elements can be either raw numbers or { score: number } objects.
+    const scoresArray = Array.isArray(rawAiResult) 
+      ? rawAiResult 
+      : (rawAiResult?.result || rawAiResult?.data || rawAiResult || []);
 
     // Combine cross-encoder score with the original vector similarity score
     const ranked = candidates
-      .map((candidate, i) => ({
-        ...candidate,
-        crossEncoderScore: rerankerResponse[i]?.score ?? 0,
-        vectorScore: candidate.score ?? 0,
-        // Weighted blend: 70% cross-encoder, 30% vector similarity
-        combinedScore:
-          0.7 * (rerankerResponse[i]?.score ?? 0) +
-          0.3 * (candidate.score ?? 0),
-      }))
+      .map((candidate, i) => {
+        const item = scoresArray[i];
+        let cScore = 0;
+        if (typeof item === 'number') {
+          cScore = item;
+        } else if (item && typeof item === 'object' && typeof item.score === 'number') {
+          cScore = item.score;
+        }
+
+        return {
+          ...candidate,
+          crossEncoderScore: cScore,
+          vectorScore: candidate.score ?? 0,
+          // Weighted blend: 70% cross-encoder, 30% vector similarity
+          combinedScore: 0.7 * cScore + 0.3 * (candidate.score ?? 0),
+        };
+      })
       .sort((a, b) => b.combinedScore - a.combinedScore)
       .slice(0, topK);
 
