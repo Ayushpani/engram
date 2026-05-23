@@ -16,17 +16,17 @@ Engram solves these challenges through a three-tiered architecture:
 
 1. **Client-Side WASM Deduplication**: Before data ever reaches the server, Engram filters out exact and near-exact duplicate memories natively in the browser or client environment using an ultra-fast WebAssembly port of the `all-MiniLM-L6-v2` quantization model. This prevents database bloat at the source.
 2. **Graph-Based Memory Consolidation**: Periodically, an asynchronous worker reconstructs the entire user memory space into an undirected graph. Using the Louvain Modularity algorithm compiled to WASM (`memory-consolidator`), Engram detects dense clusters of highly related memories and uses an LLM to synthesize them into unified, high-density facts.
-3. **Agentic Edge Reranking**: During retrieval, candidate documents from the Vector Database are intercepted at the Cloudflare Edge. A localized MS-MARCO Cross-Encoder runs native WASM inference to re-score documents based on temporal recency, logical contradictions, and adversarial metadata, ensuring the agent only receives the absolute ground-truth context.
+3. **Agentic Edge Reranking**: During retrieval, candidate documents from the Vector Database are intercepted at the Cloudflare Edge. We utilize Cloudflare Workers AI native bindings to execute a Cross-Encoder (`@cf/baai/bge-reranker-base`) on Cloudflare's serverless GPU infrastructure. This re-scores and re-orders documents to ensure the agent receives the most relevant context possible.
 
-## LongMemEval Benchmark Results
+*(Note: While we maintain Rust/WASM crates for local inference, our production Edge Reranker currently leverages Cloudflare's native AI infrastructure to bypass WebAssembly memory limits and dynamic import restrictions).*
 
-Engram is rigorously tested against the LongMemEval Adversarial Benchmark suite, which measures an agentic memory system's ability to resist context poisoning, temporal degradation, and contradiction injection.
+## Benchmarking
 
-In our latest automated runs:
-- **Baseline Vector Search (Standard RAG)**: 0/5 Adversarial Pass Rate
-- **Engram Agentic Reranker**: 5/5 Adversarial Pass Rate
+Engram includes a robust benchmark suite (`packages/benchmark`) designed to measure latency and test integration against the live Cloudflare Workers API. 
 
-The system actively prevents "near-miss" hallucinations and temporal overrides, demonstrating unparalleled accuracy compared to legacy vector-only architectures.
+Our edge reranker currently achieves a p50 end-to-end latency of ~300ms over the internet (with internal Cloudflare GPU execution taking 60-150ms) when rescuing relevant documents from a simulated vector database. 
+
+True end-to-end LongMemEval memory recall benchmarking (testing resistance against context poisoning, temporal degradation, and contradiction injection against real ingested memories) is scheduled for the next phase of development.
 
 ## Monorepo Architecture
 
@@ -37,11 +37,12 @@ This project is structured as a Turbo Monorepo using Bun for high-speed package 
 - **`mcp`**: The Model Context Protocol (MCP) server running on Cloudflare Workers. This allows seamless connection to tools like Claude Desktop, Cursor, and OpenClaw.
 - **`browser-extension`**: Chrome extension for capturing memory context directly from the web.
 - **`raycast-extension`**: Desktop native integration for MacOS users.
+- **`reranker-worker`**: The Cloudflare Worker that natively interfaces with Workers AI for edge-side memory reranking.
 
 ### Core Packages (`packages/`)
 - **`client-dedup-wasm`**: Rust-based WASM package for fast cosine similarity and deduplication.
 - **`memory-consolidator`**: Rust-based WASM package for Louvain graph clustering.
-- **`benchmark`**: The LongMemEval test runner and dataset generator.
+- **`benchmark`**: The test runner and dataset generator for API benchmarking.
 - **`lib`**: Shared database schemas (Drizzle ORM) and utility functions.
 - **`tools`**: Integrations and connector logic for third-party platforms.
 
@@ -60,6 +61,7 @@ The included `apps/mcp` package runs a fully compliant MCP Server. This enables 
 
 Engram is built for edge-native execution.
 - **Compute**: Cloudflare Workers for ultra-low latency global routing.
+- **AI Infrastructure**: Cloudflare Workers AI for cross-encoder reranking.
 - **Database**: Hyperdrive connected to distributed PostgreSQL.
 - **Vector Storage**: Cloudflare Vectorize for nearest-neighbor candidate generation.
 - **State**: Cloudflare Durable Objects to manage concurrent memory consolidation streams.
