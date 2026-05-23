@@ -1,7 +1,11 @@
 name = "engram-edge-reranker"
 main = "src/index.ts"
 compatibility_date = "2024-05-20"
-usage_model = "unbound" # Unlocks 2GB memory cap, bypassing the 128MB limit
+
+# Explicitly deploy to workers.dev subdomain.
+# Requires a workers.dev subdomain to be registered in the Cloudflare dashboard:
+# https://dash.cloudflare.com -> Workers & Pages -> Overview -> Set subdomain
+workers_dev = true
 
 [placement]
 mode = "smart"
