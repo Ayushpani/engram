@@ -13,7 +13,9 @@ env.backends.onnx.wasm.numThreads = 1;
 env.backends.onnx.wasm.simd = false;
 
 // Tell the ONNX Runtime where to fetch the non-threaded WASM binaries.
-env.backends.onnx.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers/dist/';
+// Note: Do NOT use a trailing slash, as ONNX Runtime Web has a bug where it merges
+// it into "https:/cdn..." when dynamically importing.
+env.backends.onnx.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0/dist';
 
 
 type Bindings = {
@@ -42,7 +44,9 @@ async function getReranker() {
     'Xenova/ms-marco-MiniLM-L-6-v2',
     {
       quantized: true, // Uses the INT8 ONNX model (~22MB), fits in Unbound Worker
-      device: 'auto',
+      // CRITICAL: Force 'wasm' device instead of 'auto'. 
+      // 'auto' tries to load WebGPU (JSEP) which forces multi-threading and crashes Cloudflare Workers.
+      device: 'wasm',
     }
   );
 
