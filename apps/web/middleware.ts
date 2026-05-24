@@ -24,6 +24,11 @@ export default async function proxy(request: Request) {
 	}
 
 	if (url.pathname.startsWith("/api/")) {
+		// Allow public access to the waitlist API
+		if (url.pathname === "/api/waitlist") {
+			return NextResponse.next()
+		}
+
 		if (!sessionCookie) {
 			console.debug("[MIDDLEWARE] API route without session, returning 401")
 			return new Response(JSON.stringify({ error: "Unauthorized" }), {
