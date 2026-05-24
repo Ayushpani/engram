@@ -1,26 +1,26 @@
-# @engram/tools
+# @smaran/tools
 
-Memory tools for AI SDK, OpenAI, and Mastra with engram
+Memory tools for AI SDK, OpenAI, and Mastra with smaran
 
-This package provides engram tools for AI SDK, OpenAI, and Mastra through dedicated submodule exports, each with function-based architectures optimized for their respective use cases.
+This package provides smaran tools for AI SDK, OpenAI, and Mastra through dedicated submodule exports, each with function-based architectures optimized for their respective use cases.
 
 ## Installation
 
 ```bash
-npm install @engram/tools
+npm install @smaran/tools
 ```
 
 ## Usage
 
 The package provides three submodule imports:
-- `@engram/tools/ai-sdk` - For use with the AI SDK framework (includes `withEngram` middleware)
-- `@engram/tools/openai` - For use with OpenAI SDK (includes `withEngram` middleware and function calling tools)
-- `@engram/tools/mastra` - For use with Mastra AI agents (includes `withEngram` wrapper and processors)
+- `@smaran/tools/ai-sdk` - For use with the AI SDK framework (includes `withSmaran` middleware)
+- `@smaran/tools/openai` - For use with OpenAI SDK (includes `withSmaran` middleware and function calling tools)
+- `@smaran/tools/mastra` - For use with Mastra AI agents (includes `withSmaran` wrapper and processors)
 
 ### AI SDK Usage
 
 ```typescript
-import { engramTools, searchMemoriesTool, addMemoryTool } from "@engram/tools/ai-sdk"
+import { smaranTools, searchMemoriesTool, addMemoryTool } from "@smaran/tools/ai-sdk"
 import { createOpenAI } from "@ai-sdk/openai"
 import { generateText } from "ai"
 
@@ -29,7 +29,7 @@ const openai = createOpenAI({
 })
 
 // Create all tools
-const tools = engramTools(process.env.ENGRAM_API_KEY!, {
+const tools = smaranTools(process.env.SMARAN_API_KEY!, {
   containerTags: ["your-user-id"],
 })
 
@@ -46,27 +46,27 @@ const result = await generateText({
 })
 
 // Or create individual tools
-const searchTool = searchMemoriesTool(process.env.ENGRAM_API_KEY!, {
+const searchTool = searchMemoriesTool(process.env.SMARAN_API_KEY!, {
   projectId: "your-project-id",
 })
 
-const addTool = addMemoryTool(process.env.ENGRAM_API_KEY!, {
+const addTool = addMemoryTool(process.env.SMARAN_API_KEY!, {
   projectId: "your-project-id",
 })
 ```
 
-#### AI SDK Middleware with Engram
+#### AI SDK Middleware with Smaran
 
-- `withEngram` will take advantage engram profile v4 endpoint personalized based on container tag
-- You can provide the Engram API key via the `apiKey` option to `withEngram` (recommended for browser usage), or fall back to `ENGRAM_API_KEY` in the environment for server usage.
+- `withSmaran` will take advantage smaran profile v4 endpoint personalized based on container tag
+- You can provide the Smaran API key via the `apiKey` option to `withSmaran` (recommended for browser usage), or fall back to `SMARAN_API_KEY` in the environment for server usage.
 - **Per-turn caching**: Memory injection is cached for tool-call continuations within the same user turn. The middleware detects when the AI SDK is continuing a multi-step flow (e.g., after a tool call) and reuses the cached memories instead of making redundant API calls. A fresh fetch occurs on each new user message turn.
 
 ```typescript
 import { generateText } from "ai"
-import { withEngram } from "@engram/tools/ai-sdk"
+import { withSmaran } from "@smaran/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
-const modelWithMemory = withEngram(openai("gpt-5"), {
+const modelWithMemory = withSmaran(openai("gpt-5"), {
 	containerTag: "user_id_life",
 	customId: "conversation-456",
 })
@@ -85,10 +85,10 @@ Enable verbose logging to see detailed information about memory search and trans
 
 ```typescript
 import { generateText } from "ai"
-import { withEngram } from "@engram/tools/ai-sdk"
+import { withSmaran } from "@smaran/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
-const modelWithMemory = withEngram(openai("gpt-5"), {
+const modelWithMemory = withSmaran(openai("gpt-5"), {
 	containerTag: "user_id_life",
 	customId: "conversation-456",
 	verbose: true,
@@ -104,12 +104,12 @@ console.log(result.text)
 
 When verbose mode is enabled, you'll see console output like:
 ```
-[engram] Searching memories for container: user_id_life
-[engram] User message: where do i live?
-[engram] System prompt exists: false
-[engram] Found 3 memories
-[engram] Memory content: You live in San Francisco, California. Your address is 123 Main Street...
-[engram] Creating new system prompt with memories
+[smaran] Searching memories for container: user_id_life
+[smaran] User message: where do i live?
+[smaran] System prompt exists: false
+[smaran] Found 3 memories
+[smaran] Memory content: You live in San Francisco, California. Your address is 123 Main Street...
+[smaran] Creating new system prompt with memories
 ```
 
 #### Memory Search Modes
@@ -119,17 +119,17 @@ The middleware supports different modes for memory retrieval:
 **Profile Mode (Default)** - Retrieves user profile memories without query filtering:
 ```typescript
 import { generateText } from "ai"
-import { withEngram } from "@engram/tools/ai-sdk"
+import { withSmaran } from "@smaran/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 // Uses profile mode by default - gets all user profile memories
-const modelWithMemory = withEngram(openai("gpt-4"), {
+const modelWithMemory = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conversation-456",
 })
 
 // Explicitly specify profile mode
-const modelWithProfile = withEngram(openai("gpt-4"), {
+const modelWithProfile = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conversation-456",
   mode: "profile",
@@ -144,10 +144,10 @@ const result = await generateText({
 **Query Mode** - Searches memories based on the user's message:
 ```typescript
 import { generateText } from "ai"
-import { withEngram } from "@engram/tools/ai-sdk"
+import { withSmaran } from "@smaran/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
-const modelWithQuery = withEngram(openai("gpt-4"), {
+const modelWithQuery = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conversation-456",
   mode: "query",
@@ -162,10 +162,10 @@ const result = await generateText({
 **Full Mode** - Combines both profile and query results:
 ```typescript
 import { generateText } from "ai"
-import { withEngram } from "@engram/tools/ai-sdk"
+import { withSmaran } from "@smaran/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
-const modelWithFull = withEngram(openai("gpt-4"), {
+const modelWithFull = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conversation-456",
   mode: "full",
@@ -184,10 +184,10 @@ The middleware can automatically save user messages as memories:
 **Always Save Memories** - Automatically stores every user message as a memory:
 ```typescript
 import { generateText } from "ai"
-import { withEngram } from "@engram/tools/ai-sdk"
+import { withSmaran } from "@smaran/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
-const modelWithAutoSave = withEngram(openai("gpt-4"), {
+const modelWithAutoSave = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conversation-456",
   addMemory: "always",
@@ -202,7 +202,7 @@ const result = await generateText({
 
 **Never Save Memories** - Only retrieves memories without storing new ones:
 ```typescript
-const modelWithNoSave = withEngram(openai("gpt-4"), {
+const modelWithNoSave = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conversation-456",
   addMemory: "never",  // explicit since default is now "always"
@@ -211,7 +211,7 @@ const modelWithNoSave = withEngram(openai("gpt-4"), {
 
 **Combined Options** - Use verbose logging with specific modes and memory storage:
 ```typescript
-const modelWithOptions = withEngram(openai("gpt-4"), {
+const modelWithOptions = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conversation-456",
   mode: "profile",
@@ -229,7 +229,7 @@ Customize how memories are formatted and injected into the system prompt using t
 
 ```typescript
 import { generateText } from "ai"
-import { withEngram, type MemoryPromptData } from "@engram/tools/ai-sdk"
+import { withSmaran, type MemoryPromptData } from "@smaran/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 const customPrompt = (data: MemoryPromptData) => `
@@ -240,7 +240,7 @@ ${data.generalSearchMemories}
 </user_memories>
 `.trim()
 
-const modelWithCustomPrompt = withEngram(openai("gpt-4"), {
+const modelWithCustomPrompt = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conversation-456",
   mode: "full",
@@ -260,15 +260,15 @@ The `MemoryPromptData` object provides:
 
 ### OpenAI SDK Usage
 
-#### OpenAI Middleware with Engram
+#### OpenAI Middleware with Smaran
 
-The `withEngram` function creates an OpenAI client with SuperMemory middleware automatically injected:
+The `withSmaran` function creates an OpenAI client with SuperMemory middleware automatically injected:
 
 ```typescript
-import { withEngram } from "@engram/tools/openai"
+import { withSmaran } from "@smaran/tools/openai"
 
-// Create OpenAI client with engram middleware
-const openaiWithEngram = withEngram(openai, {
+// Create OpenAI client with smaran middleware
+const openaiWithSmaran = withSmaran(openai, {
   containerTag: "user-123",      // Required: identifies the user/container
   customId: "conversation-456",  // Required: groups messages into the same document 
   mode: "full",
@@ -277,7 +277,7 @@ const openaiWithEngram = withEngram(openai, {
 })
 
 // Use directly with chat completions - memories are automatically injected
-const completion = await openaiWithEngram.chat.completions.create({
+const completion = await openaiWithSmaran.chat.completions.create({
   model: "gpt-4o-mini",
   messages: [
     { role: "user", content: "What do you remember about my preferences?" }
@@ -292,7 +292,7 @@ console.log(completion.choices[0]?.message?.content)
 The middleware supports the same configuration options as the AI SDK version:
 
 ```typescript
-const openaiWithEngram = withEngram(openai, {
+const openaiWithSmaran = withSmaran(openai, {
   containerTag: "user-123",      // Required: identifies the user/container
   customId: "conversation-456",  // Required: groups messages for contextual memory
   mode: "full",                  // "profile" | "query" | "full"
@@ -307,7 +307,7 @@ Here's a complete example for a Next.js API route:
 
 ```typescript
 // app/api/chat/route.ts
-import { withEngram } from "@engram/tools/openai"
+import { withSmaran } from "@smaran/tools/openai"
 import type { OpenAI as OpenAIType } from "openai"
 
 export async function POST(req: Request) {
@@ -316,7 +316,7 @@ export async function POST(req: Request) {
     conversationId: string
   }
 
-  const openaiWithEngram = withEngram(openai, {
+  const openaiWithSmaran = withSmaran(openai, {
     containerTag: "user-123",
     customId: conversationId,
     mode: "full",
@@ -324,7 +324,7 @@ export async function POST(req: Request) {
     verbose: true,
   })
 
-  const completion = await openaiWithEngram.chat.completions.create({
+  const completion = await openaiWithSmaran.chat.completions.create({
     model: "gpt-4o-mini",
     messages,
   })
@@ -337,7 +337,7 @@ export async function POST(req: Request) {
 ### OpenAI Function Calling Usage
 
 ```typescript
-import { engramTools, getToolDefinitions, createToolCallExecutor } from "@engram/tools/openai"
+import { smaranTools, getToolDefinitions, createToolCallExecutor } from "@smaran/tools/openai"
 import OpenAI from "openai"
 
 const client = new OpenAI({
@@ -348,7 +348,7 @@ const client = new OpenAI({
 const toolDefinitions = getToolDefinitions()
 
 // Create tool executor
-const executeToolCall = createToolCallExecutor(process.env.ENGRAM_API_KEY!, {
+const executeToolCall = createToolCallExecutor(process.env.SMARAN_API_KEY!, {
   projectId: "your-project-id",
 })
 
@@ -373,7 +373,7 @@ if (completion.choices[0]?.message.tool_calls) {
 }
 
 // Or create individual function-based tools
-const tools = engramTools(process.env.ENGRAM_API_KEY!, {
+const tools = smaranTools(process.env.SMARAN_API_KEY!, {
   containerTags: ["your-user-id"],
 })
 
@@ -391,19 +391,19 @@ const addResult = await tools.addMemory({
 
 Add persistent memory to [Mastra](https://mastra.ai) AI agents. The integration provides processors that:
 - **Input Processor**: Fetches relevant memories and injects them into the system prompt before LLM calls
-- **Output Processor**: Saves conversations to Engram after responses (enabled by default)
+- **Output Processor**: Saves conversations to Smaran after responses (enabled by default)
 
-#### Quick Start with `withEngram` Wrapper
+#### Quick Start with `withSmaran` Wrapper
 
 The simplest way to add memory to a Mastra agent - wrap your config before creating the Agent:
 
 ```typescript
 import { Agent } from "@mastra/core/agent"
-import { withEngram } from "@engram/tools/mastra"
+import { withSmaran } from "@smaran/tools/mastra"
 import { openai } from "@ai-sdk/openai"
 
 // Create agent with memory-enhanced config
-const agent = new Agent(withEngram(
+const agent = new Agent(withSmaran(
   {
     id: "my-assistant",
     name: "My Assistant",
@@ -427,10 +427,10 @@ For fine-grained control, use processors directly:
 
 ```typescript
 import { Agent } from "@mastra/core/agent"
-import { createEngramProcessors } from "@engram/tools/mastra"
+import { createSmaranProcessors } from "@smaran/tools/mastra"
 import { openai } from "@ai-sdk/openai"
 
-const { input, output } = createEngramProcessors({
+const { input, output } = createSmaranProcessors({
   containerTag: "user-123",
   customId: "conv-456",
   mode: "full",
@@ -455,14 +455,14 @@ Here's a full example showing a multi-turn conversation with memory:
 
 ```typescript
 import { Agent } from "@mastra/core/agent"
-import { createEngramProcessors } from "@engram/tools/mastra"
+import { createSmaranProcessors } from "@smaran/tools/mastra"
 import { openai } from "@ai-sdk/openai"
 
 async function main() {
   const userId = "user-alex-123"
   const customId = `thread-${Date.now()}`
 
-  const { input, output } = createEngramProcessors({
+  const { input, output } = createSmaranProcessors({
     containerTag: userId,
     customId,
     mode: "profile",      // Fetch user profile memories
@@ -501,21 +501,21 @@ main()
 
 ```typescript
 // Profile mode - good for general personalization
-const { input } = createEngramProcessors({
+const { input } = createSmaranProcessors({
   containerTag: "user-123",
   customId: "conv-456",
   mode: "profile",
 })
 
 // Query mode - good for specific lookups
-const { input } = createEngramProcessors({
+const { input } = createSmaranProcessors({
   containerTag: "user-123",
   customId: "conv-456",
   mode: "query",
 })
 
 // Full mode - comprehensive context
-const { input } = createEngramProcessors({
+const { input } = createSmaranProcessors({
   containerTag: "user-123",
   customId: "conv-456",
   mode: "full",
@@ -527,7 +527,7 @@ const { input } = createEngramProcessors({
 Customize how memories are formatted in the system prompt:
 
 ```typescript
-import { createEngramProcessors, type MemoryPromptData } from "@engram/tools/mastra"
+import { createSmaranProcessors, type MemoryPromptData } from "@smaran/tools/mastra"
 
 const customTemplate = (data: MemoryPromptData) => `
 <user_context>
@@ -536,7 +536,7 @@ ${data.generalSearchMemories}
 </user_context>
 `.trim()
 
-const { input, output } = createEngramProcessors({
+const { input, output } = createSmaranProcessors({
   containerTag: "user-123",
   customId: "conv-456",
   mode: "full",
@@ -551,9 +551,9 @@ For server setups where one agent instance handles multiple concurrent conversat
 ```typescript
 import { Agent } from "@mastra/core/agent"
 import { RequestContext, MASTRA_THREAD_ID_KEY } from "@mastra/core/request-context"
-import { createEngramProcessors } from "@engram/tools/mastra"
+import { createSmaranProcessors } from "@smaran/tools/mastra"
 
-const { input, output } = createEngramProcessors({
+const { input, output } = createSmaranProcessors({
   containerTag: "user-123",
   customId: "fallback-conv",  // Used only when RequestContext doesn't provide a threadId
   mode: "profile",
@@ -580,10 +580,10 @@ const response = await agent.generate("Hello!", { requestContext: ctx })
 #### Mastra Configuration Options
 
 ```typescript
-interface EngramMastraOptions {
+interface SmaranMastraOptions {
   containerTag: string         // Required: User/container tag for scoping memories
   customId: string             // Required: Groups messages into a single document for contextual memory
-  apiKey?: string              // Engram API key (or use ENGRAM_API_KEY env var)
+  apiKey?: string              // Smaran API key (or use SMARAN_API_KEY env var)
   baseUrl?: string             // Custom API endpoint
   mode?: "profile" | "query" | "full"  // Memory search mode (default: "profile")
   addMemory?: "always" | "never"       // Auto-save conversations (default: "always")
@@ -597,7 +597,7 @@ interface EngramMastraOptions {
 Both modules accept the same configuration interface:
 
 ```typescript
-interface EngramToolsConfig {
+interface SmaranToolsConfig {
   baseUrl?: string
   containerTags?: string[]
   projectId?: string
@@ -605,7 +605,7 @@ interface EngramToolsConfig {
 }
 ```
 
-- **baseUrl**: Custom base URL for the engram API
+- **baseUrl**: Custom base URL for the smaran API
 - **containerTags**: Array of custom container tags (mutually exclusive with projectId)
 - **projectId**: Project ID which gets converted to container tag format (mutually exclusive with containerTags)
 - **strict**: Enable strict schema mode for OpenAI strict validation. When `true`, all schema properties are required (satisfies OpenAI strict mode). When `false` (default), optional fields remain optional for maximum compatibility with all models.
@@ -615,7 +615,7 @@ interface EngramToolsConfig {
 When using OpenAI-compatible providers with strict schema validation (e.g., OpenRouter with Azure OpenAI backend), enable strict mode to ensure all schema properties are included in the `required` array:
 
 ```typescript
-import { searchMemoriesTool, addMemoryTool } from "@engram/tools/ai-sdk"
+import { searchMemoriesTool, addMemoryTool } from "@smaran/tools/ai-sdk"
 import { createOpenRouter } from "@openrouter/ai-sdk-provider"
 import { streamText } from "ai"
 
@@ -641,18 +641,18 @@ const result = streamText({
 
 Without `strict: true`, optional fields like `includeFullDocs` and `limit` won't be in the `required` array, which will cause validation errors with OpenAI strict mode.
 
-### withEngram Middleware Options
+### withSmaran Middleware Options
 
-The `withEngram` middleware accepts a configuration object as the second argument:
+The `withSmaran` middleware accepts a configuration object as the second argument:
 
 ```typescript
-interface WithEngramOptions {
+interface WithSmaranOptions {
   containerTag: string  // Required: identifies the user/container
   customId: string      // Required: groups messages into the same document 
   verbose?: boolean
   mode?: "profile" | "query" | "full"
   addMemory?: "always" | "never"  // Default: "always"
-  /** Optional Engram API key. Use this in browser environments. */
+  /** Optional Smaran API key. Use this in browser environments. */
   apiKey?: string
   baseUrl?: string
   promptTemplate?: (data: MemoryPromptData) => string
@@ -687,25 +687,25 @@ Adds a new memory to the system.
 
 ## Claude Memory Tool
 
-Enable Claude to store and retrieve persistent memory across conversations using engram as the backend.
+Enable Claude to store and retrieve persistent memory across conversations using smaran as the backend.
 
 ### Installation
 
 ```bash
-npm install @engram/tools @anthropic-ai/sdk
+npm install @smaran/tools @anthropic-ai/sdk
 ```
 
 ### Basic Usage
 
 ```typescript
 import Anthropic from '@anthropic-ai/sdk'
-import { createClaudeMemoryTool } from '@engram/tools/claude-memory'
+import { createClaudeMemoryTool } from '@smaran/tools/claude-memory'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
 })
 
-const memoryTool = createClaudeMemoryTool(process.env.ENGRAM_API_KEY!, {
+const memoryTool = createClaudeMemoryTool(process.env.SMARAN_API_KEY!, {
   projectId: 'my-app',
 })
 
@@ -751,12 +751,12 @@ Claude can perform these memory operations automatically:
 - **`delete`** - Delete memory files
 - **`rename`** - Rename or move memory files
 
-All memory files are stored in engram with normalized paths and can be searched and retrieved across conversations.
+All memory files are stored in smaran with normalized paths and can be searched and retrieved across conversations.
 
 ## Environment Variables
 
 ```env
-ENGRAM_API_KEY=your_engram_api_key
+SMARAN_API_KEY=your_smaran_api_key
 ANTHROPIC_API_KEY=your_anthropic_api_key  # for Claude Memory Tool
-ENGRAM_BASE_URL=https://your-custom-url  # optional
+SMARAN_BASE_URL=https://your-custom-url  # optional
 ```

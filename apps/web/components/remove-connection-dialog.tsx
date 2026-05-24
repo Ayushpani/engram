@@ -104,7 +104,7 @@ export function RemoveConnectionDialog({
 								<span className="text-[#fafafa] font-medium">
 									{documentCount} {memoryNoun}
 								</span>{" "}
-								stay in Engram.
+								stay in Smaran.
 							</>
 						) : (
 							<>Sync stops. No memories were imported from this connection.</>

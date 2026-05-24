@@ -626,7 +626,7 @@ export function ConnectContent({ selectedProject }: ConnectContentProps) {
 							<div className="flex items-center gap-2">
 								<p className="truncate text-[16px] font-semibold">
 									<span className="hidden sm:inline">
-										Connected to Engram
+										Connected to Smaran
 									</span>
 									<span className="sm:hidden">Connections</span>
 								</p>
@@ -821,7 +821,7 @@ export function ConnectContent({ selectedProject }: ConnectContentProps) {
 										</button>{" "}
 										to get
 										<br />
-										Engram Connections
+										Smaran Connections
 									</>
 								)}
 							</p>

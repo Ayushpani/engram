@@ -160,7 +160,7 @@ function IdentityCard({ displayName }: { displayName: string }) {
 						{firstName ? `${firstName}'s` : "Your"}
 					</p>
 					<p className="text-white font-bold text-[20px] leading-none mt-1">
-						engram
+						smaran
 					</p>
 				</div>
 			</div>
@@ -289,7 +289,7 @@ export default function SettingsPage() {
 					>
 						<Logo className="h-7 shrink-0" />
 						<span className="ml-2 font-semibold text-white/90 tracking-tight">
-							engram
+							smaran
 						</span>
 					</button>
 					<span className="text-white/30 shrink-0" aria-hidden>

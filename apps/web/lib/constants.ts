@@ -3,7 +3,7 @@
  * the onboarding flow can redirect back to it after the user creates
  * their first organization.
  */
-export const PENDING_CONNECT_URL_KEY = "engram-pending-connect-url"
+export const PENDING_CONNECT_URL_KEY = "smaran-pending-connect-url"
 
 /**
  * Consume the pending plugin-connect URL from sessionStorage (if any)

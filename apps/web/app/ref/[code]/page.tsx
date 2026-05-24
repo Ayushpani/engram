@@ -27,7 +27,7 @@ export default function ReferralPage() {
 	} | null>(null)
 	const [copiedLink, setCopiedLink] = useState(false)
 
-	const referralLink = `https://engram.ai/ref/${referralCode}`
+	const referralLink = `https://smaran.ai/ref/${referralCode}`
 
 	// Verify referral code and get referrer info
 	useEffect(() => {
@@ -42,7 +42,7 @@ export default function ReferralPage() {
 				// For now, we'll assume it's valid - in the future this should call an API
 				setReferralData({
 					valid: true,
-					referrerName: "A engram user", // Placeholder - should come from API
+					referrerName: "A smaran user", // Placeholder - should come from API
 				})
 			} catch (error) {
 				console.error("Error checking referral:", error)
@@ -69,8 +69,8 @@ export default function ReferralPage() {
 	const handleShare = () => {
 		if (navigator.share) {
 			navigator.share({
-				title: "Join engram",
-				text: "I'm excited about engram - it's going to change how we store and interact with our memories!",
+				title: "Join smaran",
+				text: "I'm excited about smaran - it's going to change how we store and interact with our memories!",
 				url: referralLink,
 			})
 		} else {
@@ -104,7 +104,7 @@ export default function ReferralPage() {
 					<CardContent>
 						<div className="text-center">
 							<Button asChild className="w-full">
-								<Link href="https://engram.ai">Go to engram</Link>
+								<Link href="https://smaran.ai">Go to smaran</Link>
 							</Button>
 						</div>
 					</CardContent>
@@ -123,7 +123,7 @@ export default function ReferralPage() {
 							<ShareIcon className="size-8 text-orange-500" />
 						</div>
 						<CardTitle className="text-2xl font-bold text-white">
-							You're invited to engram!
+							You're invited to smaran!
 						</CardTitle>
 						<CardDescription className="text-white/60 mt-2">
 							{referralData.referrerName} invited you to join the future of
@@ -134,10 +134,10 @@ export default function ReferralPage() {
 						<div className="space-y-4">
 							<div className="bg-[#0f1419] rounded-lg p-4 border border-white/10">
 								<h3 className="text-white font-semibold mb-2">
-									What is engram?
+									What is smaran?
 								</h3>
 								<p className="text-white/70 text-sm leading-relaxed">
-									engram is an AI-powered personal knowledge base that
+									smaran is an AI-powered personal knowledge base that
 									helps you store, organize, and interact with all your digital
 									memories - from documents and links to conversations and
 									ideas.
@@ -146,10 +146,10 @@ export default function ReferralPage() {
 
 							<div className="text-center">
 								<Link
-									href="https://engram.ai"
+									href="https://smaran.ai"
 									className="text-orange-500 hover:text-orange-400 text-sm underline"
 								>
-									Learn more about engram
+									Learn more about smaran
 								</Link>
 							</div>
 						</div>
@@ -163,7 +163,7 @@ export default function ReferralPage() {
 							Share with friends
 						</CardTitle>
 						<CardDescription className="text-white/60">
-							Help others discover engram and earn priority access.
+							Help others discover smaran and earn priority access.
 						</CardDescription>
 					</CardHeader>
 					<CardContent>

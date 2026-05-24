@@ -1,11 +1,11 @@
-# Engram Cartesia SDK
+# Smaran Cartesia SDK
 
-Memory-enhanced voice agents with [Engram](https://engram.ai) and [Cartesia Line](https://cartesia.ai/agents).
+Memory-enhanced voice agents with [Smaran](https://smaran.ai) and [Cartesia Line](https://cartesia.ai/agents).
 
 ## Installation
 
 ```bash
-pip install engram-cartesia
+pip install smaran-cartesia
 ```
 
 ## Quick Start
@@ -14,7 +14,7 @@ pip install engram-cartesia
 import os
 from line.llm_agent import LlmAgent, LlmConfig
 from line.voice_agent_app import VoiceAgentApp
-from engram_cartesia import EngramCartesiaAgent
+from smaran_cartesia import SmaranCartesiaAgent
 
 async def get_agent(env, call_request):
     # Extract container_tag from call metadata (typically user ID)
@@ -29,10 +29,10 @@ async def get_agent(env, call_request):
         )
     )
 
-    # Wrap with Engram
-    memory_agent = EngramCartesiaAgent(
+    # Wrap with Smaran
+    memory_agent = SmaranCartesiaAgent(
         agent=base_agent,
-        api_key=os.getenv("ENGRAM_API_KEY"),
+        api_key=os.getenv("SMARAN_API_KEY"),
         container_tag=container_tag,
         custom_id=call_request.call_id,
     )
@@ -57,22 +57,22 @@ if __name__ == "__main__":
 | `custom_id`     | str          | **Yes**  | Custom ID for grouping conversation messages into a single document|
 | `add_memory`    | Literal      | No       | Memory persistence mode: "always" (default) or "never"             |
 | `container_tags`| List[str]    | No       | Additional container tags for organization (e.g., ["org", "prod"]) |
-| `api_key`       | str          | No       | Engram API key (or set `ENGRAM_API_KEY` env var)         |
+| `api_key`       | str          | No       | Smaran API key (or set `SMARAN_API_KEY` env var)         |
 | `config`        | MemoryConfig | No       | Advanced configuration                                             |
 | `base_url`      | str          | No       | Custom API endpoint                                                |
 
 ### Advanced Configuration
 
 ```python
-from engram_cartesia import EngramCartesiaAgent
+from smaran_cartesia import SmaranCartesiaAgent
 
-memory_agent = EngramCartesiaAgent(
+memory_agent = SmaranCartesiaAgent(
     agent=base_agent,
     container_tag="user-123",
     custom_id="conversation-456",
     add_memory="always",           # "always" (default) or "never"
     container_tags=["org-acme", "prod"],  # Optional: additional tags
-    config=EngramCartesiaAgent.MemoryConfig(
+    config=SmaranCartesiaAgent.MemoryConfig(
         search_limit=10,           # Max memories to retrieve
         search_threshold=0.1,      # Similarity threshold
         mode="full",               # "profile", "query", or "full"
@@ -81,7 +81,7 @@ memory_agent = EngramCartesiaAgent(
 )
 
 # Read-only mode - retrieve memories but don't save new ones
-read_only_agent = EngramCartesiaAgent(
+read_only_agent = SmaranCartesiaAgent(
     agent=base_agent,
     container_tag="user-123",
     custom_id="conversation-456",
@@ -100,14 +100,14 @@ read_only_agent = EngramCartesiaAgent(
 ## How It Works
 
 1. **Intercepts events** - Listens for `UserTurnEnded` events from Cartesia Line
-2. **Retrieves memories** - Queries Engram `/v4/profile` API with user's message
+2. **Retrieves memories** - Queries Smaran `/v4/profile` API with user's message
 3. **Enriches context** - Adds memories to event history as system message
-4. **Stores messages** - Sends conversation to Engram (background, non-blocking)
+4. **Stores messages** - Sends conversation to Smaran (background, non-blocking)
 5. **Passes to agent** - Forwards enriched event to wrapped LlmAgent
 
 ### What Gets Stored
 
-User and assistant messages are sent to Engram:
+User and assistant messages are sent to Smaran:
 
 ```json
 {
@@ -129,12 +129,12 @@ User Speaks (Audio)
 UserTurnEnded Event {content: "user message", history: [...]}
     ↓
 ┌──────────────────────────────────────────────┐
-│   ENGRAM CARTESIA AGENT (Wrapper)       │
+│   SMARAN CARTESIA AGENT (Wrapper)       │
 │                                              │
 │  process(env, event):                        │
 │    1. Intercept UserTurnEnded                │
 │    2. Extract user message                   │
-│    3. Query Engram API                  │
+│    3. Query Smaran API                  │
 │    4. Enrich event.history with memories     │
 │    5. Pass to wrapped LlmAgent               │
 │    6. Store conversation (async background)  │
@@ -164,7 +164,7 @@ import os
 from line.llm_agent import LlmAgent, LlmConfig
 from line.tools import LoopbackTool
 from line.voice_agent_app import VoiceAgentApp
-from engram_cartesia import EngramCartesiaAgent
+from smaran_cartesia import SmaranCartesiaAgent
 
 # Define custom tools
 async def get_weather(location: str) -> str:
@@ -190,14 +190,14 @@ async def get_agent(env, call_request):
         )
     )
 
-    # Wrap with Engram
-    memory_agent = EngramCartesiaAgent(
+    # Wrap with Smaran
+    memory_agent = SmaranCartesiaAgent(
         agent=base_agent,
-        api_key=os.getenv("ENGRAM_API_KEY"),
+        api_key=os.getenv("SMARAN_API_KEY"),
         container_tag=container_tag,
         custom_id=call_request.call_id,
         container_tags=[org_id] if org_id else None,
-        config=EngramCartesiaAgent.MemoryConfig(
+        config=SmaranCartesiaAgent.MemoryConfig(
             mode="full",
             search_limit=15,
             search_threshold=0.15,
@@ -213,8 +213,8 @@ app = VoiceAgentApp(get_agent=get_agent)
 
 ```bash
 # Clone repository
-git clone https://github.com/engramai/engram
-cd engram/packages/cartesia-sdk-python
+git clone https://github.com/smaranai/smaran
+cd smaran/packages/cartesia-sdk-python
 
 # Install in development mode
 pip install -e ".[dev]"

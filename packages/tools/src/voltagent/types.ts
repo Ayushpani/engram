@@ -2,7 +2,7 @@
  * Type definitions for VoltAgent integration.
  *
  * VoltAgent uses hooks to intercept and modify agent behavior. We integrate
- * Engram by providing hooks that inject memories before LLM calls.
+ * Smaran by providing hooks that inject memories before LLM calls.
  */
 
 import type {
@@ -10,14 +10,14 @@ import type {
 	MemoryMode,
 	AddMemoryMode,
 	MemoryPromptData,
-	EngramBaseOptions,
+	SmaranBaseOptions,
 } from "../shared"
 
 /**
- * Configuration options for the Engram VoltAgent integration.
+ * Configuration options for the Smaran VoltAgent integration.
  * Extends base options with VoltAgent-specific settings.
  */
-export interface EngramVoltAgent extends EngramBaseOptions {
+export interface SmaranVoltAgent extends SmaranBaseOptions {
 	/**
 	 * Custom ID to group messages into a single document.
 	 * Ensures related messages are added to the same document for that conversation.

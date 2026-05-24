@@ -306,7 +306,7 @@ export const apiSchema = createSchema({
 })
 
 export const $fetch = createFetch({
-	baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.engram.ai"}/v3`,
+	baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.smaran.ai"}/v3`,
 	credentials: "include",
 	headers: { "X-App-Source": "nova" },
 	onRequest: (context: { headers: Headers }) => {

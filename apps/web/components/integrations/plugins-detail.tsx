@@ -322,7 +322,7 @@ export function PluginsDetail() {
 	const { data: pluginsData } = useQuery({
 		queryFn: async () => {
 			const API_URL =
-				process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.engram.ai"
+				process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.smaran.ai"
 			const res = await fetch(`${API_URL}/v3/auth/plugins`, {
 				credentials: "include",
 			})
@@ -379,7 +379,7 @@ export function PluginsDetail() {
 	const createPluginKeyMutation = useMutation({
 		mutationFn: async (pluginId: string) => {
 			const API_URL =
-				process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.engram.ai"
+				process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.smaran.ai"
 			const params = new URLSearchParams({ client: pluginId })
 			const res = await fetch(`${API_URL}/v3/auth/key?${params}`, {
 				credentials: "include",

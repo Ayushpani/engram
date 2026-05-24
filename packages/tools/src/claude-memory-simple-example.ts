@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 /**
  * Simple Claude Memory Tool Example
- * Shows the cleanest way to integrate Claude's memory tool with engram
+ * Shows the cleanest way to integrate Claude's memory tool with smaran
  */
 
 import Anthropic from "@anthropic-ai/sdk"
@@ -11,7 +11,7 @@ const anthropic = new Anthropic({
 	apiKey: process.env.ANTHROPIC_API_KEY!,
 })
 
-const memoryTool = createClaudeMemoryTool(process.env.ENGRAM_API_KEY!, {
+const memoryTool = createClaudeMemoryTool(process.env.SMARAN_API_KEY!, {
 	projectId: "my-app",
 })
 

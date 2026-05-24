@@ -11,15 +11,15 @@ async function testMemoryTool() {
 	console.log("🧪 Testing Claude Memory Tool Operations")
 	console.log("=".repeat(50))
 
-	if (!process.env.ENGRAM_API_KEY) {
-		console.error("❌ ENGRAM_API_KEY environment variable is required")
+	if (!process.env.SMARAN_API_KEY) {
+		console.error("❌ SMARAN_API_KEY environment variable is required")
 		process.exit(1)
 	}
 
-	const memoryTool = createClaudeMemoryTool(process.env.ENGRAM_API_KEY, {
+	const memoryTool = createClaudeMemoryTool(process.env.SMARAN_API_KEY, {
 		projectId: "memory-tool-test",
 		memoryContainerTag: "claude_memory_test",
-		baseUrl: process.env.ENGRAM_BASE_URL,
+		baseUrl: process.env.SMARAN_BASE_URL,
 	})
 
 	const testCases: Array<{

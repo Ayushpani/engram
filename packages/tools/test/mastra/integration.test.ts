@@ -1,6 +1,6 @@
 /**
  * Integration tests for the Mastra integration
- * Tests processors and wrapper with real Engram API calls
+ * Tests processors and wrapper with real Smaran API calls
  */
 
 import { describe, it, expect, vi } from "vitest"
@@ -9,10 +9,10 @@ import {
 	MASTRA_THREAD_ID_KEY,
 } from "@mastra/core/request-context"
 import {
-	EngramInputProcessor,
-	EngramOutputProcessor,
-	createEngramProcessors,
-	withEngram,
+	SmaranInputProcessor,
+	SmaranOutputProcessor,
+	createSmaranProcessors,
+	withSmaran,
 } from "../../src/mastra"
 import type {
 	ProcessInputArgs,
@@ -34,13 +34,13 @@ interface MockAgentConfig {
 import "dotenv/config"
 
 const INTEGRATION_CONFIG = {
-	apiKey: process.env.ENGRAM_API_KEY || "",
-	baseUrl: process.env.ENGRAM_BASE_URL || "https://api.engram.ai",
+	apiKey: process.env.SMARAN_API_KEY || "",
+	baseUrl: process.env.SMARAN_BASE_URL || "https://api.smaran.ai",
 	containerTag: "integration-test-mastra",
 	customId: "integration-test-conversation",
 }
 
-const shouldRunIntegration = !!process.env.ENGRAM_API_KEY
+const shouldRunIntegration = !!process.env.SMARAN_API_KEY
 
 /**
  * Helper to create MastraMessageContentV2 from text
@@ -99,9 +99,9 @@ const createIntegrationMessageList = (): MessageList & {
 describe.skipIf(!shouldRunIntegration)(
 	"Integration: Mastra processors with real API",
 	() => {
-		describe("EngramInputProcessor", () => {
+		describe("SmaranInputProcessor", () => {
 			it("should fetch real memories and inject into messageList", async () => {
-				const processor = new EngramInputProcessor({
+				const processor = new SmaranInputProcessor({
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: INTEGRATION_CONFIG.customId,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -132,7 +132,7 @@ describe.skipIf(!shouldRunIntegration)(
 			it("should use query mode with user message as search query", async () => {
 				const fetchSpy = vi.spyOn(globalThis, "fetch")
 
-				const processor = new EngramInputProcessor({
+				const processor = new SmaranInputProcessor({
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: INTEGRATION_CONFIG.customId,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -176,7 +176,7 @@ describe.skipIf(!shouldRunIntegration)(
 			it("should use full mode with both profile and query", async () => {
 				const fetchSpy = vi.spyOn(globalThis, "fetch")
 
-				const processor = new EngramInputProcessor({
+				const processor = new SmaranInputProcessor({
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: INTEGRATION_CONFIG.customId,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -215,7 +215,7 @@ describe.skipIf(!shouldRunIntegration)(
 			it("should cache memories for repeated calls with same message", async () => {
 				const fetchSpy = vi.spyOn(globalThis, "fetch")
 
-				const processor = new EngramInputProcessor({
+				const processor = new SmaranInputProcessor({
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: INTEGRATION_CONFIG.customId,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -266,7 +266,7 @@ describe.skipIf(!shouldRunIntegration)(
 					generalSearchMemories: string
 				}) => `<mastra-memories>${data.userMemories}</mastra-memories>`
 
-				const processor = new EngramInputProcessor({
+				const processor = new SmaranInputProcessor({
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: INTEGRATION_CONFIG.customId,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -291,13 +291,13 @@ describe.skipIf(!shouldRunIntegration)(
 			})
 		})
 
-		describe("EngramOutputProcessor", () => {
+		describe("SmaranOutputProcessor", () => {
 			it("should save conversation when addMemory is always", async () => {
 				const fetchSpy = vi.spyOn(globalThis, "fetch")
 
 				const customId = `test-mastra-${Date.now()}`
 
-				const processor = new EngramOutputProcessor({
+				const processor = new SmaranOutputProcessor({
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -330,7 +330,7 @@ describe.skipIf(!shouldRunIntegration)(
 			it("should not save when addMemory is never", async () => {
 				const fetchSpy = vi.spyOn(globalThis, "fetch")
 
-				const processor = new EngramOutputProcessor({
+				const processor = new SmaranOutputProcessor({
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "test-thread",
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -363,7 +363,7 @@ describe.skipIf(!shouldRunIntegration)(
 			it("should use threadId from RequestContext when available", async () => {
 				const fetchSpy = vi.spyOn(globalThis, "fetch")
 
-				const processor = new EngramOutputProcessor({
+				const processor = new SmaranOutputProcessor({
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: INTEGRATION_CONFIG.customId,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -399,9 +399,9 @@ describe.skipIf(!shouldRunIntegration)(
 			})
 		})
 
-		describe("createEngramProcessors", () => {
+		describe("createSmaranProcessors", () => {
 			it("should create working input and output processors", async () => {
-				const { input, output } = createEngramProcessors({
+				const { input, output } = createSmaranProcessors({
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: `processors-test-${Date.now()}`,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -436,7 +436,7 @@ describe.skipIf(!shouldRunIntegration)(
 			})
 		})
 
-		describe("withEngram wrapper", () => {
+		describe("withSmaran wrapper", () => {
 			it("should enhance config with working processors", async () => {
 				const config: MockAgentConfig = {
 					id: "test-mastra-agent",
@@ -444,7 +444,7 @@ describe.skipIf(!shouldRunIntegration)(
 					model: "gpt-4o",
 				}
 
-				const enhanced = withEngram(config, {
+				const enhanced = withSmaran(config, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: `wrapper-test-${Date.now()}`,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -460,7 +460,7 @@ describe.skipIf(!shouldRunIntegration)(
 				expect(enhanced.outputProcessors).toHaveLength(1)
 
 				const inputProcessor = enhanced.inputProcessors?.[0]
-				expect(inputProcessor?.id).toBe("engram-input")
+				expect(inputProcessor?.id).toBe("smaran-input")
 
 				if (inputProcessor?.processInput) {
 					const messageList = createIntegrationMessageList()
@@ -497,7 +497,7 @@ describe.skipIf(!shouldRunIntegration)(
 					outputProcessors: [existingOutputProcessor],
 				}
 
-				const enhanced = withEngram(config, {
+				const enhanced = withSmaran(config, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: INTEGRATION_CONFIG.customId,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -508,17 +508,17 @@ describe.skipIf(!shouldRunIntegration)(
 				expect(enhanced.inputProcessors).toHaveLength(2)
 				expect(enhanced.outputProcessors).toHaveLength(2)
 
-				expect(enhanced.inputProcessors?.[0]?.id).toBe("engram-input")
+				expect(enhanced.inputProcessors?.[0]?.id).toBe("smaran-input")
 				expect(enhanced.inputProcessors?.[1]?.id).toBe("existing-input")
 
 				expect(enhanced.outputProcessors?.[0]?.id).toBe("existing-output")
-				expect(enhanced.outputProcessors?.[1]?.id).toBe("engram-output")
+				expect(enhanced.outputProcessors?.[1]?.id).toBe("smaran-output")
 			})
 		})
 
 		describe("Options", () => {
 			it("verbose mode should not break functionality", async () => {
-				const processor = new EngramInputProcessor({
+				const processor = new SmaranInputProcessor({
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: INTEGRATION_CONFIG.customId,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -544,7 +544,7 @@ describe.skipIf(!shouldRunIntegration)(
 			it("custom baseUrl should be used for API calls", async () => {
 				const fetchSpy = vi.spyOn(globalThis, "fetch")
 
-				const processor = new EngramInputProcessor({
+				const processor = new SmaranInputProcessor({
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: INTEGRATION_CONFIG.customId,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -577,7 +577,7 @@ describe.skipIf(!shouldRunIntegration)(
 
 		describe("Error handling", () => {
 			it("should handle invalid API key gracefully", async () => {
-				const processor = new EngramInputProcessor({
+				const processor = new SmaranInputProcessor({
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: INTEGRATION_CONFIG.customId,
 					apiKey: "invalid-api-key-12345",
@@ -600,7 +600,7 @@ describe.skipIf(!shouldRunIntegration)(
 			})
 
 			it("output processor should handle save errors gracefully", async () => {
-				const processor = new EngramOutputProcessor({
+				const processor = new SmaranOutputProcessor({
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "error-test",
 					apiKey: "invalid-api-key-12345",

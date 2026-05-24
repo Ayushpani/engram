@@ -1,5 +1,5 @@
 import { OpenAI } from "openai"
-import { withEngram } from "@engram/tools/openai"
+import { withSmaran } from "@smaran/tools/openai"
 
 export const runtime = "nodejs"
 
@@ -13,16 +13,16 @@ export async function POST(req: Request) {
 		apiKey: process.env.OPENAI_API_KEY,
 	})
 
-	const openaiWithEngram = withEngram(openai, {
+	const openaiWithSmaran = withSmaran(openai, {
 		containerTag: "user-123",
 		customId: conversationId,
 		mode: "full",
 		addMemory: "always",
 		verbose: true,
-		baseUrl: process.env.ENGRAM_BASE_URL,
+		baseUrl: process.env.SMARAN_BASE_URL,
 	})
 
-	const completion = await openaiWithEngram.chat.completions.create({
+	const completion = await openaiWithSmaran.chat.completions.create({
 		model: "gpt-4o-mini",
 		messages,
 	})

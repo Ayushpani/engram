@@ -81,7 +81,7 @@ async function searchEdge(query: string, allMemories: BenchmarkMemory[]): Promis
   
   const start = performance.now();
   try {
-    const res = await fetch("https://engram-edge-reranker.ayushpanigrahi84.workers.dev/v3/search/rerank", {
+    const res = await fetch("https://smaran-edge-reranker.ayushpanigrahi84.workers.dev/v3/search/rerank", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query, candidates })

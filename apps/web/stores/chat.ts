@@ -178,7 +178,7 @@ export const usePersistentChatStore = create<ConversationsStoreState>()(
 			},
 		}),
 		{
-			name: "engram-chats",
+			name: "smaran-chats",
 			storage: createJSONStorage(() => indexedDBStorage),
 		},
 	),

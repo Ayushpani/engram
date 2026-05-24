@@ -1,17 +1,17 @@
-import { EngramClient } from "supermemory"
+import { SmaranClient } from "supermemory"
 import { generateText } from "ai"
 import { createOpenAI } from "@ai-sdk/openai"
 import { pipeline, env } from "@xenova/transformers"
 import { detect_clusters } from "memory-consolidator"
 
 export interface ConsolidationOptions {
-	engramClient: EngramClient
+	smaranClient: SmaranClient
 	openaiApiKey: string
 	projectId: string
 }
 
 export async function consolidateGraphMemory({
-	engramClient,
+	smaranClient,
 	openaiApiKey,
 	projectId,
 }: ConsolidationOptions) {
@@ -19,7 +19,7 @@ export async function consolidateGraphMemory({
 
 	// 1. Fetch memories
 	console.log("Fetching memories for project:", projectId)
-	const result = await engramClient.search.memories({
+	const result = await smaranClient.search.memories({
 		q: "",
 		limit: 100,
 		containerTag: projectId,
@@ -91,7 +91,7 @@ ${clusterTexts.map((t: string) => "- " + t).join("\n")}
 		console.log(`Generated summary: ${summary.slice(0, 100)}...`)
 
 		// 5. Save the summary back
-		await engramClient.add({
+		await smaranClient.add({
 			content: summary,
 			containerTag: projectId,
 			metadata: {

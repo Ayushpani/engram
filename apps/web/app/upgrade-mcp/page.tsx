@@ -157,7 +157,7 @@ export default function MigrateMCPPage() {
 									</div>
 								</div>
 								<h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
-									Upgrade engram MCP
+									Upgrade smaran MCP
 								</h1>
 								<p className="text-slate-400 text-sm md:text-base">
 									Migrate your documents to the new MCP server
@@ -188,7 +188,7 @@ export default function MigrateMCPPage() {
 											onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
 												setMcpUrl(e.target.value)
 											}
-											placeholder="https://mcp.engram.ai/userId/sse"
+											placeholder="https://mcp.smaran.ai/userId/sse"
 											type="url"
 											value={mcpUrl}
 										/>

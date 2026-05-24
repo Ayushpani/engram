@@ -1,9 +1,9 @@
 /**
- * Mastra Processors for Engram Integration
+ * Mastra Processors for Smaran Integration
  *
  * This module provides input and output processors for Mastra agents that enable:
  * - Memory injection: Fetches relevant user memories before LLM calls
- * - Conversation saving: Persists conversations to Engram after responses
+ * - Conversation saving: Persists conversations to Smaran after responses
  *
  * Processors integrate with Mastra's processor pipeline:
  * - InputProcessor runs before the LLM call, injecting memories into system messages
@@ -29,7 +29,7 @@ import {
 } from "../conversations-client"
 import { MASTRA_THREAD_ID_KEY } from "@mastra/core/request-context"
 import type {
-	EngramMastraOptions,
+	SmaranMastraOptions,
 	Processor,
 	ProcessInputArgs,
 	ProcessInputResult,
@@ -57,7 +57,7 @@ interface ProcessorContext {
  * Creates the shared processor context from options.
  */
 function createProcessorContext(
-	options: EngramMastraOptions,
+	options: SmaranMastraOptions,
 ): ProcessorContext {
 	const apiKey = validateApiKey(options.apiKey)
 	const baseUrl = normalizeBaseUrl(options.baseUrl)
@@ -101,13 +101,13 @@ function getEffectiveCustomId(
  * Input processor that injects memories into the system prompt before LLM calls.
  *
  * This processor runs once at the start of agent execution (processInput).
- * It fetches relevant memories from Engram based on the user's message
+ * It fetches relevant memories from Smaran based on the user's message
  * and injects them into the system messages.
  *
  * @example
  * ```typescript
  * import { Agent } from "@mastra/core/agent"
- * import { EngramInputProcessor } from "@engram/tools/mastra"
+ * import { SmaranInputProcessor } from "@smaran/tools/mastra"
  * import { openai } from "@ai-sdk/openai"
  *
  * const agent = new Agent({
@@ -115,7 +115,7 @@ function getEffectiveCustomId(
  *   name: "My Agent",
  *   model: openai("gpt-4o"),
  *   inputProcessors: [
- *     new EngramInputProcessor({
+ *     new SmaranInputProcessor({
  *       containerTag: "user-123",
  *       customId: "conv-456",
  *       mode: "full",
@@ -125,13 +125,13 @@ function getEffectiveCustomId(
  * })
  * ```
  */
-export class EngramInputProcessor implements Processor {
-	readonly id = "engram-input"
-	readonly name = "Engram Memory Injection"
+export class SmaranInputProcessor implements Processor {
+	readonly id = "smaran-input"
+	readonly name = "Smaran Memory Injection"
 
 	private ctx: ProcessorContext
 
-	constructor(options: EngramMastraOptions) {
+	constructor(options: SmaranMastraOptions) {
 		this.ctx = createProcessorContext(options)
 	}
 
@@ -163,7 +163,7 @@ export class EngramInputProcessor implements Processor {
 			const cachedMemories = this.ctx.memoryCache.get(turnKey)
 			if (cachedMemories) {
 				this.ctx.logger.debug("Using cached memories", { turnKey })
-				messageList.addSystem(cachedMemories, "engram")
+				messageList.addSystem(cachedMemories, "smaran")
 				return messageList
 			}
 
@@ -185,7 +185,7 @@ export class EngramInputProcessor implements Processor {
 
 			if (memories) {
 				this.ctx.memoryCache.set(turnKey, memories)
-				messageList.addSystem(memories, "engram")
+				messageList.addSystem(memories, "smaran")
 				this.ctx.logger.debug("Injected memories into system prompt", {
 					length: memories.length,
 				})
@@ -202,16 +202,16 @@ export class EngramInputProcessor implements Processor {
 }
 
 /**
- * Output processor that saves conversations to Engram after generation completes.
+ * Output processor that saves conversations to Smaran after generation completes.
  *
  * This processor runs once after generation completes (processOutputResult).
- * When addMemory is set to "always", it saves the conversation to Engram
+ * When addMemory is set to "always", it saves the conversation to Smaran
  * using the /v4/conversations API for thread-based storage.
  *
  * @example
  * ```typescript
  * import { Agent } from "@mastra/core/agent"
- * import { EngramOutputProcessor } from "@engram/tools/mastra"
+ * import { SmaranOutputProcessor } from "@smaran/tools/mastra"
  * import { openai } from "@ai-sdk/openai"
  *
  * const agent = new Agent({
@@ -219,7 +219,7 @@ export class EngramInputProcessor implements Processor {
  *   name: "My Agent",
  *   model: openai("gpt-4o"),
  *   outputProcessors: [
- *     new EngramOutputProcessor({
+ *     new SmaranOutputProcessor({
  *       containerTag: "user-123",
  *       customId: "conv-456",
  *       addMemory: "always",
@@ -228,13 +228,13 @@ export class EngramInputProcessor implements Processor {
  * })
  * ```
  */
-export class EngramOutputProcessor implements Processor {
-	readonly id = "engram-output"
-	readonly name = "Engram Conversation Save"
+export class SmaranOutputProcessor implements Processor {
+	readonly id = "smaran-output"
+	readonly name = "Smaran Conversation Save"
 
 	private ctx: ProcessorContext
 
-	constructor(options: EngramMastraOptions) {
+	constructor(options: SmaranMastraOptions) {
 		this.ctx = createProcessorContext(options)
 	}
 
@@ -322,18 +322,18 @@ export class EngramOutputProcessor implements Processor {
 }
 
 /**
- * Creates a Engram input processor for memory injection.
+ * Creates a Smaran input processor for memory injection.
  *
  * @param options - Configuration options including required containerTag and customId
- * @returns Configured EngramInputProcessor instance
+ * @returns Configured SmaranInputProcessor instance
  *
  * @example
  * ```typescript
  * import { Agent } from "@mastra/core/agent"
- * import { createEngramProcessor } from "@engram/tools/mastra"
+ * import { createSmaranProcessor } from "@smaran/tools/mastra"
  * import { openai } from "@ai-sdk/openai"
  *
- * const processor = createEngramProcessor({
+ * const processor = createSmaranProcessor({
  *   containerTag: "user-123",
  *   customId: "conv-456",
  *   mode: "full",
@@ -348,25 +348,25 @@ export class EngramOutputProcessor implements Processor {
  * })
  * ```
  */
-export function createEngramProcessor(
-	options: EngramMastraOptions,
-): EngramInputProcessor {
-	return new EngramInputProcessor(options)
+export function createSmaranProcessor(
+	options: SmaranMastraOptions,
+): SmaranInputProcessor {
+	return new SmaranInputProcessor(options)
 }
 
 /**
- * Creates a Engram output processor for saving conversations.
+ * Creates a Smaran output processor for saving conversations.
  *
  * @param options - Configuration options including required containerTag and customId
- * @returns Configured EngramOutputProcessor instance
+ * @returns Configured SmaranOutputProcessor instance
  *
  * @example
  * ```typescript
  * import { Agent } from "@mastra/core/agent"
- * import { createEngramOutputProcessor } from "@engram/tools/mastra"
+ * import { createSmaranOutputProcessor } from "@smaran/tools/mastra"
  * import { openai } from "@ai-sdk/openai"
  *
- * const processor = createEngramOutputProcessor({
+ * const processor = createSmaranOutputProcessor({
  *   containerTag: "user-123",
  *   customId: "conv-456",
  *   addMemory: "always",
@@ -380,10 +380,10 @@ export function createEngramProcessor(
  * })
  * ```
  */
-export function createEngramOutputProcessor(
-	options: EngramMastraOptions,
-): EngramOutputProcessor {
-	return new EngramOutputProcessor(options)
+export function createSmaranOutputProcessor(
+	options: SmaranMastraOptions,
+): SmaranOutputProcessor {
+	return new SmaranOutputProcessor(options)
 }
 
 /**
@@ -398,10 +398,10 @@ export function createEngramOutputProcessor(
  * @example
  * ```typescript
  * import { Agent } from "@mastra/core/agent"
- * import { createEngramProcessors } from "@engram/tools/mastra"
+ * import { createSmaranProcessors } from "@smaran/tools/mastra"
  * import { openai } from "@ai-sdk/openai"
  *
- * const { input, output } = createEngramProcessors({
+ * const { input, output } = createSmaranProcessors({
  *   containerTag: "user-123",
  *   customId: "conv-456",
  *   mode: "full",
@@ -417,14 +417,14 @@ export function createEngramOutputProcessor(
  * })
  * ```
  */
-export function createEngramProcessors(
-	options: EngramMastraOptions,
+export function createSmaranProcessors(
+	options: SmaranMastraOptions,
 ): {
-	input: EngramInputProcessor
-	output: EngramOutputProcessor
+	input: SmaranInputProcessor
+	output: SmaranOutputProcessor
 } {
 	return {
-		input: new EngramInputProcessor(options),
-		output: new EngramOutputProcessor(options),
+		input: new SmaranInputProcessor(options),
+		output: new SmaranOutputProcessor(options),
 	}
 }

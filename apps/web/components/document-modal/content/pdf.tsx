@@ -22,7 +22,7 @@ export function PdfViewer({ url, documentId }: PdfViewerProps) {
 		try {
 			if (new URL(url).hostname === "www.googleapis.com" && documentId) {
 				const base =
-					process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.engram.ai"
+					process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.smaran.ai"
 				return {
 					url: `${base}/v3/drive-proxy/${documentId}`,
 					withCredentials: true,

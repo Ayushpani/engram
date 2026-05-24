@@ -1,6 +1,6 @@
 import "dotenv/config"
 import OpenAI from "openai"
-import { withEngram } from "@engram/tools/openai"
+import { withSmaran } from "@smaran/tools/openai"
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 
@@ -15,16 +15,16 @@ async function testOpenAIWrapper() {
 	const openai = new OpenAI()
 
 	// Basic wrapper
-	const client = withEngram(openai, "docs-test-openai")
-	console.log("✓ withEngram basic")
+	const client = withSmaran(openai, "docs-test-openai")
+	console.log("✓ withSmaran basic")
 
 	// With options
-	const clientWithOptions = withEngram(openai, "docs-test-openai", {
+	const clientWithOptions = withSmaran(openai, "docs-test-openai", {
 		mode: "full",
 		addMemory: "always",
 		verbose: true,
 	})
-	console.log("✓ withEngram with options")
+	console.log("✓ withSmaran with options")
 }
 
 async function testChatCompletion() {
@@ -36,7 +36,7 @@ async function testChatCompletion() {
 	}
 
 	const openai = new OpenAI()
-	const client = withEngram(openai, "docs-test-openai", {
+	const client = withSmaran(openai, "docs-test-openai", {
 		mode: "full",
 		addMemory: "always",
 	})

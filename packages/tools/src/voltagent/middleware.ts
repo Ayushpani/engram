@@ -1,10 +1,10 @@
 /**
- * Middleware utilities for VoltAgent integration with Engram.
+ * Middleware utilities for VoltAgent integration with Smaran.
  *
  * Provides memory retrieval, injection, and storage functionality.
  */
 
-import Engram from "supermemory"
+import Smaran from "supermemory"
 import {
 	addConversation,
 	type ConversationMessage,
@@ -18,13 +18,13 @@ import {
 	type Logger,
 	type MemoryMode,
 } from "../shared"
-import type { EngramVoltAgent, VoltAgentMessage } from "./types"
+import type { SmaranVoltAgent, VoltAgentMessage } from "./types"
 
 /**
- * Context for Engram middleware operations.
+ * Context for Smaran middleware operations.
  */
-export interface EngramMiddlewareContext {
-	client: Engram
+export interface SmaranMiddlewareContext {
+	client: Smaran
 	logger: Logger
 	containerTag: string
 	customId: string
@@ -62,16 +62,16 @@ export interface EngramMiddlewareContext {
 }
 
 /**
- * Creates a Engram middleware context.
+ * Creates a Smaran middleware context.
  */
-export const createEngramContext = (
+export const createSmaranContext = (
 	containerTag: string,
-	options: EngramVoltAgent,
-): EngramMiddlewareContext => {
-	const apiKey = options.apiKey ?? process.env.ENGRAM_API_KEY
+	options: SmaranVoltAgent,
+): SmaranMiddlewareContext => {
+	const apiKey = options.apiKey ?? process.env.SMARAN_API_KEY
 	if (!apiKey) {
 		throw new Error(
-			"ENGRAM_API_KEY is not set — provide it via `options.apiKey` or set `process.env.ENGRAM_API_KEY`",
+			"SMARAN_API_KEY is not set — provide it via `options.apiKey` or set `process.env.SMARAN_API_KEY`",
 		)
 	}
 
@@ -103,9 +103,9 @@ export const createEngramContext = (
 	const logger = createLogger(verbose)
 	const normalizedBaseUrl = normalizeBaseUrl(baseUrl)
 
-	const client = new Engram({
+	const client = new Smaran({
 		apiKey,
-		...(normalizedBaseUrl !== "https://api.engram.ai"
+		...(normalizedBaseUrl !== "https://api.smaran.ai"
 			? { baseURL: normalizedBaseUrl }
 			: {}),
 	})
@@ -137,7 +137,7 @@ export const createEngramContext = (
  * Generates a cache key for the current turn based on context and user message.
  */
 const makeTurnKey = (
-	ctx: EngramMiddlewareContext,
+	ctx: SmaranMiddlewareContext,
 	userMessage: string,
 ): string => {
 	return MemoryCache.makeTurnKey(
@@ -190,12 +190,12 @@ const getLastUserMessage = (messages: VoltAgentMessage[]): string => {
  * Returns enhanced messages with memories injected into system prompt.
  *
  * @param searchMessages - Messages to search for user input (VoltAgent's input messages)
- * @param ctx - Engram middleware context
+ * @param ctx - Smaran middleware context
  * @param systemMessages - System messages to inject memories into (VoltAgent's prepared messages)
  */
 export const enhanceMessagesWithMemories = async (
 	searchMessages: VoltAgentMessage[],
-	ctx: EngramMiddlewareContext,
+	ctx: SmaranMiddlewareContext,
 	systemMessages?: VoltAgentMessage[],
 ): Promise<VoltAgentMessage[]> => {
 	const messagesToEnhance = systemMessages || searchMessages
@@ -448,11 +448,11 @@ const convertToConversationMessages = (
 }
 
 /**
- * Saves conversation to Engram (fire-and-forget).
+ * Saves conversation to Smaran (fire-and-forget).
  */
 export const saveConversation = async (
 	messages: VoltAgentMessage[],
-	ctx: EngramMiddlewareContext,
+	ctx: SmaranMiddlewareContext,
 ): Promise<void> => {
 	if (ctx.addMemory !== "always") {
 		return

@@ -43,7 +43,7 @@ export default function Page() {
 				<div className="mb-6">
 					<h1 className="text-2xl font-bold text-foreground">Chat App</h1>
 					<p className="text-muted-foreground">
-						Chat with AI using Engram
+						Chat with AI using Smaran
 					</p>
 				</div>
 

@@ -3,36 +3,36 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-	--color-onboarding: #525966;
+	--color-onboarding: #e2e8f0;
 
-	--color-fg-primary: #fafafa;
-	--color-fg-secondary: #e2e8f0;
-	--color-fg-muted: #d0dae7;
-	--color-fg-subtle: #b5c2d3;
-	--color-fg-faint: #a0aec4;
+	--color-fg-primary: #0f172a;
+	--color-fg-secondary: #334155;
+	--color-fg-muted: #64748b;
+	--color-fg-subtle: #94a3b8;
+	--color-fg-faint: #cbd5e1;
 
-	--color-surface-base: #0b1119;
-	--color-surface-card: #101822;
-	--color-surface-hover: #131b28;
-	--color-surface-skeleton: #1a2030;
-	--color-surface-border: #263348;
+	--color-surface-base: #ffffff;
+	--color-surface-card: #f8fafc;
+	--color-surface-hover: #f1f5f9;
+	--color-surface-skeleton: #e2e8f0;
+	--color-surface-border: #e2e8f0;
 
-	--color-pill-bg: #0d121a;
-	--color-pill-bg-active: #00173c;
-	--color-pill-border: #161f2c;
-	--color-pill-border-active: #2261ca33;
+	--color-pill-bg: #fff7ed;
+	--color-pill-bg-active: #ffedd5;
+	--color-pill-border: #fdba74;
+	--color-pill-border-active: #f97316;
 
-	--color-brand-accent: #4ba0fa;
+	--color-brand-accent: #f97316; /* Orangish */
 
 	--animate-file-upload-grow: file-upload-grow 6s cubic-bezier(0.22, 1, 0.36, 1)
 		forwards;
 }
 
 :root {
-	--color-placeholder-onboarding: #525966;
-	--sm-scrollbar-thumb: rgb(41 57 82 / 0.55);
-	--sm-scrollbar-thumb-hover: rgb(55 90 130 / 0.75);
-	--sm-scrollbar-thumb-active: rgb(70 110 160 / 0.85);
+	--color-placeholder-onboarding: #94a3b8;
+	--sm-scrollbar-thumb: rgb(249 115 22 / 0.55);
+	--sm-scrollbar-thumb-hover: rgb(249 115 22 / 0.75);
+	--sm-scrollbar-thumb-active: rgb(249 115 22 / 0.85);
 }
 
 * {

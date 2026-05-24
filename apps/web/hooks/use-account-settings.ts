@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useAuth } from "@lib/auth-context"
 
 const API_BASE =
-	process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.engram.ai"
+	process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.smaran.ai"
 
 export type AccountMembership = {
 	orgId: string

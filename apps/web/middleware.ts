@@ -68,8 +68,8 @@ export default async function proxy(request: Request) {
 	const response = NextResponse.next()
 	response.cookies.set({
 		name: "last-site-visited",
-		value: "https://app.engram.ai",
-		domain: "engram.ai",
+		value: "https://app.smaran.ai",
+		domain: "smaran.ai",
 	})
 	return response
 }

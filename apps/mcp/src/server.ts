@@ -5,7 +5,7 @@ import {
 	registerAppResource,
 	RESOURCE_MIME_TYPE,
 } from "@modelcontextprotocol/ext-apps/server"
-import { EngramClient, getMemoryText } from "./client"
+import { SmaranClient, getMemoryText } from "./client"
 import { initPosthog, posthog } from "./posthog"
 import { z } from "zod"
 import mcpAppHtml from "../dist/mcp-app.html"
@@ -26,13 +26,13 @@ type Props = {
 
 const CONTAINER_TAGS_TTL_MS = 5 * 60 * 1000
 
-export class EngramMCP extends McpAgent<Env, unknown, Props> {
+export class SmaranMCP extends McpAgent<Env, unknown, Props> {
 	private clientInfo: { name: string; version?: string } | null = null
 	private cachedContainerTags: string[] = []
 	private containerTagsLastFetchedAt: number | null = null
 
 	server = new McpServer({
-		name: "engram",
+		name: "smaran",
 		version: "4.0.0",
 	})
 
@@ -129,7 +129,7 @@ export class EngramMCP extends McpAgent<Env, unknown, Props> {
 		// Register profile resource
 		this.server.registerResource(
 			"User Profile",
-			"engram://profile",
+			"smaran://profile",
 			{},
 			async () => {
 				const client = this.getClient()
@@ -153,7 +153,7 @@ export class EngramMCP extends McpAgent<Env, unknown, Props> {
 				return {
 					contents: [
 						{
-							uri: "engram://profile",
+							uri: "smaran://profile",
 							mimeType: "text/plain",
 							text:
 								parts.length > 1
@@ -168,7 +168,7 @@ export class EngramMCP extends McpAgent<Env, unknown, Props> {
 		// Register projects resource
 		this.server.registerResource(
 			"My Projects",
-			"engram://projects",
+			"smaran://projects",
 			{},
 			async () => {
 				await this.ensureContainerTagsFresh()
@@ -177,7 +177,7 @@ export class EngramMCP extends McpAgent<Env, unknown, Props> {
 				return {
 					contents: [
 						{
-							uri: "engram://projects",
+							uri: "smaran://projects",
 							mimeType: "application/json",
 							text: JSON.stringify({ projects }, null, 2),
 						},
@@ -451,7 +451,7 @@ export class EngramMCP extends McpAgent<Env, unknown, Props> {
 					const parts: string[] = []
 
 					parts.push(
-						"**Important:** Whenever the user shares informative facts, preferences, personal details, or any memory-worthy information, use the `memory` tool to save it to Engram. This helps maintain context across conversations.",
+						"**Important:** Whenever the user shares informative facts, preferences, personal details, or any memory-worthy information, use the `memory` tool to save it to Smaran. This helps maintain context across conversations.",
 					)
 					parts.push("")
 
@@ -479,7 +479,7 @@ export class EngramMCP extends McpAgent<Env, unknown, Props> {
 					const contextText =
 						parts.length > 2
 							? parts.join("\n")
-							: "**Important:** Whenever the user shares informative facts, preferences, personal details, or any memory-worthy information, use the `memory` tool to save it to Engram. This helps maintain context across conversations.\n\nNo user profile available yet. Start saving memories to build context."
+							: "**Important:** Whenever the user shares informative facts, preferences, personal details, or any memory-worthy information, use the `memory` tool to save it to Smaran. This helps maintain context across conversations.\n\nNo user profile available yet. Start saving memories to build context."
 
 					return {
 						messages: [
@@ -515,9 +515,9 @@ export class EngramMCP extends McpAgent<Env, unknown, Props> {
 	}
 
 	/**
-	 * Get a EngramClient instance configured with the API key
+	 * Get a SmaranClient instance configured with the API key
 	 */
-	private getClient(containerTag?: string): EngramClient {
+	private getClient(containerTag?: string): SmaranClient {
 		if (!this.props) {
 			throw new Error("Props not initialized")
 		}
@@ -525,8 +525,8 @@ export class EngramMCP extends McpAgent<Env, unknown, Props> {
 		if (!apiKey) {
 			throw new Error("Authentication required")
 		}
-		const apiUrl = this.env.API_URL || "https://api.engram.ai"
-		return new EngramClient(
+		const apiUrl = this.env.API_URL || "https://api.smaran.ai"
+		return new SmaranClient(
 			apiKey,
 			containerTag || mcpRootContainerTag,
 			apiUrl,

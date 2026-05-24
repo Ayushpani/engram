@@ -26,14 +26,14 @@ import {
  *
  * @example
  * ```typescript
- * import { withEngram } from "@engram/tools/openai"
+ * import { withSmaran } from "@smaran/tools/openai"
  * import OpenAI from "openai"
  *
- * // Create OpenAI client with engram middleware
+ * // Create OpenAI client with smaran middleware
  * const openai = new OpenAI({
  *   apiKey: process.env.OPENAI_API_KEY,
  * })
- * const openaiWithEngram = withEngram(openai, {
+ * const openaiWithSmaran = withSmaran(openai, {
  *   containerTag: "user-123",
  *   customId: "conversation-456",
  *   mode: "full",
@@ -41,7 +41,7 @@ import {
  * })
  *
  * // Use with Chat Completions API - memories injected into system prompt
- * const chatResponse = await openaiWithEngram.chat.completions.create({
+ * const chatResponse = await openaiWithSmaran.chat.completions.create({
  *   model: "gpt-4",
  *   messages: [
  *     { role: "user", content: "What's my favorite programming language?" }
@@ -49,22 +49,22 @@ import {
  * })
  *
  * // Use with Responses API - memories injected into instructions
- * const response = await openaiWithEngram.responses.create({
+ * const response = await openaiWithSmaran.responses.create({
  *   model: "gpt-4o",
  *   instructions: "You are a helpful coding assistant",
  *   input: "What's my favorite programming language?"
  * })
  * ```
  *
- * @throws {Error} When ENGRAM_API_KEY environment variable is not set
- * @throws {Error} When engram API request fails
+ * @throws {Error} When SMARAN_API_KEY environment variable is not set
+ * @throws {Error} When smaran API request fails
  */
-export function withEngram(
+export function withSmaran(
 	openaiClient: OpenAI,
 	options: OpenAIMiddlewareOptions,
 ) {
-	if (!process.env.ENGRAM_API_KEY) {
-		throw new Error("ENGRAM_API_KEY is not set")
+	if (!process.env.SMARAN_API_KEY) {
+		throw new Error("SMARAN_API_KEY is not set")
 	}
 
 	if (!options.containerTag) {
@@ -84,7 +84,7 @@ export function withEngram(
 	const mode = options.mode ?? "profile"
 	const addMemory = options.addMemory ?? "always"
 
-	const openaiWithEngram = createOpenAIMiddleware(
+	const openaiWithSmaran = createOpenAIMiddleware(
 		openaiClient,
 		containerTag,
 		{
@@ -95,7 +95,7 @@ export function withEngram(
 		},
 	)
 
-	return openaiWithEngram
+	return openaiWithSmaran
 }
 
 export type { OpenAIMiddlewareOptions }
@@ -116,7 +116,7 @@ export {
 	createDocumentDeleteFunction,
 	createDocumentAddFunction,
 	createMemoryForgetFunction,
-	engramTools,
+	smaranTools,
 	getToolDefinitions,
 	createToolCallExecutor,
 	createToolCallsExecutor,

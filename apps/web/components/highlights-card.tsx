@@ -180,7 +180,7 @@ export function HighlightsCard({
 								powered by
 							</span>
 							<span className="text-[10px] text-brand-accent font-medium tracking-[-0.3px]">
-								engram
+								smaran
 							</span>
 						</div>
 					</div>
@@ -209,7 +209,7 @@ export function HighlightsCard({
 							powered by
 						</span>
 						<span className="text-[10px] text-brand-accent font-medium tracking-[-0.3px]">
-							engram
+							smaran
 						</span>
 					</div>
 				</div>

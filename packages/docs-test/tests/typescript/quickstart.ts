@@ -1,7 +1,7 @@
 import "dotenv/config"
-import Engram from "supermemory"
+import Smaran from "supermemory"
 
-const client = new Engram()
+const client = new Smaran()
 const USER_ID = "docs-test-user"
 
 const conversation = [

@@ -105,7 +105,7 @@ async function verifyXAccount(account: ParsedAccount, signal: AbortSignal) {
 		headers: {
 			Accept: "application/json",
 			"User-Agent":
-				"Mozilla/5.0 (compatible; SuperMemory/1.0; +https://engram.ai)",
+				"Mozilla/5.0 (compatible; SuperMemory/1.0; +https://smaran.ai)",
 		},
 	})
 
@@ -171,7 +171,7 @@ export async function GET(request: Request) {
 				Accept:
 					"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
 				"User-Agent":
-					"Mozilla/5.0 (compatible; SuperMemory/1.0; +https://engram.ai)",
+					"Mozilla/5.0 (compatible; SuperMemory/1.0; +https://smaran.ai)",
 			},
 		})
 

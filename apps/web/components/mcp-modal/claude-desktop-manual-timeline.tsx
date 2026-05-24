@@ -22,7 +22,7 @@ const STEPS: {
 }[] = [
 	{
 		step: 1,
-		body: "Copy the engram block below. You will paste it inside mcpServers in a later step.",
+		body: "Copy the smaran block below. You will paste it inside mcpServers in a later step.",
 	},
 	{
 		step: 2,
@@ -41,18 +41,18 @@ const STEPS: {
 		step: 4,
 		body: "Paste what you copied under mcpServers (merge with existing servers if the file already has some), then save.",
 		imageSrc: GUIDE_IMAGES.step4,
-		imageAlt: "JSON editor showing engram mcpServers configuration",
+		imageAlt: "JSON editor showing smaran mcpServers configuration",
 	},
 	{
 		step: 5,
-		body: "Restart Claude Desktop. Open Settings → Connectors, find engram, and click Configure.",
+		body: "Restart Claude Desktop. Open Settings → Connectors, find smaran, and click Configure.",
 		imageSrc: GUIDE_IMAGES.step5,
 		imageAlt:
-			"Claude Desktop Connectors settings with engram and Configure highlighted",
+			"Claude Desktop Connectors settings with smaran and Configure highlighted",
 	},
 	{
 		step: 6,
-		body: "engram is installed in your Claude Desktop and ready to use.",
+		body: "smaran is installed in your Claude Desktop and ready to use.",
 	},
 ]
 

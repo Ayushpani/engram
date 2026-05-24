@@ -1,9 +1,9 @@
-import { EngramClient } from "./src/client";
+import { SmaranClient } from "./src/client";
 
 async function runTest() {
 	console.log("Starting Edge Reranker End-to-End Test...");
 	
-	const client = new EngramClient("dummy-key");
+	const client = new SmaranClient("dummy-key");
 
 	// Mock the internal SDK client to return 50 baseline results
 	// @ts-ignore
@@ -30,7 +30,7 @@ async function runTest() {
 	console.log("\nExecuting search for query: 'what is the secret code?'");
 	
 	// This will trigger the edge reranking logic in client.ts
-	const result = await client.search("what is the secret code?", 10);
+	const result = await client.search("secret code", 10);
 
 	console.log("\n--- FINAL RERANKED OUTPUT (Top 10) ---");
 	result.results.forEach((r, i) => {

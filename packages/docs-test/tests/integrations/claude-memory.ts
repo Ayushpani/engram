@@ -1,17 +1,17 @@
 import "dotenv/config"
-import { createClaudeMemoryTool } from "@engram/tools/claude-memory"
+import { createClaudeMemoryTool } from "@smaran/tools/claude-memory"
 
 async function testConfiguration() {
 	console.log("=== Configuration ===")
 
 	// Basic
-	const tool = createClaudeMemoryTool(process.env.ENGRAM_API_KEY!, {
+	const tool = createClaudeMemoryTool(process.env.SMARAN_API_KEY!, {
 		projectId: "my-app",
 	})
 	console.log("✓ Basic config")
 
 	// Full options
-	const toolFull = createClaudeMemoryTool(process.env.ENGRAM_API_KEY!, {
+	const toolFull = createClaudeMemoryTool(process.env.SMARAN_API_KEY!, {
 		projectId: "my-app",
 		containerTags: ["user-123", "project-alpha"],
 		memoryContainerTag: "my_memory_prefix",

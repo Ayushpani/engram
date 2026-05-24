@@ -1,9 +1,9 @@
 /**
- * Integration tests for the withEngram wrapper
+ * Integration tests for the withSmaran wrapper
  */
 
 import { describe, it, expect, vi } from "vitest"
-import { withEngram } from "../../src/vercel"
+import { withSmaran } from "../../src/vercel"
 import type {
 	LanguageModelV2,
 	LanguageModelV2CallOptions,
@@ -11,12 +11,12 @@ import type {
 import "dotenv/config"
 
 const INTEGRATION_CONFIG = {
-	apiKey: process.env.ENGRAM_API_KEY || "",
-	baseUrl: process.env.ENGRAM_BASE_URL || "https://api.engram.ai",
+	apiKey: process.env.SMARAN_API_KEY || "",
+	baseUrl: process.env.SMARAN_BASE_URL || "https://api.smaran.ai",
 	containerTag: "integration-test-vercel-wrapper",
 }
 
-const shouldRunIntegration = !!process.env.ENGRAM_API_KEY
+const shouldRunIntegration = !!process.env.SMARAN_API_KEY
 
 /**
  * Creates a mock language model that captures params for assertion
@@ -89,14 +89,14 @@ const createIntegrationMockModel = () => {
 }
 
 describe.skipIf(!shouldRunIntegration)(
-	"Integration: withEngram wrapper with real API",
+	"Integration: withSmaran wrapper with real API",
 	() => {
 		describe("doGenerate flow", () => {
 			it("should fetch real memories and inject into params passed to model", async () => {
 				const { model, getCapturedGenerateParams } =
 					createIntegrationMockModel()
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "test-generate",
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -125,7 +125,7 @@ describe.skipIf(!shouldRunIntegration)(
 
 				const customId = `test-generate-${Date.now()}`
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -167,7 +167,7 @@ describe.skipIf(!shouldRunIntegration)(
 
 				const customId = `test-conversation-${Date.now()}`
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -195,7 +195,7 @@ describe.skipIf(!shouldRunIntegration)(
 			it("should fetch memories and stream response", async () => {
 				const { model, getCapturedStreamParams } = createIntegrationMockModel()
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "test-stream",
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -232,7 +232,7 @@ describe.skipIf(!shouldRunIntegration)(
 
 				const customId = `test-stream-${Date.now()}`
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId,
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -273,7 +273,7 @@ describe.skipIf(!shouldRunIntegration)(
 			it("should handle text-delta chunks correctly", async () => {
 				const { model } = createIntegrationMockModel()
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "test-chunks",
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -312,7 +312,7 @@ describe.skipIf(!shouldRunIntegration)(
 				const { model } = createIntegrationMockModel()
 				const fetchSpy = vi.spyOn(globalThis, "fetch")
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "test-profile",
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -351,7 +351,7 @@ describe.skipIf(!shouldRunIntegration)(
 				const { model } = createIntegrationMockModel()
 				const fetchSpy = vi.spyOn(globalThis, "fetch")
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "test-query",
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -390,7 +390,7 @@ describe.skipIf(!shouldRunIntegration)(
 				const { model } = createIntegrationMockModel()
 				const fetchSpy = vi.spyOn(globalThis, "fetch")
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "test-full",
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -435,7 +435,7 @@ describe.skipIf(!shouldRunIntegration)(
 					generalSearchMemories: string
 				}) => `<custom-memories>${data.userMemories}</custom-memories>`
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "test-template",
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -462,7 +462,7 @@ describe.skipIf(!shouldRunIntegration)(
 				const { model, getCapturedGenerateParams } =
 					createIntegrationMockModel()
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "test-verbose",
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -489,7 +489,7 @@ describe.skipIf(!shouldRunIntegration)(
 				const fetchSpy = vi.spyOn(globalThis, "fetch")
 
 				// Use the configured base URL (or default)
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "test-baseurl",
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -529,7 +529,7 @@ describe.skipIf(!shouldRunIntegration)(
 					new Error("Model error"),
 				)
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "test-error",
 					apiKey: INTEGRATION_CONFIG.apiKey,
@@ -552,7 +552,7 @@ describe.skipIf(!shouldRunIntegration)(
 				const { model, getCapturedGenerateParams } =
 					createIntegrationMockModel()
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "test-invalid-key",
 					apiKey: "invalid-api-key-12345",
@@ -575,7 +575,7 @@ describe.skipIf(!shouldRunIntegration)(
 			it("should reject on invalid API key when skipMemoryOnError is false", async () => {
 				const { model } = createIntegrationMockModel()
 
-				const wrapped = withEngram(model, {
+				const wrapped = withSmaran(model, {
 					containerTag: INTEGRATION_CONFIG.containerTag,
 					customId: "test-invalid-strict",
 					apiKey: "invalid-api-key-12345",

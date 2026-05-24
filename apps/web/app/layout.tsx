@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Space_Grotesk } from "next/font/google"
+import { Inter } from "next/font/google"
 import "../globals.css"
 import "@ui/globals.css"
 import { AuthProvider } from "@lib/auth-context"
@@ -12,13 +12,13 @@ import { Toaster } from "@ui/components/sonner"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { ThemeProvider } from "@/lib/theme-provider"
 
-const font = Space_Grotesk({
+const font = Inter({
 	subsets: ["latin"],
 	variable: "--font-sans",
 })
 
 export const metadata: Metadata = {
-	metadataBase: new URL("https://app.engram.ai"),
+	metadataBase: new URL("https://app.smaran.ai"),
 	description: "Your memories, wherever you are",
 	icons: {
 		icon: [
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 		],
 	},
 	manifest: "/manifest.webmanifest",
-	title: "engram app",
+	title: "smaran app",
 }
 
 export const viewport: Viewport = {
@@ -48,12 +48,6 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
-				{process.env.NODE_ENV === "development" && (
-					<script
-						crossOrigin="anonymous"
-						src="https://unpkg.com/react-scan/dist/auto.global.js"
-					/>
-				)}
 			</head>
 			<body
 				className={`${font.variable} antialiased overflow-x-hidden`}
@@ -61,15 +55,15 @@ export default function RootLayout({
 			>
 				<ThemeProvider
 					attribute="class"
-					defaultTheme="dark"
+					defaultTheme="light"
 					enableSystem={false}
 					disableTransitionOnChange
-					forcedTheme="dark"
+					forcedTheme="light"
 				>
 					<AutumnProvider
 						backendUrl={
 							process.env.NEXT_PUBLIC_BACKEND_URL ??
-							"https://api.engram.ai"
+							"https://api.smaran.ai"
 						}
 						includeCredentials={true}
 						headers={{ "X-App-Source": "nova" }}

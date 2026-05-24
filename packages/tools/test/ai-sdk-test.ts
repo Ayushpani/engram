@@ -1,8 +1,8 @@
 import { generateText } from "ai"
-import { withEngram } from "../src/ai-sdk"
+import { withSmaran } from "../src/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
-const modelWithMemory = withEngram(openai("gpt-5"), {
+const modelWithMemory = withSmaran(openai("gpt-5"), {
 	containerTag: "user_id_life",
 	customId: "conversation-123",
 	verbose: true,

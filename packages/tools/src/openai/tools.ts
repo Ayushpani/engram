@@ -1,26 +1,26 @@
 import type OpenAI from "openai"
-import Engram from "supermemory"
+import Smaran from "supermemory"
 import {
 	DEFAULT_VALUES,
 	PARAMETER_DESCRIPTIONS,
 	TOOL_DESCRIPTIONS,
 	getContainerTags,
 } from "../tools-shared"
-import type { EngramToolsConfig } from "../types"
+import type { SmaranToolsConfig } from "../types"
 
 /**
  * Result types for memory operations
  */
 export interface MemorySearchResult {
 	success: boolean
-	results?: Awaited<ReturnType<Engram["search"]["execute"]>>["results"]
+	results?: Awaited<ReturnType<Smaran["search"]["execute"]>>["results"]
 	count?: number
 	error?: string
 }
 
 export interface MemoryAddResult {
 	success: boolean
-	memory?: Awaited<ReturnType<Engram["memories"]["add"]>>
+	memory?: Awaited<ReturnType<Smaran["memories"]["add"]>>
 	error?: string
 }
 
@@ -30,15 +30,15 @@ export interface ProfileResult {
 		static: string[]
 		dynamic: string[]
 	}
-	searchResults?: Awaited<ReturnType<Engram["search"]["execute"]>>
+	searchResults?: Awaited<ReturnType<Smaran["search"]["execute"]>>
 	error?: string
 }
 
 export interface DocumentListResult {
 	success: boolean
-	documents?: Awaited<ReturnType<Engram["documents"]["list"]>>["documents"]
+	documents?: Awaited<ReturnType<Smaran["documents"]["list"]>>["documents"]
 	pagination?: Awaited<
-		ReturnType<Engram["documents"]["list"]>
+		ReturnType<Smaran["documents"]["list"]>
 	>["pagination"]
 	error?: string
 }
@@ -51,7 +51,7 @@ export interface DocumentDeleteResult {
 
 export interface DocumentAddResult {
 	success: boolean
-	document?: Awaited<ReturnType<Engram["documents"]["add"]>>
+	document?: Awaited<ReturnType<Smaran["documents"]["add"]>>
 	error?: string
 }
 
@@ -219,10 +219,10 @@ export const memoryToolSchemas = {
 } as const
 
 /**
- * Create a Engram client with configuration
+ * Create a Smaran client with configuration
  */
-function createClient(apiKey: string, config?: EngramToolsConfig) {
-	const client = new Engram({
+function createClient(apiKey: string, config?: SmaranToolsConfig) {
+	const client = new Smaran({
 		apiKey,
 		...(config?.baseUrl && { baseURL: config.baseUrl }),
 	})
@@ -237,7 +237,7 @@ function createClient(apiKey: string, config?: EngramToolsConfig) {
  */
 export function createSearchMemoriesFunction(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const { client, containerTags } = createClient(apiKey, config)
 
@@ -278,7 +278,7 @@ export function createSearchMemoriesFunction(
  */
 export function createAddMemoryFunction(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const { client, containerTags } = createClient(apiKey, config)
 
@@ -314,7 +314,7 @@ export function createAddMemoryFunction(
  */
 export function createGetProfileFunction(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const { client, containerTags } = createClient(apiKey, config)
 
@@ -352,7 +352,7 @@ export function createGetProfileFunction(
  */
 export function createDocumentListFunction(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const { client, containerTags } = createClient(apiKey, config)
 
@@ -396,7 +396,7 @@ export function createDocumentListFunction(
  */
 export function createDocumentDeleteFunction(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const { client } = createClient(apiKey, config)
 
@@ -426,7 +426,7 @@ export function createDocumentDeleteFunction(
  */
 export function createDocumentAddFunction(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const { client, containerTags } = createClient(apiKey, config)
 
@@ -468,7 +468,7 @@ export function createDocumentAddFunction(
  */
 export function createMemoryForgetFunction(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const { client, containerTags } = createClient(apiKey, config)
 
@@ -516,9 +516,9 @@ export function createMemoryForgetFunction(
 /**
  * Create all memory tools functions
  */
-export function engramTools(
+export function smaranTools(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const searchMemories = createSearchMemoriesFunction(apiKey, config)
 	const addMemory = createAddMemoryFunction(apiKey, config)
@@ -559,9 +559,9 @@ export function getToolDefinitions(): OpenAI.Chat.Completions.ChatCompletionTool
  */
 export function createToolCallExecutor(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
-	const tools = engramTools(apiKey, config)
+	const tools = smaranTools(apiKey, config)
 
 	return async function executeToolCall(
 		toolCall: OpenAI.Chat.Completions.ChatCompletionMessageToolCall,
@@ -598,7 +598,7 @@ export function createToolCallExecutor(
  */
 export function createToolCallsExecutor(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const executeToolCall = createToolCallExecutor(apiKey, config)
 
@@ -625,7 +625,7 @@ export function createToolCallsExecutor(
  */
 export function createSearchMemoriesTool(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const searchMemories = createSearchMemoriesFunction(apiKey, config)
 
@@ -640,7 +640,7 @@ export function createSearchMemoriesTool(
 
 export function createAddMemoryTool(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const addMemory = createAddMemoryFunction(apiKey, config)
 
@@ -655,7 +655,7 @@ export function createAddMemoryTool(
 
 export function createGetProfileTool(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const getProfile = createGetProfileFunction(apiKey, config)
 
@@ -670,7 +670,7 @@ export function createGetProfileTool(
 
 export function createDocumentListTool(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const documentList = createDocumentListFunction(apiKey, config)
 
@@ -685,7 +685,7 @@ export function createDocumentListTool(
 
 export function createDocumentDeleteTool(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const documentDelete = createDocumentDeleteFunction(apiKey, config)
 
@@ -700,7 +700,7 @@ export function createDocumentDeleteTool(
 
 export function createDocumentAddTool(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const documentAdd = createDocumentAddFunction(apiKey, config)
 
@@ -715,7 +715,7 @@ export function createDocumentAddTool(
 
 export function createMemoryForgetTool(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	const memoryForget = createMemoryForgetFunction(apiKey, config)
 

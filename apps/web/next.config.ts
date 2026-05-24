@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
 		ignoreBuildErrors: true,
 	},
 	transpilePackages: [
-		"@engram/memory-graph",
+		"@smaran/memory-graph",
 		"@tiptap/core",
 		"@tiptap/react",
 		"@tiptap/pm",
@@ -57,7 +57,7 @@ export default withSentryConfig(nextConfig, {
 	// For all available options, see:
 	// https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-	org: "engram",
+	org: "smaran",
 
 	project: "consumer-app",
 

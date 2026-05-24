@@ -213,17 +213,17 @@ function buildSpotlightCatalog(
 				},
 			},
 			{
-				id: "coding-claude-engram",
-				title: "Claude Engram",
+				id: "coding-claude-smaran",
+				title: "Claude Smaran",
 				description:
 					"Persistent memory for Claude Code — context and decisions across sessions.",
 				icon: spotlightPluginCornerIcon(
 					"/images/plugins/claude-code.svg",
-					"Claude Engram",
+					"Claude Smaran",
 				),
 				pro: true,
 				onOpen: () => {
-					track("plugin_claude_engram")
+					track("plugin_claude_smaran")
 					openPluginsPanel()
 				},
 			},
@@ -326,17 +326,17 @@ function buildSpotlightCatalog(
 				},
 			},
 			{
-				id: "agents-claude-engram",
-				title: "Claude Engram",
+				id: "agents-claude-smaran",
+				title: "Claude Smaran",
 				description:
 					"Persistent memory for Claude Code — context and decisions across sessions.",
 				icon: spotlightPluginCornerIcon(
 					"/images/plugins/claude-code.svg",
-					"Claude Engram",
+					"Claude Smaran",
 				),
 				pro: true,
 				onOpen: () => {
-					track("plugin_claude_engram")
+					track("plugin_claude_smaran")
 					openPluginsPanel()
 				},
 			},
@@ -364,7 +364,7 @@ function buildSpotlightCatalog(
 				onOpen: () => {
 					track("console_api")
 					window.open(
-						"https://console.engram.ai",
+						"https://console.smaran.ai",
 						"_blank",
 						"noopener,noreferrer",
 					)

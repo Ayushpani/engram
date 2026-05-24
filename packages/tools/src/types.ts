@@ -1,10 +1,10 @@
 /**
- * Engram configuration
+ * Smaran configuration
  * Only one of `projectId` or `containerTags` can be provided.
  */
-export interface EngramToolsConfig {
+export interface SmaranToolsConfig {
 	/**
-	 * Custom base URL for the engram API
+	 * Custom base URL for the smaran API
 	 */
 	baseUrl?: string
 	/**

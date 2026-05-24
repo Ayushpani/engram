@@ -1,11 +1,11 @@
-# Engram Pipecat SDK
+# Smaran Pipecat SDK
 
-Memory-enhanced conversational AI pipelines with [Engram](https://engram.ai) and [Pipecat](https://github.com/pipecat-ai/pipecat).
+Memory-enhanced conversational AI pipelines with [Smaran](https://smaran.ai) and [Pipecat](https://github.com/pipecat-ai/pipecat).
 
 ## Installation
 
 ```bash
-pip install engram-pipecat
+pip install smaran-pipecat
 ```
 
 ## Quick Start
@@ -14,11 +14,11 @@ pip install engram-pipecat
 import os
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.services.openai import OpenAILLMService, OpenAIUserContextAggregator
-from engram_pipecat import EngramPipecatService
+from smaran_pipecat import SmaranPipecatService
 
 # Create memory service
-memory = EngramPipecatService(
-    api_key=os.getenv("ENGRAM_API_KEY"),
+memory = SmaranPipecatService(
+    api_key=os.getenv("SMARAN_API_KEY"),
     user_id="user-123",  # Required: used as container_tag
     session_id="conversation-456",  # Optional: groups memories by session
 )
@@ -42,19 +42,19 @@ pipeline = Pipeline([
 | ------------ | ----------- | -------- | ---------------------------------------------------------- |
 | `user_id`    | str         | **Yes**  | User identifier - used as container_tag for memory scoping |
 | `session_id` | str         | No       | Session/conversation ID for grouping memories              |
-| `api_key`    | str         | No       | Engram API key (or set `ENGRAM_API_KEY` env var) |
+| `api_key`    | str         | No       | Smaran API key (or set `SMARAN_API_KEY` env var) |
 | `params`     | InputParams | No       | Advanced configuration                                     |
 | `base_url`   | str         | No       | Custom API endpoint                                        |
 
 ### Advanced Configuration
 
 ```python
-from engram_pipecat import EngramPipecatService
+from smaran_pipecat import SmaranPipecatService
 
-memory = EngramPipecatService(
+memory = SmaranPipecatService(
     user_id="user-123",
     session_id="conv-456",
-    params=EngramPipecatService.InputParams(
+    params=SmaranPipecatService.InputParams(
         search_limit=10,           # Max memories to retrieve
         search_threshold=0.1,      # Similarity threshold
         mode="full",               # "profile", "query", or "full"
@@ -77,11 +77,11 @@ memory = EngramPipecatService(
 2. **Tracks conversation** - Maintains clean conversation history (no injected memories)
 3. **Retrieves memories** - Queries `/v4/profile` API with user's message
 4. **Injects memories** - Formats and adds to LLM context as system message
-5. **Stores messages** - Sends last user message to Engram (background, non-blocking)
+5. **Stores messages** - Sends last user message to Smaran (background, non-blocking)
 
 ### What Gets Stored
 
-Only the last user message is sent to Engram:
+Only the last user message is sent to Smaran:
 
 ```
 User: What's the weather like today?
@@ -113,7 +113,7 @@ from pipecat.transports.websocket.fastapi import (
     FastAPIWebsocketTransport,
     FastAPIWebsocketParams,
 )
-from engram_pipecat import EngramPipecatService
+from smaran_pipecat import SmaranPipecatService
 
 app = FastAPI()
 
@@ -135,8 +135,8 @@ async def websocket_endpoint(websocket: WebSocket):
     context = OpenAILLMContext([{"role": "system", "content": "You are a helpful assistant."}])
     context_aggregator = llm.create_context_aggregator(context)
 
-    # Engram memory service
-    memory = EngramPipecatService(
+    # Smaran memory service
+    memory = SmaranPipecatService(
         user_id="alice",
         session_id="session-123",
     )

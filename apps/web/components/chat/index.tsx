@@ -218,7 +218,7 @@ export function ChatSidebar({
 		[setThreadId],
 	)
 	const chatApiBase =
-		process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.engram.ai"
+		process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.smaran.ai"
 
 	const chatTransport = useMemo(
 		() =>

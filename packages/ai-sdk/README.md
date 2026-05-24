@@ -1,17 +1,17 @@
-# engram AI SDK Utilities
+# smaran AI SDK Utilities
 
-Vercel AI SDK utilities for engram
+Vercel AI SDK utilities for smaran
 
 ## Installation
 
 ```bash
-npm install @engram/ai-sdk
+npm install @smaran/ai-sdk
 # or
-bun add @engram/ai-sdk
+bun add @smaran/ai-sdk
 # or
-pnpm add @engram/ai-sdk
+pnpm add @smaran/ai-sdk
 # or
-yarn add @engram/ai-sdk
+yarn add @smaran/ai-sdk
 ```
 
 ## Features
@@ -19,27 +19,27 @@ yarn add @engram/ai-sdk
 Choose **one** of the following approaches (they cannot be used together):
 
 - **Infinite Chat Provider**: Connect to various LLM providers with unlimited context support
-- **Memory Tools**: Search, add, and fetch memories from engram using AI agents
+- **Memory Tools**: Search, add, and fetch memories from smaran using AI agents
 
 ## Infinite Chat Provider
 
-The infinite chat provider allows you to connect to various LLM providers with engram's context management.
+The infinite chat provider allows you to connect to various LLM providers with smaran's context management.
 
 ```typescript
 import { generateText } from 'ai'
 
 // Using a custom provider URL
-const engramOpenai = createOpenAI({
-  baseUrl: 'https://api.engram.ai/v3/https://api.openai.com/v1',
+const smaranOpenai = createOpenAI({
+  baseUrl: 'https://api.smaran.ai/v3/https://api.openai.com/v1',
   apiKey: 'your-provider-api-key',
   headers: {
-    'x-engram-api-key': 'engram-api-key',
+    'x-smaran-api-key': 'smaran-api-key',
     'x-sm-conversation-id': 'conversation-id'
   }
 })
 
 const result = await generateText({
-  model: engramOpenai('gpt-5'),
+  model: smaranOpenai('gpt-5'),
   messages: [
     { role: 'user', content: 'Hello, how are you?' }
   ]
@@ -51,22 +51,22 @@ const result = await generateText({
 ```typescript
 import { generateText } from 'ai'
 
-const engramApiKey = process.env.ENGRAM_API_KEY!
+const smaranApiKey = process.env.SMARAN_API_KEY!
 const openaiApiKey = process.env.OPENAI_API_KEY!
 
 // Initialize infinite chat provider
-const engramOpenai = createOpenAI({
-  baseUrl: 'https://api.engram.ai/v3/https://api.openai.com/v1',
+const smaranOpenai = createOpenAI({
+  baseUrl: 'https://api.smaran.ai/v3/https://api.openai.com/v1',
   apiKey: 'your-provider-api-key',
   headers: {
-    'x-engram-api-key': 'engram-api-key',
+    'x-smaran-api-key': 'smaran-api-key',
     'x-sm-conversation-id': 'conversation-id'
   }
 })
 
 async function chat(userMessage: string) {
   const result = await generateText({
-    model: engramOpenai('gpt-5'),
+    model: smaranOpenai('gpt-5'),
     messages: [
       {
         role: 'system',
@@ -104,10 +104,10 @@ interface ConfigWithProviderUrl {
 
 ## Memory Tools
 
-engram tools allow AI agents to interact with user memories for enhanced context and personalization.
+smaran tools allow AI agents to interact with user memories for enhanced context and personalization.
 
 ```typescript
-import { engramTools } from '@engram/ai-sdk'
+import { smaranTools } from '@smaran/ai-sdk'
 import { generateText } from 'ai'
 
 const result = await generateText({
@@ -116,9 +116,9 @@ const result = await generateText({
     { role: 'user', content: 'What do you remember about my preferences?' }
   ],
   tools: {
-    ...engramTools('your-engram-api-key', {
+    ...smaranTools('your-smaran-api-key', {
   // Optional: specify a base URL for self-hosted instances
-  baseUrl: 'https://api.engram.com',
+  baseUrl: 'https://api.smaran.com',
 
   // Use either projectId OR containerTags, not both
   projectId: 'your-project-id',
@@ -133,11 +133,11 @@ const result = await generateText({
 ### Complete Memory Tools Example
 
 ```typescript
-import { engramTools } from '@engram/ai-sdk'
+import { smaranTools } from '@smaran/ai-sdk'
 import { generateText } from 'ai'
 import { openai } from '@ai-sdk/openai'
 
-const engramApiKey = process.env.ENGRAM_API_KEY!
+const smaranApiKey = process.env.SMARAN_API_KEY!
 
 async function chatWithTools(userMessage: string) {
   const result = await generateText({
@@ -153,7 +153,7 @@ async function chatWithTools(userMessage: string) {
       }
     ],
     tools: {
-      ...engramTools(engramApiKey, {
+      ...smaranTools(smaranApiKey, {
         containerTags: ['my-user-id']
       })
     },
@@ -167,8 +167,8 @@ async function chatWithTools(userMessage: string) {
 ### Configuration
 
 ```typescript
-interface EngramConfig {
-  // Optional: Base URL for API calls (default: https://api.engram.com)
+interface SmaranConfig {
+  // Optional: Base URL for API calls (default: https://api.smaran.com)
   baseUrl?: string
 
   // Container tags for organizing memories (cannot be used with projectId)
@@ -179,13 +179,13 @@ interface EngramConfig {
 }
 ```
 
-### Self-Hosted engram
+### Self-Hosted smaran
 
-If you're running a self-hosted engram instance:
+If you're running a self-hosted smaran instance:
 
 ```typescript
-const tools = engramTools('your-api-key', {
-  baseUrl: 'https://your-engram-instance.com',
+const tools = smaranTools('your-api-key', {
+  baseUrl: 'https://your-smaran-instance.com',
   containerTags: ['production', 'user-memories']
 })
 ```
@@ -231,7 +231,7 @@ import {
   searchMemoriesTool,
   addMemoryTool,
   fetchMemoryTool
-} from '@engram/ai-sdk'
+} from '@smaran/ai-sdk'
 
 const searchTool = searchMemoriesTool('your-api-key', {
   projectId: 'your-project-id'
@@ -285,12 +285,12 @@ cp .env.example .env
 ```
 
 **Required:**
-- `ENGRAM_API_KEY`: Your Engram API key
+- `SMARAN_API_KEY`: Your Smaran API key
 - `PROVIDER_API_KEY`: Your AI provider API key (OpenAI, Anthropic, etc.)
 - `OPENAI_API_KEY`: Your OpenAI API key for tool integration tests
 
 **Optional:**
-- `ENGRAM_BASE_URL`: Custom Engram base URL (defaults to `https://api.engram.ai`)
+- `SMARAN_BASE_URL`: Custom Smaran base URL (defaults to `https://api.smaran.ai`)
 - `PROVIDER_NAME`: Provider name (defaults to `openai`) - one of: `openai`, `anthropic`, `openrouter`, `deepinfra`, `groq`, `google`, `cloudflare`
 - `PROVIDER_URL`: Custom provider URL (use instead of `PROVIDER_NAME`)
 - `MODEL_NAME`: Model to use in tests (defaults to `gpt-3.5-turbo`)
@@ -303,4 +303,4 @@ MIT
 
 ## Support
 
-Email our [24/7 Founder/CEO/Support Executive](dhravya@engram.com)
+Email our [24/7 Founder/CEO/Support Executive](dhravya@smaran.com)

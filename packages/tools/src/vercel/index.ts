@@ -5,7 +5,7 @@ import {
 	getLastUserMessage,
 } from "./util"
 import {
-	createEngramContext,
+	createSmaranContext,
 	transformParamsWithMemory,
 	extractAssistantResponseText,
 	saveMemoryAfterResponse,
@@ -34,9 +34,9 @@ interface WrapVercelLanguageModelOptions {
 	 * - "never": Only retrieve memories, don't store new ones
 	 */
 	addMemory?: "always" | "never"
-	/** Engram API key (falls back to ENGRAM_API_KEY env var) */
+	/** Smaran API key (falls back to SMARAN_API_KEY env var) */
 	apiKey?: string
-	/** Custom Engram API base URL */
+	/** Custom Smaran API base URL */
 	baseUrl?: string
 	/**
 	 * Custom function to format memory data into the system prompt.
@@ -55,7 +55,7 @@ interface WrapVercelLanguageModelOptions {
 	 */
 	promptTemplate?: PromptTemplate
 	/**
-	 * When Engram memory retrieval / injection fails or times out:
+	 * When Smaran memory retrieval / injection fails or times out:
 	 * - `true` (default): log and call the base model with the original prompt (no memories).
 	 * - `false`: propagate the error (fail closed on memory).
 	 */
@@ -63,10 +63,10 @@ interface WrapVercelLanguageModelOptions {
 }
 
 /**
- * Wraps a language model with engram middleware to automatically inject relevant memories
+ * Wraps a language model with smaran middleware to automatically inject relevant memories
  * into the system prompt based on the user's message content.
  *
- * This wrapper searches the engram API for relevant memories using the container tag
+ * This wrapper searches the smaran API for relevant memories using the container tag
  * and user message, then either appends memories to an existing system prompt or creates
  * a new system prompt with the memories. Pre-LLM profile retrieval uses a fixed internal
  * time budget and cannot be configured via options.
@@ -74,25 +74,25 @@ interface WrapVercelLanguageModelOptions {
  * Supports both Vercel AI SDK 5 (LanguageModelV2) and SDK 6 (LanguageModelV3) via runtime
  * detection of `model.specificationVersion`.
  *
- * @param model - The language model to wrap with engram capabilities (V2 or V3)
- * @param options - Configuration options for Engram integration
+ * @param model - The language model to wrap with smaran capabilities (V2 or V3)
+ * @param options - Configuration options for Smaran integration
  * @param options.containerTag - Required. The container tag/identifier for memory search (e.g., user ID, project ID)
  * @param options.customId - Required. Custom ID to group messages into a single document for contextual memory generation
  * @param options.verbose - Optional flag to enable detailed logging of memory search and injection process (default: false)
  * @param options.mode - Optional mode for memory search: "profile", "query", or "full" (default: "profile")
  * @param options.addMemory - Optional mode for memory search: "always", "never" (default: "always")
- * @param options.apiKey - Optional Engram API key to use instead of the environment variable
- * @param options.baseUrl - Optional base URL for the Engram API (default: "https://api.engram.ai")
+ * @param options.apiKey - Optional Smaran API key to use instead of the environment variable
+ * @param options.baseUrl - Optional base URL for the Smaran API (default: "https://api.smaran.ai")
  * @param options.skipMemoryOnError - When memory retrieval fails or times out: `true` (default) continues without injected memories; `false` throws
  *
  * @returns A wrapped language model that automatically includes relevant memories in prompts
  *
  * @example
  * ```typescript
- * import { withEngram } from "@engram/tools/ai-sdk"
+ * import { withSmaran } from "@smaran/tools/ai-sdk"
  * import { openai } from "@ai-sdk/openai"
  *
- * const modelWithMemory = withEngram(openai("gpt-4"), {
+ * const modelWithMemory = withSmaran(openai("gpt-4"), {
  *   containerTag: "user-123",
  *   customId: "conversation-456",
  *   mode: "full",
@@ -105,18 +105,18 @@ interface WrapVercelLanguageModelOptions {
  * })
  * ```
  *
- * @throws {Error} When neither `options.apiKey` nor `process.env.ENGRAM_API_KEY` are set
- * @throws {Error} When engram memory retrieval fails and `skipMemoryOnError` is `false`
+ * @throws {Error} When neither `options.apiKey` nor `process.env.SMARAN_API_KEY` are set
+ * @throws {Error} When smaran memory retrieval fails and `skipMemoryOnError` is `false`
  */
 const wrapVercelLanguageModel = <T extends LanguageModel>(
 	model: T,
 	options: WrapVercelLanguageModelOptions,
 ): T => {
-	const providedApiKey = options.apiKey ?? process.env.ENGRAM_API_KEY
+	const providedApiKey = options.apiKey ?? process.env.SMARAN_API_KEY
 
 	if (!providedApiKey) {
 		throw new Error(
-			"ENGRAM_API_KEY is not set — provide it via `options.apiKey` or set `process.env.ENGRAM_API_KEY`",
+			"SMARAN_API_KEY is not set — provide it via `options.apiKey` or set `process.env.SMARAN_API_KEY`",
 		)
 	}
 
@@ -126,7 +126,7 @@ const wrapVercelLanguageModel = <T extends LanguageModel>(
 		)
 	}
 
-	const ctx = createEngramContext({
+	const ctx = createSmaranContext({
 		containerTag: options.containerTag,
 		apiKey: providedApiKey,
 		customId: options.customId,
@@ -151,7 +151,7 @@ const wrapVercelLanguageModel = <T extends LanguageModel>(
 					} catch (memoryError) {
 						if (skipMemoryOnError) {
 							ctx.logger.warn(
-								"Engram retrieval failed; continuing without injected memories",
+								"Smaran retrieval failed; continuing without injected memories",
 								{
 									error:
 										memoryError instanceof Error
@@ -216,7 +216,7 @@ const wrapVercelLanguageModel = <T extends LanguageModel>(
 					} catch (memoryError) {
 						if (skipMemoryOnError) {
 							ctx.logger.warn(
-								"Engram retrieval failed; continuing without injected memories",
+								"Smaran retrieval failed; continuing without injected memories",
 								{
 									error:
 										memoryError instanceof Error
@@ -292,8 +292,8 @@ const wrapVercelLanguageModel = <T extends LanguageModel>(
 }
 
 export {
-	wrapVercelLanguageModel as withEngram,
-	type WrapVercelLanguageModelOptions as WithEngramOptions,
+	wrapVercelLanguageModel as withSmaran,
+	type WrapVercelLanguageModelOptions as WithSmaranOptions,
 	type PromptTemplate,
 	type MemoryPromptData,
 }

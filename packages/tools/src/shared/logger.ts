@@ -19,25 +19,25 @@ export const createLogger = (verbose: boolean): Logger => {
 	return {
 		debug: (message: string, data?: unknown) => {
 			console.log(
-				`[engram] ${message}`,
+				`[smaran] ${message}`,
 				data ? JSON.stringify(data, null, 2) : "",
 			)
 		},
 		info: (message: string, data?: unknown) => {
 			console.log(
-				`[engram] ${message}`,
+				`[smaran] ${message}`,
 				data ? JSON.stringify(data, null, 2) : "",
 			)
 		},
 		warn: (message: string, data?: unknown) => {
 			console.warn(
-				`[engram] ${message}`,
+				`[smaran] ${message}`,
 				data ? JSON.stringify(data, null, 2) : "",
 			)
 		},
 		error: (message: string, data?: unknown) => {
 			console.error(
-				`[engram] ${message}`,
+				`[smaran] ${message}`,
 				data ? JSON.stringify(data, null, 2) : "",
 			)
 		},

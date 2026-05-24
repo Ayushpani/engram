@@ -190,21 +190,21 @@ export function toLinkedInProfileUrl(handle: string): string {
 }
 
 /**
- * Checks if a URL points to a engram-hosted file.
- * Matches the public bucket domain (files.engram.ai) and
+ * Checks if a URL points to a smaran-hosted file.
+ * Matches the public bucket domain (files.smaran.ai) and
  * presigned R2 URLs whose hostname ends with `.r2.cloudflarestorage.com`.
  *
  * Note: The R2 check is intentionally broad — it matches any Cloudflare R2
- * presigned URL, not only engram's account.  This is acceptable because
+ * presigned URL, not only smaran's account.  This is acceptable because
  * the function is only called on `document.url` values returned by our own
- * backend, where all R2 URLs originate from the engram bucket.
+ * backend, where all R2 URLs originate from the smaran bucket.
  * If user-supplied external R2 URLs ever appear in this field, tighten the
  * check by also validating the account-id subdomain or the bucket path prefix.
  */
-export const isEngramFileUrl = (url: string): boolean => {
+export const isSmaranFileUrl = (url: string): boolean => {
 	try {
 		const parsed = new URL(url)
-		if (parsed.hostname === "files.engram.ai") return true
+		if (parsed.hostname === "files.smaran.ai") return true
 		if (parsed.hostname.endsWith(".r2.cloudflarestorage.com")) return true
 		return false
 	} catch {

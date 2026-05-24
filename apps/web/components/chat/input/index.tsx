@@ -135,7 +135,7 @@ export default function ChatInput({
 						value={value}
 						onChange={handleChange}
 						onKeyDown={onKeyDown}
-						placeholder="Ask your engram..."
+						placeholder="Ask your smaran..."
 						className="w-full resize-none overflow-y-auto bg-transparent p-2 text-fg-primary transition-all duration-200 placeholder:text-fg-faint focus:outline-none"
 						style={{ minHeight: "36px" }}
 						rows={1}
@@ -166,7 +166,7 @@ export default function ChatInput({
 						value={value}
 						onChange={handleChange}
 						onKeyDown={onKeyDown}
-						placeholder="Ask your engram..."
+						placeholder="Ask your smaran..."
 						className="w-full resize-none overflow-y-auto bg-transparent p-2 text-fg-primary transition-all duration-200 placeholder:text-fg-faint focus:outline-none"
 						style={{ minHeight: "36px" }}
 						rows={1}

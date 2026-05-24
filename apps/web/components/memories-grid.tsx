@@ -29,7 +29,7 @@ import { getAbsoluteUrl, isYouTubeUrl, useYouTubeChannelName } from "./utils"
 import { SyncLogoIcon } from "@ui/assets/icons"
 import { McpPreview } from "./document-cards/mcp-preview"
 import { NotionPreview } from "./document-cards/notion-preview"
-import { getFaviconUrl, isEngramFileUrl } from "@/lib/url-helpers"
+import { getFaviconUrl, isSmaranFileUrl } from "@/lib/url-helpers"
 import { QuickNoteCard } from "./quick-note-card"
 import type { HighlightItem } from "./highlights-card"
 import { Button } from "@ui/components/button"
@@ -956,7 +956,7 @@ const DocumentCard = memo(
 			document.type !== "notion_doc" &&
 			!document.url.includes("x.com") &&
 			!document.url.includes("twitter.com") &&
-			!isEngramFileUrl(document.url) &&
+			!isSmaranFileUrl(document.url) &&
 			!document.url.includes("docs.googleapis.com") &&
 			!document.url.includes("notion.so") &&
 			(!document.title || !ogImage)
@@ -1075,7 +1075,7 @@ const DocumentCard = memo(
 					) && (
 						<div className="pb-[10px] space-y-1">
 							{document.url &&
-								!isEngramFileUrl(document.url) &&
+								!isSmaranFileUrl(document.url) &&
 								(document.title ||
 									(!document.url.includes("x.com") &&
 										!document.url.includes("twitter.com"))) && (

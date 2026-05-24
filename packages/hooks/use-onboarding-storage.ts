@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react"
 
-const ONBOARDING_STORAGE_KEY = "engram_onboarding_completed"
+const ONBOARDING_STORAGE_KEY = "smaran_onboarding_completed"
 
 export function useOnboardingStorage() {
 	const [isOnboardingCompleted, setIsOnboardingCompleted] = useState<

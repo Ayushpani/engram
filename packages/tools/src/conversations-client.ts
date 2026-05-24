@@ -1,5 +1,5 @@
 /**
- * Client for the Engram Conversations API
+ * Client for the Smaran Conversations API
  *
  * This module provides a helper function to ingest conversations using the
  * /v4/conversations endpoint, which supports structured messages with smart
@@ -46,7 +46,7 @@ export interface AddConversationResponse {
 }
 
 /**
- * Adds a conversation to Engram using the /v4/conversations endpoint
+ * Adds a conversation to Smaran using the /v4/conversations endpoint
  *
  * This endpoint supports:
  * - Structured messages with roles (user, assistant, system, tool)
@@ -66,14 +66,14 @@ export interface AddConversationResponse {
  *     { role: "assistant", content: "Hi there!" }
  *   ],
  *   containerTags: ["user-456"],
- *   apiKey: process.env.ENGRAM_API_KEY,
+ *   apiKey: process.env.SMARAN_API_KEY,
  * })
  * ```
  */
 export async function addConversation(
 	params: AddConversationParams,
 ): Promise<AddConversationResponse> {
-	const baseUrl = params.baseUrl || "https://api.engram.ai"
+	const baseUrl = params.baseUrl || "https://api.smaran.ai"
 	const url = `${baseUrl}/v4/conversations`
 
 	const response = await fetch(url, {

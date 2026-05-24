@@ -20,16 +20,16 @@ const RAYCAST_STEPS: InstallStep[] = [
 	},
 	{
 		title: "Install the Raycast extension",
-		description: "Open the Engram extension page in the Raycast Store.",
+		description: "Open the Smaran extension page in the Raycast Store.",
 	},
 	{
 		title: "Paste your key in Raycast preferences",
 		description:
-			"Open Raycast preferences → Extensions → Engram, then paste the key above.",
+			"Open Raycast preferences → Extensions → Smaran, then paste the key above.",
 	},
 	{
 		title: 'Run "Add Memory" or "Search Memories"',
-		description: "Trigger Raycast and start using Engram from anywhere.",
+		description: "Trigger Raycast and start using Smaran from anywhere.",
 	},
 ]
 

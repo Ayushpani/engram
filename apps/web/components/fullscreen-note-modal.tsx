@@ -108,7 +108,7 @@ export function FullscreenNoteModal({
 									{userName}
 								</p>
 								<p className="text-white font-bold text-xl leading-none -mt-1">
-									engram
+									smaran
 								</p>
 							</div>
 						)}

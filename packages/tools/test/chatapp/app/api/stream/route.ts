@@ -1,19 +1,19 @@
 import { convertToModelMessages, gateway, streamText, type UIMessage } from "ai"
 import { withTracing } from "@posthog/ai"
-import { withEngram } from "../../../../../src/ai-sdk"
+import { withSmaran } from "../../../../../src/ai-sdk"
 import { PostHog } from "posthog-node"
 
-const ENGRAM_USER_ID = "user-1"
+const SMARAN_USER_ID = "user-1"
 
 const gatewayModel = gateway("google/gemini-2.5-flash")
 
-const engramOptions = {
-	containerTag: ENGRAM_USER_ID,
+const smaranOptions = {
+	containerTag: SMARAN_USER_ID,
 	customId: "stream-session",
-	apiKey: process.env.ENGRAM_API_KEY ?? "",
+	apiKey: process.env.SMARAN_API_KEY ?? "",
 	mode: "full" as const,
 	addMemory: "always" as const,
-	baseUrl: process.env.ENGRAM_BASE_URL,
+	baseUrl: process.env.SMARAN_BASE_URL,
 }
 
 export async function POST(req: Request) {
@@ -28,12 +28,12 @@ export async function POST(req: Request) {
 
 	const innerModel = phClient
 		? withTracing(gatewayModel, phClient, {
-				posthogDistinctId: ENGRAM_USER_ID,
+				posthogDistinctId: SMARAN_USER_ID,
 				posthogProperties: { route: "api/stream" },
 			})
 		: gatewayModel
 
-	const model = withEngram(innerModel, engramOptions)
+	const model = withSmaran(innerModel, smaranOptions)
 
 	const result = streamText({
 		model,

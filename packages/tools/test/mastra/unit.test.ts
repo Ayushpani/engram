@@ -9,12 +9,12 @@ import {
 	MASTRA_THREAD_ID_KEY,
 } from "@mastra/core/request-context"
 import {
-	EngramInputProcessor,
-	EngramOutputProcessor,
-	createEngramProcessor,
-	createEngramOutputProcessor,
-	createEngramProcessors,
-	withEngram,
+	SmaranInputProcessor,
+	SmaranOutputProcessor,
+	createSmaranProcessor,
+	createSmaranOutputProcessor,
+	createSmaranProcessors,
+	withSmaran,
 } from "../../src/mastra"
 import type {
 	ProcessInputArgs,
@@ -27,7 +27,7 @@ import type {
 
 const TEST_CONFIG = {
 	apiKey: "test-api-key",
-	baseUrl: "https://api.engram.ai",
+	baseUrl: "https://api.smaran.ai",
 	containerTag: "test-mastra-user",
 	customId: "test-conversation",
 }
@@ -105,14 +105,14 @@ const createMockConversationResponse = () => ({
 	status: "created",
 })
 
-describe("EngramInputProcessor", () => {
+describe("SmaranInputProcessor", () => {
 	let originalEnv: string | undefined
 	let originalFetch: typeof globalThis.fetch
 	let fetchMock: ReturnType<typeof vi.fn>
 
 	beforeEach(() => {
-		originalEnv = process.env.ENGRAM_API_KEY
-		process.env.ENGRAM_API_KEY = TEST_CONFIG.apiKey
+		originalEnv = process.env.SMARAN_API_KEY
+		process.env.SMARAN_API_KEY = TEST_CONFIG.apiKey
 		originalFetch = globalThis.fetch
 		fetchMock = vi.fn()
 		globalThis.fetch = fetchMock as unknown as typeof fetch
@@ -121,43 +121,43 @@ describe("EngramInputProcessor", () => {
 
 	afterEach(() => {
 		if (originalEnv) {
-			process.env.ENGRAM_API_KEY = originalEnv
+			process.env.SMARAN_API_KEY = originalEnv
 		} else {
-			delete process.env.ENGRAM_API_KEY
+			delete process.env.SMARAN_API_KEY
 		}
 		globalThis.fetch = originalFetch
 	})
 
 	describe("constructor", () => {
 		it("should create processor with required options", () => {
-			const processor = new EngramInputProcessor({
+			const processor = new SmaranInputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 			})
-			expect(processor.id).toBe("engram-input")
-			expect(processor.name).toBe("Engram Memory Injection")
+			expect(processor.id).toBe("smaran-input")
+			expect(processor.name).toBe("Smaran Memory Injection")
 		})
 
 		it("should throw error if API key is not set", () => {
-			delete process.env.ENGRAM_API_KEY
+			delete process.env.SMARAN_API_KEY
 
 			expect(() => {
-				new EngramInputProcessor({
+				new SmaranInputProcessor({
 					containerTag: TEST_CONFIG.containerTag,
 					customId: TEST_CONFIG.customId,
 				})
-			}).toThrow("ENGRAM_API_KEY is not set")
+			}).toThrow("SMARAN_API_KEY is not set")
 		})
 
 		it("should accept API key via options", () => {
-			delete process.env.ENGRAM_API_KEY
+			delete process.env.SMARAN_API_KEY
 
-			const processor = new EngramInputProcessor({
+			const processor = new SmaranInputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 				apiKey: "custom-key",
 			})
-			expect(processor.id).toBe("engram-input")
+			expect(processor.id).toBe("smaran-input")
 		})
 	})
 
@@ -174,7 +174,7 @@ describe("EngramInputProcessor", () => {
 					),
 			})
 
-			const processor = new EngramInputProcessor({
+			const processor = new SmaranInputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 				apiKey: TEST_CONFIG.apiKey,
@@ -198,7 +198,7 @@ describe("EngramInputProcessor", () => {
 			const systemCall = messageList.calls.find((c) => c.method === "addSystem")
 			expect(systemCall).toBeDefined()
 			expect(systemCall?.args[0]).toContain("TypeScript")
-			expect(systemCall?.args[1]).toBe("engram")
+			expect(systemCall?.args[1]).toBe("smaran")
 		})
 
 		it("should use cached memories on second call with same message", async () => {
@@ -208,7 +208,7 @@ describe("EngramInputProcessor", () => {
 					Promise.resolve(createMockProfileResponse(["Cached memory"])),
 			})
 
-			const processor = new EngramInputProcessor({
+			const processor = new SmaranInputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 				apiKey: TEST_CONFIG.apiKey,
@@ -253,7 +253,7 @@ describe("EngramInputProcessor", () => {
 				})
 			})
 
-			const processor = new EngramInputProcessor({
+			const processor = new SmaranInputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 				apiKey: TEST_CONFIG.apiKey,
@@ -284,7 +284,7 @@ describe("EngramInputProcessor", () => {
 		})
 
 		it("should return messageList in query mode when no user message", async () => {
-			const processor = new EngramInputProcessor({
+			const processor = new SmaranInputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 				apiKey: TEST_CONFIG.apiKey,
@@ -315,7 +315,7 @@ describe("EngramInputProcessor", () => {
 				text: () => Promise.resolve("Server error"),
 			})
 
-			const processor = new EngramInputProcessor({
+			const processor = new SmaranInputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 				apiKey: TEST_CONFIG.apiKey,
@@ -343,7 +343,7 @@ describe("EngramInputProcessor", () => {
 				json: () => Promise.resolve(createMockProfileResponse(["Memory"])),
 			})
 
-			const processor = new EngramInputProcessor({
+			const processor = new SmaranInputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "thread-123",
 				apiKey: TEST_CONFIG.apiKey,
@@ -369,7 +369,7 @@ describe("EngramInputProcessor", () => {
 				json: () => Promise.resolve(createMockProfileResponse(["Memory"])),
 			})
 
-			const processor = new EngramInputProcessor({
+			const processor = new SmaranInputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 				apiKey: TEST_CONFIG.apiKey,
@@ -399,7 +399,7 @@ describe("EngramInputProcessor", () => {
 				json: () => Promise.resolve(createMockProfileResponse(["Memory"])),
 			})
 
-			const processor = new EngramInputProcessor({
+			const processor = new SmaranInputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 				apiKey: TEST_CONFIG.apiKey,
@@ -437,14 +437,14 @@ describe("EngramInputProcessor", () => {
 	})
 })
 
-describe("EngramOutputProcessor", () => {
+describe("SmaranOutputProcessor", () => {
 	let originalEnv: string | undefined
 	let originalFetch: typeof globalThis.fetch
 	let fetchMock: ReturnType<typeof vi.fn>
 
 	beforeEach(() => {
-		originalEnv = process.env.ENGRAM_API_KEY
-		process.env.ENGRAM_API_KEY = TEST_CONFIG.apiKey
+		originalEnv = process.env.SMARAN_API_KEY
+		process.env.SMARAN_API_KEY = TEST_CONFIG.apiKey
 		originalFetch = globalThis.fetch
 		fetchMock = vi.fn()
 		globalThis.fetch = fetchMock as unknown as typeof fetch
@@ -453,21 +453,21 @@ describe("EngramOutputProcessor", () => {
 
 	afterEach(() => {
 		if (originalEnv) {
-			process.env.ENGRAM_API_KEY = originalEnv
+			process.env.SMARAN_API_KEY = originalEnv
 		} else {
-			delete process.env.ENGRAM_API_KEY
+			delete process.env.SMARAN_API_KEY
 		}
 		globalThis.fetch = originalFetch
 	})
 
 	describe("constructor", () => {
 		it("should create processor with required options", () => {
-			const processor = new EngramOutputProcessor({
+			const processor = new SmaranOutputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 			})
-			expect(processor.id).toBe("engram-output")
-			expect(processor.name).toBe("Engram Conversation Save")
+			expect(processor.id).toBe("smaran-output")
+			expect(processor.name).toBe("Smaran Conversation Save")
 		})
 	})
 
@@ -478,7 +478,7 @@ describe("EngramOutputProcessor", () => {
 				json: () => Promise.resolve(createMockConversationResponse()),
 			})
 
-			const processor = new EngramOutputProcessor({
+			const processor = new SmaranOutputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "conv-456",
 				apiKey: TEST_CONFIG.apiKey,
@@ -520,7 +520,7 @@ describe("EngramOutputProcessor", () => {
 		})
 
 		it("should not save conversation when addMemory is never", async () => {
-			const processor = new EngramOutputProcessor({
+			const processor = new SmaranOutputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "conv-456",
 				apiKey: TEST_CONFIG.apiKey,
@@ -548,7 +548,7 @@ describe("EngramOutputProcessor", () => {
 				json: () => Promise.resolve(createMockConversationResponse()),
 			})
 
-			const processor = new EngramOutputProcessor({
+			const processor = new SmaranOutputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "my-custom-id",
 				apiKey: TEST_CONFIG.apiKey,
@@ -580,7 +580,7 @@ describe("EngramOutputProcessor", () => {
 				json: () => Promise.resolve(createMockConversationResponse()),
 			})
 
-			const processor = new EngramOutputProcessor({
+			const processor = new SmaranOutputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "fallback-custom-id",
 				apiKey: TEST_CONFIG.apiKey,
@@ -617,7 +617,7 @@ describe("EngramOutputProcessor", () => {
 				json: () => Promise.resolve(createMockConversationResponse()),
 			})
 
-			const processor = new EngramOutputProcessor({
+			const processor = new SmaranOutputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "fallback-custom-id",
 				apiKey: TEST_CONFIG.apiKey,
@@ -650,7 +650,7 @@ describe("EngramOutputProcessor", () => {
 				json: () => Promise.resolve(createMockConversationResponse()),
 			})
 
-			const processor = new EngramOutputProcessor({
+			const processor = new SmaranOutputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "conv-456",
 				apiKey: TEST_CONFIG.apiKey,
@@ -687,7 +687,7 @@ describe("EngramOutputProcessor", () => {
 				json: () => Promise.resolve(createMockConversationResponse()),
 			})
 
-			const processor = new EngramOutputProcessor({
+			const processor = new SmaranOutputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "conv-456",
 				apiKey: TEST_CONFIG.apiKey,
@@ -741,7 +741,7 @@ describe("EngramOutputProcessor", () => {
 				text: () => Promise.resolve("Server error"),
 			})
 
-			const processor = new EngramOutputProcessor({
+			const processor = new SmaranOutputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "conv-456",
 				apiKey: TEST_CONFIG.apiKey,
@@ -763,7 +763,7 @@ describe("EngramOutputProcessor", () => {
 		})
 
 		it("should not save when no messages to save", async () => {
-			const processor = new EngramOutputProcessor({
+			const processor = new SmaranOutputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "conv-456",
 				apiKey: TEST_CONFIG.apiKey,
@@ -788,119 +788,119 @@ describe("Factory functions", () => {
 	let originalEnv: string | undefined
 
 	beforeEach(() => {
-		originalEnv = process.env.ENGRAM_API_KEY
-		process.env.ENGRAM_API_KEY = TEST_CONFIG.apiKey
+		originalEnv = process.env.SMARAN_API_KEY
+		process.env.SMARAN_API_KEY = TEST_CONFIG.apiKey
 	})
 
 	afterEach(() => {
 		if (originalEnv) {
-			process.env.ENGRAM_API_KEY = originalEnv
+			process.env.SMARAN_API_KEY = originalEnv
 		} else {
-			delete process.env.ENGRAM_API_KEY
+			delete process.env.SMARAN_API_KEY
 		}
 	})
 
-	describe("createEngramProcessor", () => {
+	describe("createSmaranProcessor", () => {
 		it("should create input processor", () => {
-			const processor = createEngramProcessor({
+			const processor = createSmaranProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 			})
-			expect(processor).toBeInstanceOf(EngramInputProcessor)
-			expect(processor.id).toBe("engram-input")
+			expect(processor).toBeInstanceOf(SmaranInputProcessor)
+			expect(processor.id).toBe("smaran-input")
 		})
 
 		it("should pass options to processor", () => {
-			const processor = createEngramProcessor({
+			const processor = createSmaranProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 				apiKey: "custom-key",
 				mode: "full",
 			})
-			expect(processor).toBeInstanceOf(EngramInputProcessor)
+			expect(processor).toBeInstanceOf(SmaranInputProcessor)
 		})
 	})
 
-	describe("createEngramOutputProcessor", () => {
+	describe("createSmaranOutputProcessor", () => {
 		it("should create output processor", () => {
-			const processor = createEngramOutputProcessor({
+			const processor = createSmaranOutputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 			})
-			expect(processor).toBeInstanceOf(EngramOutputProcessor)
-			expect(processor.id).toBe("engram-output")
+			expect(processor).toBeInstanceOf(SmaranOutputProcessor)
+			expect(processor.id).toBe("smaran-output")
 		})
 
 		it("should pass options to processor", () => {
-			const processor = createEngramOutputProcessor({
+			const processor = createSmaranOutputProcessor({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "conv-123",
 				apiKey: "custom-key",
 				addMemory: "always",
 			})
-			expect(processor).toBeInstanceOf(EngramOutputProcessor)
+			expect(processor).toBeInstanceOf(SmaranOutputProcessor)
 		})
 	})
 
-	describe("createEngramProcessors", () => {
+	describe("createSmaranProcessors", () => {
 		it("should create both input and output processors", () => {
-			const { input, output } = createEngramProcessors({
+			const { input, output } = createSmaranProcessors({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 			})
-			expect(input).toBeInstanceOf(EngramInputProcessor)
-			expect(output).toBeInstanceOf(EngramOutputProcessor)
+			expect(input).toBeInstanceOf(SmaranInputProcessor)
+			expect(output).toBeInstanceOf(SmaranOutputProcessor)
 		})
 
 		it("should share options between processors", () => {
-			const { input, output } = createEngramProcessors({
+			const { input, output } = createSmaranProcessors({
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "conv-123",
 				apiKey: "custom-key",
 				mode: "full",
 				addMemory: "always",
 			})
-			expect(input.id).toBe("engram-input")
-			expect(output.id).toBe("engram-output")
+			expect(input.id).toBe("smaran-input")
+			expect(output.id).toBe("smaran-output")
 		})
 	})
 })
 
-describe("withEngram", () => {
+describe("withSmaran", () => {
 	let originalEnv: string | undefined
 
 	beforeEach(() => {
-		originalEnv = process.env.ENGRAM_API_KEY
-		process.env.ENGRAM_API_KEY = TEST_CONFIG.apiKey
+		originalEnv = process.env.SMARAN_API_KEY
+		process.env.SMARAN_API_KEY = TEST_CONFIG.apiKey
 	})
 
 	afterEach(() => {
 		if (originalEnv) {
-			process.env.ENGRAM_API_KEY = originalEnv
+			process.env.SMARAN_API_KEY = originalEnv
 		} else {
-			delete process.env.ENGRAM_API_KEY
+			delete process.env.SMARAN_API_KEY
 		}
 	})
 
 	describe("API key validation", () => {
 		it("should throw error if API key is not set", () => {
-			delete process.env.ENGRAM_API_KEY
+			delete process.env.SMARAN_API_KEY
 
 			const config: MockAgentConfig = { id: "test-agent", name: "Test Agent" }
 
 			expect(() => {
-				withEngram(config, {
+				withSmaran(config, {
 					containerTag: TEST_CONFIG.containerTag,
 					customId: TEST_CONFIG.customId,
 				})
-			}).toThrow("ENGRAM_API_KEY is not set")
+			}).toThrow("SMARAN_API_KEY is not set")
 		})
 
 		it("should accept API key via options", () => {
-			delete process.env.ENGRAM_API_KEY
+			delete process.env.SMARAN_API_KEY
 
 			const config: MockAgentConfig = { id: "test-agent", name: "Test Agent" }
-			const enhanced = withEngram(config, {
+			const enhanced = withSmaran(config, {
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 				apiKey: "custom-key",
@@ -914,15 +914,15 @@ describe("withEngram", () => {
 	describe("processor injection", () => {
 		it("should inject input and output processors", () => {
 			const config: MockAgentConfig = { id: "test-agent", name: "Test Agent" }
-			const enhanced = withEngram(config, {
+			const enhanced = withSmaran(config, {
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 			})
 
 			expect(enhanced.inputProcessors).toHaveLength(1)
 			expect(enhanced.outputProcessors).toHaveLength(1)
-			expect(enhanced.inputProcessors?.[0]?.id).toBe("engram-input")
-			expect(enhanced.outputProcessors?.[0]?.id).toBe("engram-output")
+			expect(enhanced.inputProcessors?.[0]?.id).toBe("smaran-input")
+			expect(enhanced.outputProcessors?.[0]?.id).toBe("smaran-output")
 		})
 
 		it("should preserve original config properties", () => {
@@ -932,7 +932,7 @@ describe("withEngram", () => {
 				model: "gpt-4",
 				customProp: "value",
 			}
-			const enhanced = withEngram(config, {
+			const enhanced = withSmaran(config, {
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 			})
@@ -954,13 +954,13 @@ describe("withEngram", () => {
 				inputProcessors: [existingInputProcessor],
 			}
 
-			const enhanced = withEngram(config, {
+			const enhanced = withSmaran(config, {
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 			})
 
 			expect(enhanced.inputProcessors).toHaveLength(2)
-			expect(enhanced.inputProcessors?.[0]?.id).toBe("engram-input")
+			expect(enhanced.inputProcessors?.[0]?.id).toBe("smaran-input")
 			expect(enhanced.inputProcessors?.[1]?.id).toBe("existing-input")
 		})
 
@@ -975,14 +975,14 @@ describe("withEngram", () => {
 				outputProcessors: [existingOutputProcessor],
 			}
 
-			const enhanced = withEngram(config, {
+			const enhanced = withSmaran(config, {
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 			})
 
 			expect(enhanced.outputProcessors).toHaveLength(2)
 			expect(enhanced.outputProcessors?.[0]?.id).toBe("existing-output")
-			expect(enhanced.outputProcessors?.[1]?.id).toBe("engram-output")
+			expect(enhanced.outputProcessors?.[1]?.id).toBe("smaran-output")
 		})
 
 		it("should handle configs with both existing input and output processors", () => {
@@ -995,24 +995,24 @@ describe("withEngram", () => {
 				outputProcessors: [existingOutput],
 			}
 
-			const enhanced = withEngram(config, {
+			const enhanced = withSmaran(config, {
 				containerTag: TEST_CONFIG.containerTag,
 				customId: TEST_CONFIG.customId,
 			})
 
 			expect(enhanced.inputProcessors).toHaveLength(2)
 			expect(enhanced.outputProcessors).toHaveLength(2)
-			expect(enhanced.inputProcessors?.[0]?.id).toBe("engram-input")
+			expect(enhanced.inputProcessors?.[0]?.id).toBe("smaran-input")
 			expect(enhanced.inputProcessors?.[1]?.id).toBe("existing-input")
 			expect(enhanced.outputProcessors?.[0]?.id).toBe("existing-output")
-			expect(enhanced.outputProcessors?.[1]?.id).toBe("engram-output")
+			expect(enhanced.outputProcessors?.[1]?.id).toBe("smaran-output")
 		})
 	})
 
 	describe("options passthrough", () => {
 		it("should pass options to processors", () => {
 			const config: MockAgentConfig = { id: "test-agent", name: "Test Agent" }
-			const enhanced = withEngram(config, {
+			const enhanced = withSmaran(config, {
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "conv-123",
 				mode: "full",

@@ -165,7 +165,7 @@ export function UserProfileMenu({
 					asChild
 					className="px-3 py-2.5 rounded-md hover:bg-[#293952]/40 cursor-pointer text-white text-sm font-medium gap-2"
 				>
-					<a href="mailto:support@engram.com">
+					<a href="mailto:support@smaran.com">
 						<HelpCircle className="size-4 text-[#737373]" />
 						Help & Support
 					</a>
@@ -175,7 +175,7 @@ export function UserProfileMenu({
 					className="px-3 py-2.5 rounded-md hover:bg-[#293952]/40 cursor-pointer text-white text-sm font-medium gap-2"
 				>
 					<a
-						href="https://engram.link/discord"
+						href="https://smaran.link/discord"
 						target="_blank"
 						rel="noreferrer"
 					>

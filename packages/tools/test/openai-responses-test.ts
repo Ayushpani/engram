@@ -1,11 +1,11 @@
 import { OpenAI } from "openai"
-import { withEngram } from "../src/openai"
+import { withSmaran } from "../src/openai"
 
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY,
 })
 
-const openaiWithEngram = withEngram(openai, {
+const openaiWithSmaran = withSmaran(openai, {
 	containerTag: "user_id_life",
 	customId: "test-conversation",
 	verbose: true,
@@ -13,7 +13,7 @@ const openaiWithEngram = withEngram(openai, {
 	addMemory: "always",
 })
 
-const response = await openaiWithEngram.responses.create({
+const response = await openaiWithSmaran.responses.create({
 	model: "gpt-4o",
 	instructions: "you are ai girlfriend",
 	input: "Where do i live?",

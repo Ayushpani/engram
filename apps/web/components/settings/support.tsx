@@ -18,7 +18,7 @@ const FAQS = [
 	{
 		question: "How do connections work?",
 		answer:
-			"Connections let you sync documents from Google Drive, Notion, and OneDrive automatically. engram will index and make them searchable.",
+			"Connections let you sync documents from Google Drive, Notion, and OneDrive automatically. smaran will index and make them searchable.",
 	},
 	{
 		question: "Can I cancel my subscription anytime?",
@@ -83,23 +83,23 @@ function PillButton({
 
 export default function Support() {
 	const handleMessageOnX = () => {
-		window.open("https://x.com/engram", "_blank", "noopener,noreferrer")
+		window.open("https://x.com/smaran", "_blank", "noopener,noreferrer")
 	}
 
 	const handleSendEmail = () => {
-		window.location.href = "mailto:support@engram.com"
+		window.location.href = "mailto:support@smaran.com"
 	}
 
 	const handleJoinDiscord = () => {
 		window.open(
-			"https://engram.link/discord",
+			"https://smaran.link/discord",
 			"_blank",
 			"noopener,noreferrer",
 		)
 	}
 
 	const handleShareFeedback = () => {
-		window.open("https://x.com/engram", "_blank", "noopener,noreferrer")
+		window.open("https://x.com/smaran", "_blank", "noopener,noreferrer")
 	}
 
 	return (

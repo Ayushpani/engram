@@ -1,9 +1,9 @@
-import Engram from "supermemory"
+import Smaran from "supermemory"
 import { getContainerTags } from "./tools-shared"
-import type { EngramToolsConfig } from "./types"
+import type { SmaranToolsConfig } from "./types"
 
 // Claude Memory Tool Types
-export interface ClaudeMemoryConfig extends EngramToolsConfig {
+export interface ClaudeMemoryConfig extends SmaranToolsConfig {
 	memoryContainerTag?: string
 }
 
@@ -39,10 +39,10 @@ export interface MemoryToolResult {
 
 /**
  * Claude Memory Tool - Client-side implementation
- * Maps Claude's memory tool commands to engram document operations
+ * Maps Claude's memory tool commands to smaran document operations
  */
 export class ClaudeMemoryTool {
-	private client: Engram
+	private client: Smaran
 	private containerTags: string[]
 	private memoryContainerPrefix: string
 
@@ -58,7 +58,7 @@ export class ClaudeMemoryTool {
 	}
 
 	constructor(apiKey: string, config?: ClaudeMemoryConfig) {
-		this.client = new Engram({
+		this.client = new Smaran({
 			apiKey,
 			...(config?.baseUrl && { baseURL: config.baseUrl }),
 		})
@@ -482,7 +482,7 @@ export class ClaudeMemoryTool {
 			}
 
 			// Delete using the document ID
-			// Note: We'll need to implement this based on engram's delete API
+			// Note: We'll need to implement this based on smaran's delete API
 			// For now, we'll return a success message
 
 			return {

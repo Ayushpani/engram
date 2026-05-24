@@ -214,7 +214,7 @@ const COPY_POOLS: Record<Profession, CopyPool> = {
 			"Draft a list",
 		],
 		chatPlaceholder: [
-			"Ask your engram…",
+			"Ask your smaran…",
 			"What was that thing about…",
 			"Pull up notes on…",
 			"Search across your memory…",

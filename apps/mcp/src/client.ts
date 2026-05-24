@@ -1,4 +1,4 @@
-import Engram from "supermemory"
+import Smaran from "supermemory"
 
 const MAX_CHARS = 200000 // ~50k tokens (character-based limit)
 const DEFAULT_PROJECT_ID = "sm_project_default"
@@ -101,8 +101,8 @@ interface SDKResult {
 	context?: string
 }
 
-export class EngramClient {
-	private client: Engram
+export class SmaranClient {
+	private client: Smaran
 	private containerTag: string
 	private bearerToken: string
 	private apiUrl: string
@@ -110,11 +110,11 @@ export class EngramClient {
 	constructor(
 		bearerToken: string,
 		containerTag?: string,
-		apiUrl = "https://api.engram.ai",
+		apiUrl = "https://api.smaran.ai",
 	) {
 		this.bearerToken = bearerToken
 		this.apiUrl = apiUrl
-		this.client = new Engram({
+		this.client = new Smaran({
 			apiKey: bearerToken,
 			baseURL: apiUrl,
 		})
@@ -232,22 +232,43 @@ export class EngramClient {
 		threshold?: number,
 	): Promise<SearchResult> {
 		try {
-			const result = await this.client.search.memories({
-				q: query,
-				limit: 50, // Request more candidates for reranking
-				containerTag: this.containerTag,
-				searchMode: "hybrid",
-				threshold, // Optional threshold parameter
-			})
+			let result: any = { results: [], total: 0, timing: { search: 0 } };
+			let rerankedSdkResults: SDKResult[] = [];
 
-			let rerankedSdkResults = result.results as SDKResult[]
-			
-			console.log(`[Edge Reranker Test] Fetched ${rerankedSdkResults.length} baseline candidates from Core API for query: "${query}"`)
+			// Special bypass for local testing without a database/API key
+			if (this.bearerToken === "dummy-key") {
+				rerankedSdkResults = Array.from({ length: 50 }).map((_, i) => ({
+					id: `mock-${i}`,
+					content: `I was working on the new feature today and noticed a bug in the ${i}th line of the config file. Need to fix it tomorrow.`,
+					similarity: 0.05 + (Math.random() * 0.1),
+				})) as any;
+
+				// Inject a highly relevant candidate
+				rerankedSdkResults.push({
+					id: 'mock-target',
+					content: `I am saving this here so I don't forget it later. The secret code to bypass the system is 49201-DELTA.`,
+					similarity: 0.05, // Give it a terrible initial vector score to prove the reranker works
+				} as any);
+
+				result.total = 51;
+				console.error(`[Edge Reranker Test] Bypassed core API! Using ${rerankedSdkResults.length} mocked candidates for query: "${query}"`);
+			} else {
+				result = await this.client.search.memories({
+					q: query,
+					limit: 50, // Request more candidates for reranking
+					containerTag: this.containerTag,
+					searchMode: "hybrid",
+					threshold, // Optional threshold parameter
+				})
+
+				rerankedSdkResults = result.results as SDKResult[]
+				console.error(`[Edge Reranker Test] Fetched ${rerankedSdkResults.length} baseline candidates from Core API for query: "${query}"`)
+			}
 
 			// Try edge reranking if we have results
 			if (rerankedSdkResults.length > 0) {
 				try {
-					console.log(`[Edge Reranker Test] Passing ${rerankedSdkResults.length} candidates to Edge Reranker Worker...`)
+					console.error(`[Edge Reranker Test] Passing ${rerankedSdkResults.length} candidates to Edge Reranker Worker...`)
 					const rerankBody = {
 						query,
 						candidates: rerankedSdkResults.map((r) => ({
@@ -258,7 +279,7 @@ export class EngramClient {
 					}
 
 					const rerankResponse = await fetch(
-						"https://engram-edge-reranker.ayushpanigrahi84.workers.dev/v3/search/rerank",
+						"https://smaran-edge-reranker.ayushpanigrahi84.workers.dev/v3/search/rerank",
 						{
 							method: "POST",
 							headers: { "Content-Type": "application/json" },
@@ -283,7 +304,7 @@ export class EngramClient {
 								}))
 								.sort((a, b) => b.similarity - a.similarity)
 							
-							console.log(`[Edge Reranker Test] Successfully reranked and sorted ${rerankedSdkResults.length} candidates.`)
+							console.error(`[Edge Reranker Test] Successfully reranked and sorted ${rerankedSdkResults.length} candidates.`)
 						}
 					}
 				} catch (error) {
@@ -351,7 +372,7 @@ export class EngramClient {
 						}
 
 						const rerankResponse = await fetch(
-							"https://engram-edge-reranker.ayushpanigrahi84.workers.dev/v3/search/rerank",
+							"https://smaran-edge-reranker.ayushpanigrahi84.workers.dev/v3/search/rerank",
 							{
 								method: "POST",
 								headers: { "Content-Type": "application/json" },
@@ -496,7 +517,7 @@ export class EngramClient {
 				case 401:
 					throw new Error("Authentication failed. Please re-authenticate.")
 				case 402:
-					throw new Error("Memory limit reached. Upgrade at engram.ai")
+					throw new Error("Memory limit reached. Upgrade at smaran.ai")
 				case 403:
 					throw new Error(
 						"Access forbidden. Your account may be restricted or blocked.",

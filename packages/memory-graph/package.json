@@ -1,7 +1,7 @@
 {
-  "name": "@engram/memory-graph",
+  "name": "@smaran/memory-graph",
   "version": "0.2.1",
-  "description": "Interactive graph visualization component for Engram - visualize and explore your memory connections",
+  "description": "Interactive graph visualization component for Smaran - visualize and explore your memory connections",
   "type": "module",
   "main": "./src/index.tsx",
   "module": "./src/index.tsx",
@@ -24,7 +24,7 @@
     "test": "vitest run"
   },
   "keywords": [
-    "engram",
+    "smaran",
     "graph",
     "visualization",
     "memory",
@@ -33,17 +33,17 @@
     "react",
     "component"
   ],
-  "author": "Engram",
+  "author": "Smaran",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/engramai/engram",
+    "url": "https://github.com/smaranai/smaran",
     "directory": "packages/memory-graph"
   },
   "bugs": {
-    "url": "https://github.com/engramai/engram/issues"
+    "url": "https://github.com/smaranai/smaran/issues"
   },
-  "homepage": "https://github.com/engramai/engram/tree/main/packages/memory-graph#readme",
+  "homepage": "https://github.com/smaranai/smaran/tree/main/packages/memory-graph#readme",
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"

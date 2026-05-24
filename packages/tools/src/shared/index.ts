@@ -7,7 +7,7 @@ export type {
 	Logger,
 	ProfileStructure,
 	ProfileMarkdownData,
-	EngramBaseOptions,
+	SmaranBaseOptions,
 } from "./types"
 
 // Logger
@@ -26,14 +26,14 @@ export { MemoryCache, makeTurnKey } from "./cache"
 // Context
 export {
 	normalizeBaseUrl,
-	createEngramClient,
+	createSmaranClient,
 	validateApiKey,
-	type CreateEngramClientOptions,
+	type CreateSmaranClientOptions,
 } from "./context"
 
 // Memory client
 export {
-	engramProfileSearch,
+	smaranProfileSearch,
 	buildMemoriesText,
 	extractQueryText,
 	getLastUserMessageText,

@@ -13,7 +13,7 @@ import { Suspense, useEffect, useState } from "react"
 import { PENDING_CONNECT_URL_KEY } from "@/lib/constants"
 
 const API_URL =
-	process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.engram.ai"
+	process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.smaran.ai"
 
 function isValidLocalhostCallback(callback: string): boolean {
 	try {
@@ -253,7 +253,7 @@ function AuthConnectContent() {
 								)}
 							>
 								{pluginInfo?.description ??
-									`Allow ${displayName} to access your Engram account.`}
+									`Allow ${displayName} to access your Smaran account.`}
 							</p>
 						</div>
 
@@ -332,7 +332,7 @@ function AuthConnectContent() {
 								)}
 							>
 								{pluginInfo?.description ??
-									`A paid plan is required to use ${displayName} with Engram.`}
+									`A paid plan is required to use ${displayName} with Smaran.`}
 							</p>
 						</div>
 
@@ -384,7 +384,7 @@ function AuthConnectContent() {
 						</button>
 
 						<a
-							href="https://app.engram.ai/?view=plugins"
+							href="https://app.smaran.ai/?view=plugins"
 							className={dmSans125ClassName(
 								"text-[12px] text-[#737373] hover:text-[#FAFAFA] transition-colors",
 							)}
@@ -434,7 +434,7 @@ function AuthConnectContent() {
 								Try again
 							</button>
 							<a
-								href="https://app.engram.ai"
+								href="https://app.smaran.ai"
 								className={dmSans125ClassName(
 									"text-[12px] text-[#737373] hover:text-[#FAFAFA] transition-colors",
 								)}

@@ -31,10 +31,10 @@ export default function ReferralHomePage() {
 					<div className="space-y-4">
 						<div className="bg-[#0f1419] rounded-lg p-4 border border-white/10">
 							<h3 className="text-white font-semibold mb-2">
-								What is engram?
+								What is smaran?
 							</h3>
 							<p className="text-white/70 text-sm leading-relaxed">
-								engram is an AI-powered personal knowledge base that helps
+								smaran is an AI-powered personal knowledge base that helps
 								you store, organize, and interact with all your digital
 								memories.
 							</p>
@@ -43,9 +43,9 @@ export default function ReferralHomePage() {
 						<div className="text-center">
 							<Link
 								className="text-orange-500 hover:text-orange-400 text-sm underline"
-								href="https://engram.ai"
+								href="https://smaran.ai"
 							>
-								Learn more about engram
+								Learn more about smaran
 							</Link>
 						</div>
 					</div>

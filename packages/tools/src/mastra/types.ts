@@ -32,16 +32,16 @@ export type {
 export type { RequestContext } from "@mastra/core/request-context"
 
 /**
- * Configuration options for the Engram Mastra processor.
+ * Configuration options for the Smaran Mastra processor.
  */
-export interface EngramMastraOptions {
+export interface SmaranMastraOptions {
 	/** Container tag/user ID for scoping memories. Required. */
 	containerTag: string
 	/** Custom ID to group messages into a single document for contextual memory generation. Required. */
 	customId: string
-	/** Engram API key (falls back to ENGRAM_API_KEY env var) */
+	/** Smaran API key (falls back to SMARAN_API_KEY env var) */
 	apiKey?: string
-	/** Custom Engram API base URL */
+	/** Custom Smaran API base URL */
 	baseUrl?: string
 	/** Memory retrieval mode */
 	mode?: MemoryMode

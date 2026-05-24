@@ -2,24 +2,24 @@
 
 ## Overview
 
-This package adds persistent memory to Pipecat voice AI pipelines using Engram.
+This package adds persistent memory to Pipecat voice AI pipelines using Smaran.
 
-**Tech Stack:** Python >=3.10, Pipecat, Engram SDK
+**Tech Stack:** Python >=3.10, Pipecat, Smaran SDK
 
 ## Commands
 
 ```bash
-pip install engram-pipecat
+pip install smaran-pipecat
 ```
 
 ## Integration Pattern
 
-Place `EngramPipecatService` between context aggregator and LLM in the pipeline:
+Place `SmaranPipecatService` between context aggregator and LLM in the pipeline:
 
 ```python
-from engram_pipecat import EngramPipecatService
+from smaran_pipecat import SmaranPipecatService
 
-memory = EngramPipecatService(
+memory = SmaranPipecatService(
     user_id="user-123",       # Required: identifies the user
     session_id="session-456", # Optional: groups conversations
 )
@@ -39,11 +39,11 @@ pipeline = Pipeline([
 ## Configuration
 
 ```python
-memory = EngramPipecatService(
-    api_key="...",             # Or use ENGRAM_API_KEY env var
+memory = SmaranPipecatService(
+    api_key="...",             # Or use SMARAN_API_KEY env var
     user_id="user-123",
     session_id="session-456",
-    params=EngramPipecatService.InputParams(
+    params=SmaranPipecatService.InputParams(
         search_limit=10,       # Max memories to retrieve
         search_threshold=0.1,  # Similarity threshold 0.0-1.0
         mode="full",           # "profile" | "query" | "full"
@@ -62,7 +62,7 @@ memory = EngramPipecatService(
 
 ## Environment Variables
 
-- `ENGRAM_API_KEY` - Engram API key
+- `SMARAN_API_KEY` - Smaran API key
 - `OPENAI_API_KEY` - For OpenAI services (STT/LLM/TTS)
 
 ## Boundaries

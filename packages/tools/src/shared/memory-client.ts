@@ -12,7 +12,7 @@ import {
 } from "./prompt-builder"
 
 /**
- * Fetches profile and search results from the Engram API.
+ * Fetches profile and search results from the Smaran API.
  *
  * @param containerTag - The container tag/user ID for scoping memories
  * @param queryText - Optional query text for semantic search
@@ -21,7 +21,7 @@ import {
  * @param signal - Optional AbortSignal to cancel the request (e.g. retrieval timeout)
  * @returns The profile structure with static, dynamic, and search results
  */
-export const engramProfileSearch = async (
+export const smaranProfileSearch = async (
 	containerTag: string,
 	queryText: string,
 	baseUrl: string,
@@ -51,7 +51,7 @@ export const engramProfileSearch = async (
 		if (!response.ok) {
 			const errorText = await response.text().catch(() => "Unknown error")
 			throw new Error(
-				`Engram profile search failed: ${response.status} ${response.statusText}. ${errorText}`,
+				`Smaran profile search failed: ${response.status} ${response.statusText}. ${errorText}`,
 			)
 		}
 
@@ -60,7 +60,7 @@ export const engramProfileSearch = async (
 		if (error instanceof Error) {
 			throw error
 		}
-		throw new Error(`Engram API request failed: ${error}`)
+		throw new Error(`Smaran API request failed: ${error}`)
 	}
 }
 
@@ -99,7 +99,7 @@ export const buildMemoriesText = async (
 		signal,
 	} = options
 
-	const memoriesResponse = await engramProfileSearch(
+	const memoriesResponse = await smaranProfileSearch(
 		containerTag,
 		queryText,
 		baseUrl,

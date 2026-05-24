@@ -16,12 +16,12 @@ async function chatWithMemoryTool() {
 	console.log("=".repeat(50))
 
 	const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
-	const ENGRAM_API_KEY = process.env.ENGRAM_API_KEY
+	const SMARAN_API_KEY = process.env.SMARAN_API_KEY
 
-	if (!ANTHROPIC_API_KEY || !ENGRAM_API_KEY) {
+	if (!ANTHROPIC_API_KEY || !SMARAN_API_KEY) {
 		console.error("❌ Missing required API keys:")
 		console.error("- ANTHROPIC_API_KEY")
-		console.error("- ENGRAM_API_KEY")
+		console.error("- SMARAN_API_KEY")
 		return
 	}
 
@@ -31,7 +31,7 @@ async function chatWithMemoryTool() {
 	})
 
 	// Initialize memory tool
-	const memoryTool = createClaudeMemoryTool(ENGRAM_API_KEY, {
+	const memoryTool = createClaudeMemoryTool(SMARAN_API_KEY, {
 		projectId: "anthropic-sdk-demo",
 		memoryContainerTag: "claude_memory_anthropic",
 	})
@@ -171,12 +171,12 @@ async function testMemoryOperations() {
 	console.log("\n🧪 Testing Memory Operations Directly")
 	console.log("=".repeat(50))
 
-	if (!process.env.ENGRAM_API_KEY) {
-		console.error("❌ ENGRAM_API_KEY is required")
+	if (!process.env.SMARAN_API_KEY) {
+		console.error("❌ SMARAN_API_KEY is required")
 		return
 	}
 
-	const memoryTool = createClaudeMemoryTool(process.env.ENGRAM_API_KEY, {
+	const memoryTool = createClaudeMemoryTool(process.env.SMARAN_API_KEY, {
 		projectId: "direct-test",
 		memoryContainerTag: "claude_memory_direct",
 	})

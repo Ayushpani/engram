@@ -1,4 +1,4 @@
-import Engram from "supermemory"
+import Smaran from "supermemory"
 import {
 	addConversation,
 	type ConversationMessage,
@@ -76,7 +76,7 @@ const convertToConversationMessages = (
 }
 
 export const saveMemoryAfterResponse = async (
-	_client: Engram,
+	_client: Smaran,
 	containerTag: string,
 	customId: string,
 	assistantResponseText: string,
@@ -113,12 +113,12 @@ export const saveMemoryAfterResponse = async (
 }
 
 /**
- * Configuration options for the Engram middleware.
+ * Configuration options for the Smaran middleware.
  */
-interface EngramMiddlewareOptions {
+interface SmaranMiddlewareOptions {
 	/** Container tag/identifier for memory search (e.g., user ID, project ID) */
 	containerTag: string
-	/** Engram API key */
+	/** Smaran API key */
 	apiKey: string
 	/** Custom ID to group messages into a single document. Required. */
 	customId: string
@@ -137,16 +137,16 @@ interface EngramMiddlewareOptions {
 	 * - "never": Only retrieve memories, don't store new ones
 	 */
 	addMemory?: "always" | "never"
-	/** Custom Engram API base URL */
+	/** Custom Smaran API base URL */
 	baseUrl?: string
 	/** Custom function to format memory data into the system prompt */
 	promptTemplate?: PromptTemplate
-	/** Max wait (ms) for the pre-LLM `/v4/profile` retrieval. Omit for no limit (e.g. tests). `withEngram` sets this internally. */
+	/** Max wait (ms) for the pre-LLM `/v4/profile` retrieval. Omit for no limit (e.g. tests). `withSmaran` sets this internally. */
 	memoryRetrievalTimeoutMs?: number
 }
 
-interface EngramMiddlewareContext {
-	client: Engram
+interface SmaranMiddlewareContext {
+	client: Smaran
 	logger: Logger
 	containerTag: string
 	customId: string
@@ -163,9 +163,9 @@ interface EngramMiddlewareContext {
 	memoryCache: MemoryCache<string>
 }
 
-export const createEngramContext = (
-	options: EngramMiddlewareOptions,
-): EngramMiddlewareContext => {
+export const createSmaranContext = (
+	options: SmaranMiddlewareOptions,
+): SmaranMiddlewareContext => {
 	const {
 		containerTag,
 		apiKey,
@@ -181,9 +181,9 @@ export const createEngramContext = (
 	const logger = createLogger(verbose)
 	const normalizedBaseUrl = normalizeBaseUrl(baseUrl)
 
-	const client = new Engram({
+	const client = new Smaran({
 		apiKey,
-		...(normalizedBaseUrl !== "https://api.engram.ai"
+		...(normalizedBaseUrl !== "https://api.smaran.ai"
 			? { baseURL: normalizedBaseUrl }
 			: {}),
 	})
@@ -210,7 +210,7 @@ export const createEngramContext = (
  * Uses the shared MemoryCache.makeTurnKey implementation.
  */
 const makeTurnKey = (
-	ctx: EngramMiddlewareContext,
+	ctx: SmaranMiddlewareContext,
 	userMessage: string,
 ): string => {
 	return MemoryCache.makeTurnKey(
@@ -231,7 +231,7 @@ const isNewUserTurn = (params: LanguageModelCallOptions): boolean => {
 
 export const transformParamsWithMemory = async (
 	params: LanguageModelCallOptions,
-	ctx: EngramMiddlewareContext,
+	ctx: SmaranMiddlewareContext,
 ): Promise<LanguageModelCallOptions> => {
 	const userMessage = getLastUserMessage(params)
 

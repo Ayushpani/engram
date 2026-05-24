@@ -12,7 +12,7 @@ export type {
 	GraphEdge,
 	GraphApiDocument,
 	GraphApiMemory,
-} from "@engram/memory-graph"
+} from "@smaran/memory-graph"
 
 // Keep the API hook export
 export { useGraphApi } from "./hooks/use-graph-api"

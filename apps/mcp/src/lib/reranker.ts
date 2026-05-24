@@ -44,14 +44,14 @@ async function ensureReranker(env: Env, ctx: ExecutionContext): Promise<boolean>
   if (wasmState.initialized) return true;
   
   try {
-    const cache = await caches.open("engram-models");
+    const cache = await caches.open("smaran-models");
     
     // We try cache first, then R2
     const modelKey = "reranker-l2-quantized.onnx";
     const tokenizerKey = "tokenizer.json";
 
-    let modelRes = await cache.match(`https://models.engram.ai/${modelKey}`);
-    let tokenizerRes = await cache.match(`https://models.engram.ai/${tokenizerKey}`);
+    let modelRes = await cache.match(`https://models.smaran.ai/${modelKey}`);
+    let tokenizerRes = await cache.match(`https://models.smaran.ai/${tokenizerKey}`);
 
     if (!modelRes || !tokenizerRes) {
       if (!env.MODELS_BUCKET) {
@@ -71,8 +71,8 @@ async function ensureReranker(env: Env, ctx: ExecutionContext): Promise<boolean>
       tokenizerRes = new Response(tokenizerObj.body as ReadableStream);
       
       // Cache them for subsequent isolate spins
-      ctx.waitUntil(cache.put(`https://models.engram.ai/${modelKey}`, modelRes.clone()));
-      ctx.waitUntil(cache.put(`https://models.engram.ai/${tokenizerKey}`, tokenizerRes.clone()));
+      ctx.waitUntil(cache.put(`https://models.smaran.ai/${modelKey}`, modelRes.clone()));
+      ctx.waitUntil(cache.put(`https://models.smaran.ai/${tokenizerKey}`, tokenizerRes.clone()));
     }
     
     const modelBytes = new Uint8Array(await modelRes.arrayBuffer());

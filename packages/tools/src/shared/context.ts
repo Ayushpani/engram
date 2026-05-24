@@ -1,4 +1,4 @@
-import Engram from "supermemory"
+import Smaran from "supermemory"
 
 /**
  * Normalizes a base URL by removing trailing slashes.
@@ -7,35 +7,35 @@ import Engram from "supermemory"
  * @returns Normalized URL without trailing slash, or default API URL
  */
 export const normalizeBaseUrl = (url?: string): string => {
-	const defaultUrl = "https://api.engram.ai"
+	const defaultUrl = "https://api.smaran.ai"
 	if (!url) return defaultUrl
 	return url.endsWith("/") ? url.slice(0, -1) : url
 }
 
 /**
- * Options for creating a Engram client.
+ * Options for creating a Smaran client.
  */
-export interface CreateEngramClientOptions {
-	/** Engram API key */
+export interface CreateSmaranClientOptions {
+	/** Smaran API key */
 	apiKey: string
 	/** Optional custom base URL */
 	baseUrl?: string
 }
 
 /**
- * Creates a configured Engram client instance.
+ * Creates a configured Smaran client instance.
  *
  * @param options - Client configuration options
- * @returns Configured Engram client
+ * @returns Configured Smaran client
  */
-export function createEngramClient(
-	options: CreateEngramClientOptions,
-): Engram {
+export function createSmaranClient(
+	options: CreateSmaranClientOptions,
+): Smaran {
 	const normalizedBaseUrl = normalizeBaseUrl(options.baseUrl)
 
-	return new Engram({
+	return new Smaran({
 		apiKey: options.apiKey,
-		...(normalizedBaseUrl !== "https://api.engram.ai"
+		...(normalizedBaseUrl !== "https://api.smaran.ai"
 			? { baseURL: normalizedBaseUrl }
 			: {}),
 	})
@@ -49,11 +49,11 @@ export function createEngramClient(
  * @throws Error if no API key is available
  */
 export function validateApiKey(apiKey?: string): string {
-	const providedApiKey = apiKey ?? process.env.ENGRAM_API_KEY
+	const providedApiKey = apiKey ?? process.env.SMARAN_API_KEY
 
 	if (!providedApiKey) {
 		throw new Error(
-			"ENGRAM_API_KEY is not set — provide it via `options.apiKey` or set `process.env.ENGRAM_API_KEY`",
+			"SMARAN_API_KEY is not set — provide it via `options.apiKey` or set `process.env.SMARAN_API_KEY`",
 		)
 	}
 

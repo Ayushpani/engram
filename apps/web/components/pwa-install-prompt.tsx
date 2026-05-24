@@ -218,7 +218,7 @@ export function PWAInstallPrompt() {
 		try {
 			if (typeof navigator !== "undefined" && "share" in navigator) {
 				await navigator.share({
-					title: "Engram",
+					title: "Smaran",
 					url: window.location.href,
 				})
 			}
@@ -240,7 +240,7 @@ export function PWAInstallPrompt() {
 					dmSansClassName(),
 				)}
 			>
-				<DrawerTitle className="sr-only">Install Engram</DrawerTitle>
+				<DrawerTitle className="sr-only">Install Smaran</DrawerTitle>
 
 				<div
 					className={cn(
@@ -265,7 +265,7 @@ export function PWAInstallPrompt() {
 										dmSans125ClassName(),
 									)}
 								>
-									Install Engram
+									Install Smaran
 								</h2>
 								<p
 									className={cn(

@@ -1,7 +1,7 @@
-export type { EngramToolsConfig } from "./types"
+export type { SmaranToolsConfig } from "./types"
 
 export type { OpenAIMiddlewareOptions } from "./openai"
 
-export type { EngramVoltAgent } from "./voltagent"
+export type { SmaranVoltAgent } from "./voltagent"
 
 export { consolidateGraphMemory, type ConsolidationOptions } from "./consolidation"

@@ -1,16 +1,16 @@
 import { OpenAI } from "openai"
-import { withEngram } from "./src/openai"
+import { withSmaran } from "./src/openai"
 
 // Make sure to set these environment variables:
 // OPENAI_API_KEY=your_openai_api_key
-// ENGRAM_API_KEY=your_engram_api_key
+// SMARAN_API_KEY=your_smaran_api_key
 
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY,
 })
 
-// Wrap OpenAI client with engram
-const openaiWithEngram = withEngram(openai, "test_user_123", {
+// Wrap OpenAI client with smaran
+const openaiWithSmaran = withSmaran(openai, "test_user_123", {
 	verbose: true, // Enable logging to see what's happening
 	mode: "full", // Search both profile and query memories
 	addMemory: "always", // Auto-save conversations as memories
@@ -18,7 +18,7 @@ const openaiWithEngram = withEngram(openai, "test_user_123", {
 
 // async function testChatCompletion() {
 // 	console.log("\n=== Testing Chat Completion ===")
-// 	const response = await openaiWithEngram.chat.completions.create({
+// 	const response = await openaiWithSmaran.chat.completions.create({
 // 		model: "gpt-4o-mini",
 // 		messages: [
 // 			{ role: "user", content: "My favorite color is blue" },
@@ -30,7 +30,7 @@ const openaiWithEngram = withEngram(openai, "test_user_123", {
 
 async function testResponses() {
 	console.log("\n=== Testing Responses API ===")
-	const response = await openaiWithEngram.chat.completions.create({
+	const response = await openaiWithSmaran.chat.completions.create({
 		model: "gpt-4o",
 		messages: [{ role: "user", content: "what's my favoritge color?" }],
 	})

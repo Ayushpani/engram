@@ -378,7 +378,7 @@ function UpgradeOverlay({ onUpgrade }: { onUpgrade: () => void }) {
 						>
 							Upgrade to Pro
 						</button>{" "}
-						to get Engram Connections
+						to get Smaran Connections
 					</p>
 				</div>
 				<div className="flex flex-col gap-2">
@@ -525,7 +525,7 @@ export default function ConnectionsMCP() {
 			analytics.connectionDeleted()
 			toast.success(
 				variables.deleteDocuments
-					? "Connection removal has started. Engram will permanently delete the documents in the next few minutes."
+					? "Connection removal has started. Smaran will permanently delete the documents in the next few minutes."
 					: "Connection removed. Your memories have been kept.",
 			)
 			setRemoveDialog({ open: false, connection: null })
@@ -560,10 +560,10 @@ export default function ConnectionsMCP() {
 
 	return (
 		<div className="flex flex-col gap-8 w-full">
-			{/* Engram Connections Section */}
+			{/* Smaran Connections Section */}
 			<div className="flex flex-col gap-4">
 				<SectionTitle badge={<ProBadge />}>
-					Engram Connections
+					Smaran Connections
 				</SectionTitle>
 
 				<ConnectionsCard className="relative">
@@ -588,7 +588,7 @@ export default function ConnectionsMCP() {
 									"font-semibold text-[16px] tracking-[-0.16px] text-[#FAFAFA]",
 								)}
 							>
-								Connected to Engram
+								Connected to Smaran
 							</span>
 							<span
 								className={cn(
@@ -677,9 +677,9 @@ export default function ConnectionsMCP() {
 				</ConnectionsCard>
 			</div>
 
-			{/* Engram MCP Section */}
+			{/* Smaran MCP Section */}
 			<div className="flex flex-col gap-4">
-				<SectionTitle>Engram MCP</SectionTitle>
+				<SectionTitle>Smaran MCP</SectionTitle>
 
 				<ConnectionsCard>
 					<div className="flex flex-col gap-4">
@@ -691,7 +691,7 @@ export default function ConnectionsMCP() {
 						>
 							Connect your AI to create and use your memories via MCP.{" "}
 							<a
-								href="https://docs.engram.ai/engram-mcp/introduction"
+								href="https://docs.smaran.ai/smaran-mcp/introduction"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="underline hover:text-[#4BA0FA] transition-colors"
@@ -704,7 +704,7 @@ export default function ConnectionsMCP() {
 							<PillButton onClick={() => setMcpModalOpen(true)}>
 								<Plus className="size-[10px] text-[#FAFAFA]" />
 								<span className="text-[14px] tracking-[-0.14px] text-[#FAFAFA] font-medium">
-									Connect your AI to Engram
+									Connect your AI to Smaran
 								</span>
 							</PillButton>
 						</ConnectAIModal>

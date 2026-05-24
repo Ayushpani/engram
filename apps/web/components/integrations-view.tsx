@@ -261,7 +261,7 @@ export function IntegrationsView() {
 						<h2 className="text-white text-xl font-medium">Integrations</h2>
 					</div>
 					<p className={cn("text-[#8B8B8B] text-sm", dmSansClassName())}>
-						Connect engram to your tools and workflows
+						Connect smaran to your tools and workflows
 					</p>
 				</div>
 

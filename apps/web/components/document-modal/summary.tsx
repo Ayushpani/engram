@@ -39,7 +39,7 @@ export function Summary({
 				</p>
 				<div className="flex items-center gap-1 text-[#737373] opacity-50 text-[10px] leading-[150%]">
 					<SyncLogoIcon className="size-[10px]" />
-					powered by engram
+					powered by smaran
 				</div>
 			</div>
 			<div className="text-[14px] text-[#FAFAFA] leading-[1.4] max-h-[117.6px] overflow-y-auto scrollbar-thin">

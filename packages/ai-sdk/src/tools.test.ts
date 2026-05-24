@@ -1,18 +1,18 @@
 import { createOpenAI } from "@ai-sdk/openai"
 import { generateText } from "ai"
 import { describe, expect, it } from "vitest"
-import { type EngramToolsConfig, engramTools } from "./tools"
+import { type SmaranToolsConfig, smaranTools } from "./tools"
 
 import "dotenv/config"
 
-describe("engramTools", () => {
+describe("smaranTools", () => {
 	// Required API keys - tests will fail if not provided
-	const testApiKey = process.env.ENGRAM_API_KEY
+	const testApiKey = process.env.SMARAN_API_KEY
 	const testOpenAIKey = process.env.OPENAI_API_KEY
 
 	if (!testApiKey) {
 		throw new Error(
-			"ENGRAM_API_KEY environment variable is required for tests",
+			"SMARAN_API_KEY environment variable is required for tests",
 		)
 	}
 	if (!testOpenAIKey) {
@@ -20,7 +20,7 @@ describe("engramTools", () => {
 	}
 
 	// Optional configuration with defaults
-	const testBaseUrl = process.env.ENGRAM_BASE_URL ?? undefined
+	const testBaseUrl = process.env.SMARAN_BASE_URL ?? undefined
 	const testModelName = process.env.MODEL_NAME || "gpt-5-nano"
 
 	const testPrompts = [
@@ -33,8 +33,8 @@ describe("engramTools", () => {
 
 	describe("client initialization", () => {
 		it("should create tools with default configuration", () => {
-			const config: EngramToolsConfig = {}
-			const tools = engramTools(testApiKey, config)
+			const config: SmaranToolsConfig = {}
+			const tools = smaranTools(testApiKey, config)
 
 			expect(tools).toBeDefined()
 			expect(tools.searchMemories).toBeDefined()
@@ -42,10 +42,10 @@ describe("engramTools", () => {
 		})
 
 		it("should create tools with custom baseUrl", () => {
-			const config: EngramToolsConfig = {
+			const config: SmaranToolsConfig = {
 				baseUrl: testBaseUrl,
 			}
-			const tools = engramTools(testApiKey, config)
+			const tools = smaranTools(testApiKey, config)
 
 			expect(tools).toBeDefined()
 			expect(tools.searchMemories).toBeDefined()
@@ -53,10 +53,10 @@ describe("engramTools", () => {
 		})
 
 		it("should create tools with projectId configuration", () => {
-			const config: EngramToolsConfig = {
+			const config: SmaranToolsConfig = {
 				projectId: "test-project-123",
 			}
-			const tools = engramTools(testApiKey, config)
+			const tools = smaranTools(testApiKey, config)
 
 			expect(tools).toBeDefined()
 			expect(tools.searchMemories).toBeDefined()
@@ -64,10 +64,10 @@ describe("engramTools", () => {
 		})
 
 		it("should create tools with custom container tags", () => {
-			const config: EngramToolsConfig = {
+			const config: SmaranToolsConfig = {
 				containerTags: ["custom-tag-1", "custom-tag-2"],
 			}
-			const tools = engramTools(testApiKey, config)
+			const tools = smaranTools(testApiKey, config)
 
 			expect(tools).toBeDefined()
 			expect(tools.searchMemories).toBeDefined()
@@ -95,7 +95,7 @@ describe("engramTools", () => {
 					},
 				],
 				tools: {
-					...engramTools(testApiKey, {
+					...smaranTools(testApiKey, {
 						projectId: "test-ai-integration",
 						baseUrl: testBaseUrl,
 					}),
@@ -112,7 +112,7 @@ describe("engramTools", () => {
 				apiKey: testOpenAIKey,
 			})
 
-			const tools = engramTools(testApiKey, {
+			const tools = smaranTools(testApiKey, {
 				projectId: "test-tool-usage",
 				baseUrl: testBaseUrl,
 			})
@@ -167,7 +167,7 @@ describe("engramTools", () => {
 					},
 				],
 				tools: {
-					...engramTools(testApiKey, {
+					...smaranTools(testApiKey, {
 						containerTags: ["test-multi-tools"],
 					}),
 				},

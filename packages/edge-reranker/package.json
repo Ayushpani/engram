@@ -1,5 +1,5 @@
 {
-  "name": "@engram/edge-reranker",
+  "name": "@smaran/edge-reranker",
   "version": "1.0.0",
   "description": "Blazing fast Edge-optimized Cross-Encoder Reranker using WASM",
   "main": "dist/index.js",
@@ -15,7 +15,7 @@
     "cloudflare-workers",
     "agentic-memory"
   ],
-  "author": "Engram Team",
+  "author": "Smaran Team",
   "license": "MIT",
   "devDependencies": {
     "typescript": "^5.0.0"

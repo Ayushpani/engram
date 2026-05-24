@@ -1,7 +1,7 @@
 /**
  * Authentication via API introspection
  *
- * This validates OAuth tokens and API keys by calling the main Engram API,
+ * This validates OAuth tokens and API keys by calling the main Smaran API,
  */
 
 export interface AuthUser {

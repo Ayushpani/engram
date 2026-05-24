@@ -4,9 +4,9 @@ const SEARCH_MEMORY_SHORTCUT_URL =
 	"https://www.icloud.com/shortcuts/b0a132cc3c0d475196bc7014aa702a5c"
 const ADD_MEMORY_SHORTCUT_URL =
 	"https://www.icloud.com/shortcuts/0fd3e855be444845b457f94c78c2c8d9"
-const RAYCAST_EXTENSION_URL = "https://www.raycast.com/engram/engram"
+const RAYCAST_EXTENSION_URL = "https://www.raycast.com/smaran/smaran"
 const CHROME_EXTENSION_URL =
-	"https://chromewebstore.google.com/detail/engram/afpgkkipfdpeaflnpoaffkcankadgjfc"
+	"https://chromewebstore.google.com/detail/smaran/afpgkkipfdpeaflnpoaffkcankadgjfc"
 
 export {
 	BIG_DIMENSIONS_NEW,

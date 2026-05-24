@@ -1,20 +1,20 @@
 /**
- * VoltAgent integration for Engram.
+ * VoltAgent integration for Smaran.
  *
  * Provides a wrapper function that enhances VoltAgent agent configurations
- * with Engram hooks for automatic memory injection and storage.
+ * with Smaran hooks for automatic memory injection and storage.
  *
  * @module
  */
 
-import { createEngramHooks, mergeHooks } from "./hooks"
-import type { VoltAgentConfig, EngramVoltAgent } from "./types"
+import { createSmaranHooks, mergeHooks } from "./hooks"
+import type { VoltAgentConfig, SmaranVoltAgent } from "./types"
 
 /**
- * Configuration options for withEngram.
+ * Configuration options for withSmaran.
  */
-interface WithEngramOptions<T extends VoltAgentConfig>
-	extends EngramVoltAgent {
+interface WithSmaranOptions<T extends VoltAgentConfig>
+	extends SmaranVoltAgent {
 	/**
 	 * The VoltAgent agent configuration to enhance
 	 */
@@ -27,21 +27,21 @@ interface WithEngramOptions<T extends VoltAgentConfig>
 }
 
 /**
- * Enhances a VoltAgent agent configuration with Engram memory capabilities.
+ * Enhances a VoltAgent agent configuration with Smaran memory capabilities.
  *
  * The function injects hooks that automatically:
  * - Retrieve relevant memories before LLM calls (via onPrepareMessages)
  * - Inject memories into the system prompt
  * - Optionally save conversations after completion (via onEnd)
  *
- * @param options - Configuration object containing agent config and Engram options
+ * @param options - Configuration object containing agent config and Smaran options
  * @param options.agentConfig - The VoltAgent agent configuration to enhance
  * @param options.containerTag - Required. The container tag/user ID for scoping memories (e.g., "user-123")
  * @param options.mode - Memory retrieval mode: "profile" (default), "query", or "full"
  * @param options.addMemory - Memory persistence: "always" (default for VoltAgent) or "never"
  * @param options.customId - Required. Custom ID to group messages into a single document
- * @param options.apiKey - Engram API key (falls back to ENGRAM_API_KEY env var)
- * @param options.baseUrl - Custom Engram API base URL
+ * @param options.apiKey - Smaran API key (falls back to SMARAN_API_KEY env var)
+ * @param options.baseUrl - Custom Smaran API base URL
  * @param options.promptTemplate - Custom function to format memory data into prompt
  * @param options.threshold - Search sensitivity: 0 (more results) to 1 (more accurate). Default: 0.1
  * @param options.limit - Maximum number of memory results to return. Default: 10
@@ -52,17 +52,17 @@ interface WithEngramOptions<T extends VoltAgentConfig>
  * @param options.metadata - Optional metadata to attach to saved conversations
  * @param options.searchMode - Search mode: "memories" (atomic facts), "documents" (chunks), or "hybrid" (both)
  * @param options.entityContext - Context for memory extraction (max 1500 chars), guides how memories are understood
- * @returns Enhanced agent config with Engram hooks injected
+ * @returns Enhanced agent config with Smaran hooks injected
  *
  * @example
  * Basic usage with profile memories:
  * ```typescript
- * import { withEngram } from "@engram/tools/voltagent"
+ * import { withSmaran } from "@smaran/tools/voltagent"
  * import { Agent } from "@voltagent/core"
  * import { VercelAIProvider } from "@voltagent/vercel-ai"
  * import { openai } from "@ai-sdk/openai"
  *
- * const configWithMemory = withEngram({
+ * const configWithMemory = withSmaran({
  *   agentConfig: {
  *     name: "my-agent",
  *     instructions: "You are a helpful assistant",
@@ -79,7 +79,7 @@ interface WithEngramOptions<T extends VoltAgentConfig>
  * @example
  * Advanced usage with full memory mode and conversation saving:
  * ```typescript
- * const configWithMemory = withEngram({
+ * const configWithMemory = withSmaran({
  *   agentConfig: {
  *     name: "my-agent",
  *     instructions: "You are a helpful assistant",
@@ -112,7 +112,7 @@ interface WithEngramOptions<T extends VoltAgentConfig>
  * @example
  * Custom prompt template:
  * ```typescript
- * const configWithMemory = withEngram({
+ * const configWithMemory = withSmaran({
  *   agentConfig: {
  *     name: "my-agent",
  *     instructions: "...",
@@ -133,22 +133,22 @@ interface WithEngramOptions<T extends VoltAgentConfig>
  * const agent = new Agent(configWithMemory)
  * ```
  *
- * @throws {Error} When neither `options.apiKey` nor `process.env.ENGRAM_API_KEY` are set
- * @throws {Error} When Engram API request fails
+ * @throws {Error} When neither `options.apiKey` nor `process.env.SMARAN_API_KEY` are set
+ * @throws {Error} When Smaran API request fails
  */
-export function withEngram<T extends VoltAgentConfig>(
-	options: WithEngramOptions<T>,
+export function withSmaran<T extends VoltAgentConfig>(
+	options: WithSmaranOptions<T>,
 ): T {
-	const { agentConfig, containerTag, ...engramOptions } = options
+	const { agentConfig, containerTag, ...smaranOptions } = options
 
-	// Create Engram hooks (internally creates its own context, validates API key)
-	const engramHooks = createEngramHooks(
+	// Create Smaran hooks (internally creates its own context, validates API key)
+	const smaranHooks = createSmaranHooks(
 		containerTag,
-		engramOptions,
+		smaranOptions,
 	)
 
 	// Merge with existing hooks if present
-	const mergedHooks = mergeHooks(agentConfig.hooks, engramHooks)
+	const mergedHooks = mergeHooks(agentConfig.hooks, smaranHooks)
 
 	// Return enhanced config with merged hooks
 	return {
@@ -159,7 +159,7 @@ export function withEngram<T extends VoltAgentConfig>(
 
 // Export types for consumers
 export type {
-	EngramVoltAgent,
+	SmaranVoltAgent,
 	VoltAgentConfig,
 	VoltAgentMessage,
 	VoltAgentHooks,
@@ -171,9 +171,9 @@ export type {
 	MemoryPromptData,
 } from "./types"
 
-export type { WithEngramOptions }
+export type { WithSmaranOptions }
 
-// Note: WithEngramOptions is exported above separately because it's generic
+// Note: WithSmaranOptions is exported above separately because it's generic
 
 // Export hook creation utilities for advanced use cases
-export { createEngramHooks } from "./hooks"
+export { createSmaranHooks } from "./hooks"

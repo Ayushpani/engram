@@ -2,58 +2,58 @@ import "dotenv/config"
 import { openai } from "@ai-sdk/openai"
 import { createAnthropic } from "@ai-sdk/anthropic"
 import {
-	withEngram,
-	engramTools,
+	withSmaran,
+	smaranTools,
 	searchMemoriesTool,
 	addMemoryTool,
 	type MemoryPromptData,
-} from "@engram/tools/ai-sdk"
+} from "@smaran/tools/ai-sdk"
 
 async function testMiddleware() {
 	console.log("=== Middleware ===")
 
 	// Basic wrapper
-	const model = withEngram(openai("gpt-4"), {
+	const model = withSmaran(openai("gpt-4"), {
 		containerTag: "user-123",
 		customId: "conv-1",
 	})
-	console.log("✓ withEngram basic")
+	console.log("✓ withSmaran basic")
 
 	// With addMemory option
-	const modelWithAdd = withEngram(openai("gpt-4"), {
+	const modelWithAdd = withSmaran(openai("gpt-4"), {
 		containerTag: "user-123",
 		customId: "conv-1",
 		addMemory: "always",
 	})
-	console.log("✓ withEngram with addMemory")
+	console.log("✓ withSmaran with addMemory")
 
 	// With verbose logging
-	const modelVerbose = withEngram(openai("gpt-4"), {
+	const modelVerbose = withSmaran(openai("gpt-4"), {
 		containerTag: "user-123",
 		customId: "conv-1",
 		verbose: true,
 	})
-	console.log("✓ withEngram with verbose")
+	console.log("✓ withSmaran with verbose")
 }
 
 async function testSearchModes() {
 	console.log("\n=== Search Modes ===")
 
-	const profileModel = withEngram(openai("gpt-4"), {
+	const profileModel = withSmaran(openai("gpt-4"), {
 		containerTag: "user-123",
 		customId: "conv-1",
 		mode: "profile",
 	})
 	console.log("✓ mode: profile")
 
-	const queryModel = withEngram(openai("gpt-4"), {
+	const queryModel = withSmaran(openai("gpt-4"), {
 		containerTag: "user-123",
 		customId: "conv-1",
 		mode: "query",
 	})
 	console.log("✓ mode: query")
 
-	const fullModel = withEngram(openai("gpt-4"), {
+	const fullModel = withSmaran(openai("gpt-4"), {
 		containerTag: "user-123",
 		customId: "conv-1",
 		mode: "full",
@@ -74,7 +74,7 @@ async function testCustomPrompt() {
 </context>
 `.trim()
 
-	const model = withEngram(anthropic("claude-3-sonnet-20240229"), {
+	const model = withSmaran(anthropic("claude-3-sonnet-20240229"), {
 		containerTag: "user-123",
 		customId: "conv-1",
 		mode: "full",
@@ -87,8 +87,8 @@ async function testTools() {
 	console.log("\n=== Memory Tools ===")
 
 	// All tools
-	const tools = engramTools("YOUR_API_KEY")
-	console.log("✓ engramTools")
+	const tools = smaranTools("YOUR_API_KEY")
+	console.log("✓ smaranTools")
 
 	// Individual tools
 	const searchTool = searchMemoriesTool("API_KEY", { projectId: "personal" })

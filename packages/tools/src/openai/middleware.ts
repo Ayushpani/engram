@@ -1,12 +1,12 @@
 import type OpenAI from "openai"
-import Engram from "supermemory"
+import Smaran from "supermemory"
 import { addConversation } from "../conversations-client"
 import { deduplicateMemories } from "../tools-shared"
 import { createLogger, type Logger } from "../vercel/logger"
 import { convertProfileToMarkdown } from "../vercel/util"
 
 const normalizeBaseUrl = (url?: string): string => {
-	const defaultUrl = "https://api.engram.ai"
+	const defaultUrl = "https://api.smaran.ai"
 	if (!url) return defaultUrl
 	return url.endsWith("/") ? url.slice(0, -1) : url
 }
@@ -22,7 +22,7 @@ export interface OpenAIMiddlewareOptions {
 	baseUrl?: string
 }
 
-interface EngramProfileSearch {
+interface SmaranProfileSearch {
 	profile: {
 		static?: Array<{ memory: string; metadata?: Record<string, unknown> }>
 		dynamic?: Array<{ memory: string; metadata?: Record<string, unknown> }>
@@ -81,17 +81,17 @@ const getLastUserMessage = (
  * @example
  * ```typescript
  * // Search with query
- * const results = await engramProfileSearch("user-123", "favorite programming language")
+ * const results = await smaranProfileSearch("user-123", "favorite programming language")
  *
  * // Get all profile memories
- * const profile = await engramProfileSearch("user-123", "")
+ * const profile = await smaranProfileSearch("user-123", "")
  * ```
  */
-const engramProfileSearch = async (
+const smaranProfileSearch = async (
 	containerTag: string,
 	queryText: string,
 	baseUrl: string,
-): Promise<EngramProfileSearch> => {
+): Promise<SmaranProfileSearch> => {
 	const payload = queryText
 		? JSON.stringify({
 				q: queryText,
@@ -106,7 +106,7 @@ const engramProfileSearch = async (
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${process.env.ENGRAM_API_KEY}`,
+				Authorization: `Bearer ${process.env.SMARAN_API_KEY}`,
 			},
 			body: payload,
 		})
@@ -114,7 +114,7 @@ const engramProfileSearch = async (
 		if (!response.ok) {
 			const errorText = await response.text().catch(() => "Unknown error")
 			throw new Error(
-				`Engram profile search failed: ${response.status} ${response.statusText}. ${errorText}`,
+				`Smaran profile search failed: ${response.status} ${response.statusText}. ${errorText}`,
 			)
 		}
 
@@ -123,7 +123,7 @@ const engramProfileSearch = async (
 		if (error instanceof Error) {
 			throw error
 		}
-		throw new Error(`Engram API request failed: ${error}`)
+		throw new Error(`Smaran API request failed: ${error}`)
 	}
 }
 
@@ -166,7 +166,7 @@ const addSystemPrompt = async (
 
 	const queryText = mode !== "profile" ? getLastUserMessage(messages) : ""
 
-	const memoriesResponse = await engramProfileSearch(
+	const memoriesResponse = await smaranProfileSearch(
 		containerTag,
 		queryText,
 		baseUrl,
@@ -302,7 +302,7 @@ const getConversationContent = (
  * @example
  * ```typescript
  * await addMemoryTool(
- *   engramClient,
+ *   smaranClient,
  *   "user-123",
  *   "User: Hello\n\nAssistant: Hi!",
  *   "conversation:456",
@@ -314,7 +314,7 @@ const getConversationContent = (
  * ```
  */
 const addMemoryTool = async (
-	client: Engram,
+	client: Smaran,
 	containerTag: string,
 	content: string,
 	customId: string | undefined,
@@ -401,11 +401,11 @@ const addMemoryTool = async (
  * @param options.mode - Memory search mode: "profile" (all memories), "query" (search-based), or "full" (both) (default: "profile")
  * @param options.addMemory - Automatic memory storage mode: "always" or "never" (default: "never")
  * @returns Object with `wrapClient` and `createClient` methods
- * @throws {Error} When ENGRAM_API_KEY environment variable is not set
+ * @throws {Error} When SMARAN_API_KEY environment variable is not set
  *
  * @example
  * ```typescript
- * const openaiWithEngram = createOpenAIMiddleware(openai, "user-123", {
+ * const openaiWithSmaran = createOpenAIMiddleware(openai, "user-123", {
  *   customId: "conversation-456",
  *   mode: "full",
  *   addMemory: "always",
@@ -421,9 +421,9 @@ export function createOpenAIMiddleware(
 ) {
 	const logger = createLogger(options?.verbose ?? false)
 	const baseUrl = normalizeBaseUrl(options?.baseUrl)
-	const client = new Engram({
-		apiKey: process.env.ENGRAM_API_KEY,
-		...(baseUrl !== "https://api.engram.ai" ? { baseURL: baseUrl } : {}),
+	const client = new Smaran({
+		apiKey: process.env.SMARAN_API_KEY,
+		...(baseUrl !== "https://api.smaran.ai" ? { baseURL: baseUrl } : {}),
 	})
 
 	const customId = options?.customId
@@ -453,7 +453,7 @@ export function createOpenAIMiddleware(
 		mode: "profile" | "query" | "full",
 		context: "chat" | "responses",
 	) => {
-		const memoriesResponse = await engramProfileSearch(
+		const memoriesResponse = await smaranProfileSearch(
 			containerTag,
 			queryText,
 			baseUrl,
@@ -615,7 +615,7 @@ export function createOpenAIMiddleware(
 						memoryCustomId,
 						logger,
 						messages,
-						process.env.ENGRAM_API_KEY,
+						process.env.SMARAN_API_KEY,
 						baseUrl,
 					),
 				)

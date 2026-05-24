@@ -82,7 +82,7 @@ export function Header({ onAddMemory, onOpenSearch }: HeaderProps) {
 										{userName}
 									</p>
 									<p className="-mt-0.5 text-base leading-none font-medium text-white/90 sm:text-lg">
-										engram
+										smaran
 									</p>
 								</div>
 							)}
@@ -112,7 +112,7 @@ export function Header({ onAddMemory, onOpenSearch }: HeaderProps) {
 							className="px-3 py-2.5 rounded-md hover:bg-[#293952]/40 cursor-pointer text-white text-sm font-medium gap-2"
 						>
 							<a
-								href="https://console.engram.ai"
+								href="https://console.smaran.ai"
 								target="_blank"
 								rel="noreferrer"
 							>
@@ -124,9 +124,9 @@ export function Header({ onAddMemory, onOpenSearch }: HeaderProps) {
 							asChild
 							className="px-3 py-2.5 rounded-md hover:bg-[#293952]/40 cursor-pointer text-white text-sm font-medium gap-2"
 						>
-							<a href="https://engram.ai" target="_blank" rel="noreferrer">
+							<a href="https://smaran.ai" target="_blank" rel="noreferrer">
 								<ExternalLink className="size-4 text-[#737373]" />
-								engram.ai
+								smaran.ai
 							</a>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
@@ -419,7 +419,7 @@ export function PublicHeader() {
 				<div className="hidden sm:flex flex-col items-start">
 					<p className="text-[10px] leading-tight text-[#6B6B6B]">Your AI</p>
 					<p className="-mt-0.5 text-base leading-none font-medium text-white/90">
-						engram
+						smaran
 					</p>
 				</div>
 			</Link>

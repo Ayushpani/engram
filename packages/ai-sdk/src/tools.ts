@@ -1,11 +1,11 @@
 import { jsonSchema, tool } from "ai"
-import Engram from "supermemory"
+import Smaran from "supermemory"
 
 /**
- * Engram configuration
+ * Smaran configuration
  * Only one of `projectId` or `containerTags` can be provided.
  */
-export interface EngramToolsConfig {
+export interface SmaranToolsConfig {
 	baseUrl?: string
 	containerTags?: string[]
 	projectId?: string
@@ -22,13 +22,13 @@ type AddMemoryInput = {
 }
 
 /**
- * Create Engram tools for AI SDK
+ * Create Smaran tools for AI SDK
  */
-export function engramTools(
+export function smaranTools(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
-	const client = new Engram({
+	const client = new Smaran({
 		apiKey,
 		...(config?.baseUrl ? { baseURL: config.baseUrl } : {}),
 	})
@@ -135,16 +135,16 @@ export function engramTools(
 // Export individual tool creators for more flexibility
 export const searchMemoriesTool = (
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) => {
-	const { searchMemories } = engramTools(apiKey, config)
+	const { searchMemories } = smaranTools(apiKey, config)
 	return searchMemories
 }
 
 export const addMemoryTool = (
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) => {
-	const { addMemory } = engramTools(apiKey, config)
+	const { addMemory } = smaranTools(apiKey, config)
 	return addMemory
 }

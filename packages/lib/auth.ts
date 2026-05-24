@@ -10,7 +10,7 @@ import {
 import { createAuthClient } from "better-auth/react"
 
 export const authClient = createAuthClient({
-	baseURL: process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.engram.ai",
+	baseURL: process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.smaran.ai",
 	fetchOptions: {
 		credentials: "include",
 		headers: { "X-App-Source": "nova" },

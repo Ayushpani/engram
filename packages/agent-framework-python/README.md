@@ -1,6 +1,6 @@
-# Engram Microsoft Agent Framework SDK
+# Smaran Microsoft Agent Framework SDK
 
-Memory tools and middleware for [Microsoft Agent Framework](https://github.com/microsoft/agent-framework) with [Engram](https://engram.ai) integration.
+Memory tools and middleware for [Microsoft Agent Framework](https://github.com/microsoft/agent-framework) with [Smaran](https://smaran.ai) integration.
 
 This package provides both **automatic memory injection middleware** and **manual memory tools** for the Microsoft Agent Framework.
 
@@ -9,13 +9,13 @@ This package provides both **automatic memory injection middleware** and **manua
 Install using uv (recommended):
 
 ```bash
-uv add --prerelease=allow engram-agent-framework
+uv add --prerelease=allow smaran-agent-framework
 ```
 
 Or with pip:
 
 ```bash
-pip install --pre engram-agent-framework
+pip install --pre smaran-agent-framework
 ```
 
 > **Note:** The `--prerelease=allow` / `--pre` flag is required because `agent-framework-core` depends on pre-release versions of Azure packages.
@@ -23,30 +23,30 @@ pip install --pre engram-agent-framework
 For async HTTP support (recommended):
 
 ```bash
-uv add engram-agent-framework[async]
+uv add smaran-agent-framework[async]
 # or
-pip install engram-agent-framework[async]
+pip install smaran-agent-framework[async]
 ```
 
 ## Quick Start
 
 ### Automatic Memory Injection (Recommended)
 
-The easiest way to add memory capabilities is using the `EngramChatMiddleware`:
+The easiest way to add memory capabilities is using the `SmaranChatMiddleware`:
 
 ```python
 import asyncio
 from agent_framework.openai import OpenAIResponsesClient
-from engram_agent_framework import (
-    EngramChatMiddleware,
-    EngramMiddlewareOptions,
+from smaran_agent_framework import (
+    SmaranChatMiddleware,
+    SmaranMiddlewareOptions,
 )
 
 async def main():
-    # Create Engram middleware
-    middleware = EngramChatMiddleware(
+    # Create Smaran middleware
+    middleware = SmaranChatMiddleware(
         container_tag="user-123",
-        options=EngramMiddlewareOptions(
+        options=SmaranMiddlewareOptions(
             mode="full",        # "profile", "query", or "full"
             verbose=True,       # Enable logging
             add_memory="always" # Automatically save conversations
@@ -77,13 +77,13 @@ The most idiomatic way to add memory in Agent Framework, using the same pattern 
 import asyncio
 from agent_framework import AgentSession
 from agent_framework.openai import OpenAIResponsesClient
-from engram_agent_framework import EngramContextProvider
+from smaran_agent_framework import SmaranContextProvider
 
 async def main():
     # Create context provider
-    provider = EngramContextProvider(
+    provider = SmaranContextProvider(
         container_tag="user-123",
-        api_key="your-engram-api-key",
+        api_key="your-smaran-api-key",
         mode="full",
         store_conversations=True,
     )
@@ -113,12 +113,12 @@ For explicit tool-based memory access:
 ```python
 import asyncio
 from agent_framework.openai import OpenAIResponsesClient
-from engram_agent_framework import EngramTools
+from smaran_agent_framework import SmaranTools
 
 async def main():
     # Create memory tools
-    tools = EngramTools(
-        api_key="your-engram-api-key",
+    tools = SmaranTools(
+        api_key="your-smaran-api-key",
         config={"project_id": "my-project"},
     )
 
@@ -145,22 +145,22 @@ For maximum flexibility, use both middleware (automatic context injection) and t
 ```python
 import asyncio
 from agent_framework.openai import OpenAIResponsesClient
-from engram_agent_framework import (
-    EngramChatMiddleware,
-    EngramMiddlewareOptions,
-    EngramTools,
+from smaran_agent_framework import (
+    SmaranChatMiddleware,
+    SmaranMiddlewareOptions,
+    SmaranTools,
 )
 
 async def main():
-    api_key = "your-engram-api-key"
+    api_key = "your-smaran-api-key"
 
-    middleware = EngramChatMiddleware(
+    middleware = SmaranChatMiddleware(
         container_tag="user-123",
-        options=EngramMiddlewareOptions(mode="full"),
+        options=SmaranMiddlewareOptions(mode="full"),
         api_key=api_key,
     )
 
-    tools = EngramTools(api_key=api_key)
+    tools = SmaranTools(api_key=api_key)
 
     agent = OpenAIResponsesClient().as_agent(
         name="MemoryAgent",
@@ -187,37 +187,37 @@ asyncio.run(main())
 Injects all static and dynamic profile memories into every request.
 
 ```python
-EngramMiddlewareOptions(mode="profile")
+SmaranMiddlewareOptions(mode="profile")
 ```
 
 #### `"query"` mode
 Searches for memories relevant to the current user message.
 
 ```python
-EngramMiddlewareOptions(mode="query")
+SmaranMiddlewareOptions(mode="query")
 ```
 
 #### `"full"` mode
 Combines both profile and query modes.
 
 ```python
-EngramMiddlewareOptions(mode="full")
+SmaranMiddlewareOptions(mode="full")
 ```
 
 ### Memory Storage
 
 ```python
 # Always save conversations as memories
-EngramMiddlewareOptions(add_memory="always")
+SmaranMiddlewareOptions(add_memory="always")
 
 # Never save conversations (default)
-EngramMiddlewareOptions(add_memory="never")
+SmaranMiddlewareOptions(add_memory="never")
 ```
 
 ### Complete Configuration
 
 ```python
-EngramMiddlewareOptions(
+SmaranMiddlewareOptions(
     conversation_id="chat-session-456",  # Group messages into conversations
     verbose=True,                        # Enable detailed logging
     mode="full",                         # Use both profile and query
@@ -227,12 +227,12 @@ EngramMiddlewareOptions(
 
 ## API Reference
 
-### EngramTools
+### SmaranTools
 
 Memory tools that integrate with Agent Framework's tool system.
 
 ```python
-tools = EngramTools(
+tools = SmaranTools(
     api_key="your-api-key",
     config={
         "project_id": "my-project",       # or use container_tags
@@ -249,37 +249,37 @@ result = await tools.add_memory("User prefers dark mode")
 result = await tools.get_profile()
 ```
 
-### EngramChatMiddleware
+### SmaranChatMiddleware
 
 Chat middleware for automatic memory injection.
 
 ```python
-middleware = EngramChatMiddleware(
+middleware = SmaranChatMiddleware(
     container_tag="user-123",           # Memory scope identifier
-    options=EngramMiddlewareOptions(...),
-    api_key="your-api-key",             # Or set ENGRAM_API_KEY env var
+    options=SmaranMiddlewareOptions(...),
+    api_key="your-api-key",             # Or set SMARAN_API_KEY env var
 )
 ```
 
-### with_engram_middleware()
+### with_smaran_middleware()
 
 Convenience function for creating middleware:
 
 ```python
-middleware = with_engram_middleware(
+middleware = with_smaran_middleware(
     "user-123",
-    EngramMiddlewareOptions(mode="full"),
+    SmaranMiddlewareOptions(mode="full"),
 )
 ```
 
-### EngramContextProvider
+### SmaranContextProvider
 
 Context provider for the Agent Framework session pipeline (like Mem0):
 
 ```python
-provider = EngramContextProvider(
+provider = SmaranContextProvider(
     container_tag="user-123",
-    api_key="your-api-key",           # Or set ENGRAM_API_KEY env var
+    api_key="your-api-key",           # Or set SMARAN_API_KEY env var
     mode="full",                      # "profile", "query", or "full"
     store_conversations=True,         # Save conversations after each run
     conversation_id="chat-456",       # Optional grouping ID
@@ -291,38 +291,38 @@ provider = EngramContextProvider(
 ## Error Handling
 
 ```python
-from engram_agent_framework import (
-    EngramConfigurationError,
-    EngramAPIError,
-    EngramNetworkError,
-    EngramMemoryOperationError,
+from smaran_agent_framework import (
+    SmaranConfigurationError,
+    SmaranAPIError,
+    SmaranNetworkError,
+    SmaranMemoryOperationError,
 )
 
 try:
-    middleware = EngramChatMiddleware("user-123")
-except EngramConfigurationError as e:
+    middleware = SmaranChatMiddleware("user-123")
+except SmaranConfigurationError as e:
     print(f"Configuration issue: {e}")
 ```
 
 ### Exception Types
 
-- **`EngramError`** - Base class for all Engram exceptions
-- **`EngramConfigurationError`** - Missing API keys, invalid configuration
-- **`EngramAPIError`** - API request failures (includes status codes)
-- **`EngramNetworkError`** - Network connectivity issues
-- **`EngramMemoryOperationError`** - Memory search/add operation failures
-- **`EngramTimeoutError`** - Operation timeouts
+- **`SmaranError`** - Base class for all Smaran exceptions
+- **`SmaranConfigurationError`** - Missing API keys, invalid configuration
+- **`SmaranAPIError`** - API request failures (includes status codes)
+- **`SmaranNetworkError`** - Network connectivity issues
+- **`SmaranMemoryOperationError`** - Memory search/add operation failures
+- **`SmaranTimeoutError`** - Operation timeouts
 
 ## Environment Variables
 
-- `ENGRAM_API_KEY` - Your Engram API key (required)
+- `SMARAN_API_KEY` - Your Smaran API key (required)
 - `OPENAI_API_KEY` - Your OpenAI API key (required for OpenAI-based agents)
 
 ## Dependencies
 
 ### Required
 - `agent-framework-core>=1.0.0rc3` - Microsoft Agent Framework
-- `engram>=3.1.0` - Engram client
+- `smaran>=3.1.0` - Smaran client
 - `requests>=2.25.0` - HTTP requests (fallback)
 
 ### Optional
@@ -339,7 +339,7 @@ uv sync --dev
 uv run pytest
 
 # Type checking
-uv run mypy src/engram_agent_framework
+uv run mypy src/smaran_agent_framework
 
 # Formatting
 uv run black src/ tests/
@@ -352,6 +352,6 @@ MIT License - see LICENSE file for details.
 
 ## Links
 
-- [Engram](https://engram.ai) - Infinite context memory platform
+- [Smaran](https://smaran.ai) - Infinite context memory platform
 - [Microsoft Agent Framework](https://github.com/microsoft/agent-framework) - AI agent framework
-- [Documentation](https://docs.engram.ai) - Full API documentation
+- [Documentation](https://docs.smaran.ai) - Full API documentation

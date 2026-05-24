@@ -1,8 +1,8 @@
-export const CHATGPT_REMOTE_MCP_URL = "https://mcp.engram.ai/mcp"
+export const CHATGPT_REMOTE_MCP_URL = "https://mcp.smaran.ai/mcp"
 
-export const ENGRAM_MCP_OAUTH_JSON = `{
+export const SMARAN_MCP_OAUTH_JSON = `{
   "mcpServers": {
-    "engram": {
+    "smaran": {
       "url": "${CHATGPT_REMOTE_MCP_URL}"
     }
   }
@@ -10,9 +10,9 @@ export const ENGRAM_MCP_OAUTH_JSON = `{
 
 export function buildMcpUrlRemoteJson(apiKeyPlaceholder: string) {
 	return `{
-  "engram-mcp": {
+  "smaran-mcp": {
     "command": "npx",
-    "args": ["-y", "mcp-remote", "https://mcp.engram.ai/mcp"],
+    "args": ["-y", "mcp-remote", "https://mcp.smaran.ai/mcp"],
     "env": {},
     "headers": {
       "Authorization": "Bearer ${apiKeyPlaceholder}"
@@ -21,20 +21,20 @@ export function buildMcpUrlRemoteJson(apiKeyPlaceholder: string) {
 }`
 }
 
-export const CODEX_MCP_TOML = `[mcp_servers.engram]
+export const CODEX_MCP_TOML = `[mcp_servers.smaran]
 command = "npx"
-args = ["-y", "mcp-remote@latest", "https://mcp.engram.ai/mcp"]
+args = ["-y", "mcp-remote@latest", "https://mcp.smaran.ai/mcp"]
 `
 
 /** Full file merge target: Claude Desktop `claude_desktop_config.json` → `mcpServers`. */
 export const CLAUDE_DESKTOP_MCP_SNIPPET = `{
   "mcpServers": {
-    "engram": {
+    "smaran": {
       "command": "npx",
       "args": [
         "-y",
         "mcp-remote@latest",
-        "https://mcp.engram.ai/mcp"
+        "https://mcp.smaran.ai/mcp"
       ]
     }
   }
@@ -65,7 +65,7 @@ export function getManualInstallEntry(clientKey: string): ManualInstallEntry {
 				kind: "file",
 				paths:
 					"Cursor: ~/.cursor/mcp.json globally, or .cursor/mcp.json in your project.",
-				snippet: ENGRAM_MCP_OAUTH_JSON,
+				snippet: SMARAN_MCP_OAUTH_JSON,
 				format: "json",
 			}
 		case "vscode":
@@ -73,7 +73,7 @@ export function getManualInstallEntry(clientKey: string): ManualInstallEntry {
 				kind: "file",
 				paths:
 					"VS Code: macOS ~/Library/Application Support/Code/User/mcp.json · Windows %APPDATA%\\Code\\User\\mcp.json · Linux ~/.config/Code/User/mcp.json.",
-				snippet: ENGRAM_MCP_OAUTH_JSON,
+				snippet: SMARAN_MCP_OAUTH_JSON,
 				format: "json",
 			}
 		case "cline":
@@ -81,7 +81,7 @@ export function getManualInstallEntry(clientKey: string): ManualInstallEntry {
 				kind: "file",
 				paths:
 					"Cline: VS Code user folder → globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json.",
-				snippet: ENGRAM_MCP_OAUTH_JSON,
+				snippet: SMARAN_MCP_OAUTH_JSON,
 				format: "json",
 			}
 		case "claude":
@@ -91,7 +91,7 @@ export function getManualInstallEntry(clientKey: string): ManualInstallEntry {
 				kind: "file",
 				paths:
 					"Claude Code: ~/.claude.json (user) or .mcp.json in the project root.",
-				snippet: ENGRAM_MCP_OAUTH_JSON,
+				snippet: SMARAN_MCP_OAUTH_JSON,
 				format: "json",
 			}
 		case "gemini-cli":
@@ -99,14 +99,14 @@ export function getManualInstallEntry(clientKey: string): ManualInstallEntry {
 				kind: "file",
 				paths:
 					"Gemini CLI: ~/.gemini/settings.json (or project .gemini/settings.json).",
-				snippet: ENGRAM_MCP_OAUTH_JSON,
+				snippet: SMARAN_MCP_OAUTH_JSON,
 				format: "json",
 			}
 		default:
 			return {
 				kind: "file",
 				paths: "Open your client's MCP settings file (see its documentation).",
-				snippet: ENGRAM_MCP_OAUTH_JSON,
+				snippet: SMARAN_MCP_OAUTH_JSON,
 				format: "json",
 			}
 	}

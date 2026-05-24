@@ -7,7 +7,7 @@ import { cn } from "@lib/utils"
 import { dmSans125ClassName } from "@/lib/fonts"
 import type { InstallStep } from "@/lib/plugin-catalog"
 
-/** Recessed "inside-out" inset shadow used across Engram surfaces. */
+/** Recessed "inside-out" inset shadow used across Smaran surfaces. */
 export const INSET =
 	"shadow-[inset_0_2px_4px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(0,0,0,0.1)]"
 

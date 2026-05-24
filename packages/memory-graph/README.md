@@ -1,25 +1,25 @@
-# @engram/memory-graph
+# @smaran/memory-graph
 
 Interactive graph visualization for documents and their memory connections.
 
-[![npm version](https://img.shields.io/npm/v/@engram/memory-graph.svg)](https://www.npmjs.com/package/@engram/memory-graph)
+[![npm version](https://img.shields.io/npm/v/@smaran/memory-graph.svg)](https://www.npmjs.com/package/@smaran/memory-graph)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Installation
 
 ```bash
-npm install @engram/memory-graph
+npm install @smaran/memory-graph
 # or
-bun add @engram/memory-graph
+bun add @smaran/memory-graph
 # or
-pnpm add @engram/memory-graph
+pnpm add @smaran/memory-graph
 ```
 
 ## Quick Start
 
 ```tsx
-import { MemoryGraph } from '@engram/memory-graph';
-import type { DocumentWithMemories } from '@engram/memory-graph';
+import { MemoryGraph } from '@smaran/memory-graph';
+import type { DocumentWithMemories } from '@smaran/memory-graph';
 
 function App() {
   const [documents, setDocuments] = useState<DocumentWithMemories[]>([]);
@@ -69,14 +69,14 @@ function App() {
 
 ## Documentation
 
-Full documentation available at [docs.engram.ai](https://docs.engram.ai):
+Full documentation available at [docs.smaran.ai](https://docs.smaran.ai):
 
-- [Overview](https://docs.engram.ai/memory-graph/overview) - What it is and when to use it
-- [Installation](https://docs.engram.ai/memory-graph/installation) - Setup and requirements
-- [Quick Start](https://docs.engram.ai/memory-graph/quickstart) - Get running in 2 minutes
-- [API Reference](https://docs.engram.ai/memory-graph/api-reference) - Complete API documentation
-- [Examples](https://docs.engram.ai/memory-graph/examples) - Common use cases
-- [Troubleshooting](https://docs.engram.ai/memory-graph/troubleshooting) - Common issues
+- [Overview](https://docs.smaran.ai/memory-graph/overview) - What it is and when to use it
+- [Installation](https://docs.smaran.ai/memory-graph/installation) - Setup and requirements
+- [Quick Start](https://docs.smaran.ai/memory-graph/quickstart) - Get running in 2 minutes
+- [API Reference](https://docs.smaran.ai/memory-graph/api-reference) - Complete API documentation
+- [Examples](https://docs.smaran.ai/memory-graph/examples) - Common use cases
+- [Troubleshooting](https://docs.smaran.ai/memory-graph/troubleshooting) - Common issues
 
 ## Requirements
 
@@ -89,6 +89,6 @@ MIT
 
 ## Links
 
-- [GitHub](https://github.com/engramai/engram/tree/main/packages/memory-graph)
-- [Issues](https://github.com/engramai/engram/issues)
-- [Engram](https://engram.ai)
+- [GitHub](https://github.com/smaranai/smaran/tree/main/packages/memory-graph)
+- [Issues](https://github.com/smaranai/smaran/issues)
+- [Smaran](https://smaran.ai)

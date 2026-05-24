@@ -1,5 +1,5 @@
 /**
- * Shared constants and descriptions for Engram tools
+ * Shared constants and descriptions for Smaran tools
  */
 
 // Tool descriptions

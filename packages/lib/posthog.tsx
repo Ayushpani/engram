@@ -39,7 +39,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
 	useEffect(() => {
 		if (typeof window !== "undefined") {
 			const backendUrl =
-				process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.engram.ai"
+				process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.smaran.ai"
 
 			posthog.init("phc_ShqecfUPQgf16lWu6ZMUzduQvcWzCywrkCz5KHwmWsv", {
 				api_host: `${backendUrl}/orange`,

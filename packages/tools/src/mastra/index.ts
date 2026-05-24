@@ -1,15 +1,15 @@
-export { withEngram } from "./wrapper"
+export { withSmaran } from "./wrapper"
 
 export {
-	EngramInputProcessor,
-	EngramOutputProcessor,
-	createEngramProcessor,
-	createEngramOutputProcessor,
-	createEngramProcessors,
+	SmaranInputProcessor,
+	SmaranOutputProcessor,
+	createSmaranProcessor,
+	createSmaranOutputProcessor,
+	createSmaranProcessors,
 } from "./processor"
 
 export type {
-	EngramMastraOptions,
+	SmaranMastraOptions,
 	Processor,
 	ProcessInputArgs,
 	ProcessInputResult,

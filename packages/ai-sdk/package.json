@@ -1,5 +1,5 @@
 {
-  "name": "@engram/ai-sdk",
+  "name": "@smaran/ai-sdk",
   "type": "module",
   "version": "1.0.8",
   "scripts": {
@@ -30,13 +30,13 @@
     "./package.json": "./package.json"
   },
   "repository": {
-    "url": "https://github.com/engramai/engram",
+    "url": "https://github.com/smaranai/smaran",
     "directory": "packages/ai-sdk"
   },
   "keywords": [
     "ai",
     "sdk",
-    "engram",
+    "smaran",
     "memory"
   ]
 }

@@ -1,8 +1,8 @@
 import "dotenv/config"
 import fs from "fs"
-import Engram, { toFile } from "supermemory"
+import Smaran, { toFile } from "supermemory"
 
-const client = new Engram()
+const client = new Smaran()
 
 async function testDocumentsCRUD() {
 	console.log("\n=== Document CRUD Operations ===")
@@ -76,11 +76,11 @@ async function testClientConfig() {
 	console.log("\n=== Client Configuration ===")
 
 	// Retries
-	const clientWithRetries = new Engram({ maxRetries: 0 })
+	const clientWithRetries = new Smaran({ maxRetries: 0 })
 	console.log("✓ maxRetries config")
 
 	// Timeout
-	const clientWithTimeout = new Engram({ timeout: 20 * 1000 })
+	const clientWithTimeout = new Smaran({ timeout: 20 * 1000 })
 	console.log("✓ timeout config")
 
 	// Per-request options
@@ -108,10 +108,10 @@ async function testRawResponse() {
 async function testTypes() {
 	console.log("\n=== Types ===")
 
-	const params: Engram.AddParams = {
+	const params: Smaran.AddParams = {
 		content: "Typed content",
 	}
-	const response: Engram.AddResponse = await client.add(params)
+	const response: Smaran.AddResponse = await client.add(params)
 	console.log("✓ TypeScript types work:", response.id)
 }
 
@@ -121,7 +121,7 @@ async function testErrorHandling() {
 	const response = await client.documents
 		.add({ content: "Test - " + Date.now() })
 		.catch(async (err) => {
-			if (err instanceof Engram.APIError) {
+			if (err instanceof Smaran.APIError) {
 				console.log("Caught APIError:", err.status, err.name)
 			} else {
 				throw err

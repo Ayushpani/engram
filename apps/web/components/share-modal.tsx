@@ -346,7 +346,7 @@ export function ShareModal({
 			const url = URL.createObjectURL(blob)
 			const a = document.createElement("a")
 			a.href = url
-			a.download = `engram-graph-${Date.now()}.png`
+			a.download = `smaran-graph-${Date.now()}.png`
 			document.body.appendChild(a)
 			a.click()
 			document.body.removeChild(a)
@@ -361,13 +361,13 @@ export function ShareModal({
 
 	const handleShareTwitter = useCallback(async () => {
 		const text = encodeURIComponent(
-			"Check out my knowledge graph on engram! 🧠\n\nhttps://engram.ai",
+			"Check out my knowledge graph on smaran! 🧠\n\nhttps://smaran.ai",
 		)
 		window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank")
 	}, [])
 
 	const handleShareLinkedIn = useCallback(async () => {
-		const url = encodeURIComponent("https://engram.ai")
+		const url = encodeURIComponent("https://smaran.ai")
 		window.open(
 			`https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
 			"_blank",
@@ -408,7 +408,7 @@ export function ShareModal({
 									dmSans125ClassName(),
 								)}
 							>
-								Share snapshot of your engram
+								Share snapshot of your smaran
 							</DialogTitle>
 						</DialogHeader>
 						<DialogPrimitive.Close
@@ -442,7 +442,7 @@ export function ShareModal({
 									{userName}
 								</span>
 								<span className="text-sm text-white font-semibold leading-tight">
-									engram
+									smaran
 								</span>
 							</div>
 						</div>

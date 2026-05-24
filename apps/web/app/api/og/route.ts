@@ -183,7 +183,7 @@ export async function GET(request: Request) {
 			signal: controller.signal,
 			headers: {
 				"User-Agent":
-					"Mozilla/5.0 (compatible; SuperMemory/1.0; +https://engram.ai)",
+					"Mozilla/5.0 (compatible; SuperMemory/1.0; +https://smaran.ai)",
 			},
 		})
 

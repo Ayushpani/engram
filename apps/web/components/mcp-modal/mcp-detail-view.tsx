@@ -156,13 +156,13 @@ export function MCPSteps({ variant = "full" }: MCPStepsProps) {
 	}, [selectedClient, setupTab, setSetupTab])
 
 	function getCursorDeeplink() {
-		return "cursor://anysphere.cursor-deeplink/mcp/install?name=engram&config=eyJ1cmwiOiJodHRwczovL2FwaS5zdXBlcm1lbW9yeS5haS9tY3AifQ%3D%3D"
+		return "cursor://anysphere.cursor-deeplink/mcp/install?name=smaran&config=eyJ1cmwiOiJodHRwczovL2FwaS5zdXBlcm1lbW9yeS5haS9tY3AifQ%3D%3D"
 	}
 
 	function generateInstallCommand() {
 		if (!selectedClient || selectedClient === "chatgpt") return ""
 
-		let command = `npx -y install-mcp@latest https://mcp.engram.ai/mcp --client ${selectedClient} --oauth=yes`
+		let command = `npx -y install-mcp@latest https://mcp.smaran.ai/mcp --client ${selectedClient} --oauth=yes`
 
 		const projectIdForCommand = selectedProject.replace(/^sm_project_/, "")
 		command += ` --project ${projectIdForCommand}`
@@ -356,14 +356,14 @@ export function MCPSteps({ variant = "full" }: MCPStepsProps) {
 														dmMonoClassName(),
 													)}
 													readOnly
-													value="https://mcp.engram.ai/mcp"
+													value="https://mcp.smaran.ai/mcp"
 												/>
 												<button
 													type="button"
 													className="absolute top-1 right-1 cursor-pointer p-1"
 													onClick={() => {
 														navigator.clipboard.writeText(
-															"https://mcp.engram.ai/mcp",
+															"https://mcp.smaran.ai/mcp",
 														)
 														analytics.mcpInstallCmdCopied()
 														toast.success("Copied to clipboard!")
@@ -378,7 +378,7 @@ export function MCPSteps({ variant = "full" }: MCPStepsProps) {
 									{selectedClient === "cursor" && (
 										<div className="space-y-4">
 											<p className="text-sm text-[#8B8B8B]">
-												Open the link below to add engram in Cursor, or use
+												Open the link below to add smaran in Cursor, or use
 												Manual instructions to edit{" "}
 												<code className="text-xs text-emerald-400/90">
 													~/.cursor/mcp.json
@@ -397,7 +397,7 @@ export function MCPSteps({ variant = "full" }: MCPStepsProps) {
 													target="_blank"
 												>
 													<Image
-														alt="Add Engram MCP server to Cursor"
+														alt="Add Smaran MCP server to Cursor"
 														className="cursor-pointer opacity-90 transition-opacity hover:opacity-100"
 														height={40}
 														src="https://cursor.com/deeplink/mcp-install-dark.svg"
@@ -525,7 +525,7 @@ export function MCPSteps({ variant = "full" }: MCPStepsProps) {
 											<div className="space-y-3">
 												<p className="text-sm text-[#8B8B8B]">
 													Add this to your client&apos;s MCP config. Replace the
-													placeholder with an API key from engram settings
+													placeholder with an API key from smaran settings
 													(Integrations).
 												</p>
 												<div className="relative">
@@ -632,7 +632,7 @@ export function MCPSteps({ variant = "full" }: MCPStepsProps) {
 									? selectedClient === "chatgpt"
 										? "Complete app setup in ChatGPT, then enable it for your chat."
 										: selectedClient === "claude"
-											? "After Connectors, complete any prompts so engram is enabled for chat."
+											? "After Connectors, complete any prompts so smaran is enabled for chat."
 											: "Save your config, restart the client, and sign in if prompted."
 									: selectedClient === "cursor"
 										? "Complete the install in Cursor and sign in with OAuth if asked."
@@ -671,7 +671,7 @@ export function MCPDetailView({ onBack }: MCPDetailViewProps) {
 							dmSansClassName(),
 						)}
 					>
-						Connect Engram MCP to your AI Tools
+						Connect Smaran MCP to your AI Tools
 					</h1>
 					<p className={cn("mb-4 text-sm text-[#737373]", dmSansClassName())}>
 						Connect Cursor, Claude, VS Code, and more via MCP.

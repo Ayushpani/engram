@@ -8,11 +8,11 @@ import { analytics } from "@/lib/analytics"
 import { consumePendingConnectUrl } from "@/lib/constants"
 
 export function InitialHeader({
-	showUserEngram,
+	showUserSmaran,
 	showSkipOnboarding,
 	name,
 }: {
-	showUserEngram?: boolean
+	showUserSmaran?: boolean
 	showSkipOnboarding?: boolean
 	name?: string
 }) {
@@ -31,13 +31,13 @@ export function InitialHeader({
 		<div className="flex p-6 justify-between items-center">
 			<div className="flex items-center z-10!">
 				<Logo className="h-7" />
-				{showUserEngram && (
+				{showUserSmaran && (
 					<div className="flex flex-col items-start justify-center ml-2">
 						<p className="text-[#8B8B8B] text-[11px] leading-tight">
 							{userName}
 						</p>
 						<p className="text-white font-bold text-xl leading-none -mt-1">
-							engram
+							smaran
 						</p>
 					</div>
 				)}

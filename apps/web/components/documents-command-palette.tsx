@@ -178,7 +178,7 @@ export function DocumentsCommandPalette({
 							}
 
 							const rerankRes = await fetch(
-								"https://engram-edge-reranker.ayushpanigrahi84.workers.dev/v3/search/rerank",
+								"https://smaran-edge-reranker.ayushpanigrahi84.workers.dev/v3/search/rerank",
 								{
 									method: "POST",
 									headers: { "Content-Type": "application/json" },

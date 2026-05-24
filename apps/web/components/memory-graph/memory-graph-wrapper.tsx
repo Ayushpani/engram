@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { MemoryGraph as MemoryGraphBase } from "@engram/memory-graph"
-import type { GraphThemeColors } from "@engram/memory-graph"
+import { MemoryGraph as MemoryGraphBase } from "@smaran/memory-graph"
+import type { GraphThemeColors } from "@smaran/memory-graph"
 import { useGraphApi } from "./hooks/use-graph-api"
 
 export interface MemoryGraphWrapperProps {

@@ -20,7 +20,7 @@ export async function directFetchExample() {
 	console.log("=".repeat(50))
 
 	// Initialize the memory tool
-	const memoryTool = createClaudeMemoryTool(process.env.ENGRAM_API_KEY!, {
+	const memoryTool = createClaudeMemoryTool(process.env.SMARAN_API_KEY!, {
 		projectId: "claude-memory-demo",
 		memoryContainerTag: "claude_memory_demo",
 	})
@@ -105,7 +105,7 @@ export async function anthropicSdkExample() {
 	console.log("=".repeat(50))
 
 	// Initialize memory tool
-	const memoryTool = createClaudeMemoryTool(process.env.ENGRAM_API_KEY!, {
+	const memoryTool = createClaudeMemoryTool(process.env.SMARAN_API_KEY!, {
 		projectId: "claude-chat-session",
 		memoryContainerTag: "claude_memory_chat",
 	})
@@ -187,16 +187,16 @@ export async function anthropicSdkExample() {
  * This is what the actual integration would look like with @anthropic-ai/sdk
  */
 export const anthropicIntegrationTemplate = `
-// Install: npm install @anthropic-ai/sdk @engram/tools
+// Install: npm install @anthropic-ai/sdk @smaran/tools
 
 import Anthropic from '@anthropic-ai/sdk';
-import { createClaudeMemoryTool } from '@engram/tools/claude-memory';
+import { createClaudeMemoryTool } from '@smaran/tools/claude-memory';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-const memoryTool = createClaudeMemoryTool(process.env.ENGRAM_API_KEY!, {
+const memoryTool = createClaudeMemoryTool(process.env.SMARAN_API_KEY!, {
   projectId: 'my-chat-app',
   memoryContainerTag: 'claude_memory'
 });
@@ -242,10 +242,10 @@ async function chatWithMemory(userMessage: string) {
 // =====================================================
 
 export const curlExamples = `
-# Test the memory tool using cURL commands against your engram API
+# Test the memory tool using cURL commands against your smaran API
 
 # 1. Create a memory file
-curl -X POST "https://api.engram.ai/v3/documents" \\
+curl -X POST "https://api.smaran.ai/v3/documents" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -261,7 +261,7 @@ curl -X POST "https://api.engram.ai/v3/documents" \\
   }'
 
 # 2. Search/read the memory file
-curl -X POST "https://api.engram.ai/v3/search" \\
+curl -X POST "https://api.smaran.ai/v3/search" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -272,7 +272,7 @@ curl -X POST "https://api.engram.ai/v3/search" \\
   }'
 
 # 3. List all memory files (directory listing)
-curl -X POST "https://api.engram.ai/v3/search" \\
+curl -X POST "https://api.smaran.ai/v3/search" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -283,7 +283,7 @@ curl -X POST "https://api.engram.ai/v3/search" \\
   }'
 
 # 4. Update a memory file (str_replace operation)
-curl -X PATCH "https://api.engram.ai/v3/documents/DOCUMENT_ID" \\
+curl -X PATCH "https://api.smaran.ai/v3/documents/DOCUMENT_ID" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -297,7 +297,7 @@ curl -X PATCH "https://api.engram.ai/v3/documents/DOCUMENT_ID" \\
   }'
 
 # 5. Delete a memory file
-curl -X DELETE "https://api.engram.ai/v3/documents/DOCUMENT_ID" \\
+curl -X DELETE "https://api.smaran.ai/v3/documents/DOCUMENT_ID" \\
   -H "Authorization: Bearer YOUR_API_KEY"
 `
 
@@ -306,8 +306,8 @@ curl -X DELETE "https://api.engram.ai/v3/documents/DOCUMENT_ID" \\
 // =====================================================
 
 export async function runAllExamples() {
-	if (!process.env.ENGRAM_API_KEY) {
-		console.error("❌ ENGRAM_API_KEY environment variable is required")
+	if (!process.env.SMARAN_API_KEY) {
+		console.error("❌ SMARAN_API_KEY environment variable is required")
 		console.log("Set your API key in .env file or environment variable")
 		return
 	}

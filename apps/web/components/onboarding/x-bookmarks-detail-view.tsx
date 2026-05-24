@@ -13,7 +13,7 @@ interface XBookmarksDetailViewProps {
 const steps = [
 	{
 		number: 1,
-		title: "Install the Chrome Extension and login with your engram",
+		title: "Install the Chrome Extension and login with your smaran",
 		image: "/onboarding/chrome-ext-1.png",
 	},
 	{
@@ -58,7 +58,7 @@ export function XBookmarksDetailView({ onBack }: XBookmarksDetailViewProps) {
 								dmSansClassName(),
 							)}
 						>
-							Bring your X bookmarks into Engram in just a few clicks.
+							Bring your X bookmarks into Smaran in just a few clicks.
 							They'll be automatically embedded so you can easily find what you
 							need, right when you need it.
 						</p>

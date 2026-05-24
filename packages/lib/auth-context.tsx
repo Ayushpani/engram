@@ -16,7 +16,7 @@ type OrganizationListItem = NonNullable<
 	ReturnType<typeof authClient.useListOrganizations>["data"]
 >[number]
 
-const STORAGE_KEY = "engram-consumer-last-org-slug"
+const STORAGE_KEY = "smaran-consumer-last-org-slug"
 
 interface AuthContextType {
 	session: SessionData["session"] | null
@@ -164,10 +164,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 		try {
 			const pendingMethod = localStorage.getItem(
-				"engram-pending-login-method",
+				"smaran-pending-login-method",
 			)
 			const pendingTsRaw = localStorage.getItem(
-				"engram-pending-login-timestamp",
+				"smaran-pending-login-timestamp",
 			)
 
 			if (pendingMethod) {
@@ -176,13 +176,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 				const isFresh = Number.isFinite(ts) && now - ts < 10 * 60 * 1000
 
 				if (isFresh) {
-					localStorage.setItem("engram-last-login-method", pendingMethod)
+					localStorage.setItem("smaran-last-login-method", pendingMethod)
 				}
 			}
 		} catch {}
 		try {
-			localStorage.removeItem("engram-pending-login-method")
-			localStorage.removeItem("engram-pending-login-timestamp")
+			localStorage.removeItem("smaran-pending-login-method")
+			localStorage.removeItem("smaran-pending-login-timestamp")
 		} catch {}
 	}, [session?.session])
 

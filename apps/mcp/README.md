@@ -1,6 +1,6 @@
-# Engram MCP Server 4.0
+# Smaran MCP Server 4.0
 
-A standalone MCP (Model Context Protocol) server for Engram that gives AI assistants persistent memory across conversations. Built on Cloudflare Workers with Durable Objects for scalable, persistent connections.
+A standalone MCP (Model Context Protocol) server for Smaran that gives AI assistants persistent memory across conversations. Built on Cloudflare Workers with Durable Objects for scalable, persistent connections.
 
 ## Features
 
@@ -15,7 +15,7 @@ A standalone MCP (Model Context Protocol) server for Engram that gives AI assist
 ### Quick Install (Recommended)
 
 ```bash
-npx -y install-mcp@latest https://mcp.engram.ai/mcp --client claude --oauth=yes
+npx -y install-mcp@latest https://mcp.smaran.ai/mcp --client claude --oauth=yes
 ```
 
 Replace `claude` with your MCP client: `claude`, `cursor`, `windsurf`, etc.
@@ -27,8 +27,8 @@ Add to your MCP client config (Claude Desktop, Cursor, Windsurf, etc.):
 ```json
 {
   "mcpServers": {
-    "engram": {
-      "url": "https://mcp.engram.ai/mcp"
+    "smaran": {
+      "url": "https://mcp.smaran.ai/mcp"
     }
   }
 }
@@ -38,13 +38,13 @@ The server uses OAuth authentication by default. Your MCP client will automatica
 
 ### API Key Authentication (Alternative)
 
-If you prefer to use an API key instead of OAuth, you can pass it directly in the `Authorization` header. Get your API key from [app.engram.ai](https://app.engram.ai):
+If you prefer to use an API key instead of OAuth, you can pass it directly in the `Authorization` header. Get your API key from [app.smaran.ai](https://app.smaran.ai):
 
 ```json
 {
   "mcpServers": {
-    "engram": {
-      "url": "https://mcp.engram.ai/mcp",
+    "smaran": {
+      "url": "https://mcp.smaran.ai/mcp",
       "headers": {
         "Authorization": "Bearer sm_your_api_key_here"
       }
@@ -62,8 +62,8 @@ To scope all operations to a specific project, add the `x-sm-project` header:
 ```json
 {
   "mcpServers": {
-    "engram": {
-      "url": "https://mcp.engram.ai/mcp",
+    "smaran": {
+      "url": "https://mcp.smaran.ai/mcp",
       "headers": {
         "x-sm-project": "your-project-id"
       }
@@ -124,8 +124,8 @@ Returns: `{ userId, email, name, client, sessionId }`
 
 | URI | Description |
 |-----|-------------|
-| `engram://profile` | User profile with stable preferences and recent activity |
-| `engram://projects` | List of available memory projects |
+| `smaran://profile` | User profile with stable preferences and recent activity |
+| `smaran://projects` | List of available memory projects |
 
 ## Prompts
 
@@ -153,12 +153,12 @@ Create a `.dev.vars` file:
 ```env
 API_URL=http://localhost:8787
 or 
-API_URL=https://api.engram.ai
+API_URL=https://api.smaran.ai
 ```
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `API_URL` | Main Engram API URL for OAuth validation | `https://api.engram.ai` |
+| `API_URL` | Main Smaran API URL for OAuth validation | `https://api.smaran.ai` |
 
 ### Run Locally
 
@@ -168,7 +168,7 @@ bun run dev
 
 The server will start at `http://localhost:8788`.
 
-**Note:** For local development, you also need the main Engram API running at the `API_URL` for OAuth token validation.
+**Note:** For local development, you also need the main Smaran API running at the `API_URL` for OAuth token validation.
 
 ### Deploy
 
@@ -180,15 +180,15 @@ bun run deploy
 
 ```
 ┌─────────────────┐  OAuth/API Key ┌──────────────────┐
-│   MCP Client    │◄──────────────►│  Engram API │
-│ (Claude, Cursor)│                │  (api.engram.ai)
+│   MCP Client    │◄──────────────►│  Smaran API │
+│ (Claude, Cursor)│                │  (api.smaran.ai)
 └────────┬────────┘                └──────────────────┘
          │                                   ▲
          │ MCP Protocol                      │ Auth Validation
          ▼                                   │
 ┌─────────────────────────────────────────────────────┐
-│            Engram MCP Server                   │
-│         (mcp.engram.ai/mcp)                   │
+│            Smaran MCP Server                   │
+│         (mcp.smaran.ai/mcp)                   │
 │  ┌─────────────────────────────────────────────┐   │
 │  │           Cloudflare Durable Object          │   │
 │  │  • Session state                             │   │
@@ -204,6 +204,6 @@ bun run deploy
 - **State:** Durable Objects with SQLite
 - **Framework:** Hono
 - **MCP SDK:** @modelcontextprotocol/sdk + agents
-- **API Client:** engram SDK
+- **API Client:** smaran SDK
 - **Analytics:** PostHog
 

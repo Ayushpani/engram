@@ -1,4 +1,4 @@
-import Engram from "supermemory"
+import Smaran from "supermemory"
 import { tool } from "ai"
 import { z } from "zod"
 import {
@@ -7,14 +7,14 @@ import {
 	TOOL_DESCRIPTIONS,
 	getContainerTags,
 } from "./tools-shared"
-import type { EngramToolsConfig } from "./types"
+import type { SmaranToolsConfig } from "./types"
 
 // Export individual tool creators
 export const searchMemoriesTool = (
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) => {
-	const client = new Engram({
+	const client = new Smaran({
 		apiKey,
 		...(config?.baseUrl ? { baseURL: config.baseUrl } : {}),
 	})
@@ -80,9 +80,9 @@ export const searchMemoriesTool = (
 
 export const addMemoryTool = (
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) => {
-	const client = new Engram({
+	const client = new Smaran({
 		apiKey,
 		...(config?.baseUrl ? { baseURL: config.baseUrl } : {}),
 	})
@@ -120,9 +120,9 @@ export const addMemoryTool = (
 
 export const getProfileTool = (
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) => {
-	const client = new Engram({
+	const client = new Smaran({
 		apiKey,
 		...(config?.baseUrl ? { baseURL: config.baseUrl } : {}),
 	})
@@ -164,9 +164,9 @@ export const getProfileTool = (
 
 export const documentListTool = (
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) => {
-	const client = new Engram({
+	const client = new Smaran({
 		apiKey,
 		...(config?.baseUrl ? { baseURL: config.baseUrl } : {}),
 	})
@@ -222,9 +222,9 @@ export const documentListTool = (
 
 export const documentDeleteTool = (
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) => {
-	const client = new Engram({
+	const client = new Smaran({
 		apiKey,
 		...(config?.baseUrl ? { baseURL: config.baseUrl } : {}),
 	})
@@ -254,9 +254,9 @@ export const documentDeleteTool = (
 
 export const documentAddTool = (
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) => {
-	const client = new Engram({
+	const client = new Smaran({
 		apiKey,
 		...(config?.baseUrl ? { baseURL: config.baseUrl } : {}),
 	})
@@ -301,9 +301,9 @@ export const documentAddTool = (
 
 export const memoryForgetTool = (
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) => {
-	const client = new Engram({
+	const client = new Smaran({
 		apiKey,
 		...(config?.baseUrl ? { baseURL: config.baseUrl } : {}),
 	})
@@ -357,11 +357,11 @@ export const memoryForgetTool = (
 }
 
 /**
- * Create Engram tools for AI SDK
+ * Create Smaran tools for AI SDK
  */
-export function engramTools(
+export function smaranTools(
 	apiKey: string,
-	config?: EngramToolsConfig,
+	config?: SmaranToolsConfig,
 ) {
 	return {
 		searchMemories: searchMemoriesTool(apiKey, config),
@@ -374,4 +374,4 @@ export function engramTools(
 	}
 }
 
-export { withEngram } from "./vercel"
+export { withSmaran } from "./vercel"

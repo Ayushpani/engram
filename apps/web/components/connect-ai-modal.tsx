@@ -65,8 +65,8 @@ const mcpMigrationSchema = z.object({
 		.string()
 		.min(1, "MCP Link is required")
 		.regex(
-			/^https:\/\/mcp\.engram\.ai\/[^/]+\/sse$/,
-			"Link must be in format: https://mcp.engram.ai/userId/sse",
+			/^https:\/\/mcp\.smaran\.ai\/[^/]+\/sse$/,
+			"Link must be in format: https://mcp.smaran.ai/userId/sse",
 		),
 })
 
@@ -197,7 +197,7 @@ export function ConnectAIModal({
 	})
 
 	const extractUserIdFromMCPUrl = (url: string): string | null => {
-		const regex = /^https:\/\/mcp\.engram\.ai\/([^/]+)\/sse$/
+		const regex = /^https:\/\/mcp\.smaran\.ai\/([^/]+)\/sse$/
 		const match = url.trim().match(regex)
 		return match?.[1] || null
 	}
@@ -295,7 +295,7 @@ export function ConnectAIModal({
 	function generateInstallCommand() {
 		if (!selectedClient || selectedClient === "chatgpt") return ""
 
-		let command = `npx -y install-mcp@latest https://mcp.engram.ai/mcp --client ${selectedClient} --oauth=yes`
+		let command = `npx -y install-mcp@latest https://mcp.smaran.ai/mcp --client ${selectedClient} --oauth=yes`
 
 		if (selectedProject && selectedProject !== "none") {
 			// Remove the "sm_project_" prefix from the containerTag
@@ -307,7 +307,7 @@ export function ConnectAIModal({
 	}
 
 	function getCursorDeeplink() {
-		return "cursor://anysphere.cursor-deeplink/mcp/install?name=engram&config=eyJ1cmwiOiJodHRwczovL2FwaS5zdXBlcm1lbW9yeS5haS9tY3AifQ%3D%3D"
+		return "cursor://anysphere.cursor-deeplink/mcp/install?name=smaran&config=eyJ1cmwiOiJodHRwczovL2FwaS5zdXBlcm1lbW9yeS5haS9tY3AifQ%3D%3D"
 	}
 
 	const copyToClipboard = () => {
@@ -340,7 +340,7 @@ export function ConnectAIModal({
 			<DialogTrigger asChild>{children}</DialogTrigger>
 			<DialogContent className="sm:max-w-4xl">
 				<DialogHeader>
-					<DialogTitle>Connect engram to Your AI</DialogTitle>
+					<DialogTitle>Connect smaran to Your AI</DialogTitle>
 					<DialogDescription>
 						Enable your AI assistant to create, search, and access your memories
 						directly using the Model Context Protocol (MCP).
@@ -491,7 +491,7 @@ export function ConnectAIModal({
 											<div className="space-y-4">
 												<div className="flex flex-col items-center gap-4 rounded-lg border border-green-500/20 bg-green-500/5 p-6">
 													<p className="text-center text-sm text-foreground/80">
-														Open Cursor and add engram in one step, or
+														Open Cursor and add smaran in one step, or
 														switch to Manual instructions to edit{" "}
 														<code className="text-xs">mcp.json</code> yourself.
 													</p>
@@ -503,7 +503,7 @@ export function ConnectAIModal({
 														}}
 													>
 														<img
-															alt="Add Engram MCP server to Cursor"
+															alt="Add Smaran MCP server to Cursor"
 															className="cursor-pointer transition-opacity hover:opacity-80"
 															height="40"
 															src="https://cursor.com/deeplink/mcp-install-dark.svg"
@@ -699,7 +699,7 @@ export function ConnectAIModal({
 																</Button>
 															</div>
 															<p className="text-xs text-muted-foreground">
-																Bearer token uses your engram API key.
+																Bearer token uses your smaran API key.
 															</p>
 														</>
 													)}
@@ -771,7 +771,7 @@ export function ConnectAIModal({
 								MCP Server URL
 							</label>
 							<p className="text-xs text-muted-foreground mt-2">
-								Use this URL to configure engram in your AI assistant
+								Use this URL to configure smaran in your AI assistant
 							</p>
 						</div>
 						<div className="p-1 bg-muted rounded-lg border border-border items-center flex px-2">
@@ -822,7 +822,7 @@ export function ConnectAIModal({
 							<Button
 								onClick={() =>
 									window.open(
-										"https://docs.engram.ai/engram-mcp/introduction",
+										"https://docs.smaran.ai/smaran-mcp/introduction",
 										"_blank",
 									)
 								}
@@ -880,7 +880,7 @@ export function ConnectAIModal({
 														onChange={(
 															e: React.ChangeEvent<HTMLInputElement>,
 														) => handleChange(e.target.value)}
-														placeholder="https://mcp.engram.ai/your-user-id/sse"
+														placeholder="https://mcp.smaran.ai/your-user-id/sse"
 														value={state.value}
 													/>
 													{state.meta.errors.length > 0 && (
@@ -894,7 +894,7 @@ export function ConnectAIModal({
 										<p className="text-xs text-muted-foreground">
 											Enter your old MCP Link in the format: <br />
 											<span className="font-mono">
-												https://mcp.engram.ai/userId/sse
+												https://mcp.smaran.ai/userId/sse
 											</span>
 										</p>
 									</div>

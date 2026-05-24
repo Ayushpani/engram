@@ -316,7 +316,7 @@ export default function Billing() {
 										onClick={() => {
 											autumn.openCustomerPortal?.({
 												returnUrl:
-													"https://app.engram.ai/settings#billing",
+													"https://app.smaran.ai/settings#billing",
 											})
 										}}
 										className={cn(

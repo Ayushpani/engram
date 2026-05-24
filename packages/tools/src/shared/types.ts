@@ -65,7 +65,7 @@ export interface Logger {
 }
 
 /**
- * Response structure from the Engram profile API.
+ * Response structure from the Smaran profile API.
  */
 export interface ProfileStructure {
 	profile: {
@@ -106,12 +106,12 @@ export interface ProfileMarkdownData {
 }
 
 /**
- * Base options shared across all integrations for Engram configuration.
+ * Base options shared across all integrations for Smaran configuration.
  */
-export interface EngramBaseOptions {
-	/** Engram API key (falls back to ENGRAM_API_KEY env var) */
+export interface SmaranBaseOptions {
+	/** Smaran API key (falls back to SMARAN_API_KEY env var) */
 	apiKey?: string
-	/** Custom Engram API base URL */
+	/** Custom Smaran API base URL */
 	baseUrl?: string
 	/** Optional conversation/thread ID to group messages for contextual memory generation */
 	threadId?: string

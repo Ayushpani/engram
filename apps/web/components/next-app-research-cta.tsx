@@ -11,7 +11,7 @@ import { analytics } from "@/lib/analytics"
 
 const STORAGE_KEY = "sm_next_app_research_cta_dismissed_v1"
 
-const BOOK_CALL_HREF = "https://cal.com/engram/growth"
+const BOOK_CALL_HREF = "https://cal.com/smaran/growth"
 
 const LOBBYSIDE_WIDGET_ID = "e385c52f-4dd3-4fb2-81eb-da3a78059014"
 
@@ -179,7 +179,7 @@ export function NextAppResearchCta() {
 									"flex-1 min-w-0 font-medium text-[12px] text-[#FAFAFA] tracking-[-0.12px]",
 								)}
 							>
-								Be part of the next engram app
+								Be part of the next smaran app
 							</p>
 							<button
 								type="button"

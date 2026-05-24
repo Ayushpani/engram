@@ -20,7 +20,7 @@ export async function handleClaudeMemoryToolCall(
 		name: "memory"
 		input: MemoryCommand
 	},
-	engramApiKey: string,
+	smaranApiKey: string,
 	config?: {
 		projectId?: string
 		memoryContainerTag?: string
@@ -33,7 +33,7 @@ export async function handleClaudeMemoryToolCall(
 	console.log(`📁 Path: ${toolUseBlock.input.path}`)
 
 	// Initialize memory tool
-	const memoryTool = createClaudeMemoryTool(engramApiKey, {
+	const memoryTool = createClaudeMemoryTool(smaranApiKey, {
 		projectId: config?.projectId || "claude-chat",
 		memoryContainerTag: config?.memoryContainerTag || "claude_memory",
 		baseUrl: config?.baseUrl,
@@ -69,12 +69,12 @@ export async function realClaudeMemoryExample() {
 
 	// Your API keys
 	const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
-	const ENGRAM_API_KEY = process.env.ENGRAM_API_KEY
+	const SMARAN_API_KEY = process.env.SMARAN_API_KEY
 
-	if (!ANTHROPIC_API_KEY || !ENGRAM_API_KEY) {
+	if (!ANTHROPIC_API_KEY || !SMARAN_API_KEY) {
 		console.error("❌ Missing API keys:")
 		console.error("- Set ANTHROPIC_API_KEY for Claude")
-		console.error("- Set ENGRAM_API_KEY for Engram")
+		console.error("- Set SMARAN_API_KEY for Smaran")
 		return
 	}
 
@@ -136,7 +136,7 @@ export async function realClaudeMemoryExample() {
 				console.log(`Command: ${block.input.command}`)
 				console.log(`Path: ${block.input.path}`)
 
-				return handleClaudeMemoryToolCall(block, ENGRAM_API_KEY, {
+				return handleClaudeMemoryToolCall(block, SMARAN_API_KEY, {
 					projectId: "python-scraper-help",
 					memoryContainerTag: "claude_memory_debug",
 				})
@@ -192,7 +192,7 @@ export async function realClaudeMemoryExample() {
  */
 export async function processClaudeResponse(
 	claudeResponseData: any,
-	engramApiKey: string,
+	smaranApiKey: string,
 	config?: {
 		projectId?: string
 		memoryContainerTag?: string
@@ -215,7 +215,7 @@ export async function processClaudeResponse(
 
 		const results = await Promise.all(
 			memoryToolCalls.map((block: any) =>
-				handleClaudeMemoryToolCall(block, engramApiKey, config),
+				handleClaudeMemoryToolCall(block, smaranApiKey, config),
 			),
 		)
 
@@ -264,7 +264,7 @@ app.post('/chat-with-memory', async (req, res) => {
     // 2. Handle any memory tool calls
     const toolResults = await processClaudeResponse(
       claudeData,
-      process.env.ENGRAM_API_KEY!,
+      process.env.SMARAN_API_KEY!,
       {
         projectId: conversationId || 'default-chat',
         memoryContainerTag: 'claude_memory_chat'
@@ -310,15 +310,15 @@ export async function testWithRealToolCall() {
 	console.log("🔍 Tool call from Claude:")
 	console.log(JSON.stringify(realToolCall, null, 2))
 
-	if (!process.env.ENGRAM_API_KEY) {
-		console.error("❌ ENGRAM_API_KEY required for testing")
+	if (!process.env.SMARAN_API_KEY) {
+		console.error("❌ SMARAN_API_KEY required for testing")
 		return
 	}
 
 	// Process the tool call
 	const result = await handleClaudeMemoryToolCall(
 		realToolCall,
-		process.env.ENGRAM_API_KEY,
+		process.env.SMARAN_API_KEY,
 		{
 			projectId: "python-scraper-debug",
 			memoryContainerTag: "claude_memory_test",
@@ -347,12 +347,12 @@ export async function runRealExamples() {
 	console.log(webIntegrationExample)
 
 	// Only run full API example if both keys are present
-	if (process.env.ANTHROPIC_API_KEY && process.env.ENGRAM_API_KEY) {
+	if (process.env.ANTHROPIC_API_KEY && process.env.SMARAN_API_KEY) {
 		console.log(`\\n${"=".repeat(70)}\\n`)
 		await realClaudeMemoryExample()
 	} else {
 		console.log(
-			"\\n⚠️  Set ANTHROPIC_API_KEY and ENGRAM_API_KEY to run full API example",
+			"\\n⚠️  Set ANTHROPIC_API_KEY and SMARAN_API_KEY to run full API example",
 		)
 	}
 }

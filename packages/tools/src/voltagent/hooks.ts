@@ -1,5 +1,5 @@
 /**
- * VoltAgent hooks for Engram integration.
+ * VoltAgent hooks for Smaran integration.
  *
  * Provides onPrepareMessages and onEnd hooks that inject memories
  * and save conversations.
@@ -10,16 +10,16 @@ import type {
 	HookPrepareMessagesArgs,
 	HookEndArgs,
 	VoltAgentMessage,
-	EngramVoltAgent,
+	SmaranVoltAgent,
 } from "./types"
 import {
-	createEngramContext,
+	createSmaranContext,
 	enhanceMessagesWithMemories,
 	saveConversation,
 } from "./middleware"
 
 /**
- * Creates Engram hooks for VoltAgent agents.
+ * Creates Smaran hooks for VoltAgent agents.
  *
  * These hooks intercept the agent lifecycle to inject memories
  * before LLM calls and save conversations after completion.
@@ -30,9 +30,9 @@ import {
  *
  * @example
  * ```typescript
- * import { createEngramHooks } from "@engram/tools/voltagent"
+ * import { createSmaranHooks } from "@smaran/tools/voltagent"
  *
- * const hooks = createEngramHooks("user-123", {
+ * const hooks = createSmaranHooks("user-123", {
  *   mode: "full",
  *   addMemory: "always",
  *   customId: "conv-456",
@@ -47,11 +47,11 @@ import {
  * })
  * ```
  */
-export function createEngramHooks(
+export function createSmaranHooks(
 	containerTag: string,
-	options: EngramVoltAgent,
+	options: SmaranVoltAgent,
 ): VoltAgentHooks {
-	const ctx = createEngramContext(containerTag, options)
+	const ctx = createSmaranContext(containerTag, options)
 
 	return {
 		onPrepareMessages: async (
@@ -144,63 +144,63 @@ export function createEngramHooks(
 }
 
 /**
- * Merges Engram hooks with existing hooks from an agent config.
- * Preserves existing hooks and adds Engram hooks.
+ * Merges Smaran hooks with existing hooks from an agent config.
+ * Preserves existing hooks and adds Smaran hooks.
  *
  * @param existingHooks - Existing hooks from agent config (if any)
- * @param engramHooks - Engram hooks to merge
+ * @param smaranHooks - Smaran hooks to merge
  * @returns Merged hooks object
  */
 export function mergeHooks(
 	existingHooks: VoltAgentHooks | undefined,
-	engramHooks: VoltAgentHooks,
+	smaranHooks: VoltAgentHooks,
 ): VoltAgentHooks {
 	if (!existingHooks) {
-		return engramHooks
+		return smaranHooks
 	}
 
 	const mergedHooks: VoltAgentHooks = { ...existingHooks }
 
-	if (existingHooks.onPrepareMessages && engramHooks.onPrepareMessages) {
+	if (existingHooks.onPrepareMessages && smaranHooks.onPrepareMessages) {
 		const existingOnPrepareMessages = existingHooks.onPrepareMessages
-		const engramOnPrepareMessages = engramHooks.onPrepareMessages
+		const smaranOnPrepareMessages = smaranHooks.onPrepareMessages
 
 		mergedHooks.onPrepareMessages = async (args) => {
 			const resultAfterExisting = await existingOnPrepareMessages(args)
 			const messagesAfterExisting =
 				resultAfterExisting?.messages || args.messages
 
-			return await engramOnPrepareMessages({
+			return await smaranOnPrepareMessages({
 				...args,
 				messages: messagesAfterExisting,
 			})
 		}
-	} else if (engramHooks.onPrepareMessages) {
-		mergedHooks.onPrepareMessages = engramHooks.onPrepareMessages
+	} else if (smaranHooks.onPrepareMessages) {
+		mergedHooks.onPrepareMessages = smaranHooks.onPrepareMessages
 	}
 
-	if (existingHooks.onEnd && engramHooks.onEnd) {
+	if (existingHooks.onEnd && smaranHooks.onEnd) {
 		const existingOnEnd = existingHooks.onEnd
-		const engramOnEnd = engramHooks.onEnd
+		const smaranOnEnd = smaranHooks.onEnd
 
 		mergedHooks.onEnd = async (args) => {
-			await engramOnEnd(args)
+			await smaranOnEnd(args)
 			await existingOnEnd(args)
 		}
-	} else if (engramHooks.onEnd) {
-		mergedHooks.onEnd = engramHooks.onEnd
+	} else if (smaranHooks.onEnd) {
+		mergedHooks.onEnd = smaranHooks.onEnd
 	}
 
-	if (existingHooks.onStart && engramHooks.onStart) {
+	if (existingHooks.onStart && smaranHooks.onStart) {
 		const existingOnStart = existingHooks.onStart
-		const engramOnStart = engramHooks.onStart
+		const smaranOnStart = smaranHooks.onStart
 
 		mergedHooks.onStart = async (args) => {
 			await existingOnStart(args)
-			await engramOnStart(args)
+			await smaranOnStart(args)
 		}
-	} else if (engramHooks.onStart) {
-		mergedHooks.onStart = engramHooks.onStart
+	} else if (smaranHooks.onStart) {
+		mergedHooks.onStart = smaranHooks.onStart
 	}
 
 	return mergedHooks

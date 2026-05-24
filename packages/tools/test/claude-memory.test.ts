@@ -4,8 +4,8 @@ import "dotenv/config"
 
 // Test configuration
 const TEST_CONFIG = {
-	apiKey: process.env.ENGRAM_API_KEY || "test-api-key",
-	baseUrl: process.env.ENGRAM_BASE_URL,
+	apiKey: process.env.SMARAN_API_KEY || "test-api-key",
+	baseUrl: process.env.SMARAN_BASE_URL,
 	projectId: "test-claude-memory",
 	memoryContainerTag: "claude_memory_test",
 }
@@ -339,16 +339,16 @@ async function runManualTests() {
 	console.log("🧪 Running Claude Memory Tool Manual Tests")
 	console.log("==========================================")
 
-	if (!process.env.ENGRAM_API_KEY) {
-		console.error("❌ ENGRAM_API_KEY environment variable is required")
+	if (!process.env.SMARAN_API_KEY) {
+		console.error("❌ SMARAN_API_KEY environment variable is required")
 		console.log("Set your API key in .env file or environment variable")
 		process.exit(1)
 	}
 
-	const memoryTool = createClaudeMemoryTool(process.env.ENGRAM_API_KEY, {
+	const memoryTool = createClaudeMemoryTool(process.env.SMARAN_API_KEY, {
 		projectId: "manual-test-project",
 		memoryContainerTag: "claude_memory_manual_test",
-		baseUrl: process.env.ENGRAM_BASE_URL,
+		baseUrl: process.env.SMARAN_BASE_URL,
 	})
 
 	const testCases = [
@@ -442,7 +442,7 @@ async function runManualTests() {
 
 	console.log("\n✨ Manual tests completed!")
 	console.log(
-		"Check your engram instance to verify the memory files were created correctly.",
+		"Check your smaran instance to verify the memory files were created correctly.",
 	)
 }
 

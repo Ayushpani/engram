@@ -80,7 +80,7 @@ async function runTest(test: TestFile): Promise<boolean> {
 }
 
 async function main() {
-	console.log("Engram Docs Test Runner")
+	console.log("Smaran Docs Test Runner")
 	console.log("============================\n")
 
 	let tests = getTests()

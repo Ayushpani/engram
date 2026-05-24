@@ -3,7 +3,7 @@ import { useAuth } from "@lib/auth-context"
 import { normalizePlanType, type PlanType } from "@/hooks/use-token-usage"
 
 const API_BASE =
-	process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.engram.ai"
+	process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://api.smaran.ai"
 
 export type OrgSummary = {
 	orgId: string

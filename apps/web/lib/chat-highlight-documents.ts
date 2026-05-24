@@ -8,7 +8,7 @@ const UUID_STRICT =
 	/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 // Matches [doc:<id>] annotations emitted by sgrep when includeDocIds is enabled.
-// Engram uses NanoIDs (alphanumeric + _ -), not UUIDs.
+// Smaran uses NanoIDs (alphanumeric + _ -), not UUIDs.
 const DOC_ANNOTATION = /\[doc:([A-Za-z0-9_-]{10,40})\]/g
 
 function collectIdsFromDynamicTool(part: Record<string, unknown>): string[] {

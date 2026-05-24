@@ -1,11 +1,11 @@
 /**
- * Unit tests for the withEngram wrapper
+ * Unit tests for the withSmaran wrapper
  */
 
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest"
-import { withEngram } from "../../src/vercel"
+import { withSmaran } from "../../src/vercel"
 import {
-	createEngramContext,
+	createSmaranContext,
 	transformParamsWithMemory,
 } from "../../src/vercel/middleware"
 import type {
@@ -17,8 +17,8 @@ import "dotenv/config"
 
 // Test configuration
 const TEST_CONFIG = {
-	apiKey: process.env.ENGRAM_API_KEY || "test-api-key",
-	baseURL: process.env.ENGRAM_BASE_URL || "https://api.engram.ai",
+	apiKey: process.env.SMARAN_API_KEY || "test-api-key",
+	baseURL: process.env.SMARAN_BASE_URL || "https://api.smaran.ai",
 	containerTag: "test-vercel-wrapper",
 }
 
@@ -47,54 +47,54 @@ const createMockProfileResponse = (
 	},
 })
 
-describe("Unit: withEngram", () => {
+describe("Unit: withSmaran", () => {
 	let originalEnv: string | undefined
 	let originalFetch: typeof globalThis.fetch
 
 	beforeEach(() => {
-		originalEnv = process.env.ENGRAM_API_KEY
+		originalEnv = process.env.SMARAN_API_KEY
 		originalFetch = globalThis.fetch
 		vi.clearAllMocks()
 	})
 
 	afterEach(() => {
 		if (originalEnv) {
-			process.env.ENGRAM_API_KEY = originalEnv
+			process.env.SMARAN_API_KEY = originalEnv
 		} else {
-			delete process.env.ENGRAM_API_KEY
+			delete process.env.SMARAN_API_KEY
 		}
 		globalThis.fetch = originalFetch
 	})
 
 	describe("Environment validation", () => {
-		it("should throw error if ENGRAM_API_KEY is not set", () => {
-			delete process.env.ENGRAM_API_KEY
+		it("should throw error if SMARAN_API_KEY is not set", () => {
+			delete process.env.SMARAN_API_KEY
 
 			const mockModel = createMockLanguageModel()
 
 			expect(() => {
-				withEngram(mockModel, {
+				withSmaran(mockModel, {
 					containerTag: TEST_CONFIG.containerTag,
 					customId: "test-id",
 				})
-			}).toThrow("ENGRAM_API_KEY is not set")
+			}).toThrow("SMARAN_API_KEY is not set")
 		})
 
 		it("should throw error if customId is missing or empty", () => {
-			process.env.ENGRAM_API_KEY = "test-key"
+			process.env.SMARAN_API_KEY = "test-key"
 
 			const mockModel = createMockLanguageModel()
 
 			// omitted customId (plain JS caller)
 			expect(() => {
-				withEngram(mockModel, {
+				withSmaran(mockModel, {
 					containerTag: TEST_CONFIG.containerTag,
 				} as any)
 			}).toThrow("customId is required")
 
 			// empty string
 			expect(() => {
-				withEngram(mockModel, {
+				withSmaran(mockModel, {
 					containerTag: TEST_CONFIG.containerTag,
 					customId: "",
 				})
@@ -102,10 +102,10 @@ describe("Unit: withEngram", () => {
 		})
 
 		it("should successfully create wrapped model with valid API key", () => {
-			process.env.ENGRAM_API_KEY = "test-key"
+			process.env.SMARAN_API_KEY = "test-key"
 
 			const mockModel = createMockLanguageModel()
-			const wrappedModel = withEngram(mockModel, {
+			const wrappedModel = withSmaran(mockModel, {
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "test-id",
 			})
@@ -115,7 +115,7 @@ describe("Unit: withEngram", () => {
 		})
 
 		it("should preserve provider, modelId, and spec when they live on the prototype", () => {
-			process.env.ENGRAM_API_KEY = "test-key"
+			process.env.SMARAN_API_KEY = "test-key"
 
 			const proto: LanguageModelV2 = {
 				specificationVersion: "v2",
@@ -126,7 +126,7 @@ describe("Unit: withEngram", () => {
 				doStream: vi.fn(),
 			}
 			const inner = Object.create(proto) as LanguageModelV2
-			const wrappedModel = withEngram(inner, {
+			const wrappedModel = withSmaran(inner, {
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "test-id",
 			})
@@ -152,7 +152,7 @@ describe("Unit: withEngram", () => {
 					Promise.resolve(createMockProfileResponse(["Cached memory"])),
 			})
 
-			const ctx = createEngramContext({
+			const ctx = createSmaranContext({
 				containerTag: TEST_CONFIG.containerTag,
 				apiKey: TEST_CONFIG.apiKey,
 				customId: "test-id",
@@ -185,7 +185,7 @@ describe("Unit: withEngram", () => {
 					Promise.resolve(createMockProfileResponse(["Cached memory"])),
 			})
 
-			const ctx = createEngramContext({
+			const ctx = createSmaranContext({
 				containerTag: TEST_CONFIG.containerTag,
 				apiKey: TEST_CONFIG.apiKey,
 				customId: "test-id",
@@ -258,7 +258,7 @@ describe("Unit: withEngram", () => {
 				})
 			})
 
-			const ctx = createEngramContext({
+			const ctx = createSmaranContext({
 				containerTag: TEST_CONFIG.containerTag,
 				apiKey: TEST_CONFIG.apiKey,
 				customId: "test-id",
@@ -319,7 +319,7 @@ describe("Unit: withEngram", () => {
 				text: () => Promise.resolve("Server error"),
 			})
 
-			const ctx = createEngramContext({
+			const ctx = createSmaranContext({
 				containerTag: TEST_CONFIG.containerTag,
 				apiKey: TEST_CONFIG.apiKey,
 				customId: "test-id",
@@ -336,12 +336,12 @@ describe("Unit: withEngram", () => {
 			}
 
 			await expect(transformParamsWithMemory(params, ctx)).rejects.toThrow(
-				"Engram profile search failed",
+				"Smaran profile search failed",
 			)
 		})
 
 		it("should handle empty prompt array", async () => {
-			const ctx = createEngramContext({
+			const ctx = createSmaranContext({
 				containerTag: TEST_CONFIG.containerTag,
 				apiKey: TEST_CONFIG.apiKey,
 				customId: "test-id",
@@ -359,7 +359,7 @@ describe("Unit: withEngram", () => {
 		})
 
 		it("should handle user message with empty content array in query mode", async () => {
-			const ctx = createEngramContext({
+			const ctx = createSmaranContext({
 				containerTag: TEST_CONFIG.containerTag,
 				apiKey: TEST_CONFIG.apiKey,
 				customId: "test-id",
@@ -387,7 +387,7 @@ describe("Unit: withEngram", () => {
 				json: () => Promise.resolve(createMockProfileResponse(["Memory"])),
 			})
 
-			const ctx = createEngramContext({
+			const ctx = createSmaranContext({
 				containerTag: TEST_CONFIG.containerTag,
 				apiKey: TEST_CONFIG.apiKey,
 				customId: "test-id",
@@ -425,7 +425,7 @@ describe("Unit: withEngram", () => {
 		let fetchMock: ReturnType<typeof vi.fn>
 
 		beforeEach(() => {
-			process.env.ENGRAM_API_KEY = "test-key"
+			process.env.SMARAN_API_KEY = "test-key"
 			fetchMock = vi.fn()
 			globalThis.fetch = fetchMock as unknown as typeof fetch
 			vi.clearAllMocks()
@@ -451,7 +451,7 @@ describe("Unit: withEngram", () => {
 				warnings: [],
 			})
 
-			const wrapped = withEngram(inner, {
+			const wrapped = withSmaran(inner, {
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "test-id",
 				apiKey: "k",
@@ -475,7 +475,7 @@ describe("Unit: withEngram", () => {
 			})
 
 			const inner = createMockLanguageModel()
-			const wrapped = withEngram(inner, {
+			const wrapped = withSmaran(inner, {
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "test-id",
 				apiKey: "k",
@@ -486,7 +486,7 @@ describe("Unit: withEngram", () => {
 				wrapped.doGenerate({
 					prompt: [{ role: "user", content: [{ type: "text", text: "Hi" }] }],
 				}),
-			).rejects.toThrow("Engram profile search failed")
+			).rejects.toThrow("Smaran profile search failed")
 		})
 
 		it("aborts slow profile fetch after internal timeout and continues by default", async () => {
@@ -516,7 +516,7 @@ describe("Unit: withEngram", () => {
 				warnings: [],
 			})
 
-			const wrapped = withEngram(inner, {
+			const wrapped = withSmaran(inner, {
 				containerTag: TEST_CONFIG.containerTag,
 				customId: "test-id",
 				apiKey: "k",
