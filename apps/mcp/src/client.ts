@@ -126,6 +126,18 @@ export class EngramClient {
 		content: string,
 	): Promise<{ id: string; status: string; containerTag: string }> {
 		try {
+			// Deduplication check: search for exact or highly similar memories first
+			const searchResult = await this.search(content, 1, 0.95)
+			if (searchResult?.results && searchResult.results.length > 0) {
+				const topMatch = searchResult.results[0]
+				console.log(`Duplicate found (similarity: ${topMatch.similarity}). Skipping creation.`)
+				return {
+					id: topMatch.id,
+					status: "duplicate",
+					containerTag: this.containerTag,
+				}
+			}
+
 			const result = await this.client.add({
 				content,
 				containerTag: this.containerTag,
@@ -222,14 +234,63 @@ export class EngramClient {
 		try {
 			const result = await this.client.search.memories({
 				q: query,
-				limit,
+				limit: 50, // Request more candidates for reranking
 				containerTag: this.containerTag,
 				searchMode: "hybrid",
 				threshold, // Optional threshold parameter
 			})
 
+			let rerankedSdkResults = result.results as SDKResult[]
+
+			// Try edge reranking if we have results
+			if (rerankedSdkResults.length > 0) {
+				try {
+					const rerankBody = {
+						query,
+						candidates: rerankedSdkResults.map((r) => ({
+							id: r.id,
+							content: r.content || r.memory || r.chunk || r.context || "",
+							score: r.similarity,
+						})),
+					}
+
+					const rerankResponse = await fetch(
+						"https://engram-edge-reranker.ayushpanigrahi84.workers.dev/v3/search/rerank",
+						{
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify(rerankBody),
+						},
+					)
+
+					if (rerankResponse.ok) {
+						const rerankData = (await rerankResponse.json()) as any
+						if (rerankData.success && Array.isArray(rerankData.results)) {
+							const scoreMap = new Map<string, number>()
+							rerankData.results.forEach((r: any) => {
+								scoreMap.set(r.id, r.crossEncoderScore)
+							})
+
+							rerankedSdkResults = rerankedSdkResults
+								.map((r) => ({
+									...r,
+									similarity: scoreMap.has(r.id)
+										? scoreMap.get(r.id)!
+										: r.similarity,
+								}))
+								.sort((a, b) => b.similarity - a.similarity)
+						}
+					}
+				} catch (error) {
+					console.error("Edge reranking failed, falling back to base search:", error)
+				}
+			}
+
+			// Apply original limit
+			const finalResults = rerankedSdkResults.slice(0, limit)
+
 			// Normalize and limit response size — preserve memory vs chunk distinction
-			const results: Memory[] = (result.results as SDKResult[]).map((r) => {
+			const results: Memory[] = finalResults.map((r) => {
 				const text = limitByChars(
 					r.content || r.memory || r.chunk || r.context || "",
 				)
@@ -271,8 +332,53 @@ export class EngramClient {
 			}
 
 			if (result.searchResults) {
+				let rerankedSdkResults = result.searchResults.results as SDKResult[]
+
+				if (query && rerankedSdkResults.length > 0) {
+					try {
+						const rerankBody = {
+							query,
+							candidates: rerankedSdkResults.map((r) => ({
+								id: r.id,
+								content: r.content || r.memory || r.chunk || r.context || "",
+								score: r.similarity,
+							})),
+						}
+
+						const rerankResponse = await fetch(
+							"https://engram-edge-reranker.ayushpanigrahi84.workers.dev/v3/search/rerank",
+							{
+								method: "POST",
+								headers: { "Content-Type": "application/json" },
+								body: JSON.stringify(rerankBody),
+							},
+						)
+
+						if (rerankResponse.ok) {
+							const rerankData = (await rerankResponse.json()) as any
+							if (rerankData.success && Array.isArray(rerankData.results)) {
+								const scoreMap = new Map<string, number>()
+								rerankData.results.forEach((r: any) => {
+									scoreMap.set(r.id, r.crossEncoderScore)
+								})
+
+								rerankedSdkResults = rerankedSdkResults
+									.map((r) => ({
+										...r,
+										similarity: scoreMap.has(r.id)
+											? scoreMap.get(r.id)!
+											: r.similarity,
+									}))
+									.sort((a, b) => b.similarity - a.similarity)
+							}
+						}
+					} catch (error) {
+						console.error("Edge reranking for profile failed:", error)
+					}
+				}
+
 				response.searchResults = {
-					results: (result.searchResults.results as SDKResult[]).map((r) => {
+					results: rerankedSdkResults.map((r) => {
 						const text = limitByChars(
 							r.content || r.memory || r.chunk || r.context || "",
 						)

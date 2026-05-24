@@ -157,14 +157,62 @@ export function DocumentsCommandPalette({
 				const res = await $fetch("@post/search", {
 					body: {
 						q: search.trim(),
-						limit: 10,
+						limit: 50, // Request more for reranking
 						containerTags: projectId ? [projectId] : undefined,
 						includeSummary: true,
 					},
 					signal: controller.signal,
 				})
 				if (!controller.signal.aborted && res.data) {
-					setSearchResults(res.data.results)
+					let results = res.data.results
+
+					if (results.length > 0) {
+						try {
+							const rerankBody = {
+								query: search.trim(),
+								candidates: results.map((r, i) => ({
+									id: String(i),
+									content: r.content ?? r.chunks?.[0]?.content ?? r.summary ?? "",
+									score: r.similarity || 0,
+								})),
+							}
+
+							const rerankRes = await fetch(
+								"https://engram-edge-reranker.ayushpanigrahi84.workers.dev/v3/search/rerank",
+								{
+									method: "POST",
+									headers: { "Content-Type": "application/json" },
+									body: JSON.stringify(rerankBody),
+									signal: controller.signal,
+								},
+							)
+
+							if (rerankRes.ok) {
+								const rerankData = (await rerankRes.json()) as any
+								if (rerankData.success && Array.isArray(rerankData.results)) {
+									const scoreMap = new Map<string, number>()
+									rerankData.results.forEach((r: any) =>
+										scoreMap.set(r.id, r.crossEncoderScore),
+									)
+
+									results = results
+										.map((r, i) => ({
+											...r,
+											similarity: scoreMap.has(String(i))
+												? scoreMap.get(String(i))!
+												: r.similarity || 0,
+										}))
+										.sort(
+											(a, b) => (b.similarity || 0) - (a.similarity || 0),
+										)
+								}
+							}
+						} catch (error) {
+							console.error("Edge reranking failed:", error)
+						}
+					}
+
+					setSearchResults(results.slice(0, 10))
 				}
 			} catch {
 				// aborted or failed - ignore

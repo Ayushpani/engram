@@ -13,8 +13,10 @@
   "dependencies": {
     "@ai-sdk/anthropic": "^2.0.25",
     "@ai-sdk/openai": "^2.0.23",
+    "@xenova/transformers": "^2.17.2",
     "ai": "^5.0.29",
     "lru-cache": "^11.2.6",
+    "memory-consolidator": "file:../memory-consolidator/pkg",
     "openai": "^4.104.0",
     "supermemory": "^3.0.0-alpha.26",
     "zod": "^4.1.5"

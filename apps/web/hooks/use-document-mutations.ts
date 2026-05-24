@@ -236,6 +236,24 @@ export function useDocumentMutations({
 			content: string
 			project: string
 		}) => {
+			// Deduplication check using edge search
+			try {
+				const searchRes = await $fetch("@post/search", {
+					body: { q: content, limit: 1, containerTags: [project] },
+				})
+				const topMatch = searchRes.data?.results?.[0]
+				if (topMatch && (topMatch.similarity ?? 0) > 0.95) {
+					console.log(
+						`Duplicate found (similarity: ${topMatch.similarity}). Skipping creation.`,
+					)
+					throw new Error("Duplicate memory found, skipping creation.")
+				}
+			} catch (err) {
+				if (err instanceof Error && err.message.includes("Duplicate memory")) {
+					throw err
+				}
+			}
+
 			const response = await $fetch("@post/documents", {
 				body: {
 					content,
@@ -300,6 +318,24 @@ export function useDocumentMutations({
 
 	const linkMutation = useMutation({
 		mutationFn: async ({ url, project }: { url: string; project: string }) => {
+			// Deduplication check using edge search
+			try {
+				const searchRes = await $fetch("@post/search", {
+					body: { q: url, limit: 1, containerTags: [project] },
+				})
+				const topMatch = searchRes.data?.results?.[0]
+				if (topMatch && (topMatch.similarity ?? 0) > 0.95) {
+					console.log(
+						`Duplicate found (similarity: ${topMatch.similarity}). Skipping creation.`,
+					)
+					throw new Error("Duplicate link found, skipping creation.")
+				}
+			} catch (err) {
+				if (err instanceof Error && err.message.includes("Duplicate link")) {
+					throw err
+				}
+			}
+
 			const response = await $fetch("@post/documents", {
 				body: {
 					content: url,
