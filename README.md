@@ -18,7 +18,7 @@
 
 ---
 
-## 🧠 What is Smaran?
+## What is Smaran?
 
 Smaran is a state-of-the-art memory infrastructure layer designed from the ground up for AI agents. It acts as the ultimate long-term memory engine for agents like **Claude Desktop**, **Cursor**, and custom LLM workflows, allowing them to instantly recall your knowledge with perfect context.
 
@@ -28,21 +28,21 @@ When you plug Smaran into your agent, it acts as a hyper-intelligent brain: inte
 
 ---
 
-## ✨ Core Features
+## Core Features
 
-*   **⚡ Edge Reranking via Cloudflare Workers AI**: Employs a blazing-fast Cross-Encoder (`@cf/baai/bge-reranker-base`) directly at the network edge, ensuring low-latency intelligence routing.
-*   **🛡️ Client-Side WASM Deduplication**: Filters exact and near-exact duplicates *before* network transport using an ultra-fast WebAssembly port of the `all-MiniLM-L6-v2` model.
-*   **🕸️ Graph-Based Consolidation**: Uses the Louvain Modularity algorithm compiled to WASM to detect dense clusters in your memory space, automatically synthesizing messy notes into unified facts.
-*   **🔌 Universal MCP Integration**: Connects effortlessly to Claude Desktop via the standard Model Context Protocol (MCP).
+*   **Edge Reranking via Cloudflare Workers AI**: Employs a blazing-fast Cross-Encoder (`@cf/baai/bge-reranker-base`) directly at the network edge, ensuring low-latency intelligence routing.
+*   **Client-Side WASM Deduplication**: Filters exact and near-exact duplicates *before* network transport using an ultra-fast WebAssembly port of the `all-MiniLM-L6-v2` model.
+*   **Graph-Based Consolidation**: Uses the Louvain Modularity algorithm compiled to WASM to detect dense clusters in your memory space, automatically synthesizing messy notes into unified facts.
+*   **Universal MCP Integration**: Connects effortlessly to Claude Desktop via the standard Model Context Protocol (MCP).
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Get an API Key (Closed Beta)
 Smaran is currently in a strict closed beta to ensure we provide a premium, high-quality onboarding experience. 
 
-👉 **[Join the waitlist at smaran.ai](https://smaran.ai)** to request access. We review every request personally and will email you an API key if you're a good fit.
+**[Join the waitlist at smaran.ai](https://smaran.ai)** to request access. We review every request personally and will email you an API key if you're a good fit.
 
 ### 2. Test the Edge Reranker Locally (No API Key Required)
 If you want to witness the power of our Cloudflare Edge Reranker right now without an API key, we have provided a mocked End-to-End test script. This script intercepts a core API call, mocks 50 messy baseline memories, and pipes them directly to the live Smaran Edge Reranker Worker.
@@ -83,17 +83,17 @@ Once you have secured your API key, you can give Claude Desktop a perfect memory
 
 ---
 
-## 🏗️ Architecture & Repository Structure
+## Architecture & Repository Structure
 
 Smaran is built as a high-performance **Turbo Monorepo**, separating core math engines, cloud infrastructure, and client applications.
 
-### 🌐 Applications (`apps/`)
+### Applications (`apps/`)
 *   **`web`**: The primary Smaran dashboard and landing page (Next.js).
 *   **`mcp`**: The Model Context Protocol server, deployed on Cloudflare Workers for global low latency.
 *   **`reranker-worker`**: The specialized Cloudflare Worker executing the BAAI Cross-Encoder model.
 *   **`browser-extension` & `raycast-extension`**: Frontend tools for capturing context directly into your Smaran graph.
 
-### 📦 Core Packages (`packages/`)
+### Core Packages (`packages/`)
 *   **`client-dedup-wasm`**: Rust-compiled WebAssembly engine for zero-latency client-side duplication filtering.
 *   **`memory-consolidator`**: Rust-compiled Louvain Modularity engine for graph clustering.
 *   **`benchmark`**: Automated testing harness for evaluating RAG retrieval accuracy.
@@ -101,7 +101,7 @@ Smaran is built as a high-performance **Turbo Monorepo**, separating core math e
 
 ---
 
-## 🛠️ Manual Build Instructions
+## Manual Build Instructions
 
 If you are contributing to the core mathematical WASM packages, you will need to compile them manually:
 
@@ -117,7 +117,7 @@ If you are contributing to the core mathematical WASM packages, you will need to
 
 ---
 
-## 📄 License & Copyright
+## License & Copyright
 
 Smaran is proprietary software. All rights reserved.
 For inquiries, contact [ayush@smaran.ai](mailto:ayush@smaran.ai).
