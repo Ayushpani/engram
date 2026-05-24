@@ -125,6 +125,18 @@
         "typescript": "^5",
       },
     },
+    "apps/reranker-worker": {
+      "name": "@engram/reranker-worker",
+      "version": "1.0.0",
+      "dependencies": {
+        "hono": "^4.3.0",
+      },
+      "devDependencies": {
+        "@cloudflare/workers-types": "^4.20240512.0",
+        "typescript": "^5.0.0",
+        "wrangler": "^4.0.0",
+      },
+    },
     "apps/web": {
       "name": "@repo/web",
       "version": "0.1.0",
@@ -341,8 +353,10 @@
       "dependencies": {
         "@ai-sdk/anthropic": "^2.0.25",
         "@ai-sdk/openai": "^2.0.23",
+        "@xenova/transformers": "^2.17.2",
         "ai": "^5.0.29",
         "lru-cache": "^11.2.6",
+        "memory-consolidator": "file:../memory-consolidator/pkg",
         "openai": "^4.104.0",
         "supermemory": "^3.0.0-alpha.26",
         "zod": "^4.1.5",
@@ -794,6 +808,8 @@
     "@engram/edge-reranker": ["@engram/edge-reranker@workspace:packages/edge-reranker"],
 
     "@engram/memory-graph": ["@engram/memory-graph@workspace:packages/memory-graph"],
+
+    "@engram/reranker-worker": ["@engram/reranker-worker@workspace:apps/reranker-worker"],
 
     "@engram/tools": ["@engram/tools@workspace:packages/tools"],
 
@@ -5107,11 +5123,15 @@
 
     "@engram/memory-graph/typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
+    "@engram/reranker-worker/typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
+
     "@engram/tools/@ai-sdk/anthropic": ["@ai-sdk/anthropic@2.0.79", "", { "dependencies": { "@ai-sdk/provider": "2.0.3", "@ai-sdk/provider-utils": "3.0.25" }, "peerDependencies": { "zod": "^3.25.76 || ^4.1.8" } }, "sha512-K0U09FPDO1kmLPjRLXFcNSvmnKHJBMARCb8r3Ulw7wU6/+Zh9djWcFDiPPNsklg6yAezcdLTcYPszgWJJ6iOTA=="],
 
     "@engram/tools/@ai-sdk/provider": ["@ai-sdk/provider@3.0.10", "", { "dependencies": { "json-schema": "^0.4.0" } }, "sha512-Q3BZ27qfpYqnCYGvE3vt+Qi6LGOF9R5Nmzn+9JoM1lCRsD9mYaIhfJLkSunN48nfGXJ6n+XNV0J/XVpqGQl7Dw=="],
 
     "@engram/tools/@anthropic-ai/sdk": ["@anthropic-ai/sdk@0.65.0", "", { "dependencies": { "json-schema-to-ts": "^3.1.1" }, "peerDependencies": { "zod": "^3.25.0 || ^4.0.0" }, "optionalPeers": ["zod"], "bin": { "anthropic-ai-sdk": "bin/cli" } }, "sha512-zIdPOcrCVEI8t3Di40nH4z9EoeyGZfXbYSvWdDLsB/KkaSYMnEgC7gmcgWu83g2NTn1ZTpbMvpdttWDGGIk6zw=="],
+
+    "@engram/tools/memory-consolidator": ["memory-consolidator@file:packages/memory-consolidator/pkg", {}],
 
     "@engram/tools/typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 

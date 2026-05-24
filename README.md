@@ -1,92 +1,83 @@
 # Engram: The Agentic Memory Engine
 
-Engram is a state-of-the-art, high-performance memory infrastructure layer designed specifically for Artificial Intelligence agents and large language models (LLMs). While traditional Retrieval-Augmented Generation (RAG) systems treat memory as static, isolated chunks of text, Engram treats memory as a dynamic, interconnected graph that actively deduplicates, consolidates, and reranks context before it reaches the language model. 
+Engram is a state-of-the-art memory infrastructure layer for AI agents. It gives agents like Claude Desktop and Cursor persistent memory that automatically deduplicates, consolidates, and reranks context at the edge using Cloudflare GPU infrastructure.
 
-This repository houses the complete monorepo for the Engram ecosystem, including the core API, Web UI, browser extensions, Model Context Protocol (MCP) servers, and the WebAssembly (WASM) mathematical engines that power its extreme performance.
-
-## The Core Problem
-
-Standard semantic search relies strictly on vector similarity (e.g., Cosine Similarity of dense embeddings). However, LLM agents require context, not just similarity. When an agent asks "What is my current role?", a traditional RAG system might return a document from three years ago stating "I am a junior developer" simply because it is semantically identical to the query, overriding a recent document stating "I am a senior engineering manager."
-
-Furthermore, as agents operate autonomously over long periods, they ingest duplicate information. Storing and retrieving this duplicated context bloats the context window, increases token costs, and degrades reasoning performance.
-
-## The Engram Solution
-
-Engram solves these challenges through a three-tiered architecture:
-
-1. **Client-Side WASM Deduplication**: Before data ever reaches the server, Engram filters out exact and near-exact duplicate memories natively in the browser or client environment using an ultra-fast WebAssembly port of the `all-MiniLM-L6-v2` quantization model. This prevents database bloat at the source.
-2. **Graph-Based Memory Consolidation**: Periodically, an asynchronous worker reconstructs the entire user memory space into an undirected graph. Using the Louvain Modularity algorithm compiled to WASM (`memory-consolidator`), Engram detects dense clusters of highly related memories and uses an LLM to synthesize them into unified, high-density facts.
-3. **Agentic Edge Reranking**: During retrieval, candidate documents from the Vector Database are intercepted at the Cloudflare Edge. We utilize Cloudflare Workers AI native bindings to execute a Cross-Encoder (`@cf/baai/bge-reranker-base`) on Cloudflare's serverless GPU infrastructure. This re-scores and re-orders documents to ensure the agent receives the most relevant context possible.
-
-*(Note: While we maintain Rust/WASM crates for local inference, our production Edge Reranker currently leverages Cloudflare's native AI infrastructure to bypass WebAssembly memory limits and dynamic import restrictions).*
-
-## Benchmarking
-
-Engram includes a robust benchmark suite (`packages/benchmark`) designed to measure latency and test integration against the live Cloudflare Workers API. 
-
-Our edge reranker currently achieves a p50 end-to-end latency of ~300ms over the internet (with internal Cloudflare GPU execution taking 60-150ms) when rescuing relevant documents from a simulated vector database. 
-
-True end-to-end LongMemEval memory recall benchmarking (testing resistance against context poisoning, temporal degradation, and contradiction injection against real ingested memories) is scheduled for the next phase of development.
-
-## Monorepo Architecture
-
-This project is structured as a Turbo Monorepo using Bun for high-speed package management.
-
-### Applications (`apps/`)
-- **`web`**: The primary Next.js frontend and dashboard for managing memories.
-- **`mcp`**: The Model Context Protocol (MCP) server running on Cloudflare Workers. This allows seamless connection to tools like Claude Desktop, Cursor, and OpenClaw.
-- **`browser-extension`**: Chrome extension for capturing memory context directly from the web.
-- **`raycast-extension`**: Desktop native integration for MacOS users.
-- **`reranker-worker`**: The Cloudflare Worker that natively interfaces with Workers AI for edge-side memory reranking.
-
-### Core Packages (`packages/`)
-- **`client-dedup-wasm`**: Rust-based WASM package for fast cosine similarity and deduplication.
-- **`memory-consolidator`**: Rust-based WASM package for Louvain graph clustering.
-- **`benchmark`**: The test runner and dataset generator for API benchmarking.
-- **`lib`**: Shared database schemas (Drizzle ORM) and utility functions.
-- **`tools`**: Integrations and connector logic for third-party platforms.
-
-## Third-Party Connectors and Integrations
-
-Engram provides out-of-the-box support for ingesting memory from external platforms. The `/v3/connections` API facilitates authenticated ingestion pipelines for:
-- Slack Workspaces
-- Notion Databases
-- Google Drive
-- Microsoft OneDrive
-
-### Model Context Protocol (MCP) Support
-The included `apps/mcp` package runs a fully compliant MCP Server. This enables external AI platforms (such as Claude Code, Cursor, and custom local agents) to query the Engram memory graph directly over standard local transport protocols, turning Engram into a universal memory layer for any MCP-compliant agent.
-
-## Deployment and Infrastructure
-
-Engram is built for edge-native execution.
-- **Compute**: Cloudflare Workers for ultra-low latency global routing.
-- **AI Infrastructure**: Cloudflare Workers AI for cross-encoder reranking.
-- **Database**: Hyperdrive connected to distributed PostgreSQL.
-- **Vector Storage**: Cloudflare Vectorize for nearest-neighbor candidate generation.
-- **State**: Cloudflare Durable Objects to manage concurrent memory consolidation streams.
+If you are an agent developer, Engram acts as your agent's brain—intercepting messy context, filtering duplicates, and serving only the highest-quality, reranked context back to the LLM.
 
 ## Getting Started
 
-### Prerequisites
-- Bun v1.3+
-- Rust Toolchain (GNU target required for Windows environments: `wasm32-unknown-unknown`)
-- Node.js v20+
+### 1. Get an API Key (Closed Beta)
+Engram is currently in closed beta to ensure high-quality onboarding. 
+**[Join the waitlist at engram.ai](https://engram.ai)** to request access. We review every request manually and will email you an API key if you're a good fit.
 
-### Installation
-1. Clone the repository and install dependencies:
-   ```bash
-   bun install
-   ```
-2. Build the WASM mathematical packages:
-   ```bash
-   cd packages/wasm-math && wasm-pack build --target bundler --release
-   cd ../memory-consolidator && wasm-pack build --target bundler --release
-   ```
-3. Start the development server:
-   ```bash
-   bun run dev
-   ```
+### 2. Test the Reranker Locally (No API Key Required)
+If you want to see the Edge Reranker in action right now without an API key, we have provided a mocked End-to-End test script. It intercepts the core API call, mocks 50 baseline memories, and pipes them directly to the live Cloudflare Edge Reranker Worker.
+
+```bash
+# Install dependencies
+bun install
+
+# Run the test
+cd apps/mcp
+bun run test-mcp-e2e.ts
+```
+Watch as the Cloudflare Worker rescues the target memory from the bottom of the pile (position 43) up to position 1.
+
+### 3. Connect to Claude Desktop (Requires API Key)
+Once you have your API key, you can connect Engram directly to Claude Desktop via the Model Context Protocol (MCP).
+
+1. Start the local MCP server:
+```bash
+cd apps/mcp
+npx wrangler dev --port 8788
+```
+
+2. Open your Claude Desktop configuration (`claude_desktop_config.json`) and add:
+```json
+{
+  "mcpServers": {
+    "engram": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/inspector", "http://127.0.0.1:8788/mcp"]
+    }
+  }
+}
+```
+*Note: Because OAuth proxying is currently limited, manual authentication may be required in the inspector.*
+
+---
+
+## How It Works (Architecture)
+
+Engram solves the "context bloat" problem of traditional RAG systems through a three-tiered architecture:
+
+1. **Client-Side WASM Deduplication**: Before data ever reaches the server, Engram filters out exact and near-exact duplicate memories using an ultra-fast WebAssembly port of the `all-MiniLM-L6-v2` model (`client-dedup-wasm`).
+2. **Graph-Based Memory Consolidation**: Periodically, the system reconstructs the user's memory space into an undirected graph. Using the Louvain Modularity algorithm compiled to WASM (`memory-consolidator`), Engram detects dense clusters and synthesizes them into unified facts.
+3. **Agentic Edge Reranking**: During retrieval, candidate documents from the Vector Database are intercepted at the Cloudflare Edge. We execute a Cross-Encoder (`@cf/baai/bge-reranker-base`) on Cloudflare's serverless GPU infrastructure to re-score documents before returning them to the agent.
+
+## Repository Structure (Turbo Monorepo)
+
+### Applications (`apps/`)
+- **`web`**: The primary frontend and dashboard (includes the Waitlist form).
+- **`mcp`**: The Model Context Protocol (MCP) server running on Cloudflare Workers.
+- **`reranker-worker`**: The Cloudflare Worker that interfaces with Workers AI for edge-side memory reranking.
+- **`browser-extension` & `raycast-extension`**: Client capture tools.
+
+### Core Packages (`packages/`)
+- **`client-dedup-wasm` & `memory-consolidator`**: Rust-based WASM mathematical engines.
+- **`benchmark`**: The test runner and dataset generator for API benchmarking.
+- **`tools`**: Integrations for Slack, Notion, Google Drive, and OneDrive.
+
+## Manual Build Instructions
+
+If you are contributing to the core math packages:
+
+1. Install Rust Toolchain (GNU target required for Windows: `wasm32-unknown-unknown`)
+2. Build the WASM packages:
+```bash
+cd packages/wasm-math && wasm-pack build --target bundler --release
+cd ../memory-consolidator && wasm-pack build --target bundler --release
+```
 
 ## License
 Engram is proprietary software. All rights reserved.

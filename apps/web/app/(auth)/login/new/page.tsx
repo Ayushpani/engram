@@ -17,6 +17,7 @@ import { motion } from "motion/react"
 import { dmSansClassName } from "@/lib/fonts"
 import { cn } from "@lib/utils"
 import { Logo } from "@ui/assets/Logo"
+import { WaitlistForm } from "@/components/waitlist-form"
 
 function isMcpOAuthAuthorizeContext(sp: Pick<URLSearchParams, "get">): boolean {
 	return sp.get("response_type") === "code" && Boolean(sp.get("client_id"))
@@ -100,6 +101,7 @@ export default function LoginPage() {
 	const [isLoadingEmail, setIsLoadingEmail] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 	const [lastUsedMethod, setLastUsedMethod] = useState<string | null>(null)
+	const [showLogin, setShowLogin] = useState(false)
 	const router = useRouter()
 
 	const posthog = usePostHog()
@@ -295,6 +297,31 @@ export default function LoginPage() {
 										Verify Token
 									</Button>
 								</form>
+							</div>
+						</LoginCard>
+					) : !showLogin ? (
+						<LoginCard>
+							<div className="w-[360px] flex flex-col gap-6">
+								<div className="flex flex-col gap-2 text-center lg:text-left">
+									<Title1Bold className="text-foreground">
+										Request Access
+									</Title1Bold>
+									<HeadingH3Medium className="text-muted-foreground leading-relaxed">
+										Join the closed beta to get an API key. I review every request personally.
+									</HeadingH3Medium>
+								</div>
+
+								<WaitlistForm />
+
+								<div className="text-center mt-2">
+									<button
+										type="button"
+										onClick={() => setShowLogin(true)}
+										className="text-[13px] font-medium text-white/40 hover:text-white transition-colors cursor-pointer"
+									>
+										Already have an invite? Log in
+									</button>
+								</div>
 							</div>
 						</LoginCard>
 					) : (
@@ -513,6 +540,16 @@ export default function LoginPage() {
 											.
 										</span>
 									</Label1Regular>
+								</div>
+								
+								<div className="text-center mt-4">
+									<button
+										type="button"
+										onClick={() => setShowLogin(false)}
+										className="text-[13px] font-medium text-white/40 hover:text-white transition-colors cursor-pointer"
+									>
+										← Back to Waitlist
+									</button>
 								</div>
 							</div>
 						</LoginCard>

@@ -241,10 +241,13 @@ export class EngramClient {
 			})
 
 			let rerankedSdkResults = result.results as SDKResult[]
+			
+			console.log(`[Edge Reranker Test] Fetched ${rerankedSdkResults.length} baseline candidates from Core API for query: "${query}"`)
 
 			// Try edge reranking if we have results
 			if (rerankedSdkResults.length > 0) {
 				try {
+					console.log(`[Edge Reranker Test] Passing ${rerankedSdkResults.length} candidates to Edge Reranker Worker...`)
 					const rerankBody = {
 						query,
 						candidates: rerankedSdkResults.map((r) => ({
@@ -279,6 +282,8 @@ export class EngramClient {
 										: r.similarity,
 								}))
 								.sort((a, b) => b.similarity - a.similarity)
+							
+							console.log(`[Edge Reranker Test] Successfully reranked and sorted ${rerankedSdkResults.length} candidates.`)
 						}
 					}
 				} catch (error) {
