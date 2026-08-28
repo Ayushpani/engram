@@ -1,9 +1,9 @@
 import { zValidator } from "@hono/zod-validator"
 import type { MemoryCore } from "@repo/core"
-import { HeuristicReranker, type Reranker } from "@repo/models"
 import { Hono } from "hono"
 import { z } from "zod"
 import { auth } from "../auth.ts"
+import type { ModelResolver } from "../model-resolver.ts"
 
 const recallInput = z.object({
 	query: z.string().min(1).max(4_000),
@@ -14,22 +14,20 @@ const recallInput = z.object({
 	rerank: z.boolean().default(false),
 })
 
-export function recallRouter(
-	core: MemoryCore,
-	reranker: Reranker = new HeuristicReranker(),
-) {
+export function recallRouter(core: MemoryCore, resolver: ModelResolver) {
 	return new Hono().post("/", zValidator("json", recallInput), async (c) => {
 		const { tenantId } = auth(c)
 		const body = c.req.valid("json")
 		const result = await core.recall({ tenantId, ...body })
 		if (!body.rerank || result.hits.length === 0) return c.json(result)
 
+		const resolved = await resolver.resolve(tenantId)
 		const candidates = result.hits.map((h) => ({
 			id: h.memory.id,
 			text: h.memory.text,
 			score: h.score,
 		}))
-		const rerankResult = await reranker.rerank(
+		const rerankResult = await resolved.reranker.rerank(
 			body.query,
 			candidates,
 			body.topK,
@@ -50,6 +48,7 @@ export function recallRouter(
 				total: result.latencyMs.total + rerankResult.rerankMs,
 			},
 			reranker: rerankResult.model,
+			rerankerSource: resolved.source,
 		})
 	})
 }

@@ -4,6 +4,7 @@ import { and, desc, eq, isNull, or } from "drizzle-orm"
 import { Hono } from "hono"
 import { z } from "zod"
 import { auth } from "../auth.ts"
+import type { ModelResolver } from "../model-resolver.ts"
 
 /**
  * Per-tenant model registry. A tenant can register multiple embedder or
@@ -37,7 +38,7 @@ function newId(prefix: string): string {
 	return `${prefix}_${Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("")}`
 }
 
-export function modelsRouter(db: Db) {
+export function modelsRouter(db: Db, resolver?: ModelResolver) {
 	return new Hono()
 		.post("/", zValidator("json", registerInput), async (c) => {
 			const { tenantId } = auth(c)
@@ -102,6 +103,7 @@ export function modelsRouter(db: Db) {
 				.set({ activatedAt: new Date() })
 				.where(eq(schema.modelRegistry.id, id))
 				.returning()
+			resolver?.invalidate(tenantId)
 			return c.json({ model: row })
 		})
 }

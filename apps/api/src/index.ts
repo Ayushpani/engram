@@ -11,6 +11,7 @@ import { cors } from "hono/cors"
 import { logger } from "hono/logger"
 import { apiKeyAuth } from "./auth.ts"
 import { loadEnv } from "./env.ts"
+import { createModelResolver } from "./model-resolver.ts"
 import { dpdpRouter } from "./routes/dpdp.ts"
 import { graphRouter } from "./routes/graph.ts"
 import { ingestRouter } from "./routes/ingest.ts"
@@ -38,6 +39,8 @@ const core = createCore({
 	consolidator: new HeuristicConsolidator(),
 })
 
+const modelResolver = createModelResolver(db)
+
 const app = new Hono()
 	.use(logger())
 	.use(cors({ origin: env.CORS_ORIGIN }))
@@ -51,12 +54,12 @@ const app = new Hono()
 	)
 	.use("/v1/*", apiKeyAuth(db))
 	.route("/v1/memories", memoriesRouter(core))
-	.route("/v1/recall", recallRouter(core))
+	.route("/v1/recall", recallRouter(core, modelResolver))
 	.route("/v1/sessions", sessionsRouter(core))
 	.route("/v1/ingest", ingestRouter(core))
 	.route("/v1/dpdp", dpdpRouter(db))
 	.route("/v1/graph", graphRouter(db))
-	.route("/v1/models", modelsRouter(db))
+	.route("/v1/models", modelsRouter(db, modelResolver))
 
 const port = env.PORT
 console.log(`smaran-api → http://localhost:${port} (embedder: ${env.EMBEDDER})`)
