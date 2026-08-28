@@ -57,6 +57,7 @@
         "@hono/zod-validator": "^0.7.1",
         "@repo/core": "workspace:*",
         "@repo/db": "workspace:*",
+        "@repo/voice": "workspace:*",
         "hono": "^4.11.1",
         "zod": "^3.25.76",
       },
@@ -285,11 +286,33 @@
         "typescript": "5.8.3",
       },
     },
+    "packages/adapter-livekit": {
+      "name": "@repo/adapter-livekit",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/core": "workspace:*",
+        "@repo/voice": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "5.8.3",
+      },
+    },
     "packages/adapter-openai": {
       "name": "@repo/adapter-openai",
       "version": "0.0.0",
       "dependencies": {
         "@repo/core": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "5.8.3",
+      },
+    },
+    "packages/adapter-vapi": {
+      "name": "@repo/adapter-vapi",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/core": "workspace:*",
+        "@repo/voice": "workspace:*",
       },
       "devDependencies": {
         "typescript": "5.8.3",
@@ -496,6 +519,16 @@
     "packages/validation": {
       "name": "@repo/validation",
       "version": "0.0.0",
+    },
+    "packages/voice": {
+      "name": "@repo/voice",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/core": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "5.8.3",
+      },
     },
   },
   "overrides": {
@@ -1505,7 +1538,11 @@
 
     "@repo/adapter-google": ["@repo/adapter-google@workspace:packages/adapter-google"],
 
+    "@repo/adapter-livekit": ["@repo/adapter-livekit@workspace:packages/adapter-livekit"],
+
     "@repo/adapter-openai": ["@repo/adapter-openai@workspace:packages/adapter-openai"],
+
+    "@repo/adapter-vapi": ["@repo/adapter-vapi@workspace:packages/adapter-vapi"],
 
     "@repo/api": ["@repo/api@workspace:apps/api"],
 
@@ -1524,6 +1561,8 @@
     "@repo/ui": ["@repo/ui@workspace:packages/ui"],
 
     "@repo/validation": ["@repo/validation@workspace:packages/validation"],
+
+    "@repo/voice": ["@repo/voice@workspace:packages/voice"],
 
     "@repo/web": ["@repo/web@workspace:apps/web"],
 

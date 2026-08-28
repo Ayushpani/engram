@@ -11,6 +11,7 @@ import { cors } from "hono/cors"
 import { logger } from "hono/logger"
 import { apiKeyAuth } from "./auth.ts"
 import { loadEnv } from "./env.ts"
+import { ingestRouter } from "./routes/ingest.ts"
 import { memoriesRouter } from "./routes/memories.ts"
 import { recallRouter } from "./routes/recall.ts"
 import { sessionsRouter } from "./routes/sessions.ts"
@@ -49,6 +50,7 @@ const app = new Hono()
 	.route("/v1/memories", memoriesRouter(core))
 	.route("/v1/recall", recallRouter(core))
 	.route("/v1/sessions", sessionsRouter(core))
+	.route("/v1/ingest", ingestRouter(core))
 
 const port = env.PORT
 console.log(`smaran-api → http://localhost:${port} (embedder: ${env.EMBEDDER})`)
