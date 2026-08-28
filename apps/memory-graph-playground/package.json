@@ -10,7 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@engram/memory-graph": "workspace:*",
+    "@smaran/memory-graph": "workspace:*",
     "next": "16.0.3",
     "react": "19.2.0",
     "react-dom": "19.2.0"
