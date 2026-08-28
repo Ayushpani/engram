@@ -16,7 +16,9 @@ function randHex(bytes: number): string {
 
 async function sha256Hex(s: string): Promise<string> {
 	const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s))
-	return Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, "0")).join("")
+	return Array.from(new Uint8Array(buf), (b) =>
+		b.toString(16).padStart(2, "0"),
+	).join("")
 }
 
 const sql = postgres(url, { max: 1 })

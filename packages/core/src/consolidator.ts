@@ -32,8 +32,14 @@ export class HeuristicConsolidator implements Consolidator {
 
 function classify(s: string): ConsolidatorCandidate["kind"] {
 	const lower = s.toLowerCase()
-	if (/\b(i (like|love|prefer|hate|dislike)|my favou?rite)\b/.test(lower)) return "preference"
-	if (/\b(yesterday|today|tomorrow|last (week|month|year)|on \w+day)\b/.test(lower)) return "event"
+	if (/\b(i (like|love|prefer|hate|dislike)|my favou?rite)\b/.test(lower))
+		return "preference"
+	if (
+		/\b(yesterday|today|tomorrow|last (week|month|year)|on \w+day)\b/.test(
+			lower,
+		)
+	)
+		return "event"
 	if (/^[A-Z][a-z]+(?: [A-Z][a-z]+)+$/.test(s.trim())) return "entity"
 	return "fact"
 }

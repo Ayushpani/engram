@@ -66,10 +66,14 @@ export function createSupabaseStore(db: Db): MemoryStore {
 					metadata: memories.metadata,
 					createdAt: memories.createdAt,
 					updatedAt: memories.updatedAt,
-					distance: sql<number>`${memories.embedding} <=> ${vec}::vector`.as("distance"),
+					distance: sql<number>`${memories.embedding} <=> ${vec}::vector`.as(
+						"distance",
+					),
 				})
 				.from(memories)
-				.where(and(eq(memories.tenantId, params.tenantId), scopeFilter, userFilter))
+				.where(
+					and(eq(memories.tenantId, params.tenantId), scopeFilter, userFilter),
+				)
 				.orderBy(sql`distance ASC`)
 				.limit(params.topK)
 

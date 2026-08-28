@@ -25,7 +25,9 @@ export const float4Array = customType<{ data: number[]; driverData: string }>({
 export const tenants = pgTable("tenants", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+	createdAt: timestamp("created_at", { withTimezone: true })
+		.notNull()
+		.defaultNow(),
 })
 
 export const apiKeys = pgTable(
@@ -37,7 +39,9 @@ export const apiKeys = pgTable(
 			.references(() => tenants.id, { onDelete: "cascade" }),
 		hashedKey: text("hashed_key").notNull(),
 		label: text("label"),
-		createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+		createdAt: timestamp("created_at", { withTimezone: true })
+			.notNull()
+			.defaultNow(),
 		revokedAt: timestamp("revoked_at", { withTimezone: true }),
 	},
 	(t) => ({
@@ -54,8 +58,12 @@ export const sessions = pgTable(
 			.notNull()
 			.references(() => tenants.id, { onDelete: "cascade" }),
 		userId: text("user_id"),
-		createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-		lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).notNull().defaultNow(),
+		createdAt: timestamp("created_at", { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+		lastSeenAt: timestamp("last_seen_at", { withTimezone: true })
+			.notNull()
+			.defaultNow(),
 	},
 	(t) => ({
 		tenantIdx: index("sessions_tenant_idx").on(t.tenantId),
@@ -75,11 +83,17 @@ export const memories = pgTable(
 		kind: text("kind", { enum: ["fact", "preference", "event", "entity"] })
 			.notNull()
 			.default("fact"),
-		source: text("source", { enum: ["text", "voice"] }).notNull().default("text"),
+		source: text("source", { enum: ["text", "voice"] })
+			.notNull()
+			.default("text"),
 		embedding: vector("embedding", { dimensions: EMBED_DIM }),
 		metadata: jsonb("metadata").notNull().default(sql`'{}'::jsonb`),
-		createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-		updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+		createdAt: timestamp("created_at", { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+		updatedAt: timestamp("updated_at", { withTimezone: true })
+			.notNull()
+			.defaultNow(),
 	},
 	(t) => ({
 		tenantIdx: index("memories_tenant_idx").on(t.tenantId),
@@ -101,7 +115,9 @@ export const entities = pgTable(
 		name: text("name").notNull(),
 		kind: text("kind").notNull(),
 		metadata: jsonb("metadata").notNull().default(sql`'{}'::jsonb`),
-		createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+		createdAt: timestamp("created_at", { withTimezone: true })
+			.notNull()
+			.defaultNow(),
 	},
 	(t) => ({
 		tenantNameIdx: index("entities_tenant_name_idx").on(t.tenantId, t.name),
@@ -122,8 +138,12 @@ export const relations = pgTable(
 			.notNull()
 			.references(() => entities.id, { onDelete: "cascade" }),
 		predicate: text("predicate").notNull(),
-		memoryId: text("memory_id").references(() => memories.id, { onDelete: "set null" }),
-		createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+		memoryId: text("memory_id").references(() => memories.id, {
+			onDelete: "set null",
+		}),
+		createdAt: timestamp("created_at", { withTimezone: true })
+			.notNull()
+			.defaultNow(),
 	},
 	(t) => ({
 		tenantIdx: index("relations_tenant_idx").on(t.tenantId),

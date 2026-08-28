@@ -64,7 +64,11 @@ export class Smaran {
 	}
 
 	async recall(opts: SmaranRecallOptions): Promise<SmaranRecallResult> {
-		return (await this.request("/v1/recall", "POST", opts)) as SmaranRecallResult
+		return (await this.request(
+			"/v1/recall",
+			"POST",
+			opts,
+		)) as SmaranRecallResult
 	}
 
 	async forget(id: string): Promise<void> {
@@ -89,15 +93,17 @@ export class Smaran {
 			const parts = buf.split("\n\n")
 			buf = parts.pop() ?? ""
 			for (const part of parts) {
-				const dataLine = part
-					.split("\n")
-					.find((l) => l.startsWith("data:"))
+				const dataLine = part.split("\n").find((l) => l.startsWith("data:"))
 				if (dataLine) yield JSON.parse(dataLine.slice(5).trim())
 			}
 		}
 	}
 
-	private async request(path: string, method: string, body?: unknown): Promise<unknown> {
+	private async request(
+		path: string,
+		method: string,
+		body?: unknown,
+	): Promise<unknown> {
 		const res = await this.fetchFn(`${this.baseUrl}${path}`, {
 			method,
 			headers: this.headers,

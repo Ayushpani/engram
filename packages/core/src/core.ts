@@ -88,7 +88,10 @@ export function createCore(deps: CoreDeps): MemoryCore {
 		const memories = await store.insertMemories(rows)
 		const t = now().toISOString()
 		for (const m of memories) {
-			bus.publish(m.sessionId, { type: "memory.saved", memory: { ...m, createdAt: t, updatedAt: t } })
+			bus.publish(m.sessionId, {
+				type: "memory.saved",
+				memory: { ...m, createdAt: t, updatedAt: t },
+			})
 		}
 		return memories
 	}
@@ -166,7 +169,10 @@ class SessionBus {
 			[Symbol.asyncIterator]: () => ({
 				next: () => {
 					if (queue.length > 0) {
-						return Promise.resolve({ value: queue.shift()!, done: false as const })
+						return Promise.resolve({
+							value: queue.shift()!,
+							done: false as const,
+						})
 					}
 					return new Promise<IteratorResult<MemoryEvent>>((res) => {
 						resolveNext = res
@@ -184,5 +190,7 @@ class SessionBus {
 function cryptoId(): string {
 	const bytes = new Uint8Array(16)
 	crypto.getRandomValues(bytes)
-	return "mem_" + Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("")
+	return (
+		"mem_" + Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("")
+	)
 }

@@ -36,7 +36,12 @@ export function apiKeyAuth(db: Db): MiddlewareHandler {
 		const [row] = await db
 			.select({ id: schema.apiKeys.id, tenantId: schema.apiKeys.tenantId })
 			.from(schema.apiKeys)
-			.where(and(eq(schema.apiKeys.hashedKey, hashed), isNull(schema.apiKeys.revokedAt)))
+			.where(
+				and(
+					eq(schema.apiKeys.hashedKey, hashed),
+					isNull(schema.apiKeys.revokedAt),
+				),
+			)
 			.limit(1)
 
 		if (!row) throw new HTTPException(401, { message: "invalid api key" })

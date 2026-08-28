@@ -1,7 +1,9 @@
 import { z } from "zod"
 
 const schema = z.object({
-	DATABASE_URL: z.string().min(1, "DATABASE_URL required (Supabase pooled connection)"),
+	DATABASE_URL: z
+		.string()
+		.min(1, "DATABASE_URL required (Supabase pooled connection)"),
 	PORT: z.coerce.number().default(8787),
 	EMBEDDER: z.enum(["hash", "openai"]).default("hash"),
 	OPENAI_API_KEY: z.string().optional(),
