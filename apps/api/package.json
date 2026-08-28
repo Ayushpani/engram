@@ -13,6 +13,7 @@
 		"@hono/zod-validator": "^0.7.1",
 		"@repo/core": "workspace:*",
 		"@repo/db": "workspace:*",
+		"@repo/language": "workspace:*",
 		"@repo/voice": "workspace:*",
 		"hono": "^4.11.1",
 		"zod": "^3.25.76"

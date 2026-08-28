@@ -2,15 +2,16 @@ import {
 	createCore,
 	createOpenAIEmbedder,
 	HashEmbedder,
-	HeuristicConsolidator,
 	type Embedder,
 } from "@repo/core"
+import { LanguageAwareConsolidator } from "./consolidator.ts"
 import { createDb, createSupabaseStore } from "@repo/db"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { logger } from "hono/logger"
 import { apiKeyAuth } from "./auth.ts"
 import { loadEnv } from "./env.ts"
+import { dpdpRouter } from "./routes/dpdp.ts"
 import { ingestRouter } from "./routes/ingest.ts"
 import { memoriesRouter } from "./routes/memories.ts"
 import { recallRouter } from "./routes/recall.ts"
@@ -32,7 +33,7 @@ const embedder: Embedder =
 const core = createCore({
 	store: createSupabaseStore(db),
 	embedder,
-	consolidator: new HeuristicConsolidator(),
+	consolidator: new LanguageAwareConsolidator(),
 })
 
 const app = new Hono()
@@ -51,6 +52,7 @@ const app = new Hono()
 	.route("/v1/recall", recallRouter(core))
 	.route("/v1/sessions", sessionsRouter(core))
 	.route("/v1/ingest", ingestRouter(core))
+	.route("/v1/dpdp", dpdpRouter(db))
 
 const port = env.PORT
 console.log(`smaran-api → http://localhost:${port} (embedder: ${env.EMBEDDER})`)

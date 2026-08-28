@@ -26,6 +26,8 @@ export interface MemoryClient {
 			score: number
 		}>
 	}>
+	/** Optional — voice adapters need this for barge-in rollback. */
+	forget?(id: string): Promise<void>
 }
 
 export interface AdapterScope {
