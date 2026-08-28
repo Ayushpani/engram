@@ -76,7 +76,7 @@ export class NoopWasmEmbedder implements WasmEmbedder {
 			h ^= text.charCodeAt(i)
 			h = Math.imul(h, 16777619) >>> 0
 		}
-		for (let i = 0; i < this.dim; i++) v[i] = ((h >>> i % 32) & 1) - 0.5
+		for (let i = 0; i < this.dim; i++) v[i] = ((h >>> (i % 32)) & 1) - 0.5
 		return v
 	}
 	free(): void {}

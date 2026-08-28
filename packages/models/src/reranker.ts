@@ -21,7 +21,11 @@ export interface RerankResult {
 
 export interface Reranker {
 	readonly model: string
-	rerank(query: string, candidates: RerankCandidate[], topK?: number): Promise<RerankResult>
+	rerank(
+		query: string,
+		candidates: RerankCandidate[],
+		topK?: number,
+	): Promise<RerankResult>
 }
 
 /**
@@ -88,9 +92,14 @@ export function createHttpReranker(opts: HttpRerankerOptions): Reranker {
 					top_n: topK,
 				}),
 			})
-			if (!res.ok) throw new Error(`reranker: ${res.status} ${await res.text()}`)
+			if (!res.ok)
+				throw new Error(`reranker: ${res.status} ${await res.text()}`)
 			const json = (await res.json()) as {
-				results: Array<{ index: number; relevance_score?: number; score?: number }>
+				results: Array<{
+					index: number
+					relevance_score?: number
+					score?: number
+				}>
 			}
 			const scored = json.results.map((r) => {
 				const base = candidates[r.index]
