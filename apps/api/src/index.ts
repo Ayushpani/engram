@@ -2,9 +2,9 @@ import {
 	createCore,
 	createOpenAIEmbedder,
 	HashEmbedder,
+	HeuristicConsolidator,
 	type Embedder,
 } from "@repo/core"
-import { LanguageAwareConsolidator } from "./consolidator.ts"
 import { createDb, createSupabaseStore } from "@repo/db"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
@@ -33,7 +33,7 @@ const embedder: Embedder =
 const core = createCore({
 	store: createSupabaseStore(db),
 	embedder,
-	consolidator: new LanguageAwareConsolidator(),
+	consolidator: new HeuristicConsolidator(),
 })
 
 const app = new Hono()

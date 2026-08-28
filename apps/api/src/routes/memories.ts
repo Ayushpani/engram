@@ -1,5 +1,6 @@
 import { zValidator } from "@hono/zod-validator"
 import type { MemoryCore } from "@repo/core"
+import { normalizeCodeSwitched } from "@repo/language"
 import { Hono } from "hono"
 import { z } from "zod"
 import { auth } from "../auth.ts"
@@ -19,7 +20,19 @@ export function memoriesRouter(core: MemoryCore) {
 		.post("/", zValidator("json", saveInput), async (c) => {
 			const { tenantId } = auth(c)
 			const body = c.req.valid("json")
-			const memories = await core.save({ tenantId, ...body })
+			const norm = normalizeCodeSwitched(body.text)
+			const memories = await core.save({
+				tenantId,
+				...body,
+				text: norm.text,
+				metadata: {
+					...(body.metadata ?? {}),
+					originalText: body.text,
+					fillersRemoved: norm.removed,
+					codeSwitched: norm.wasCodeSwitched,
+					primaryLanguage: norm.primary,
+				},
+			})
 			return c.json({ memories })
 		})
 		.delete("/:id", zValidator("param", deleteParams), async (c) => {
