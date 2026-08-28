@@ -1,0 +1,36 @@
+{
+	"name": "smaran-cli",
+	"version": "0.1.0",
+	"description": "One-command runner for Smaran voice-memory infrastructure.",
+	"license": "MIT",
+	"type": "module",
+	"bin": {
+		"smaran": "./src/index.ts"
+	},
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"import": "./src/index.ts"
+		}
+	},
+	"scripts": {
+		"check-types": "tsc --noEmit"
+	},
+	"files": ["src", "README.md"],
+	"keywords": [
+		"memory",
+		"voice-agents",
+		"ai-agents",
+		"llm",
+		"mcp",
+		"vapi",
+		"livekit",
+		"anthropic",
+		"openai",
+		"gemini"
+	],
+	"devDependencies": {
+		"@types/bun": "^1.4.0",
+		"typescript": "5.8.3"
+	}
+}

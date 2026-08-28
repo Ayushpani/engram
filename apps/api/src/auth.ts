@@ -1,8 +1,8 @@
+import type { Db } from "@repo/db"
+import { schema } from "@repo/db"
 import { and, eq, isNull } from "drizzle-orm"
 import type { Context, MiddlewareHandler } from "hono"
 import { HTTPException } from "hono/http-exception"
-import type { Db } from "@repo/db"
-import { schema } from "@repo/db"
 
 export interface AuthContext {
 	tenantId: string
@@ -25,13 +25,7 @@ async function hashKey(key: string): Promise<string> {
 
 export function apiKeyAuth(db: Db): MiddlewareHandler {
 	return async (c, next) => {
-		const raw = c.req.header("Authorization")
-		if (!raw?.startsWith("Bearer ")) {
-			throw new HTTPException(401, { message: "missing bearer token" })
-		}
-		const token = raw.slice(7).trim()
-		if (!token) throw new HTTPException(401, { message: "empty token" })
-
+		const token = readBearer(c)
 		const hashed = await hashKey(token)
 		const [row] = await db
 			.select({ id: schema.apiKeys.id, tenantId: schema.apiKeys.tenantId })
@@ -48,6 +42,32 @@ export function apiKeyAuth(db: Db): MiddlewareHandler {
 		c.set("auth", { tenantId: row.tenantId, apiKeyId: row.id })
 		await next()
 	}
+}
+
+/**
+ * Sandbox auth — one hardcoded key = one tenant. Used only when
+ * STORE=memory. Prints the key on startup so first-time users can
+ * grab it from the console.
+ */
+export function sandboxAuth(apiKey: string): MiddlewareHandler {
+	return async (c, next) => {
+		const token = readBearer(c)
+		if (token !== apiKey) {
+			throw new HTTPException(401, { message: "invalid api key" })
+		}
+		c.set("auth", { tenantId: "ten_sandbox", apiKeyId: "key_sandbox" })
+		await next()
+	}
+}
+
+function readBearer(c: Context): string {
+	const raw = c.req.header("Authorization")
+	if (!raw?.startsWith("Bearer ")) {
+		throw new HTTPException(401, { message: "missing bearer token" })
+	}
+	const token = raw.slice(7).trim()
+	if (!token) throw new HTTPException(401, { message: "empty token" })
+	return token
 }
 
 export function auth(c: Context): AuthContext {

@@ -407,6 +407,17 @@
         "typescript": "^5.0.0",
       },
     },
+    "packages/cli": {
+      "name": "smaran-cli",
+      "version": "0.1.0",
+      "bin": {
+        "smaran": "./src/index.ts",
+      },
+      "devDependencies": {
+        "@types/bun": "^1.4.0",
+        "typescript": "5.8.3",
+      },
+    },
     "packages/core": {
       "name": "@repo/core",
       "version": "0.0.0",
@@ -4691,6 +4702,8 @@
     "slate-react": ["slate-react@0.117.4", "", { "dependencies": { "@juggle/resize-observer": "^3.4.0", "direction": "^1.0.4", "is-hotkey": "^0.2.0", "lodash": "^4.17.21", "scroll-into-view-if-needed": "^3.1.0", "tiny-invariant": "1.3.1" }, "peerDependencies": { "react": ">=18.2.0", "react-dom": ">=18.2.0", "slate": ">=0.114.0", "slate-dom": ">=0.116.0" } }, "sha512-9ckilyUzQS1VHJnstIpgInhcWnTDgv2Cd7m1HOQVl3zasChoapPSMftzT/wl/48grZaZYZIi4xVuzGTcFRUWFg=="],
 
     "slice-ansi": ["slice-ansi@7.1.2", "", { "dependencies": { "ansi-styles": "^6.2.1", "is-fullwidth-code-point": "^5.0.0" } }, "sha512-iOBWFgUX7caIZiuutICxVgX1SdxwAVFFKwt1EvMYYec/NWO5meOJ6K5uQxhrYBdQJne4KxiqZc+KptFOWFSI9w=="],
+
+    "smaran-cli": ["smaran-cli@workspace:packages/cli"],
 
     "smaran-mcp": ["smaran-mcp@workspace:apps/mcp"],
 

@@ -1,5 +1,5 @@
 {
-  "name": "engram",
+  "name": "smaran",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -7,8 +7,7 @@
     "dev:local": "turbo run dev:app",
     "format-lint": "bunx biome check --write",
     "check-types": "turbo run check-types",
-    "sentry:sourcemaps": "_SENTRY_RELEASE=$(sentry-cli releases propose-version) && sentry-cli releases new $_SENTRY_RELEASE --org=engram --project=consumer-app && sentry-cli sourcemaps upload --org=engram --project=consumer-app --release=$_SENTRY_RELEASE --strip-prefix 'dist/..' dist",
-    "postbuild": "bun run sentry:sourcemaps"
+    "try": "STORE=memory EMBEDDER=hash SANDBOX_API_KEY=sk_local_dev bun run apps/api/src/index.ts"
   },
   "engines": {
     "node": ">=20"
