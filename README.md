@@ -1,123 +1,229 @@
 <div align="center">
-  <img src="apps/web/public/logo.png" width="500" alt="Smaran Logo" />
-  
-  <br />
-  <br />
+  <img src="apps/web/public/logo.png" width="360" alt="Smaran" />
+
+  <h3>Voice-native memory infrastructure for AI agents</h3>
 
   <p>
-    <b>The Intelligent Memory Backend for AI Agents</b>
+    Sub-second recall path • Streaming ASR ingest • Hindi/English code-switching •
+    <br />
+    Adapters for every major LLM, agent framework, and voice platform.
   </p>
-  
+
   <p>
-    <a href="https://smaran.ai"><img src="https://img.shields.io/badge/Website-smaran.ai-orange.svg" alt="Website" /></a>
-    <a href="https://github.com/Ayushpani/engram/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-Proprietary-blue.svg" alt="License" /></a>
-    <img src="https://img.shields.io/badge/Status-Closed_Beta-success.svg" alt="Beta" />
-    <img src="https://img.shields.io/badge/Platform-Cloudflare_Edge-orange.svg" alt="Platform" />
+    <a href="https://github.com/Ayushpani/smaran/actions"><img src="https://img.shields.io/github/actions/workflow/status/Ayushpani/smaran/ci.yml?branch=main&label=CI&style=flat-square" alt="CI" /></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="MIT license" /></a>
+    <img src="https://img.shields.io/badge/runtime-Bun%20%7C%20Node-black.svg?style=flat-square" alt="Runtime" />
+    <img src="https://img.shields.io/badge/monorepo-Turbo-red.svg?style=flat-square" alt="Turbo" />
+    <a href="https://github.com/Ayushpani/smaran/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs welcome" /></a>
   </p>
 </div>
 
 ---
 
-## What is Smaran?
-
-Smaran is a state-of-the-art memory infrastructure layer designed from the ground up for AI agents. It acts as the ultimate long-term memory engine for agents like **Claude Desktop**, **Cursor**, and custom LLM workflows, allowing them to instantly recall your knowledge with perfect context.
-
-Traditional Retrieval-Augmented Generation (RAG) systems suffer from "context bloat"—repeated facts, messy data, and degraded LLM reasoning. **Smaran solves this.** 
-
-When you plug Smaran into your agent, it acts as a hyper-intelligent brain: intercepting raw context, filtering duplicates mathematically on the client side, and executing millisecond edge-side reranking before serving only the highest-quality, distilled facts back to the LLM.
-
----
-
-## Core Features
-
-*   **Edge Reranking via Cloudflare Workers AI**: Employs a blazing-fast Cross-Encoder (`@cf/baai/bge-reranker-base`) directly at the network edge, ensuring low-latency intelligence routing.
-*   **Client-Side WASM Deduplication**: Filters exact and near-exact duplicates *before* network transport using an ultra-fast WebAssembly port of the `all-MiniLM-L6-v2` model.
-*   **Graph-Based Consolidation**: Uses the Louvain Modularity algorithm compiled to WASM to detect dense clusters in your memory space, automatically synthesizing messy notes into unified facts.
-*   **Universal MCP Integration**: Connects effortlessly to Claude Desktop via the standard Model Context Protocol (MCP).
-
----
-
-## Getting Started
-
-### 1. Get an API Key (Closed Beta)
-Smaran is currently in a strict closed beta to ensure we provide a premium, high-quality onboarding experience. 
-
-**[Join the waitlist at smaran.ai](https://smaran.ai)** to request access. We review every request personally and will email you an API key if you're a good fit.
-
-### 2. Test the Edge Reranker Locally (No API Key Required)
-If you want to witness the power of our Cloudflare Edge Reranker right now without an API key, we have provided a mocked End-to-End test script. This script intercepts a core API call, mocks 50 messy baseline memories, and pipes them directly to the live Smaran Edge Reranker Worker.
+## Try it in 30 seconds
 
 ```bash
-# 1. Install dependencies across the monorepo
+git clone https://github.com/Ayushpani/smaran && cd smaran
 bun install
-
-# 2. Run the E2E test script
-cd apps/mcp
-bun run test-mcp-e2e.ts
+bun run try
 ```
 
-*Watch your terminal as the Cloudflare Worker rescues the target memory from the absolute bottom of the pile (position 43) all the way up to position 1.*
+Live memory API on `http://localhost:8787`. No database, no API keys, no setup. Sandbox data disappears when the process exits.
 
-### 3. Connect to Claude Desktop (Requires API Key)
-Once you have secured your API key, you can give Claude Desktop a perfect memory using our Model Context Protocol (MCP) server.
+```bash
+# Save
+curl http://localhost:8787/v1/memories \
+  -H "Authorization: Bearer sk_local_dev" \
+  -H "Content-Type: application/json" \
+  -d '{"text":"I prefer window seats. My daughter loves elephants.","userId":"u1","sessionId":"s1"}'
 
-1. **Start the local MCP server:**
-   ```bash
-   cd apps/mcp
-   npx wrangler dev --port 8788
-   ```
-
-2. **Configure Claude Desktop:**
-   Open your Claude configuration file (`claude_desktop_config.json`) and register the Smaran server:
-   ```json
-   {
-     "mcpServers": {
-       "smaran": {
-         "command": "npx",
-         "args": ["@modelcontextprotocol/inspector", "http://127.0.0.1:8788/mcp"]
-       }
-     }
-   }
-   ```
-   *(Note: Because OAuth proxying is currently limited in some MCP clients, manual authentication via the inspector may be required on your first run.)*
+# Recall
+curl http://localhost:8787/v1/recall \
+  -H "Authorization: Bearer sk_local_dev" \
+  -H "Content-Type: application/json" \
+  -d '{"query":"what does my kid like","topK":3}'
+```
 
 ---
 
-## Architecture & Repository Structure
+## What is Smaran
 
-Smaran is built as a high-performance **Turbo Monorepo**, separating core math engines, cloud infrastructure, and client applications.
+Smaran is a self-hosted memory layer for AI agents built specifically around the constraints of **voice**: sub-second recall under a live call, ASR-noise cleanup, Hindi/English code-switching, per-turn observability, and barge-in rollback. It ships with adapters for every mainstream LLM SDK, every popular agent framework, and every major voice platform, so wiring it into an existing agent is usually one import.
 
-### Applications (`apps/`)
-*   **`web`**: The primary Smaran dashboard and landing page (Next.js).
-*   **`mcp`**: The Model Context Protocol server, deployed on Cloudflare Workers for global low latency.
-*   **`reranker-worker`**: The specialized Cloudflare Worker executing the BAAI Cross-Encoder model.
-*   **`browser-extension` & `raycast-extension`**: Frontend tools for capturing context directly into your Smaran graph.
-
-### Core Packages (`packages/`)
-*   **`client-dedup-wasm`**: Rust-compiled WebAssembly engine for zero-latency client-side duplication filtering.
-*   **`memory-consolidator`**: Rust-compiled Louvain Modularity engine for graph clustering.
-*   **`benchmark`**: Automated testing harness for evaluating RAG retrieval accuracy.
-*   **`tools`**: Built-in integrations for Slack, Notion, Google Drive, and OneDrive.
+Under the hood it's a small provider-agnostic core (`@repo/core`) with a Postgres+pgvector store, sitting behind a Hono HTTP API, an MCP server, and an optional Cloudflare Worker edge tier. Every adapter is a thin translation layer — no client wrapping, no monkey-patching, one interface all the way down.
 
 ---
 
-## Manual Build Instructions
+## Deploy anywhere
 
-If you are contributing to the core mathematical WASM packages, you will need to compile them manually:
+Fully self-hosted. Pick your cloud (all offer free tiers big enough for early usage):
 
-1. **Install the Rust Toolchain** (Ensure the `wasm32-unknown-unknown` target is installed).
-2. **Build the WASM packages:**
-   ```bash
-   cd packages/wasm-math
-   wasm-pack build --target bundler --release
+<p>
+  <a href="https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FAyushpani%2Fsmaran&envs=DATABASE_URL"><img src="https://railway.app/button.svg" alt="Deploy on Railway" /></a>
+  <a href="https://render.com/deploy?repo=https://github.com/Ayushpani/smaran"><img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render" /></a>
+  <a href="https://fly.io/docs/apps/launch/"><img src="https://img.shields.io/badge/Deploy%20on-Fly.io-8B5CF6?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEyIDJMMiAxMmwxMCAxMCA5LjUtOS41WiIvPjwvc3ZnPg==" alt="Deploy on Fly.io" /></a>
+</p>
 
-   cd ../memory-consolidator
-   wasm-pack build --target bundler --release
-   ```
+The API needs one env var (`DATABASE_URL`) — a Supabase free-tier Postgres works out of the box. See [`apps/api/README.md`](apps/api/README.md).
 
 ---
 
-## License & Copyright
+## What Smaran ships
 
-Smaran is proprietary software. All rights reserved.
-For inquiries, contact [ayush@smaran.ai](mailto:ayush@smaran.ai).
+### Core
+
+| Package | Purpose |
+| --- | --- |
+| [`@repo/core`](packages/core) | Provider-agnostic memory engine + shared adapter contract. Ships `HashEmbedder`, `HeuristicConsolidator`, and `InMemoryStore` so it runs without any external dependency. |
+| [`@repo/db`](packages/db) | Drizzle schema + `MemoryStore` for Postgres+pgvector. Multi-hop graph store. Idempotent migrations. |
+| [`@repo/voice`](packages/voice) | Live-call primitives: `StreamingSession`, `HotCache` (TTL LRU), `scrubAsrText`, barge-in `abortTurn`/`rollbackLastTurn`. |
+| [`@repo/language`](packages/language) | Script/language detection across Latin + 8 Indian scripts, Hindi/Hinglish filler removal, heuristic NER, session-scoped coreference. |
+| [`@repo/data-pipeline`](packages/data-pipeline) | PII scrubbing (Aadhaar/PAN/GSTIN/UPI) + training-pair extraction for future distilled models. |
+| [`@repo/models`](packages/models) | Reranker contract with heuristic + HTTP + WASM slots. |
+| [`@repo/sdk-ts`](packages/sdk-ts) | Zero-dependency TypeScript client. |
+
+### LLM & agent-framework adapters
+
+| Package | Coverage |
+| --- | --- |
+| [`@repo/adapter-anthropic`](packages/adapter-anthropic) | Anthropic Messages + Claude Agent SDK |
+| [`@repo/adapter-openai`](packages/adapter-openai) | OpenAI Chat/Responses/Agents/Codex + Groq/Together/DeepSeek/xAI/Fireworks/Ollama/LM Studio/vLLM |
+| [`@repo/adapter-google`](packages/adapter-google) | Google Gemini + Agent Kit |
+| [`@repo/adapter-vercel-ai`](packages/adapter-vercel-ai) | Vercel AI SDK |
+| [`@repo/adapter-langgraph`](packages/adapter-langgraph) | LangGraph.js |
+| [`@repo/adapter-mastra`](packages/adapter-mastra) | Mastra |
+
+Every adapter exposes both **model-driven tools** (the model calls `memory_save` / `memory_recall` itself) and **silent context injection** (`withRecalledContext` prepends relevant memories to the system prompt). Compose both on the same call.
+
+### Voice-platform adapters
+
+| Package | Coverage |
+| --- | --- |
+| [`@repo/adapter-vapi`](packages/adapter-vapi) | Vapi server-URL webhook (functions + transcripts) |
+| [`@repo/adapter-livekit`](packages/adapter-livekit) | LiveKit Agents (Pipecat by shape) |
+
+### Applications
+
+| App | Purpose |
+| --- | --- |
+| [`apps/api`](apps/api) | The memory API. REST + SSE. Sandbox mode (`STORE=memory`) or persistent (`STORE=supabase`). |
+| [`apps/mcp`](apps/mcp) | MCP server — plugs into Claude Desktop / Claude Code / Cursor / Windsurf. |
+| [`apps/edge-recall`](apps/edge-recall) | Cloudflare Worker: KV hot cache tier in front of the origin. |
+| [`apps/starter-vapi`](apps/starter-vapi) | ~90-line runnable Vapi voice-agent-with-memory template. |
+| [`apps/reranker-worker`](apps/reranker-worker) | BAAI cross-encoder as a CF Worker. |
+
+Full endpoint reference: [`DOCS.md`](DOCS.md).
+
+---
+
+## Two integration patterns, per adapter
+
+```ts
+// Anthropic Claude — model decides when to save/recall
+import Anthropic from "@anthropic-ai/sdk"
+import { handleToolUse, memoryTools, withRecalledContext } from "@repo/adapter-anthropic"
+
+const res = await anthropic.messages.create({
+  model: "claude-…",
+  system: (await withRecalledContext(memory, { messages }, scope)).system,
+  tools: memoryTools(),
+  messages,
+})
+```
+
+```ts
+// Vapi voice agent — memory follows the caller across sessions
+import { handleVapiEvent, memoryFunctions } from "@repo/adapter-vapi"
+
+app.post("/vapi", async (c) => {
+  const result = await handleVapiEvent(await c.req.json().then(b => b.message), {
+    memory, session, sessionId: callId, userId
+  })
+  if (result.response) return c.json(result.response)
+  return c.body(null, 204)
+})
+```
+
+More examples in each adapter's README.
+
+---
+
+## Current status — honest read
+
+Smaran is a working codebase, not yet a validated product. Being explicit about what's proven vs. what's still on the roadmap:
+
+**Working end-to-end today** (verified in a live sandbox):
+- Save, recall, forget, streaming ingest, DPDP endpoints, graph traverse
+- Provider adapters for Anthropic, OpenAI, Gemini, Vercel AI SDK, LangGraph, Mastra, Vapi, LiveKit, MCP
+- Hindi/Hinglish detection + filler stripping, entity extraction, session coreference
+- Barge-in rollback, hot-cache tier, speculative prefetch
+- Per-tenant reranker registry with atomic activation
+- Cloudflare Worker edge tier
+- Sandbox mode with no external dependencies
+
+**Shipped but not proven yet**:
+- Recall quality — the default `HashEmbedder` is a deterministic stub; real embeddings work via `EMBEDDER=openai` (any `/v1/embeddings` host, including free-tier Ollama), but published benchmark numbers do not yet exist.
+- Latency — architecturally supported (sub-200ms with in-region hosting), not yet measured on real voice-agent traffic.
+
+**On the roadmap** (planned, not yet code):
+- Distilled voice-tuned embedder + reranker (needs collected call data to train)
+- Public playground UI
+- Managed hosted tier + pricing
+
+No production users, no funding round, no case studies. If you're reading this and want to be the first design partner, [open an issue](https://github.com/Ayushpani/smaran/issues/new).
+
+---
+
+## Development
+
+```bash
+bun install
+bun run try                          # sandbox API on :8787
+bun run check-types                  # tsc across every package
+bunx biome check --write             # format + lint
+bun --filter '@repo/db' db:migrate   # migrate a Supabase Postgres
+```
+
+CI runs type-check + Biome on every PR — see [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
+
+---
+
+## Architecture at a glance
+
+```
+                   ┌──────────────────────────────────────┐
+     LLM caller ──▶│  adapter-{anthropic,openai,google,   │
+                   │  vercel-ai,langgraph,mastra,vapi,    │
+                   │  livekit}                            │
+                   └───────────────┬──────────────────────┘
+                                   │  MemoryClient (shared)
+                                   ▼
+                   ┌──────────────────────────────────────┐
+                   │  @repo/sdk-ts  ──▶  HTTP + SSE       │
+                   └───────────────┬──────────────────────┘
+                                   ▼
+                       ┌───────────────────────┐
+                       │  apps/api  (Hono)     │
+                       │  auth · routes ·      │
+                       │  model resolver       │
+                       └────────┬──────────────┘
+                                │  MemoryStore
+                     ┌──────────┴──────────┐
+                     ▼                     ▼
+             InMemoryStore         Postgres + pgvector
+             (STORE=memory)        (STORE=supabase)
+```
+
+`apps/edge-recall` sits in front of `apps/api` when deployed to Cloudflare, terminating repeat recalls at the edge with a KV hot cache.
+
+---
+
+## Contributing
+
+PRs welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md). Every phase of the build is a separate commit on the branch and every PR runs the CI. Adapters, examples, and language coverage improvements are the highest-leverage places to help.
+
+---
+
+## License
+
+MIT — [`LICENSE`](LICENSE). Use it for anything, commercial or personal, no strings attached.
