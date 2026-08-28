@@ -355,6 +355,16 @@
         "typescript": "5.8.3",
       },
     },
+    "packages/data-pipeline": {
+      "name": "@repo/data-pipeline",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/language": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "5.8.3",
+      },
+    },
     "packages/db": {
       "name": "@repo/db",
       "version": "0.0.0",
@@ -1555,6 +1565,8 @@
     "@repo/api": ["@repo/api@workspace:apps/api"],
 
     "@repo/core": ["@repo/core@workspace:packages/core"],
+
+    "@repo/data-pipeline": ["@repo/data-pipeline@workspace:packages/data-pipeline"],
 
     "@repo/db": ["@repo/db@workspace:packages/db"],
 
