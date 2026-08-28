@@ -84,7 +84,12 @@ export function graphRouter(db: Db) {
 		.post("/traverse", zValidator("json", traverseInput), async (c) => {
 			const { tenantId } = auth(c)
 			const { startEntityId, maxHops, memoryLimit } = c.req.valid("json")
-			const walk = await graph.traverse(tenantId, startEntityId, maxHops, memoryLimit)
+			const walk = await graph.traverse(
+				tenantId,
+				startEntityId,
+				maxHops,
+				memoryLimit,
+			)
 			const rows = await graph.fetchMemoriesByIds(tenantId, walk.memoryIds)
 			const memories = rows.map((r) => ({
 				id: r.id,

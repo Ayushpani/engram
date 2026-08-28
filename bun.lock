@@ -455,6 +455,13 @@
         "react-dom": ">=18.0.0",
       },
     },
+    "packages/models": {
+      "name": "@repo/models",
+      "version": "0.0.0",
+      "devDependencies": {
+        "typescript": "5.8.3",
+      },
+    },
     "packages/sdk-ts": {
       "name": "@repo/sdk-ts",
       "version": "0.1.0",
@@ -1577,6 +1584,8 @@
     "@repo/language": ["@repo/language@workspace:packages/language"],
 
     "@repo/lib": ["@repo/lib@workspace:packages/lib"],
+
+    "@repo/models": ["@repo/models@workspace:packages/models"],
 
     "@repo/sdk-ts": ["@repo/sdk-ts@workspace:packages/sdk-ts"],
 
