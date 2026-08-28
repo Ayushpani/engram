@@ -124,6 +124,30 @@ export const entities = pgTable(
 	}),
 )
 
+export const modelRegistry = pgTable(
+	"model_registry",
+	{
+		id: text("id").primaryKey(),
+		tenantId: text("tenant_id").references(() => tenants.id, {
+			onDelete: "cascade",
+		}),
+		role: text("role", { enum: ["embedder", "reranker"] }).notNull(),
+		name: text("name").notNull(),
+		provider: text("provider").notNull(),
+		config: jsonb("config").notNull().default(sql`'{}'::jsonb`),
+		createdAt: timestamp("created_at", { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+		activatedAt: timestamp("activated_at", { withTimezone: true }),
+	},
+	(t) => ({
+		tenantRoleIdx: index("model_registry_tenant_role_idx").on(
+			t.tenantId,
+			t.role,
+		),
+	}),
+)
+
 export const relations = pgTable(
 	"relations",
 	{
