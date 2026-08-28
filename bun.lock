@@ -168,6 +168,21 @@
         "wrangler": "^4.0.0",
       },
     },
+    "apps/starter-vapi": {
+      "name": "@repo/starter-vapi",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/adapter-vapi": "workspace:*",
+        "@repo/sdk-ts": "workspace:*",
+        "@repo/voice": "workspace:*",
+        "hono": "^4.11.1",
+        "zod": "^3.25.76",
+      },
+      "devDependencies": {
+        "@types/bun": "^1.4.0",
+        "typescript": "5.8.3",
+      },
+    },
     "apps/web": {
       "name": "@repo/web",
       "version": "0.1.0",
@@ -301,12 +316,32 @@
         "typescript": "5.8.3",
       },
     },
+    "packages/adapter-langgraph": {
+      "name": "@repo/adapter-langgraph",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/core": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "5.8.3",
+      },
+    },
     "packages/adapter-livekit": {
       "name": "@repo/adapter-livekit",
       "version": "0.0.0",
       "dependencies": {
         "@repo/core": "workspace:*",
         "@repo/voice": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "5.8.3",
+      },
+    },
+    "packages/adapter-mastra": {
+      "name": "@repo/adapter-mastra",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/core": "workspace:*",
       },
       "devDependencies": {
         "typescript": "5.8.3",
@@ -328,6 +363,16 @@
       "dependencies": {
         "@repo/core": "workspace:*",
         "@repo/voice": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "5.8.3",
+      },
+    },
+    "packages/adapter-vercel-ai": {
+      "name": "@repo/adapter-vercel-ai",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/core": "workspace:*",
       },
       "devDependencies": {
         "typescript": "5.8.3",
@@ -1577,11 +1622,17 @@
 
     "@repo/adapter-google": ["@repo/adapter-google@workspace:packages/adapter-google"],
 
+    "@repo/adapter-langgraph": ["@repo/adapter-langgraph@workspace:packages/adapter-langgraph"],
+
     "@repo/adapter-livekit": ["@repo/adapter-livekit@workspace:packages/adapter-livekit"],
+
+    "@repo/adapter-mastra": ["@repo/adapter-mastra@workspace:packages/adapter-mastra"],
 
     "@repo/adapter-openai": ["@repo/adapter-openai@workspace:packages/adapter-openai"],
 
     "@repo/adapter-vapi": ["@repo/adapter-vapi@workspace:packages/adapter-vapi"],
+
+    "@repo/adapter-vercel-ai": ["@repo/adapter-vercel-ai@workspace:packages/adapter-vercel-ai"],
 
     "@repo/api": ["@repo/api@workspace:apps/api"],
 
@@ -1604,6 +1655,8 @@
     "@repo/models": ["@repo/models@workspace:packages/models"],
 
     "@repo/sdk-ts": ["@repo/sdk-ts@workspace:packages/sdk-ts"],
+
+    "@repo/starter-vapi": ["@repo/starter-vapi@workspace:apps/starter-vapi"],
 
     "@repo/ui": ["@repo/ui@workspace:packages/ui"],
 

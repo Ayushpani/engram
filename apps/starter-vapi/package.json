@@ -1,0 +1,23 @@
+{
+	"name": "@repo/starter-vapi",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "bun run --hot src/index.ts",
+		"dev:app": "bun run --hot src/index.ts",
+		"start": "bun run src/index.ts",
+		"check-types": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@repo/adapter-vapi": "workspace:*",
+		"@repo/sdk-ts": "workspace:*",
+		"@repo/voice": "workspace:*",
+		"hono": "^4.11.1",
+		"zod": "^3.25.76"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.4.0",
+		"typescript": "5.8.3"
+	}
+}
