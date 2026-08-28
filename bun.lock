@@ -265,6 +265,36 @@
         "wrangler": "^4.26.0",
       },
     },
+    "packages/adapter-anthropic": {
+      "name": "@repo/adapter-anthropic",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/core": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "5.8.3",
+      },
+    },
+    "packages/adapter-google": {
+      "name": "@repo/adapter-google",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/core": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "5.8.3",
+      },
+    },
+    "packages/adapter-openai": {
+      "name": "@repo/adapter-openai",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/core": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "5.8.3",
+      },
+    },
     "packages/ai-sdk": {
       "name": "@smaran/ai-sdk",
       "version": "1.0.8",
@@ -1470,6 +1500,12 @@
     "@react-router/serve": ["@react-router/serve@7.15.1", "", { "dependencies": { "@mjackson/node-fetch-server": "^0.2.0", "@react-router/express": "7.15.1", "@react-router/node": "7.15.1", "compression": "^1.8.1", "express": "^4.19.2", "get-port": "5.1.1", "morgan": "^1.10.1", "source-map-support": "^0.5.21" }, "peerDependencies": { "react-router": "7.15.1" }, "bin": { "react-router-serve": "bin.js" } }, "sha512-x9rON/OtmfVKsc4OxZI0GzgZBVBhKvtJ2N1CuembFhH4c1lmZyK0kk7+rHUkVboM3vSevqxnLWs+SMRsp26xaw=="],
 
     "@remix-run/node-fetch-server": ["@remix-run/node-fetch-server@0.13.3", "", {}, "sha512-UfjOXed/DQteaM5VyTfqTeGpHwyL2J5aoRGY6cydip4tt1ehNNeSwuXCC7AEGE0RWBs/7bgKxYkL/B/+UDe4AA=="],
+
+    "@repo/adapter-anthropic": ["@repo/adapter-anthropic@workspace:packages/adapter-anthropic"],
+
+    "@repo/adapter-google": ["@repo/adapter-google@workspace:packages/adapter-google"],
+
+    "@repo/adapter-openai": ["@repo/adapter-openai@workspace:packages/adapter-openai"],
 
     "@repo/api": ["@repo/api@workspace:apps/api"],
 
