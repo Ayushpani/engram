@@ -12,6 +12,7 @@ import { logger } from "hono/logger"
 import { apiKeyAuth } from "./auth.ts"
 import { loadEnv } from "./env.ts"
 import { dpdpRouter } from "./routes/dpdp.ts"
+import { graphRouter } from "./routes/graph.ts"
 import { ingestRouter } from "./routes/ingest.ts"
 import { memoriesRouter } from "./routes/memories.ts"
 import { recallRouter } from "./routes/recall.ts"
@@ -53,6 +54,7 @@ const app = new Hono()
 	.route("/v1/sessions", sessionsRouter(core))
 	.route("/v1/ingest", ingestRouter(core))
 	.route("/v1/dpdp", dpdpRouter(db))
+	.route("/v1/graph", graphRouter(db))
 
 const port = env.PORT
 console.log(`smaran-api → http://localhost:${port} (embedder: ${env.EMBEDDER})`)
