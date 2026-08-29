@@ -1,0 +1,61 @@
+---
+title: Voice concepts
+description: Partial + commit, self-correction, filler scrub — how the pipeline actually thinks.
+section: Get started
+order: 3
+---
+
+Voice memory is different from text memory in one important way: the caller retracts. Every real voice turn ships with false starts, corrections, and fillers that don't belong in the stored record. Smaran's pipeline is built around that fact.
+
+## The two-phase turn
+
+Real-time voice agents don't get one clean utterance per turn — they get a stream of partial transcripts as the ASR is still hearing, then a final "commit" when the speaker pauses long enough to hand the turn back. Smaran exposes both:
+
+- `POST /v1/ingest/partial` — replaces the working buffer for the turn. Zero-cost to call on every ASR word.
+- `POST /v1/ingest/commit` — freezes the buffer, runs self-correction, and writes to storage.
+
+You call `partial` continuously and `commit` once per turn. Nothing is written until commit, so retractions inside the same turn never touch the graph.
+
+## Self-correction
+
+The self-correction pass runs on every commit. It looks for two things:
+
+### Retraction cues
+
+Words that signal the speaker is taking something back: `no`, `sorry`, `actually`, `wait`, `I mean`, `scratch that`, `no wait`, and their Hinglish equivalents (`nahi`, `matlab`, `haan wait`). When a cue is followed by a corrected value, the cue and the retracted value are dropped in-place.
+
+### Slot patches
+
+When the correction is a single bare value (a number, an email, a phone), Smaran patches just that slot in the prior clause rather than replacing the whole thing:
+
+```
+"my order is one two three four, actually four three two one"
+                                          ↓
+                    "my order is four three two one"
+```
+
+vs. wholesale replace when the caller restates the full context:
+
+```
+"my address is bandra east, actually the whole street is different — bandra west, flat 12"
+                                          ↓
+                    "the whole street is different — bandra west, flat 12"
+```
+
+## Filler scrub
+
+Before self-correction runs, the pipeline strips ASR noise words that don't carry meaning: `um`, `uh`, `like`, `you know`, `mera matlab`, `yaar`. This step happens **after** the retraction cue detector runs, so a filler that also functions as a cue (`I mean`) is preserved when it precedes a correction.
+
+## Language normalization
+
+Smaran handles English, Hindi (Devanagari), and Hinglish (romanized Hindi) natively — the same commit endpoint accepts all three. Code-switch detection uses a combination of Unicode script ranges and a small lexical marker set (~200 common romanized-Hindi tokens). The stored value is always normalized to a canonical form.
+
+<Callout tone="info" title="You get to see what got dropped">
+Every save response includes a `corrections` array — one entry per retraction detected, with `kind` (replace | patch), `retracted`, and `kept`. Log it, audit it, or expose it in your admin UI.
+</Callout>
+
+## What the pipeline does NOT do
+
+- **No LLM in the hot path.** Self-correction is deterministic string transformations plus a tiny classifier. Adding an LLM would add hundreds of milliseconds; the whole point is sub-3ms round trips.
+- **No PII redaction on save.** Storage retention and PII handling are policy decisions — see the DPDP guide when it lands. Smaran gives you the tools to redact, but doesn't scrub by default.
+- **No cross-turn coreference in v0.1.** "The number I said earlier" needs turn history; that's on the roadmap.

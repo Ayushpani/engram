@@ -1,0 +1,108 @@
+---
+title: TypeScript SDK
+description: createMemoryClient, save, recall — copy-paste ready for any Node runtime.
+section: SDK
+order: 1
+---
+
+The Smaran SDK ships as `@smaran/sdk` (previously `@repo/sdk-ts` inside the monorepo). It works in Node, Bun, Edge runtimes, and Cloudflare Workers with zero peer dependencies.
+
+## Install
+
+```bash
+bun add @smaran/sdk
+# or
+npm i @smaran/sdk
+```
+
+## Create a client
+
+```ts
+import { createMemoryClient } from "@smaran/sdk"
+
+const smaran = createMemoryClient({
+  apiKey: process.env.SMARAN_API_KEY,
+  // Optional — defaults to https://api.smaran.dev
+  baseUrl: process.env.SMARAN_BASE_URL,
+})
+```
+
+Use `sk_local_dev` as the key when hitting the sandbox on `localhost:8787`.
+
+## Save
+
+```ts
+const result = await smaran.save({
+  text: "confirm my order — one two three four, actually four three two one",
+  sessionId: "sess_abc",
+  userId: "u_alice",
+  source: "voice",
+})
+
+console.log(result)
+// {
+//   saved: true,
+//   text: "confirm my order four three two one",
+//   memoryId: "mem_...",
+//   corrections: [{ kind: "replace", retracted: "one two three four", kept: "four three two one" }],
+//   latency_ms: 1.8,
+// }
+```
+
+### Options
+
+| Field | Type | Notes |
+|---|---|---|
+| `text` | `string` | Required. The utterance, transcript, or free-form fact to save. |
+| `sessionId` | `string` | Recommended. Scopes recall — one caller, one session ID. |
+| `userId` | `string?` | Optional. Cross-session tie-breaker. |
+| `source` | `"voice" \| "text" \| "system"` | Hints downstream processing. `voice` runs the self-correction pass. |
+| `metadata` | `Record<string, unknown>?` | Free-form. Stored alongside the memory, returned on recall. |
+
+## Recall
+
+```ts
+const hits = await smaran.recall({
+  query: "what did the caller confirm",
+  sessionId: "sess_abc",
+  topK: 5,
+  includeCrossSession: false,
+})
+
+for (const h of hits) {
+  console.log(h.memory.text, h.score)
+}
+```
+
+`recall` returns an array of `{ memory, score }` — memory carries `text`, `id`, `sessionId`, `metadata`, and `createdAt`; `score` is the cosine similarity from the vector store.
+
+### Streaming partials
+
+For live voice, don't wait for the turn to end:
+
+```ts
+await smaran.partial({ sessionId: "sess_abc", text: partialText })
+// ...called repeatedly as ASR streams
+await smaran.commit({ sessionId: "sess_abc", source: "voice" })
+```
+
+`partial` is safe to call every 100ms. `commit` fires self-correction and writes to storage exactly once per turn.
+
+## Error handling
+
+Every SDK method throws on network or auth failures. Wrap in try/catch if you want to surface the error to your agent instead of failing the turn:
+
+```ts
+try {
+  await smaran.save({ text, sessionId })
+} catch (err) {
+  console.error("smaran save failed", err)
+  // fall back to no-op — the agent turn still completes
+}
+```
+
+Save failures should be non-fatal. Losing one memory beats dropping the call.
+
+<Callout tone="warn" title="Sandbox vs production">
+The local sandbox uses an in-memory store — restart the process and everything's gone. For persistence, either set `STORE=supabase` locally or point the SDK at the hosted API.
+</Callout>
