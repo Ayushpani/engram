@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
-"""Small Python bridge — loads a HuggingFace ASR model and transcribes
-an audio file to stdout. Used by scripts/benchmark-audio.ts and
-scripts/stream-audio.ts.
+"""Small Python bridge - loads Whisper and transcribes an audio file
+to stdout. Used by scripts/benchmark-audio.ts and scripts/stream-audio.ts.
 
-Two modes:
-  transcribe.py <audio_file>          → prints the full transcript.
-  transcribe.py --chunks <audio_file> → prints one line per fake
-                                        chunk (streaming simulation);
-                                        splits the full transcript by
-                                        word count so we never touch
-                                        torchcodec/ffmpeg on Windows.
+Uses WhisperProcessor + WhisperForConditionalGeneration directly instead
+of the transformers ASR pipeline, because transformers 5.16's pipeline
+unconditionally imports torchcodec in its preprocess step, which fails
+on stock Windows without the FFmpeg DLL bundle. This direct path only
+needs librosa for audio decode and Whisper for inference - no torchcodec,
+no ffmpeg on PATH.
 
-Default model is openai/whisper-tiny (~150MB, CPU-friendly, no custom
-code, works on every OS). Override with --model. Reads WAV/MP3/FLAC/OGG
-at 16kHz via librosa — no ffmpeg on PATH required.
+Modes:
+  transcribe.py <audio_file>          -> prints the full transcript.
+  transcribe.py --chunks <audio_file> -> splits the transcript into fake
+                                          N-word chunks for streaming
+                                          simulation.
+
+Default model is openai/whisper-tiny (~150MB, CPU-friendly, English).
+Override with --model.
 
 Install (once):
   pip install --upgrade "transformers>=4.40" "torch>=2.1" \\
@@ -47,10 +50,11 @@ def main() -> int:
         return 1
 
     try:
-        from transformers import pipeline
-    except ImportError:
+        import torch
+        from transformers import WhisperForConditionalGeneration, WhisperProcessor
+    except ImportError as e:
         print(
-            "error: transformers not installed. Run:\n"
+            f"error: missing dep ({e}). Run:\n"
             "  pip install --upgrade 'transformers>=4.40' 'torch>=2.1' "
             "'librosa>=0.10' 'soundfile>=0.12'",
             file=sys.stderr,
@@ -64,28 +68,26 @@ def main() -> int:
         return 1
 
     t_load_start = time.perf_counter()
-    asr = pipeline(
-        "automatic-speech-recognition",
-        model=args.model,
-        device="cpu",
-        trust_remote_code=True,
-    )
+    processor = WhisperProcessor.from_pretrained(args.model)
+    model = WhisperForConditionalGeneration.from_pretrained(args.model)
+    model.eval()
     load_ms = int((time.perf_counter() - t_load_start) * 1000)
     print(f"loaded {args.model} in {load_ms}ms", file=sys.stderr)
 
-    # Decode audio in-process with librosa (16kHz mono ndarray). This
-    # skips the HF pipeline's ffmpeg loader entirely.
+    # Decode audio to 16kHz mono ndarray with librosa. This is the only
+    # audio-decode step; no ffmpeg, no torchcodec.
     audio_array, _ = librosa.load(str(args.audio), sr=16000, mono=True)
 
-    # One plain full transcription — no return_timestamps, no
-    # chunk_length_s. Those paths pull in torchcodec, which needs FFmpeg
-    # DLLs on Windows and dies with cryptic ctypes errors on stock
-    # installs. For streaming simulation we split the resulting text
-    # into fake chunks in --chunks mode.
     t0 = time.perf_counter()
-    result = asr(audio_array)
+    inputs = processor(
+        audio_array,
+        sampling_rate=16000,
+        return_tensors="pt",
+    )
+    with torch.no_grad():
+        predicted_ids = model.generate(inputs.input_features, max_new_tokens=440)
+    text = processor.batch_decode(predicted_ids, skip_special_tokens=True)[0].strip()
     elapsed = int((time.perf_counter() - t0) * 1000)
-    text = (result.get("text") or "").strip()
 
     if args.chunks:
         words = text.split()
