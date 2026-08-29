@@ -45,7 +45,7 @@ import { basename, join, resolve } from "node:path"
 
 const BASE = process.env.SMARAN_BASE_URL ?? "http://localhost:8787"
 const KEY = process.env.SMARAN_API_KEY ?? "sk_local_dev"
-const MODEL = process.env.ASR_MODEL ?? "Audio8/Audio8-ASR-0.1B"
+const MODEL = process.env.ASR_MODEL ?? "openai/whisper-tiny"
 const PYTHON = process.env.PYTHON ?? "python3"
 
 interface Query {
