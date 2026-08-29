@@ -4,16 +4,19 @@ an audio file to stdout. Used by scripts/benchmark-audio.ts and
 scripts/stream-audio.ts.
 
 Two modes:
-  transcribe.py <audio_file>         → prints the full transcript.
-  transcribe.py --chunks <audio_file> → prints one line per ~500ms
-                                        chunk (streaming simulation).
+  transcribe.py <audio_file>          → prints the full transcript.
+  transcribe.py --chunks <audio_file> → prints one line per fake
+                                        chunk (streaming simulation);
+                                        splits the full transcript by
+                                        word count so we never touch
+                                        torchcodec/ffmpeg on Windows.
 
-Default model is Audio8/Audio8-ASR-0.1B (~100M params, CPU-friendly).
-Override with --model. Reads WAV/MP3/FLAC/OGG at 16kHz — the loader
-resamples for you.
+Default model is openai/whisper-tiny (~150MB, CPU-friendly, no custom
+code, works on every OS). Override with --model. Reads WAV/MP3/FLAC/OGG
+at 16kHz via librosa — no ffmpeg on PATH required.
 
 Install (once):
-  pip install --upgrade "transformers>=4.40" "torch>=2.1" "torchaudio>=2.1" \\
+  pip install --upgrade "transformers>=4.40" "torch>=2.1" \\
               "librosa>=0.10" "soundfile>=0.12"
 """
 
@@ -30,6 +33,12 @@ def main() -> int:
     parser.add_argument("--model", default="openai/whisper-tiny")
     parser.add_argument("--chunks", action="store_true")
     parser.add_argument("--chunk-ms", type=int, default=500)
+    parser.add_argument(
+        "--words-per-chunk",
+        type=int,
+        default=3,
+        help="Fake-streaming chunk size in words (--chunks mode).",
+    )
     parser.add_argument("--json", action="store_true", help="Emit structured JSON.")
     args = parser.parse_args()
 
@@ -43,9 +52,15 @@ def main() -> int:
         print(
             "error: transformers not installed. Run:\n"
             "  pip install --upgrade 'transformers>=4.40' 'torch>=2.1' "
-            "'torchaudio>=2.1' 'librosa>=0.10' 'soundfile>=0.12'",
+            "'librosa>=0.10' 'soundfile>=0.12'",
             file=sys.stderr,
         )
+        return 1
+
+    try:
+        import librosa
+    except ImportError:
+        print("error: librosa not installed. pip install 'librosa>=0.10'", file=sys.stderr)
         return 1
 
     t_load_start = time.perf_counter()
@@ -58,36 +73,35 @@ def main() -> int:
     load_ms = int((time.perf_counter() - t_load_start) * 1000)
     print(f"loaded {args.model} in {load_ms}ms", file=sys.stderr)
 
-    # Decode audio in-process with librosa (16kHz mono ndarray) so we
-    # don't need ffmpeg on PATH — HF pipeline's default loader shells
-    # out to ffmpeg, which isn't installed on stock Windows/macOS.
-    try:
-        import librosa
-    except ImportError:
-        print("error: librosa not installed. pip install 'librosa>=0.10'", file=sys.stderr)
-        return 1
+    # Decode audio in-process with librosa (16kHz mono ndarray). This
+    # skips the HF pipeline's ffmpeg loader entirely.
     audio_array, _ = librosa.load(str(args.audio), sr=16000, mono=True)
 
-    if args.chunks:
-        t0 = time.perf_counter()
-        result = asr(
-            audio_array,
-            return_timestamps="word",
-            chunk_length_s=args.chunk_ms / 1000.0,
-        )
-        elapsed = int((time.perf_counter() - t0) * 1000)
-        chunks = result.get("chunks", [])
-        if args.json:
-            print(json.dumps({"elapsed_ms": elapsed, "chunks": chunks}))
-        else:
-            for c in chunks:
-                print(c.get("text", "").strip())
-        return 0
-
+    # One plain full transcription — no return_timestamps, no
+    # chunk_length_s. Those paths pull in torchcodec, which needs FFmpeg
+    # DLLs on Windows and dies with cryptic ctypes errors on stock
+    # installs. For streaming simulation we split the resulting text
+    # into fake chunks in --chunks mode.
     t0 = time.perf_counter()
     result = asr(audio_array)
     elapsed = int((time.perf_counter() - t0) * 1000)
     text = (result.get("text") or "").strip()
+
+    if args.chunks:
+        words = text.split()
+        n = max(1, args.words_per_chunk)
+        chunks = [
+            {"text": " ".join(words[i : i + n])}
+            for i in range(0, len(words), n)
+        ]
+        if args.json:
+            print(json.dumps({"elapsed_ms": elapsed, "chunks": chunks, "text": text}))
+        else:
+            for c in chunks:
+                print(c["text"])
+        print(f"transcribed in {elapsed}ms ({len(chunks)} fake chunks)", file=sys.stderr)
+        return 0
+
     if args.json:
         print(json.dumps({"elapsed_ms": elapsed, "text": text}))
     else:
