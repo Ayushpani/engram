@@ -1,0 +1,46 @@
+---
+title: Gemini
+description: Google Gemini and Gemini Live API — memory injection + function calling.
+section: Integrations
+order: 9
+---
+
+The Gemini adapter targets both the standard `generateContent` API and the streaming Live API used for voice agents.
+
+## Install
+
+```bash
+bun add @smaran/sdk @smaran/adapter-google @google/genai
+```
+
+## generateContent
+
+```ts
+import { GoogleGenAI } from "@google/genai"
+import { GeminiAdapter } from "@smaran/adapter-google"
+import { createMemoryClient } from "@smaran/sdk"
+
+const smaran = createMemoryClient({ apiKey: process.env.SMARAN_API_KEY })
+const gemini = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
+const memory = new GeminiAdapter(smaran, { sessionId: "sess_abc" })
+
+const res = await memory.wrap(gemini).models.generateContent({
+  model: "gemini-2.5-flash",
+  contents: "What did I ask about yesterday?",
+  config: { tools: [{ functionDeclarations: memory.tools() }] },
+})
+```
+
+`memory.wrap()` intercepts the request to prepend recalled context as a system instruction and handles `memory_save` / `memory_recall` function calls if Gemini invokes them.
+
+## Gemini Live (voice)
+
+```ts
+import { GeminiLiveAdapter } from "@smaran/adapter-google/live"
+
+const live = new GeminiLiveAdapter(smaran, sessionId)
+session.on("serverContent", live.onServerContent)
+session.on("inputTranscription", live.onUserTranscript)
+```
+
+The Live adapter buffers partial transcripts and commits on turn end — the same pattern as LiveKit and the OpenAI Realtime adapter.

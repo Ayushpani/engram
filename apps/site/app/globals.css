@@ -390,7 +390,7 @@ h2.big em {
 	min-height: 100svh;
 	display: flex;
 	flex-direction: column;
-	padding: 120px 0 0;
+	padding: 120px 0 60px;
 	position: relative;
 	overflow: hidden;
 }
@@ -697,18 +697,20 @@ h2.big em {
 	border-top: 1px solid var(--line);
 	border-bottom: 1px solid var(--line);
 	background: var(--paper);
+	margin-top: 72px;
 }
 .strip-in {
 	display: flex;
 	align-items: center;
 	gap: 0;
 	flex-wrap: wrap;
+	padding: 8px 0;
 }
 .stat {
 	display: flex;
 	flex-direction: column;
-	gap: 2px;
-	padding: 18px 30px;
+	gap: 4px;
+	padding: 26px 40px;
 	border-right: 1px solid var(--line);
 }
 .stat b {

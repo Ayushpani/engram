@@ -1,0 +1,90 @@
+---
+title: Self-host
+description: Run Smaran on your own Postgres + your own Cloudflare Worker in under 20 minutes.
+section: Operations
+order: 1
+---
+
+Everything Smaran needs runs on infrastructure you already have. This guide gets you from zero to a self-hosted deployment on Supabase Postgres + Cloudflare Workers.
+
+## What you need
+
+- A Postgres 15+ with the `pgvector` extension. Supabase, Neon, Railway, or your own — doesn't matter.
+- A Cloudflare account with Workers + KV enabled.
+- Bun `1.3.6+` and Node `20+` locally.
+- ~20 minutes.
+
+## 1 · Set up the database
+
+Enable pgvector and run migrations:
+
+```bash
+# In Supabase SQL editor or psql
+create extension if not exists vector;
+```
+
+Then apply Smaran's schema:
+
+```bash
+git clone https://github.com/Ayushpani/smaran
+cd smaran
+bun install
+DATABASE_URL="postgresql://..." bunx drizzle-kit push --config packages/db/drizzle.config.ts
+```
+
+This creates the `tenants`, `api_keys`, `sessions`, `memories`, `entities`, and `relations` tables. The `memories.embedding` column is `vector(1536)` with an HNSW index tuned for balanced recall/speed.
+
+## 2 · Deploy the API
+
+The API is a Bun/Hono app. Ships as a Cloudflare Worker by default.
+
+```bash
+cd apps/api
+cp wrangler.example.jsonc wrangler.jsonc
+# edit wrangler.jsonc with your DATABASE_URL (via Hyperdrive) and JWT_SECRET
+bun run deploy
+```
+
+You now have a Worker URL like `https://smaran-api.your-account.workers.dev`.
+
+## 3 · Deploy the edge cache (optional but recommended)
+
+The hot cache lives in Cloudflare KV. It's a separate Worker for cache-invalidation isolation.
+
+```bash
+cd apps/edge-recall
+bun run deploy
+```
+
+Point the API at it via `EDGE_CACHE_URL` env var. Reads under 1ms after this step; misses fall through to Postgres.
+
+## 4 · Issue an API key
+
+Once the API is up, seed a tenant + key:
+
+```bash
+DATABASE_URL="..." bun run packages/db/seed.ts
+```
+
+This prints an `sk_...` key. Pass it as `SMARAN_API_KEY` to the SDK.
+
+## 5 · Point the SDK at your host
+
+```ts
+const smaran = createMemoryClient({
+  apiKey: process.env.SMARAN_API_KEY,
+  baseUrl: "https://smaran-api.your-account.workers.dev",
+})
+```
+
+That's it. Same latency, same self-correction, same voice-turn semantics — running on your infra.
+
+<Callout tone="info" title="Alternatives">
+Not on Cloudflare? The API also runs as a plain Bun HTTP server (`bun run apps/api/src/index.ts`). You'll lose the edge cache but keep everything else. Set `STORE=supabase` and provide `DATABASE_URL`.
+</Callout>
+
+## Operational bits
+
+- **Backups**: Postgres does the heavy lifting. Take snapshots of the `memories` and `sessions` tables at your usual cadence. Everything else is derived.
+- **Scaling**: pgvector HNSW handles ~10M memories per tenant on modest hardware. Split into per-tenant schemas when you outgrow one instance.
+- **Monitoring**: The API exports Prometheus metrics at `/metrics` and Sentry breadcrumbs on the `SENTRY_DSN` env var.

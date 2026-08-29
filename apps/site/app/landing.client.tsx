@@ -696,13 +696,13 @@ export default function Landing() {
 						</a>
 					</li>
 					<li>
-						<a href="#samples" className="nlink">
-							The Tape
+						<a href="#code" className="nlink">
+							Adapters
 						</a>
 					</li>
 					<li>
-						<a href="#code" className="nlink">
-							Adapters
+						<a href="/docs" className="nlink">
+							Docs
 						</a>
 					</li>
 				</ul>
@@ -1347,6 +1347,14 @@ export default function Landing() {
 							One memory core, thin adapters per provider. Pick your stack — the
 							past comes with it.
 						</p>
+						<a
+							href="/docs"
+							className="btn btn-line"
+							data-hover
+							style={{ marginTop: 8, marginBottom: 24 }}
+						>
+							Read the docs →
+						</a>
 						<div className="vtabs" id="vtabs">
 							<button className="vtab on" data-p="p-livekit">
 								<i>01</i>LiveKit<span className="arr">→</span>
@@ -1483,6 +1491,9 @@ const completion = await memory.wrap(openai).chat.completions.create({
 							data-hover
 						>
 							GitHub
+						</a>
+						<a href="/docs" className="foot-link" data-hover>
+							Docs
 						</a>
 						<a href="#problem" className="foot-link" data-hover>
 							Benchmarks

@@ -1,0 +1,37 @@
+---
+title: Retell
+description: Retell webhook → Smaran commit, one handler.
+section: Integrations
+order: 6
+---
+
+Retell voice agents call your webhook with `call_started`, `call_ended`, `agent_response`, and `custom_function` events. Route them all through Smaran's Retell adapter.
+
+## Install
+
+```bash
+bun add @smaran/sdk @smaran/adapter-retell
+```
+
+## Handler
+
+```ts
+import { handleRetellWebhook } from "@smaran/adapter-retell"
+import { createMemoryClient } from "@smaran/sdk"
+
+const smaran = createMemoryClient({ apiKey: process.env.SMARAN_API_KEY })
+
+export async function POST(req: Request) {
+  const body = await req.json()
+  const res = await handleRetellWebhook(smaran, body)
+  return Response.json(res)
+}
+```
+
+The adapter handles the three moments that matter:
+
+- **`call_started`** — opens a Smaran session keyed on `call.call_id`.
+- **`call_ended`** — commits any pending buffer, closes the session.
+- **`custom_function` with name `recall_memory`** — returns Smaran hits inline as the function result.
+
+Register `recall_memory` as a custom function on your Retell agent; the LLM will call it when it needs past context.

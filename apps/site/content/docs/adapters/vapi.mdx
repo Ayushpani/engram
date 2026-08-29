@@ -1,0 +1,43 @@
+---
+title: Vapi
+description: Wire Smaran into a Vapi voice agent via one webhook.
+section: Integrations
+order: 3
+---
+
+Vapi calls a webhook after every user turn. Point that webhook at a Next.js API route (or any HTTP handler) and let `@repo/adapter-vapi` do the rest.
+
+## Install
+
+```bash
+bun add @smaran/sdk @smaran/adapter-vapi
+```
+
+## Handler
+
+```ts
+import { handleVapiWebhook } from "@smaran/adapter-vapi"
+import { createMemoryClient } from "@smaran/sdk"
+
+const smaran = createMemoryClient({ apiKey: process.env.SMARAN_API_KEY })
+
+export async function POST(req: Request) {
+  const body = await req.json()
+  const response = await handleVapiWebhook(smaran, body)
+  return Response.json(response)
+}
+```
+
+The adapter figures out which Vapi event you got (`function-call`, `end-of-call-report`, `transcript`) and does the right thing:
+
+- **`transcript`** — partial ingestion, buffered per call.
+- **`end-of-call-report`** — commit; runs self-correction + save.
+- **`function-call`** — if the tool name is `smaran_recall`, returns hits inline.
+
+## Configure Vapi
+
+In the Vapi dashboard, set your assistant's **Server URL** to `https://your-app.dev/api/vapi-webhook`. Enable the `smaran_recall` function on the assistant so it can pull memory during a call.
+
+<Callout tone="note" title="Session ID mapping">
+The adapter uses Vapi's `call.id` as the Smaran `sessionId` by default. Override by passing `{ mapSession: (event) => customId }` if you want cross-call continuity per phone number.
+</Callout>

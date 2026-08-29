@@ -1,0 +1,49 @@
+---
+title: Anthropic
+description: Wrap Anthropic Messages calls with Smaran recall + save.
+section: Integrations
+order: 7
+---
+
+The Anthropic adapter injects recalled memories into your system prompt and registers `memory_save` / `memory_recall` as native Anthropic tools.
+
+## Install
+
+```bash
+bun add @smaran/sdk @smaran/adapter-anthropic @anthropic-ai/sdk
+```
+
+## Wrap the call
+
+```ts
+import Anthropic from "@anthropic-ai/sdk"
+import { withRecalledContext, memoryTools } from "@smaran/adapter-anthropic"
+import { createMemoryClient } from "@smaran/sdk"
+
+const smaran = createMemoryClient({ apiKey: process.env.SMARAN_API_KEY })
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+
+const { system, messages } = await withRecalledContext(smaran, {
+  system: "You are an empathetic voice assistant.",
+  messages: history,
+  sessionId: "sess_abc",
+})
+
+const res = await anthropic.messages.create({
+  model: "claude-sonnet-4",
+  max_tokens: 1024,
+  system,
+  messages,
+  tools: memoryTools(),
+})
+```
+
+`withRecalledContext` prepends `<recalled_memory>` XML blocks to the system prompt — Claude is trained to weight XML-fenced context strongly. `memoryTools()` returns the schema for `memory_save` and `memory_recall`; the SDK executes them when Claude invokes them.
+
+## Tool-use loop
+
+If you're running a full agent loop, the adapter exports `runMemoryToolCall(smaran, block)` so you can handle `tool_use` blocks in your streaming handler.
+
+<Callout tone="note" title="Model choice">
+Any Claude model with tool-use support works. Haiku is the fastest for latency-sensitive voice loops; Sonnet 4 for complex reasoning that still needs memory.
+</Callout>
