@@ -1,0 +1,46 @@
+---
+title: LiveKit
+description: Inject micro-context into a LiveKit Agents voice pipeline in under 3ms.
+section: Integrations
+order: 4
+---
+
+LiveKit Agents emit `user_speech_committed` and `agent_speech_committed` events. The LiveKit adapter subscribes to the first and injects a Smaran-fetched context prefix before the LLM turn.
+
+## Install
+
+```bash
+bun add @smaran/sdk @smaran/adapter-livekit
+```
+
+## Wire it in
+
+```ts
+import { LiveKitMemoryAdapter } from "@smaran/adapter-livekit"
+import { createMemoryClient } from "@smaran/sdk"
+
+const memory = createMemoryClient({ apiKey: process.env.SMARAN_API_KEY })
+const adapter = new LiveKitMemoryAdapter(memory, {
+  sessionId: room.name,
+  userId: participant.identity,
+})
+
+agent.on("user_speech_committed", async (turn) => {
+  const ctx = await adapter.onUserSpeech(turn.text)
+  agent.setContextPrefix(ctx)  // <150-token digest of recalled memories
+})
+
+agent.on("agent_speech_committed", async (turn) => {
+  await adapter.onAgentSpeech(turn.text)
+})
+```
+
+The adapter caps the recalled context at 150 tokens by default — enough to seed the LLM without blowing the turn budget. Tune with `{ maxContextTokens: 300 }`.
+
+## Latency
+
+`onUserSpeech` is the only call in the hot path. It's designed to complete in under 3ms against the hosted API (measured p50). If you're self-hosting Smaran on the same box as the LiveKit worker, expect sub-1ms.
+
+<Callout tone="info" title="Selective save">
+By default, only user turns are saved. Enable `{ saveAgentTurns: true }` if you want the assistant's replies in memory too (useful for auditing, not for recall context).
+</Callout>

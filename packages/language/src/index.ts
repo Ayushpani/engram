@@ -1,0 +1,5 @@
+export * from "./detect.ts"
+export * from "./code-switch.ts"
+export * from "./entities.ts"
+export * from "./coreference.ts"
+export * from "./self-correction.ts"

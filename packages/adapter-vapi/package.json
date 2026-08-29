@@ -1,0 +1,22 @@
+{
+	"name": "@repo/adapter-vapi",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"import": "./src/index.ts"
+		}
+	},
+	"scripts": {
+		"check-types": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@repo/core": "workspace:*",
+		"@repo/voice": "workspace:*"
+	},
+	"devDependencies": {
+		"typescript": "5.8.3"
+	}
+}

@@ -1,6 +1,6 @@
 # Memory Graph Playground
 
-A demo app showcasing the `@engram/memory-graph` package.
+A demo app showcasing the `@smaran/memory-graph` package.
 
 ## Getting Started
 
@@ -14,7 +14,7 @@ Open [http://localhost:3000](http://localhost:3000) and enter your Engram API ke
 ## Usage Example
 
 ```tsx
-import { MemoryGraph, type DocumentWithMemories } from '@engram/memory-graph'
+import { MemoryGraph, type DocumentWithMemories } from '@smaran/memory-graph'
 
 function App() {
   const [documents, setDocuments] = useState<DocumentWithMemories[]>([])

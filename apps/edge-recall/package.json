@@ -1,0 +1,22 @@
+{
+	"name": "@repo/edge-recall",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "wrangler dev",
+		"dev:app": "wrangler dev",
+		"build": "wrangler deploy --dry-run --outdir=dist",
+		"deploy": "wrangler deploy --minify",
+		"check-types": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@repo/core": "workspace:*",
+		"@repo/models": "workspace:*"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20250620.0",
+		"typescript": "^5.8.3",
+		"wrangler": "^4.42.2"
+	}
+}

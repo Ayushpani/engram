@@ -7,14 +7,14 @@ icon: "network"
 
 Memory Graph is a React component that visualizes your Engram documents and memories as an interactive network. Documents appear as rectangular nodes, memories as hexagonal nodes, and connections between them show relationships and similarity.
 
-<Card title="@engram/memory-graph on npm" icon="npm" href="https://www.npmjs.com/package/@engram/memory-graph">
+<Card title="@smaran/memory-graph on npm" icon="npm" href="https://www.npmjs.com/package/@smaran/memory-graph">
     Check out the NPM page for more details
 </Card>
 
 ## Installation
 
 ```bash
-npm install @engram/memory-graph
+npm install @smaran/memory-graph
 ```
 
 **Requirements:** React 18.0.0 or higher
@@ -24,8 +24,8 @@ npm install @engram/memory-graph
 ```tsx
 'use client'; // For Next.js App Router
 
-import { MemoryGraph } from '@engram/memory-graph';
-import type { DocumentWithMemories } from '@engram/memory-graph';
+import { MemoryGraph } from '@smaran/memory-graph';
+import type { DocumentWithMemories } from '@smaran/memory-graph';
 import { useEffect, useState } from 'react';
 
 export default function GraphPage() {
@@ -155,7 +155,7 @@ app.get('/api/graph', async (req, res) => {
 ```tsx
 'use client';
 
-import { MemoryGraph } from '@engram/memory-graph';
+import { MemoryGraph } from '@smaran/memory-graph';
 import { useCallback, useEffect, useState } from 'react';
 
 export default function PaginatedGraph() {
@@ -331,19 +331,19 @@ import {
   LoadingIndicator,
   NodeDetailPanel,
   SpacesDropdown
-} from '@engram/memory-graph';
+} from '@smaran/memory-graph';
 ```
 
 ### Hooks
 
 ```typescript
-import { useGraphData, useGraphInteractions } from '@engram/memory-graph';
+import { useGraphData, useGraphInteractions } from '@smaran/memory-graph';
 ```
 
 ### Constants
 
 ```typescript
-import { colors, GRAPH_SETTINGS, LAYOUT_CONSTANTS } from '@engram/memory-graph';
+import { colors, GRAPH_SETTINGS, LAYOUT_CONSTANTS } from '@smaran/memory-graph';
 ```
 
 ---

@@ -107,6 +107,28 @@
 				"rules": {
 					"complexity": {
 						"noImportantStyles": "off"
+					},
+					"style": {
+						"noDescendingSpecificity": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["apps/site/**"],
+			"linter": {
+				"rules": {
+					"a11y": {
+						"noSvgWithoutTitle": "off",
+						"useButtonType": "off"
+					},
+					"style": {
+						"useTemplate": "off"
+					},
+					"suspicious": {
+						"noExplicitAny": "off",
+						"noArrayIndexKey": "off",
+						"useIterableCallbackReturn": "off"
 					}
 				}
 			}

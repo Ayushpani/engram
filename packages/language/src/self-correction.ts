@@ -1,0 +1,298 @@
+/**
+ * Voice self-correction handler. Every real caller retracts and refines
+ * mid-utterance. Without this, we store the pre-retraction value as a
+ * memory, which the recall path then serves back as "fact".
+ *
+ * Example:
+ *   input:  "i live in powai, no... actual trikutta towers powai,
+ *            room number 13... sorry 913"
+ *   output: "trikutta towers powai, room number 913"
+ *
+ * The parser handles three patterns:
+ *
+ *  1. Retraction cue at a segment boundary. Strong cues (no / actually /
+ *     sorry / wait / I mean / scratch that) default to replacing the
+ *     prior segment — that's what the cue actually signals.
+ *
+ *  2. Slot-level patch. If the new segment is a bare value (a lone
+ *     number, an email, a phone) we patch just that slot into the
+ *     prior segment instead of replacing it wholesale.
+ *
+ *  3. "and X" continuation inside a segment. After a retraction cue,
+ *     "…and Y is Z" splits the segment so the first half corrects the
+ *     prior and the second half is a fresh clause.
+ *
+ * Deterministic regex + set logic. Phase 8 replaces with a distilled
+ * LM once we have real call data to train on.
+ */
+
+const STRONG_CUES = [
+	"scratch that",
+	"let me correct",
+	"my mistake",
+	"my bad",
+	"no wait",
+	"no actually",
+	"actually no",
+	"sorry no",
+	"wait no",
+	"no i mean",
+	"i mean",
+	"i meant",
+	"correction",
+	"actually",
+	"sorry",
+	"actual",
+	"actualy",
+]
+
+// Standalone "no" separated from surrounding words by punctuation or a
+// pause marker (…). We do NOT match "no" as a full word in general —
+// too many false positives ("no problem", "no one is home").
+const CUE_PATTERN = new RegExp(
+	`(?:^|[\\s,.\\-—])(${STRONG_CUES.map((c) => c.replace(/\s+/g, "\\s+"))
+		.sort((a, b) => b.length - a.length)
+		.join("|")})(?=\\b)|(?:^|[\\s])no[\\s]*[,.\\-—…]+`,
+	"gi",
+)
+
+const BARE_NUMBER = /^\s*\d+\s*$/
+const BARE_EMAIL =
+	/^\s*[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\s*[.!]?\s*$/
+const BARE_PHONE = /^\s*\+?\d[\d\s\-()]{5,}\s*$/
+
+const CONTENT_ANCHORS = [
+	"address",
+	"live",
+	"living",
+	"stay",
+	"staying",
+	"house",
+	"home",
+	"flat",
+	"apartment",
+	"room",
+	"floor",
+	"unit",
+	"number",
+	"phone",
+	"mobile",
+	"contact",
+	"email",
+	"name",
+	"extension",
+	"company",
+	"office",
+	"work",
+	"city",
+	"pincode",
+	"zip",
+]
+
+const STOPWORDS = new Set([
+	"the",
+	"a",
+	"an",
+	"and",
+	"or",
+	"but",
+	"is",
+	"it",
+	"in",
+	"to",
+	"of",
+	"for",
+	"on",
+	"at",
+	"by",
+	"with",
+	"i",
+	"my",
+	"our",
+	"we",
+	"they",
+	"them",
+	"this",
+	"that",
+	"was",
+	"are",
+	"were",
+	"be",
+	"do",
+	"does",
+	"did",
+	"have",
+	"has",
+	"had",
+	"will",
+	"would",
+])
+
+export interface Correction {
+	kind: "replace" | "patch"
+	retracted: string
+	kept: string
+}
+
+export interface SelfCorrectionResult {
+	text: string
+	corrections: Correction[]
+	segments: string[]
+}
+
+export function applySelfCorrection(input: string): SelfCorrectionResult {
+	const trimmed = input.trim()
+	if (!trimmed) return { text: "", corrections: [], segments: [] }
+
+	const rawSegments = splitOnCues(trimmed)
+	if (rawSegments.length <= 1) {
+		return { text: trimmed, corrections: [], segments: rawSegments }
+	}
+
+	// Second pass: some segments carry two ideas separated by "and" —
+	// split them so slot-patches don't accidentally eat the second idea.
+	const segments: string[] = []
+	for (const seg of rawSegments) {
+		for (const s of splitOnAnd(seg)) if (s) segments.push(s)
+	}
+
+	const corrections: Correction[] = []
+	const kept: string[] = []
+
+	for (let i = 0; i < segments.length; i++) {
+		const current = segments[i]!
+		if (!current) continue
+
+		// Bare value → slot-patch the immediately-prior segment.
+		const patched = tryPatch(kept[kept.length - 1], current)
+		if (patched) {
+			corrections.push({
+				kind: "patch",
+				retracted: kept[kept.length - 1]!,
+				kept: patched,
+			})
+			kept[kept.length - 1] = patched
+			continue
+		}
+
+		// If there IS a prior segment and this one shares an anchor with
+		// it — same conceptual slot — replace the prior wholesale.
+		if (
+			kept.length > 0 &&
+			sharesAnchorOrEntity(kept[kept.length - 1]!, current, segments.length)
+		) {
+			corrections.push({
+				kind: "replace",
+				retracted: kept[kept.length - 1]!,
+				kept: current,
+			})
+			kept[kept.length - 1] = current
+			continue
+		}
+
+		kept.push(current)
+	}
+
+	return {
+		text: kept.join(", "),
+		corrections,
+		segments,
+	}
+}
+
+function splitOnCues(text: string): string[] {
+	const out: string[] = []
+	let last = 0
+	for (const match of text.matchAll(CUE_PATTERN)) {
+		if (match.index === undefined) continue
+		const before = text.slice(last, match.index)
+		if (before.trim()) out.push(cleanEdges(before))
+		last = match.index + match[0].length
+	}
+	const tail = text.slice(last)
+	if (tail.trim()) out.push(cleanEdges(tail))
+	return out.filter(Boolean)
+}
+
+function splitOnAnd(segment: string): string[] {
+	// Split on ". and" or "; and" but not just plain " and "
+	// (too many false positives inside a single content phrase).
+	return segment
+		.split(/[.;]\s+and\s+/i)
+		.map(cleanEdges)
+		.filter(Boolean)
+}
+
+function cleanEdges(text: string): string {
+	return text
+		.trim()
+		.replace(/^[,.\s—\-…]+/, "")
+		.replace(/[,.\s—\-…]+$/, "")
+		.trim()
+}
+
+function tryPatch(prior: string | undefined, current: string): string | null {
+	if (!prior) return null
+	if (BARE_NUMBER.test(current)) {
+		const value = current.trim()
+		return replaceLastToken(prior, /\b\d+\b/g, value)
+	}
+	if (BARE_EMAIL.test(current)) {
+		const value = current.trim().replace(/[.!]$/, "")
+		const patched = replaceLastToken(
+			prior,
+			/\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b/g,
+			value,
+		)
+		return patched
+	}
+	if (BARE_PHONE.test(current) && /\d/.test(prior)) {
+		const value = current.trim()
+		return replaceLastToken(prior, /\+?\d[\d\s\-()]{5,}/g, value)
+	}
+	return null
+}
+
+function replaceLastToken(
+	haystack: string,
+	pattern: RegExp,
+	replacement: string,
+): string | null {
+	const matches = Array.from(haystack.matchAll(pattern))
+	if (matches.length === 0) return null
+	const last = matches[matches.length - 1]!
+	const start = last.index ?? 0
+	return (
+		haystack.slice(0, start) +
+		replacement +
+		haystack.slice(start + last[0].length)
+	)
+}
+
+function sharesAnchorOrEntity(
+	prev: string,
+	next: string,
+	totalSegments: number,
+): boolean {
+	const pLower = prev.toLowerCase()
+	const nLower = next.toLowerCase()
+	for (const a of CONTENT_ANCHORS) {
+		if (pLower.includes(a) && nLower.includes(a)) return true
+	}
+
+	const pw = new Set(contentWords(prev))
+	const nw = new Set(contentWords(next))
+	for (const w of nw) if (pw.has(w)) return true
+
+	// Aggressive fallback: when the turn only has two segments and there
+	// was a retract cue between them, the caller is almost always
+	// correcting themselves. Prefer the later.
+	return totalSegments === 2
+}
+
+function contentWords(text: string): string[] {
+	return text
+		.toLowerCase()
+		.split(/[^\p{L}\p{N}]+/u)
+		.filter((w) => w.length >= 3 && !STOPWORDS.has(w))
+}

@@ -1,0 +1,113 @@
+---
+title: REST API
+description: One endpoint per operation. Bring your key, get your memory.
+section: SDK
+order: 2
+---
+
+The REST API is the wire format the TypeScript SDK speaks. Use it directly from any language that can make HTTPS requests — Python, Rust, Go, or a bash script.
+
+## Base URL
+
+- **Sandbox** — `http://localhost:8787` (started with `bun run try`)
+- **Hosted** — `https://api.smaran.dev` (coming soon; use self-host in the meantime)
+
+Every request must include an `Authorization: Bearer <api-key>` header. The sandbox accepts `sk_local_dev`; the hosted API uses tenant-scoped keys.
+
+## POST /v1/memories
+
+One-shot save. Runs the full normalizer + self-correction pipeline and commits.
+
+**Request**
+
+```json
+{
+  "text": "confirm my order — one two three four, actually four three two one",
+  "sessionId": "sess_abc",
+  "userId": "u_alice",
+  "source": "voice",
+  "metadata": { "channel": "phone" }
+}
+```
+
+**Response**
+
+```json
+{
+  "saved": true,
+  "memoryId": "mem_01H...",
+  "text": "confirm my order four three two one",
+  "corrections": [
+    { "kind": "replace", "retracted": "one two three four", "kept": "four three two one" }
+  ],
+  "latency_ms": 1.8
+}
+```
+
+## POST /v1/recall
+
+Semantic recall over a session's stored memories.
+
+**Request**
+
+```json
+{
+  "query": "what did the caller confirm",
+  "sessionId": "sess_abc",
+  "topK": 5,
+  "includeCrossSession": false
+}
+```
+
+**Response**
+
+```json
+{
+  "hits": [
+    {
+      "memory": {
+        "id": "mem_01H...",
+        "text": "confirm my order four three two one",
+        "sessionId": "sess_abc",
+        "createdAt": "2026-08-29T14:30:00Z"
+      },
+      "score": 0.91
+    }
+  ],
+  "latency_ms": 0.9
+}
+```
+
+## POST /v1/ingest/partial
+
+Streaming ingestion during a live voice turn. Overwrites the working buffer.
+
+```json
+{ "sessionId": "sess_abc", "text": "confirm my order — one two three four" }
+```
+
+Returns `204 No Content`. Call as often as the ASR ships partials.
+
+## POST /v1/ingest/commit
+
+Freezes the buffer, runs self-correction, writes to storage. Exactly once per turn.
+
+```json
+{ "sessionId": "sess_abc", "userId": "u_alice", "source": "voice" }
+```
+
+Response is the same shape as `POST /v1/memories`.
+
+## Error codes
+
+| Status | Meaning |
+|---|---|
+| `401` | Missing or invalid `Authorization` header |
+| `403` | Key doesn't belong to the tenant that owns this session |
+| `422` | Body failed schema validation (Zod error is included in `detail`) |
+| `429` | Rate limited — check `Retry-After` |
+| `500` | Server error — please report at github.com/Ayushpani/smaran/issues |
+
+<Callout tone="info" title="Idempotency">
+Include an `Idempotency-Key` header on `/v1/memories` if you're retrying at the network layer — Smaran will collapse duplicate writes for 24 hours.
+</Callout>

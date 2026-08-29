@@ -1,0 +1,16 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "smaran-edge-recall",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-08-01",
+	"observability": { "enabled": true },
+	"kv_namespaces": [
+		{
+			"binding": "HOT_CACHE",
+			"id": "REPLACE_WITH_KV_ID"
+		}
+	],
+	"vars": {
+		"ORIGIN_URL": "https://api.smaran.ai"
+	}
+}
