@@ -27,7 +27,7 @@ from pathlib import Path
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("audio", type=Path)
-    parser.add_argument("--model", default="Audio8/Audio8-ASR-0.1B")
+    parser.add_argument("--model", default="openai/whisper-tiny")
     parser.add_argument("--chunks", action="store_true")
     parser.add_argument("--chunk-ms", type=int, default=500)
     parser.add_argument("--json", action="store_true", help="Emit structured JSON.")
@@ -53,6 +53,7 @@ def main() -> int:
         "automatic-speech-recognition",
         model=args.model,
         device="cpu",
+        trust_remote_code=True,
     )
     load_ms = int((time.perf_counter() - t_load_start) * 1000)
     print(f"loaded {args.model} in {load_ms}ms", file=sys.stderr)
