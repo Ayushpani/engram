@@ -58,10 +58,20 @@ def main() -> int:
     load_ms = int((time.perf_counter() - t_load_start) * 1000)
     print(f"loaded {args.model} in {load_ms}ms", file=sys.stderr)
 
+    # Decode audio in-process with librosa (16kHz mono ndarray) so we
+    # don't need ffmpeg on PATH — HF pipeline's default loader shells
+    # out to ffmpeg, which isn't installed on stock Windows/macOS.
+    try:
+        import librosa
+    except ImportError:
+        print("error: librosa not installed. pip install 'librosa>=0.10'", file=sys.stderr)
+        return 1
+    audio_array, _ = librosa.load(str(args.audio), sr=16000, mono=True)
+
     if args.chunks:
         t0 = time.perf_counter()
         result = asr(
-            str(args.audio),
+            audio_array,
             return_timestamps="word",
             chunk_length_s=args.chunk_ms / 1000.0,
         )
@@ -75,7 +85,7 @@ def main() -> int:
         return 0
 
     t0 = time.perf_counter()
-    result = asr(str(args.audio))
+    result = asr(audio_array)
     elapsed = int((time.perf_counter() - t0) * 1000)
     text = (result.get("text") or "").strip()
     if args.json:
