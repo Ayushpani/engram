@@ -201,30 +201,27 @@ export default function Landing() {
 			const total = story.offsetHeight - innerHeight
 			if (total <= 0) return
 			const p = clamp(-story.getBoundingClientRect().top / total)
-			// Compressed timeline: all reveals finished by p=0.55, then the
-			// completed tableau holds visible until end. Prevents the empty
-			// half-scrolled state that made the section feel like a blank room.
-			let j = 0
-			stWords.forEach((w, i) => {
+			// New pacing — whole line fades in as ONE motion (no per-word
+			// cascade that read as "letters being cut"), then the strike and
+			// correction fire in one clean gesture.
+			const lineIn = clamp((p - 0.05) / 0.15)
+			stWords.forEach((w) => {
 				const k = w.getAttribute("data-k")
 				if (k === "say" || k === "ret") {
-					const a = clamp((p - (0.02 + i * 0.018)) / 0.05)
-					w.style.opacity = String(a)
-					w.style.transform = `translateY(${(1 - a) * 0.5}em)`
+					w.style.opacity = String(lineIn)
+					w.style.transform = `translateY(${(1 - lineIn) * 0.4}em)`
 					if (k === "ret") {
 						const stk = w.querySelector<HTMLElement>(".stk")
-						if (stk)
-							stk.style.transform = `scaleX(${clamp((p - (0.28 + j * 0.018)) / 0.05)})`
-						j++
+						if (stk) stk.style.transform = `scaleX(${clamp((p - 0.3) / 0.08)})`
 					}
 				} else if (k === "cue") {
-					const c = clamp((p - 0.38) / 0.05)
+					const c = clamp((p - 0.36) / 0.05)
 					w.style.opacity = String(c)
-					w.style.transform = `translateY(${(1 - c) * 0.45}em)`
+					w.style.transform = `translateY(${(1 - c) * 0.4}em)`
 				} else if (k === "fix") {
-					const f = clamp((p - 0.44) / 0.06)
+					const f = clamp((p - 0.42) / 0.06)
 					w.style.opacity = String(f)
-					w.style.transform = `scale(${0.86 + f * 0.14}) translateY(${(1 - f) * 0.35}em)`
+					w.style.transform = `scale(${0.9 + f * 0.1}) translateY(${(1 - f) * 0.3}em)`
 				}
 			})
 			const cd = clamp((p - 0.52) / 0.08)
@@ -232,8 +229,8 @@ export default function Landing() {
 				stCard.style.opacity = String(cd)
 				stCard.style.transform = `translateY(${(1 - cd) * 30}px)`
 			}
-			stWave?.classList.toggle("show", p > 0.02 && p < 0.98)
-			const ph = p < 0.28 ? 0 : p < 0.38 ? 1 : p < 0.5 ? 2 : 3
+			stWave?.classList.toggle("show", p > 0.05 && p < 0.98)
+			const ph = p < 0.28 ? 0 : p < 0.36 ? 1 : p < 0.48 ? 2 : 3
 			stPhs.forEach((el) =>
 				el.classList.toggle("on", Number(el.getAttribute("data-p")) === ph),
 			)
@@ -337,20 +334,16 @@ export default function Landing() {
 			}
 		}
 		const SAMPLES = [
-			{ a: "my number is ", w: "98765", c: " — sorry — ", r: "987654321" },
-			{ a: "i live in powai, room ", w: "13", c: " — sorry — ", r: "913" },
-			{
-				a: "mera address hai ",
-				w: "andheri",
-				c: " — actually — ",
-				r: "bandra west",
-			},
+			{ a: "confirm order ", w: "#1234", c: " — sorry — ", r: "#4321" },
+			{ a: "let's meet at ", w: "3pm", c: " — actually — ", r: "3:30pm" },
+			{ a: "reply-to is ", w: "old@ex.com", c: " — wait — ", r: "new@ex.com" },
+			{ a: "deliver to gate ", w: "2", c: " — no, — ", r: "gate 3" },
 		]
 		const SLOTS: [string, string][] = [
-			["user.address", '"Bandra West · Flat 12"'],
-			["user.phone", '"987654321"'],
-			["user.company", '"Acme Corp"'],
-			["user.email", '"new@example.com"'],
+			["order.id", '"ORD-4321"'],
+			["meeting.time", '"15:30 IST"'],
+			["contact.email", '"new@ex.com"'],
+			["delivery.gate", '"3"'],
 		]
 		let slotIdx = 0
 		const addSlot = () => {
@@ -974,34 +967,34 @@ export default function Landing() {
 					</div>
 					<div className="st-t" id="stT">
 						<span className="stw" data-k="say">
-							&ldquo;i
+							&ldquo;confirm
 						</span>{" "}
 						<span className="stw" data-k="say">
-							live
+							my
 						</span>{" "}
 						<span className="stw" data-k="say">
-							in
+							order
 						</span>{" "}
 						<span className="stw" data-k="say">
-							powai,
+							—
 						</span>{" "}
 						<span className="stw" data-k="ret">
 							<i className="stk" />
-							room
+							one
 						</span>{" "}
 						<span className="stw" data-k="ret">
 							<i className="stk" />
-							number
+							two
 						</span>{" "}
 						<span className="stw" data-k="ret">
 							<i className="stk" />
-							13,
+							three four,
 						</span>{" "}
 						<span className="stw cue" data-k="cue">
-							sorry
+							actually
 						</span>{" "}
 						<span className="stw fix" data-k="fix">
-							913
+							four three two one
 						</span>
 						<span className="stw" data-k="say">
 							&rdquo;
@@ -1011,11 +1004,11 @@ export default function Landing() {
 					<div className="st-card" id="stCard">
 						<div className="g">
 							<span className="k">Committed</span>
-							<span className="v vm">address.unit = 913</span>
+							<span className="v vm">order.id = #4321</span>
 						</div>
 						<div className="g">
 							<span className="k">Discarded</span>
-							<span className="v cut">&ldquo;room 13&rdquo;</span>
+							<span className="v cut">&ldquo;#1234&rdquo;</span>
 						</div>
 						<div className="g">
 							<span className="k">Save</span>
@@ -1094,14 +1087,12 @@ export default function Landing() {
 									Voice <em>self-correction.</em>
 								</h3>
 								<p>
-									&ldquo;Room 13… sorry, 913&rdquo; never reaches the graph.
-									Retraction markers rewrite the slot in place — the transcript
-									stays honest, the memory stays clean.
+									“Gate 2, actually gate 3” never reaches the graph. Retraction
+									markers rewrite the slot in place — the transcript stays
+									honest, the memory stays clean.
 								</p>
 							</div>
-							<span className="spec">
-								retract → rewrite → commit · 0 phantoms
-							</span>
+							<span className="spec">ArkASR + Whisper · 0 phantom writes</span>
 						</article>
 						<article className="stkc rv">
 							<span className="num">02 / EDGE</span>
@@ -1115,7 +1106,9 @@ export default function Landing() {
 									datasheet promise.
 								</p>
 							</div>
-							<span className="spec">p50 2.6ms · p99 ~40ms · verified</span>
+							<span className="spec">
+								Rust WASM · in-process cache · CI-measured
+							</span>
 						</article>
 						<article className="stkc rv">
 							<span className="num">03 / UNIVERSAL</span>
@@ -1129,7 +1122,9 @@ export default function Landing() {
 									its brain; Smaran gives it a past.
 								</p>
 							</div>
-							<span className="spec">1 core · 7 adapters · ~5 LOC each</span>
+							<span className="spec">
+								9 runtimes · MCP · Skill · Tool · SDK
+							</span>
 						</article>
 						<article className="stkc rv">
 							<span className="num">04 / INDIC</span>
@@ -1143,8 +1138,58 @@ export default function Landing() {
 									later.
 								</p>
 							</div>
-							<span className="spec">हिंदी + English · DPDP-aligned</span>
+							<span className="spec">
+								हिंदी + English · DPDP · code-switch aware
+							</span>
 						</article>
+					</div>
+				</div>
+			</section>
+
+			{/* under the hood */}
+			<section className="stack-strip">
+				<div className="wrap">
+					<div className="ss-head rv">
+						<div className="eyebrow">Under the hood</div>
+						<h2 className="big">
+							Fast because it's <em>built</em> that way.
+						</h2>
+					</div>
+					<div className="ss-grid">
+						<div className="ss-cell rv d1">
+							<div className="ss-tag">01 · Runtime</div>
+							<div className="ss-t">Rust · WASM</div>
+							<p>
+								Reranker, dedup, and math kernels are Rust compiled to WASM.
+								Runs at the edge, in the browser, and inside your worker with
+								the same binary. Zero cold-start.
+							</p>
+						</div>
+						<div className="ss-cell rv d2">
+							<div className="ss-tag">02 · Store</div>
+							<div className="ss-t">Postgres · pgvector · HNSW</div>
+							<p>
+								Vector search on managed Postgres. HNSW index tunes recall/speed
+								per tenant. No vendor lock-in, no separate vector DB to operate.
+							</p>
+						</div>
+						<div className="ss-cell rv d3">
+							<div className="ss-tag">03 · Edge</div>
+							<div className="ss-t">Cloudflare Workers · KV</div>
+							<p>
+								Hot cache + micro-context injection at 300+ POPs. First byte
+								inside the ISP peering the caller, not across the ocean.
+							</p>
+						</div>
+						<div className="ss-cell rv d4">
+							<div className="ss-tag">04 · Safety</div>
+							<div className="ss-t">DPDP-aligned · SOC 2 ready</div>
+							<p>
+								Tenant isolation at the row level. PII scrub in-process before
+								anything leaves the region. Audit log of every write and every
+								recall.
+							</p>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -1201,62 +1246,62 @@ export default function Landing() {
 					<div className="t-track" id="tTrack">
 						{[
 							{
-								f: "s_powai.wav",
+								f: "order-confirm.wav",
 								b: "Passed",
-								u: "“i live in powai, no actually trikutta towers, room number 13, sorry 913”",
-								del: "room number 13",
-								add: "Trikutta Towers · Unit 913",
+								u: "“confirm my order — one two three four, actually four three two one”",
+								del: "order #1234",
+								add: "order #4321",
 								asr: 1596,
 								sv: 31.7,
 								rc: 6.9,
 							},
 							{
-								f: "s_phone.wav",
+								f: "reschedule.wav",
 								b: "Refined",
-								u: "“my phone is 98765, wait no, 987654321”",
-								del: "98765",
-								add: "987654321",
+								u: "“let's meet at three pm — sorry — three-thirty pm”",
+								del: "meeting 3:00pm",
+								add: "meeting 3:30pm",
 								asr: 1941,
 								sv: 13.9,
 								rc: 2.2,
 							},
 							{
-								f: "s_name.wav",
+								f: "contact-update.wav",
 								b: "Refined",
-								u: "“my name is Ayush, sorry Ayushpani”",
-								del: "Ayush",
-								add: "Ayushpani",
+								u: "“reply-to is old at ex, wait, new at ex",
+								del: "old@ex.com",
+								add: "new@ex.com",
 								asr: 1269,
 								sv: 11.2,
 								rc: 3.0,
 							},
 							{
-								f: "s_multi.wav",
+								f: "support-ticket.wav",
 								b: "Passed",
-								u: "“my email is old@example. actually new@example. extension 42”",
-								del: "old@example",
-								add: "new@example · ext 42",
+								u: "“ticket ID is A-four-five-nine, wait, A-four-nine-five”",
+								del: "ticket A-459",
+								add: "ticket A-495",
 								asr: 1373,
 								sv: 8.7,
 								rc: 1.5,
 							},
 							{
-								f: "s_hinglish.wav",
+								f: "hindi-code-switch.wav",
 								b: "Hindi + Eng",
 								hin: true,
-								u: "“mera address hai andheri, actually bandra west, flat 21, no 12”",
-								del: "andheri · flat 21",
-								add: "Bandra West · Flat 12",
+								u: "“delivery bhejo gate two par, actually gate three”",
+								del: "gate 2",
+								add: "gate 3",
 								asr: 1378,
 								sv: 10.7,
 								rc: 3.1,
 							},
 							{
-								f: "s_refine.wav",
+								f: "progressive-refine.wav",
 								b: "Refined",
-								u: "“my company is Acme Corporation Private Limited actually”",
-								del: "(no prior value)",
-								add: "Acme Corporation Pvt Ltd",
+								u: "“account owner is Acme, Acme Corp Private Limited actually”",
+								del: "Acme",
+								add: "Acme Corp Pvt Ltd",
 								asr: 1143,
 								sv: 8.3,
 								rc: 2.6,

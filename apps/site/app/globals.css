@@ -33,10 +33,11 @@ html {
 	font-family: var(--sans);
 	font-size: 16px;
 	-webkit-font-smoothing: antialiased;
-	overflow-x: hidden;
+	/* NOTE: no overflow-x: hidden here — it kills position: sticky in
+	   Chrome/Firefox. Horizontal overflow is contained per-section
+	   (.hero, .marquee-section, .tape, etc.) instead. */
 }
 body {
-	overflow-x: hidden;
 	line-height: 1.5;
 }
 @media (pointer: fine) {
@@ -1348,6 +1349,61 @@ h2.big em {
 	}
 	.stkc .spec {
 		justify-self: start;
+	}
+}
+
+/* stack strip — under the hood */
+.stack-strip {
+	padding: 90px 0;
+	border-top: 1px solid var(--line);
+}
+.ss-head {
+	margin-bottom: 56px;
+	max-width: 640px;
+}
+.ss-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 1px;
+	background: var(--line);
+	border: 1px solid var(--line);
+	border-radius: 16px;
+	overflow: hidden;
+}
+.ss-cell {
+	background: var(--paper);
+	padding: 34px 28px;
+}
+.ss-tag {
+	font-family: var(--mono);
+	font-size: 10.5px;
+	letter-spacing: 0.2em;
+	color: var(--primary-dim);
+	text-transform: uppercase;
+	margin-bottom: 20px;
+}
+.ss-t {
+	font-family: var(--disp);
+	font-weight: 400;
+	font-size: 24px;
+	letter-spacing: -0.01em;
+	line-height: 1.15;
+	margin-bottom: 12px;
+	color: var(--ink);
+}
+.ss-cell p {
+	font-size: 14px;
+	line-height: 1.6;
+	color: var(--ink2);
+}
+@media (max-width: 900px) {
+	.ss-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+@media (max-width: 560px) {
+	.ss-grid {
+		grid-template-columns: 1fr;
 	}
 }
 
