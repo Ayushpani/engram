@@ -79,7 +79,7 @@ export default function Landing() {
 					const t0 = performance.now()
 					const tick = (t: number) => {
 						const p = clamp((t - t0) / 1400)
-						const v = target * (1 - Math.pow(2, -10 * p))
+						const v = target * (1 - 2 ** (-10 * p))
 						el.textContent = v.toFixed(dec)
 						if (p < 1) requestAnimationFrame(tick)
 						else el.textContent = target.toFixed(dec)
@@ -103,8 +103,7 @@ export default function Landing() {
 		if (RM) heroIn()
 		else {
 			const go = () => setTimeout(heroIn, 100)
-			if ((document as any).fonts?.ready)
-				(document as any).fonts.ready.then(go)
+			if ((document as any).fonts?.ready) (document as any).fonts.ready.then(go)
 			else go()
 		}
 
@@ -135,7 +134,14 @@ export default function Landing() {
 		const recTime = $<HTMLElement>("#recTime")
 		const railDots = $$<HTMLButtonElement>(".rail-dot")
 		const railLab = $<HTMLElement>("#railLab")
-		const sections = ["#hero", "#problem", "#story", "#caps", "#samples", "#code"]
+		const sections = [
+			"#hero",
+			"#problem",
+			"#story",
+			"#caps",
+			"#samples",
+			"#code",
+		]
 			.map((s) => $<HTMLElement>(s))
 			.filter(Boolean) as HTMLElement[]
 		let activeIdx = 0
@@ -259,10 +265,7 @@ export default function Landing() {
 				}
 				const nt = next.getBoundingClientRect().top
 				const stick = 96 + i * 22
-				stackCards[i].classList.toggle(
-					"under",
-					nt < innerHeight * 0.16 + stick,
-				)
+				stackCards[i].classList.toggle("under", nt < innerHeight * 0.16 + stick)
 			}
 		}
 
@@ -333,7 +336,12 @@ export default function Landing() {
 		const SAMPLES = [
 			{ a: "my number is ", w: "98765", c: " — sorry — ", r: "987654321" },
 			{ a: "i live in powai, room ", w: "13", c: " — sorry — ", r: "913" },
-			{ a: "mera address hai ", w: "andheri", c: " — actually — ", r: "bandra west" },
+			{
+				a: "mera address hai ",
+				w: "andheri",
+				c: " — actually — ",
+				r: "bandra west",
+			},
 		]
 		const SLOTS: [string, string][] = [
 			["user.address", '"Bandra West · Flat 12"'],
@@ -438,7 +446,7 @@ export default function Landing() {
 			if (!ctx) return
 			ctx.clearRect(0, 0, cvW, cvH)
 			const inBand = M.y > cvTop - scrollY && M.y < cvTop - scrollY + cvH
-			const pulse = RM ? -9999 : (t * 0.05) % (cvW + 200) - 100
+			const pulse = RM ? -9999 : ((t * 0.05) % (cvW + 200)) - 100
 			const mid = cvH * 0.55
 			for (let i = 0; i < n; i++) {
 				const x = i * 8 + 2
@@ -449,7 +457,9 @@ export default function Landing() {
 				let amp = 0
 				if (inBand) {
 					const d = x - M.x
-					amp += Math.exp(-(d * d) / (2 * 85 * 85)) * (8 + Math.min(M.spd * 0.55, 46))
+					amp +=
+						Math.exp(-(d * d) / (2 * 85 * 85)) *
+						(8 + Math.min(M.spd * 0.55, 46))
 				}
 				const pd = x - pulse
 				amp += Math.exp(-(pd * pd) / (2 * 60 * 60)) * 13
@@ -496,8 +506,7 @@ export default function Landing() {
 			gy += (ny - gy) * 0.05
 			if (heroGhost)
 				heroGhost.style.transform = `translate(${gx * -26}px,${gy * -18}px)`
-			if (heroH1)
-				heroH1.style.transform = `translate(${gx * 10}px,${gy * 8}px)`
+			if (heroH1) heroH1.style.transform = `translate(${gx * 10}px,${gy * 8}px)`
 		}
 
 		// magnet buttons
@@ -626,61 +635,174 @@ export default function Landing() {
 			<aside className="rail" aria-hidden>
 				<div className="rail-track" id="railTrack">
 					<div className="rail-fill" id="railFill" />
-					<button className="rail-dot" style={{ top: "2%" }} data-t="#hero" data-l="start" />
-					<button className="rail-dot" style={{ top: "22%" }} data-t="#problem" data-l="the 500ms problem" />
-					<button className="rail-dot" style={{ top: "42%" }} data-t="#story" data-l="live demo" />
-					<button className="rail-dot" style={{ top: "60%" }} data-t="#caps" data-l="capabilities" />
-					<button className="rail-dot" style={{ top: "78%" }} data-t="#samples" data-l="the tape" />
-					<button className="rail-dot" style={{ top: "94%" }} data-t="#code" data-l="adapters" />
+					<button
+						className="rail-dot"
+						style={{ top: "2%" }}
+						data-t="#hero"
+						data-l="start"
+					/>
+					<button
+						className="rail-dot"
+						style={{ top: "22%" }}
+						data-t="#problem"
+						data-l="the 500ms problem"
+					/>
+					<button
+						className="rail-dot"
+						style={{ top: "42%" }}
+						data-t="#story"
+						data-l="live demo"
+					/>
+					<button
+						className="rail-dot"
+						style={{ top: "60%" }}
+						data-t="#caps"
+						data-l="capabilities"
+					/>
+					<button
+						className="rail-dot"
+						style={{ top: "78%" }}
+						data-t="#samples"
+						data-l="the tape"
+					/>
+					<button
+						className="rail-dot"
+						style={{ top: "94%" }}
+						data-t="#code"
+						data-l="adapters"
+					/>
 				</div>
 				<span className="rail-lab" id="railLab" />
 			</aside>
-			<div className="rec"><i />REC <span id="recTime">00:00:00</span></div>
+			<div className="rec">
+				<i />
+				REC <span id="recTime">00:00:00</span>
+			</div>
 
 			<nav className="nav" id="nav">
-				<a href="#hero" className="brand">Smaran <i>स्मरण</i></a>
+				<a href="#hero" className="brand">
+					Smaran <i>स्मरण</i>
+				</a>
 				<ul className="nlinks">
-					<li><a href="#problem" className="nlink">Problem</a></li>
-					<li><a href="#story" className="nlink">Demo</a></li>
-					<li><a href="#caps" className="nlink">Capabilities</a></li>
-					<li><a href="#samples" className="nlink">The Tape</a></li>
-					<li><a href="#code" className="nlink">Adapters</a></li>
+					<li>
+						<a href="#problem" className="nlink">
+							Problem
+						</a>
+					</li>
+					<li>
+						<a href="#story" className="nlink">
+							Demo
+						</a>
+					</li>
+					<li>
+						<a href="#caps" className="nlink">
+							Capabilities
+						</a>
+					</li>
+					<li>
+						<a href="#samples" className="nlink">
+							The Tape
+						</a>
+					</li>
+					<li>
+						<a href="#code" className="nlink">
+							Adapters
+						</a>
+					</li>
 				</ul>
-				<a href="https://github.com/Ayushpani/smaran" target="_blank" rel="noopener" className="ncta" data-hover data-label="REPO">GitHub →</a>
+				<a
+					href="https://github.com/Ayushpani/smaran"
+					target="_blank"
+					rel="noopener"
+					className="ncta"
+					data-hover
+					data-label="REPO"
+				>
+					GitHub →
+				</a>
 			</nav>
 
 			{/* HERO */}
 			<header className="hero" id="hero">
-				<div className="hero-ghost" id="heroGhost">स्मरण</div>
+				<div className="hero-ghost" id="heroGhost">
+					स्मरण
+				</div>
 				<div className="wrap hero-grid">
 					<div>
-						<div className="hero-kicker rv"><span className="kick-rule" /><b>Smaran</b>· voice-native memory · Hindi + English</div>
+						<div className="hero-kicker rv">
+							<span className="kick-rule" />
+							<b>Smaran</b>· voice-native memory · Hindi + English
+						</div>
 						<h1 id="heroH1">
-							<span className="hline"><span className="hw" style={{ ["--d" as any]: ".05s" }}>Said</span> <span className="hw" style={{ ["--d" as any]: ".14s" }}>once,</span></span>
-							<span className="hline"><span className="hw" style={{ ["--d" as any]: ".23s" }}>remembered</span></span>
+							<span className="hline">
+								<span className="hw" style={{ ["--d" as any]: ".05s" }}>
+									Said
+								</span>{" "}
+								<span className="hw" style={{ ["--d" as any]: ".14s" }}>
+									once,
+								</span>
+							</span>
+							<span className="hline">
+								<span className="hw" style={{ ["--d" as any]: ".23s" }}>
+									remembered
+								</span>
+							</span>
 							<span className="hline">
 								<span className="hw emw" style={{ ["--d" as any]: ".34s" }}>
 									<em>always.</em>
-									<svg className="scrib" viewBox="0 0 320 100" preserveAspectRatio="none">
-										<path id="scribP" d="M10 62 C 58 16, 244 8, 294 40 C 320 60, 176 94, 66 84 C 16 79, 12 56, 82 44" />
+									<svg
+										className="scrib"
+										viewBox="0 0 320 100"
+										preserveAspectRatio="none"
+									>
+										<path
+											id="scribP"
+											d="M10 62 C 58 16, 244 8, 294 40 C 320 60, 176 94, 66 84 C 16 79, 12 56, 82 44"
+										/>
 									</svg>
 								</span>
 							</span>
 						</h1>
-						<p className="hero-sub rv" data-d=".45s">Smaran hears the way people actually talk — the stumbles, the take-backs, the Hinglish — commits only what&apos;s true, and recalls it in <b>2.6&nbsp;ms</b>.</p>
+						<p className="hero-sub rv" data-d=".45s">
+							Smaran hears the way people actually talk — the stumbles, the
+							take-backs, the Hinglish — commits only what&apos;s true, and
+							recalls it in <b>2.6&nbsp;ms</b>.
+						</p>
 						<div className="hero-btns rv" data-d=".55s">
-							<a href="#story" className="btn btn-dark magnet" data-hover>Hear it work</a>
-							<a href="https://github.com/Ayushpani/smaran" target="_blank" rel="noopener" className="btn btn-line magnet" data-hover data-label="REPO">GitHub</a>
+							<a href="#story" className="btn btn-dark magnet" data-hover>
+								Hear it work
+							</a>
+							<a
+								href="https://github.com/Ayushpani/smaran"
+								target="_blank"
+								rel="noopener"
+								className="btn btn-line magnet"
+								data-hover
+								data-label="REPO"
+							>
+								GitHub
+							</a>
 						</div>
 					</div>
 
 					<aside className="console rv" data-d=".5s">
-						<div className="con-top"><span className="rd" />MEMORY CONSOLE<span className="clk" id="conClock">00:00.0</span></div>
-						<div className="con-tr" id="conTr"><span id="hlText" /><span className="con-caret" /></div>
+						<div className="con-top">
+							<span className="rd" />
+							MEMORY CONSOLE
+							<span className="clk" id="conClock">
+								00:00.0
+							</span>
+						</div>
+						<div className="con-tr" id="conTr">
+							<span id="hlText" />
+							<span className="con-caret" />
+						</div>
 						<div className="con-slots" id="conSlots" />
 						<div className="con-foot">
 							<div className="con-bars" id="conBars" />
-							<div className="con-lat">recall <b id="conLat">2.6</b>ms</div>
+							<div className="con-lat">
+								recall <b id="conLat">2.6</b>ms
+							</div>
 						</div>
 					</aside>
 				</div>
@@ -688,21 +810,81 @@ export default function Landing() {
 				<div className="strip">
 					<div className="wrap strip-in">
 						<span className="stamp">Verified · CI</span>
-						<div className="stat"><b>Save p50</b><strong><span data-count="10.7" data-dec="1">0</span><u>ms</u></strong></div>
-						<div className="stat g"><b>Recall p50</b><strong><span data-count="2.6" data-dec="1">0</span><u>ms</u></strong></div>
-						<div className="stat"><b>Edge rerank</b><strong><span data-count="42" data-dec="0">0</span><u>ms</u></strong></div>
-						<div className="stat v"><b>WASM dedup</b><strong>&lt;<span data-count="0.5" data-dec="1">0</span><u>ms</u></strong></div>
-						<div className="stat" style={{ borderRight: 0 }}><b>whisper-tiny → smaran</b><strong style={{ fontFamily: "var(--mono)", fontSize: "12px", color: "var(--mut)", fontWeight: 400 }}>measured on every commit</strong></div>
+						<div className="stat">
+							<b>Save p50</b>
+							<strong>
+								<span data-count="10.7" data-dec="1">
+									0
+								</span>
+								<u>ms</u>
+							</strong>
+						</div>
+						<div className="stat g">
+							<b>Recall p50</b>
+							<strong>
+								<span data-count="2.6" data-dec="1">
+									0
+								</span>
+								<u>ms</u>
+							</strong>
+						</div>
+						<div className="stat">
+							<b>Edge rerank</b>
+							<strong>
+								<span data-count="42" data-dec="0">
+									0
+								</span>
+								<u>ms</u>
+							</strong>
+						</div>
+						<div className="stat v">
+							<b>WASM dedup</b>
+							<strong>
+								&lt;
+								<span data-count="0.5" data-dec="1">
+									0
+								</span>
+								<u>ms</u>
+							</strong>
+						</div>
+						<div className="stat" style={{ borderRight: 0 }}>
+							<b>whisper-tiny → smaran</b>
+							<strong
+								style={{
+									fontFamily: "var(--mono)",
+									fontSize: "12px",
+									color: "var(--mut)",
+									fontWeight: 400,
+								}}
+							>
+								measured on every commit
+							</strong>
+						</div>
 					</div>
 				</div>
 
 				<div className="mq" aria-hidden>
 					<div className="mq-track" id="mqTrack">
 						<div className="mq-set" id="mqSet">
-							{["Vapi", "LiveKit", "Pipecat", "Retell", "Claude", "GPT Realtime", "Gemini Live", "Bland", "Codex"].map((name) => (
-								<span key={name} style={{ display: "inline-flex", alignItems: "center" }}>
+							{[
+								"Vapi",
+								"LiveKit",
+								"Pipecat",
+								"Retell",
+								"Claude",
+								"GPT Realtime",
+								"Gemini Live",
+								"Bland",
+								"Codex",
+							].map((name) => (
+								<span
+									key={name}
+									style={{ display: "inline-flex", alignItems: "center" }}
+								>
 									<span className="mq-item">{name}</span>
-									<svg className="mq-sep" viewBox="0 0 22 14"><path d="M1 7h2M6 3v8M11 1v12M16 4v6M21 7h1" /></svg>
+									<svg className="mq-sep" viewBox="0 0 22 14">
+										<path d="M1 7h2M6 3v8M11 1v12M16 4v6M21 7h1" />
+									</svg>
 								</span>
 							))}
 						</div>
@@ -716,29 +898,66 @@ export default function Landing() {
 					<div className="prob-head">
 						<div className="rv">
 							<div className="eyebrow">01 — The 500ms problem</div>
-							<h2 className="big">Classic RAG breaks on a <em>live call.</em></h2>
+							<h2 className="big">
+								Classic RAG breaks on a <em>live call.</em>
+							</h2>
 						</div>
-						<p className="rv" data-d=".12s">Natural turn-taking needs a full roundtrip under 500ms. Traditional stacks spend most of it just finding what to remember.</p>
+						<p className="rv" data-d=".12s">
+							Natural turn-taking needs a full roundtrip under 500ms.
+							Traditional stacks spend most of it just finding what to remember.
+						</p>
 					</div>
 					<div className="bz rv" data-d=".15s" id="bz">
 						<div className="bz-row lose" id="bzLose">
-							<div className="bz-name"><span>typical voice stack — retrieval alone</span><span className="tot">480ms</span></div>
+							<div className="bz-name">
+								<span>typical voice stack — retrieval alone</span>
+								<span className="tot">480ms</span>
+							</div>
 							<div className="bz-track">
-								<div className="bz-seg s1" style={{ width: "21.3%" }}>ASR<b>160</b></div>
-								<div className="bz-seg s2" style={{ width: "18.7%" }}>pipeline<b>140</b></div>
-								<div className="bz-seg s3" style={{ width: "26.7%" }}>vector RAG<b>180</b></div>
-								<div className="bz-over">→ + LLM + TTS · the caller hears 1.5s of silence</div>
-								<div className="bz-mark"><i /></div>
+								<div className="bz-seg s1" style={{ width: "21.3%" }}>
+									ASR<b>160</b>
+								</div>
+								<div className="bz-seg s2" style={{ width: "18.7%" }}>
+									pipeline<b>140</b>
+								</div>
+								<div className="bz-seg s3" style={{ width: "26.7%" }}>
+									vector RAG<b>180</b>
+								</div>
+								<div className="bz-over">
+									→ + LLM + TTS · the caller hears 1.5s of silence
+								</div>
+								<div className="bz-mark">
+									<i />
+								</div>
 							</div>
 						</div>
 						<div className="bz-row win" id="bzWin">
-							<div className="bz-name"><span>smaran voice layer — full recall, reranked, injected</span><span className="tot">2.6ms</span></div>
-							<div className="bz-track">
-								<div className="bz-seg head" style={{ width: "2.2%", minWidth: 8, background: "var(--moss)" }} />
-								<div className="room">497ms of headroom → natural conversation</div>
-								<div className="bz-mark"><i /></div>
+							<div className="bz-name">
+								<span>
+									smaran voice layer — full recall, reranked, injected
+								</span>
+								<span className="tot">2.6ms</span>
 							</div>
-							<div className="bz-cap">hot cache &lt;1ms · WASM dedup 0.4ms · micro-context &lt;150 tokens</div>
+							<div className="bz-track">
+								<div
+									className="bz-seg head"
+									style={{
+										width: "2.2%",
+										minWidth: 8,
+										background: "var(--moss)",
+									}}
+								/>
+								<div className="room">
+									497ms of headroom → natural conversation
+								</div>
+								<div className="bz-mark">
+									<i />
+								</div>
+							</div>
+							<div className="bz-cap">
+								hot cache &lt;1ms · WASM dedup 0.4ms · micro-context &lt;150
+								tokens
+							</div>
 						</div>
 					</div>
 				</div>
@@ -747,38 +966,105 @@ export default function Landing() {
 			{/* story scrub */}
 			<section className="story" id="story">
 				<div className="story-st">
-					<div className="st-cap"><i />A real speech turn, replayed at scroll speed</div>
+					<div className="st-cap">
+						<i />A real speech turn, replayed at scroll speed
+					</div>
 					<div className="st-t" id="stT">
-						<span className="stw" data-k="say">&ldquo;i</span> <span className="stw" data-k="say">live</span> <span className="stw" data-k="say">in</span> <span className="stw" data-k="say">powai,</span>{" "}
-						<span className="stw" data-k="ret"><i className="stk" />room</span> <span className="stw" data-k="ret"><i className="stk" />number</span> <span className="stw" data-k="ret"><i className="stk" />13,</span>{" "}
-						<span className="stw cue" data-k="cue">sorry</span>{" "}
-						<span className="stw fix" data-k="fix">913</span>
-						<span className="stw" data-k="say">&rdquo;</span>
+						<span className="stw" data-k="say">
+							&ldquo;i
+						</span>{" "}
+						<span className="stw" data-k="say">
+							live
+						</span>{" "}
+						<span className="stw" data-k="say">
+							in
+						</span>{" "}
+						<span className="stw" data-k="say">
+							powai,
+						</span>{" "}
+						<span className="stw" data-k="ret">
+							<i className="stk" />
+							room
+						</span>{" "}
+						<span className="stw" data-k="ret">
+							<i className="stk" />
+							number
+						</span>{" "}
+						<span className="stw" data-k="ret">
+							<i className="stk" />
+							13,
+						</span>{" "}
+						<span className="stw cue" data-k="cue">
+							sorry
+						</span>{" "}
+						<span className="stw fix" data-k="fix">
+							913
+						</span>
+						<span className="stw" data-k="say">
+							&rdquo;
+						</span>
 					</div>
 					<div id="stWave" aria-hidden />
 					<div className="st-card" id="stCard">
-						<div className="g"><span className="k">Committed</span><span className="v vm">address.unit = 913</span></div>
-						<div className="g"><span className="k">Discarded</span><span className="v cut">&ldquo;room 13&rdquo;</span></div>
-						<div className="g"><span className="k">Save</span><span className="v">10.7ms</span></div>
-						<div className="g"><span className="k">Recall</span><span className="v vg">2.6ms</span></div>
+						<div className="g">
+							<span className="k">Committed</span>
+							<span className="v vm">address.unit = 913</span>
+						</div>
+						<div className="g">
+							<span className="k">Discarded</span>
+							<span className="v cut">&ldquo;room 13&rdquo;</span>
+						</div>
+						<div className="g">
+							<span className="k">Save</span>
+							<span className="v">10.7ms</span>
+						</div>
+						<div className="g">
+							<span className="k">Recall</span>
+							<span className="v vg">2.6ms</span>
+						</div>
 					</div>
 					<div className="st-rail" id="stRail">
-						<span className="st-ph" data-p="0"><i />Hear</span><span className="st-dash" />
-						<span className="st-ph" data-p="1"><i />Stumble</span><span className="st-dash" />
-						<span className="st-ph" data-p="2"><i />Correct</span><span className="st-dash" />
-						<span className="st-ph" data-p="3"><i />Remember</span>
+						<span className="st-ph" data-p="0">
+							<i />
+							Hear
+						</span>
+						<span className="st-dash" />
+						<span className="st-ph" data-p="1">
+							<i />
+							Stumble
+						</span>
+						<span className="st-dash" />
+						<span className="st-ph" data-p="2">
+							<i />
+							Correct
+						</span>
+						<span className="st-dash" />
+						<span className="st-ph" data-p="3">
+							<i />
+							Remember
+						</span>
 					</div>
 				</div>
 			</section>
 
 			{/* definition */}
 			<section className="def">
-				<div className="def-big" id="defBig">स्मरण</div>
+				<div className="def-big" id="defBig">
+					स्मरण
+				</div>
 				<div className="def-entry">
-					<div className="def-w rv"><b>smaran</b><i>स्मरण</i><span>/ sməˈrʌn / · noun · Sanskrit</span></div>
+					<div className="def-w rv">
+						<b>smaran</b>
+						<i>स्मरण</i>
+						<span>/ sməˈrʌn / · noun · Sanskrit</span>
+					</div>
 					<div className="def-rule rv" data-d=".08s" />
-					<p className="def-l rv" data-d=".16s"><b>1.</b>the act of remembering; remembrance.</p>
-					<p className="def-l rv" data-d=".26s" style={{ marginTop: 8 }}><b>2.</b>what remains when the speaking stops.</p>
+					<p className="def-l rv" data-d=".16s">
+						<b>1.</b>the act of remembering; remembrance.
+					</p>
+					<p className="def-l rv" data-d=".26s" style={{ marginTop: 8 }}>
+						<b>2.</b>what remains when the speaking stops.
+					</p>
 				</div>
 			</section>
 
@@ -788,33 +1074,72 @@ export default function Landing() {
 					<div className="caps-head">
 						<div className="rv">
 							<div className="eyebrow">02 — Architectural advantages</div>
-							<h2 className="big">Four ideas we got <em>right.</em></h2>
+							<h2 className="big">
+								Four ideas we got <em>right.</em>
+							</h2>
 						</div>
-						<p className="rv" data-d=".12s">Cards file themselves as you scroll — like folders dropped onto a desk. Measured, not marketed.</p>
+						<p className="rv" data-d=".12s">
+							Cards file themselves as you scroll — like folders dropped onto a
+							desk. Measured, not marketed.
+						</p>
 					</div>
 					<div className="stack" id="stack">
 						<article className="stkc rv">
 							<span className="num">01 / RETRACTION</span>
-							<div><h3>Voice <em>self-correction.</em></h3>
-								<p>&ldquo;Room 13… sorry, 913&rdquo; never reaches the graph. Retraction markers rewrite the slot in place — the transcript stays honest, the memory stays clean.</p></div>
-							<span className="spec">retract → rewrite → commit · 0 phantoms</span>
+							<div>
+								<h3>
+									Voice <em>self-correction.</em>
+								</h3>
+								<p>
+									&ldquo;Room 13… sorry, 913&rdquo; never reaches the graph.
+									Retraction markers rewrite the slot in place — the transcript
+									stays honest, the memory stays clean.
+								</p>
+							</div>
+							<span className="spec">
+								retract → rewrite → commit · 0 phantoms
+							</span>
 						</article>
 						<article className="stkc rv">
 							<span className="num">02 / EDGE</span>
-							<div><h3>Sub-3ms <em>hot recall.</em></h3>
-								<p>An in-process cache in front of a Cloudflare cross-encoder reranker. Numbers come from CI runs on every commit — not a datasheet promise.</p></div>
+							<div>
+								<h3>
+									Sub-3ms <em>hot recall.</em>
+								</h3>
+								<p>
+									An in-process cache in front of a Cloudflare cross-encoder
+									reranker. Numbers come from CI runs on every commit — not a
+									datasheet promise.
+								</p>
+							</div>
 							<span className="spec">p50 2.6ms · p99 ~40ms · verified</span>
 						</article>
 						<article className="stkc rv">
 							<span className="num">03 / UNIVERSAL</span>
-							<div><h3>Runs <em>everywhere.</em></h3>
-								<p>Vapi, LiveKit, Pipecat, Claude, GPT, Gemini, Codex — one memory core, one thin adapter per provider. Your agent keeps its brain; Smaran gives it a past.</p></div>
+							<div>
+								<h3>
+									Runs <em>everywhere.</em>
+								</h3>
+								<p>
+									Vapi, LiveKit, Pipecat, Claude, GPT, Gemini, Codex — one
+									memory core, one thin adapter per provider. Your agent keeps
+									its brain; Smaran gives it a past.
+								</p>
+							</div>
 							<span className="spec">1 core · 7 adapters · ~5 LOC each</span>
 						</article>
 						<article className="stkc rv">
 							<span className="num">04 / INDIC</span>
-							<div><h3>Hindi + English <em>native.</em></h3>
-								<p>Romanized Hinglish filler scrubbing, Devanagari detection, and DPDP Act alignment baked in from day one — not bolted on later.</p></div>
+							<div>
+								<h3>
+									Hindi + English <em>native.</em>
+								</h3>
+								<p>
+									Romanized Hinglish filler scrubbing, Devanagari detection, and
+									DPDP Act alignment baked in from day one — not bolted on
+									later.
+								</p>
+							</div>
 							<span className="spec">हिंदी + English · DPDP-aligned</span>
 						</article>
 					</div>
@@ -827,35 +1152,135 @@ export default function Landing() {
 					<div className="tape-head">
 						<div className="rv">
 							<div className="eyebrow">03 — Proof</div>
-							<h2 className="big">Tested on <em>actual</em> speech turns.</h2>
+							<h2 className="big">
+								Tested on <em>actual</em> speech turns.
+							</h2>
 						</div>
-						<div className="rv" data-d=".15s" style={{ display: "flex", gap: 36, alignItems: "flex-end", flexWrap: "wrap" }}>
+						<div
+							className="rv"
+							data-d=".15s"
+							style={{
+								display: "flex",
+								gap: 36,
+								alignItems: "flex-end",
+								flexWrap: "wrap",
+							}}
+						>
 							<div className="transport" aria-hidden>
-								<svg className="reel" viewBox="0 0 34 34"><circle cx="17" cy="17" r="15" /><circle className="hub" cx="17" cy="17" r="4" /><line x1="17" y1="3" x2="17" y2="13" /><line x1="17" y1="21" x2="17" y2="31" /><line x1="3" y1="17" x2="13" y2="17" /><line x1="21" y1="17" x2="31" y2="17" /></svg>
+								<svg className="reel" viewBox="0 0 34 34">
+									<circle cx="17" cy="17" r="15" />
+									<circle className="hub" cx="17" cy="17" r="4" />
+									<line x1="17" y1="3" x2="17" y2="13" />
+									<line x1="17" y1="21" x2="17" y2="31" />
+									<line x1="3" y1="17" x2="13" y2="17" />
+									<line x1="21" y1="17" x2="31" y2="17" />
+								</svg>
 								<div className="tp-line" />
-								<svg className="reel" viewBox="0 0 34 34"><circle cx="17" cy="17" r="15" /><circle className="hub" cx="17" cy="17" r="4" /><line x1="17" y1="3" x2="17" y2="13" /><line x1="17" y1="21" x2="17" y2="31" /><line x1="3" y1="17" x2="13" y2="17" /><line x1="21" y1="17" x2="31" y2="17" /></svg>
+								<svg className="reel" viewBox="0 0 34 34">
+									<circle cx="17" cy="17" r="15" />
+									<circle className="hub" cx="17" cy="17" r="4" />
+									<line x1="17" y1="3" x2="17" y2="13" />
+									<line x1="17" y1="21" x2="17" y2="31" />
+									<line x1="3" y1="17" x2="13" y2="17" />
+									<line x1="21" y1="17" x2="31" y2="17" />
+								</svg>
 							</div>
 							<div className="tp-meta">
-								<span className="tp-count"><b id="tpIdx">01</b> / 06</span>
-								<div className="tp-rail"><i id="tpFill" /></div>
+								<span className="tp-count">
+									<b id="tpIdx">01</b> / 06
+								</span>
+								<div className="tp-rail">
+									<i id="tpFill" />
+								</div>
 							</div>
 						</div>
 					</div>
 					<div className="t-track" id="tTrack">
 						{[
-							{ f: "s_powai.wav", b: "Passed", u: "“i live in powai, no actually trikutta towers, room number 13, sorry 913”", del: "room number 13", add: "Trikutta Towers · Unit 913", asr: 1596, sv: 31.7, rc: 6.9 },
-							{ f: "s_phone.wav", b: "Refined", u: "“my phone is 98765, wait no, 987654321”", del: "98765", add: "987654321", asr: 1941, sv: 13.9, rc: 2.2 },
-							{ f: "s_name.wav", b: "Refined", u: "“my name is Ayush, sorry Ayushpani”", del: "Ayush", add: "Ayushpani", asr: 1269, sv: 11.2, rc: 3.0 },
-							{ f: "s_multi.wav", b: "Passed", u: "“my email is old@example. actually new@example. extension 42”", del: "old@example", add: "new@example · ext 42", asr: 1373, sv: 8.7, rc: 1.5 },
-							{ f: "s_hinglish.wav", b: "Hindi + Eng", hin: true, u: "“mera address hai andheri, actually bandra west, flat 21, no 12”", del: "andheri · flat 21", add: "Bandra West · Flat 12", asr: 1378, sv: 10.7, rc: 3.1 },
-							{ f: "s_refine.wav", b: "Refined", u: "“my company is Acme Corporation Private Limited actually”", del: "(no prior value)", add: "Acme Corporation Pvt Ltd", asr: 1143, sv: 8.3, rc: 2.6 },
+							{
+								f: "s_powai.wav",
+								b: "Passed",
+								u: "“i live in powai, no actually trikutta towers, room number 13, sorry 913”",
+								del: "room number 13",
+								add: "Trikutta Towers · Unit 913",
+								asr: 1596,
+								sv: 31.7,
+								rc: 6.9,
+							},
+							{
+								f: "s_phone.wav",
+								b: "Refined",
+								u: "“my phone is 98765, wait no, 987654321”",
+								del: "98765",
+								add: "987654321",
+								asr: 1941,
+								sv: 13.9,
+								rc: 2.2,
+							},
+							{
+								f: "s_name.wav",
+								b: "Refined",
+								u: "“my name is Ayush, sorry Ayushpani”",
+								del: "Ayush",
+								add: "Ayushpani",
+								asr: 1269,
+								sv: 11.2,
+								rc: 3.0,
+							},
+							{
+								f: "s_multi.wav",
+								b: "Passed",
+								u: "“my email is old@example. actually new@example. extension 42”",
+								del: "old@example",
+								add: "new@example · ext 42",
+								asr: 1373,
+								sv: 8.7,
+								rc: 1.5,
+							},
+							{
+								f: "s_hinglish.wav",
+								b: "Hindi + Eng",
+								hin: true,
+								u: "“mera address hai andheri, actually bandra west, flat 21, no 12”",
+								del: "andheri · flat 21",
+								add: "Bandra West · Flat 12",
+								asr: 1378,
+								sv: 10.7,
+								rc: 3.1,
+							},
+							{
+								f: "s_refine.wav",
+								b: "Refined",
+								u: "“my company is Acme Corporation Private Limited actually”",
+								del: "(no prior value)",
+								add: "Acme Corporation Pvt Ltd",
+								asr: 1143,
+								sv: 8.3,
+								rc: 2.6,
+							},
 						].map((s) => (
 							<article key={s.f} className="ac" data-hover>
-								<div className="ac-holes">{Array.from({ length: 8 }, (_, i) => <i key={i} />)}</div>
-								<div className="ac-top"><span className="ac-file">{s.f}</span><span className={`ac-badge${s.hin ? " hin" : ""}`}>{s.b}</span></div>
+								<div className="ac-holes">
+									{Array.from({ length: 8 }, (_, i) => (
+										<i key={i} />
+									))}
+								</div>
+								<div className="ac-top">
+									<span className="ac-file">{s.f}</span>
+									<span className={`ac-badge${s.hin ? " hin" : ""}`}>
+										{s.b}
+									</span>
+								</div>
 								<p className="ac-utt">{s.u}</p>
-								<div className="ac-diff"><div className="ac-del">− {s.del}</div><div className="ac-add">+ {s.add}</div></div>
-								<div className="ac-met"><span>ASR {s.asr}ms</span><span>Save {s.sv}ms</span><b>Recall {s.rc}ms</b></div>
+								<div className="ac-diff">
+									<div className="ac-del">− {s.del}</div>
+									<div className="ac-add">+ {s.add}</div>
+								</div>
+								<div className="ac-met">
+									<span>ASR {s.asr}ms</span>
+									<span>Save {s.sv}ms</span>
+									<b>Recall {s.rc}ms</b>
+								</div>
 							</article>
 						))}
 					</div>
@@ -867,21 +1292,45 @@ export default function Landing() {
 				<div className="wrap code-grid">
 					<div className="code-left rv">
 						<div className="eyebrow">04 — Developer experience</div>
-						<h2 className="big">Five lines. <em>Any platform.</em></h2>
-						<p>One memory core, thin adapters per provider. Pick your stack — the past comes with it.</p>
+						<h2 className="big">
+							Five lines. <em>Any platform.</em>
+						</h2>
+						<p>
+							One memory core, thin adapters per provider. Pick your stack — the
+							past comes with it.
+						</p>
 						<div className="vtabs" id="vtabs">
-							<button className="vtab on" data-p="p-livekit"><i>01</i>LiveKit<span className="arr">→</span></button>
-							<button className="vtab" data-p="p-vapi"><i>02</i>Vapi<span className="arr">→</span></button>
-							<button className="vtab" data-p="p-claude"><i>03</i>Anthropic<span className="arr">→</span></button>
-							<button className="vtab" data-p="p-openai"><i>04</i>OpenAI / Codex<span className="arr">→</span></button>
+							<button className="vtab on" data-p="p-livekit">
+								<i>01</i>LiveKit<span className="arr">→</span>
+							</button>
+							<button className="vtab" data-p="p-vapi">
+								<i>02</i>Vapi<span className="arr">→</span>
+							</button>
+							<button className="vtab" data-p="p-claude">
+								<i>03</i>Anthropic<span className="arr">→</span>
+							</button>
+							<button className="vtab" data-p="p-openai">
+								<i>04</i>OpenAI / Codex<span className="arr">→</span>
+							</button>
 						</div>
 					</div>
 					<div className="code-right rv" data-d=".12s">
 						<div className="cr-top">
-							<span className="cr-file" id="crFile">adapter-livekit.ts</span>
-							<button className="copy" id="copyBtn" data-hover data-label="COPY">Copy</button>
+							<span className="cr-file" id="crFile">
+								adapter-livekit.ts
+							</span>
+							<button
+								className="copy"
+								id="copyBtn"
+								data-hover
+								data-label="COPY"
+							>
+								Copy
+							</button>
 						</div>
-						<div className="cpanel on" id="p-livekit"><pre><code>{`import { LiveKitMemoryAdapter } from "@repo/adapter-livekit";
+						<div className="cpanel on" id="p-livekit">
+							<pre>
+								<code>{`import { LiveKitMemoryAdapter } from "@repo/adapter-livekit";
 import { createMemoryClient } from "@repo/sdk-ts";
 
 const memory = createMemoryClient({ apiKey: process.env.SMARAN_API_KEY });
@@ -891,8 +1340,12 @@ const adapter = new LiveKitMemoryAdapter(memory, { sessionId, userId });
 agent.on("user_speech_committed", async (turn) => {
   const ctx = await adapter.onUserSpeech(turn.text);
   agent.setContextPrefix(ctx);
-});`}</code></pre></div>
-						<div className="cpanel" id="p-vapi"><pre><code>{`import { handleVapiWebhook } from "@repo/adapter-vapi";
+});`}</code>
+							</pre>
+						</div>
+						<div className="cpanel" id="p-vapi">
+							<pre>
+								<code>{`import { handleVapiWebhook } from "@repo/adapter-vapi";
 import { createMemoryClient } from "@repo/sdk-ts";
 
 const smaran = createMemoryClient({ apiKey: process.env.SMARAN_API_KEY });
@@ -900,8 +1353,12 @@ const smaran = createMemoryClient({ apiKey: process.env.SMARAN_API_KEY });
 app.post("/vapi-webhook", async (req, res) => {
   const response = await handleVapiWebhook(smaran, req.body);
   res.json(response);
-});`}</code></pre></div>
-						<div className="cpanel" id="p-claude"><pre><code>{`import { withRecalledContext, memoryTools } from "@repo/adapter-anthropic";
+});`}</code>
+							</pre>
+						</div>
+						<div className="cpanel" id="p-claude">
+							<pre>
+								<code>{`import { withRecalledContext, memoryTools } from "@repo/adapter-anthropic";
 
 const { system, messages } = await withRecalledContext(smaran, {
   system: "You are an empathetic voice assistant.",
@@ -912,15 +1369,21 @@ const res = await anthropic.messages.create({
   model: "claude-sonnet-4",
   system, messages,
   tools: memoryTools(),
-});`}</code></pre></div>
-						<div className="cpanel" id="p-openai"><pre><code>{`import { OpenAIAdapter } from "@repo/adapter-openai";
+});`}</code>
+							</pre>
+						</div>
+						<div className="cpanel" id="p-openai">
+							<pre>
+								<code>{`import { OpenAIAdapter } from "@repo/adapter-openai";
 
 const memory = new OpenAIAdapter(smaran, { userId, sessionId });
 
 const completion = await memory.wrap(openai).chat.completions.create({
   model: "gpt-4o",
   messages: [{ role: "user", content: "Where did I say I moved?" }],
-});`}</code></pre></div>
+});`}</code>
+							</pre>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -928,25 +1391,64 @@ const completion = await memory.wrap(openai).chat.completions.create({
 			{/* cta */}
 			<section className="cta">
 				<div className="wrap">
-					<h2 className="rv">Give your agent<br />a <em>memory.</em></h2>
-					<p className="rv" data-d=".1s">Ship voice-memory to production today. SDK, MCP server, Claude Skill, and hosted API — take your pick.</p>
+					<h2 className="rv">
+						Give your agent
+						<br />a <em>memory.</em>
+					</h2>
+					<p className="rv" data-d=".1s">
+						Ship voice-memory to production today. SDK, MCP server, Claude
+						Skill, and hosted API — take your pick.
+					</p>
 					<div className="cta-btns rv" data-d=".18s">
-						<a href="https://github.com/Ayushpani/smaran" target="_blank" rel="noopener" className="btn btn-dark magnet" data-hover data-label="REPO">Star on GitHub</a>
-						<button className="npm" id="npmBtn" data-hover data-label="COPY">npm i @smaran/sdk</button>
+						<a
+							href="https://github.com/Ayushpani/smaran"
+							target="_blank"
+							rel="noopener"
+							className="btn btn-dark magnet"
+							data-hover
+							data-label="REPO"
+						>
+							Star on GitHub
+						</a>
+						<button className="npm" id="npmBtn" data-hover data-label="COPY">
+							npm i @smaran/sdk
+						</button>
 					</div>
-					<div className="cta-fine rv" data-d=".24s">Made in India · स्मरण</div>
+					<div className="cta-fine rv" data-d=".24s">
+						Made in India · स्मरण
+					</div>
 				</div>
 				<canvas id="ctaWave" />
 			</section>
 
 			<footer className="footer">
 				<div className="wrap foot">
-					<div className="foot-brand">Smaran <i>स्मरण</i></div>
+					<div className="foot-brand">
+						Smaran <i>स्मरण</i>
+					</div>
 					<div className="foot-links">
-						<a href="https://github.com/Ayushpani/smaran" target="_blank" rel="noopener" className="foot-link" data-hover>GitHub</a>
-						<a href="#problem" className="foot-link" data-hover>Benchmarks</a>
-						<a href="#caps" className="foot-link" data-hover>Architecture</a>
-						<a href="mailto:ayushpanigrahi84@gmail.com" className="foot-link" data-hover>Contact</a>
+						<a
+							href="https://github.com/Ayushpani/smaran"
+							target="_blank"
+							rel="noopener"
+							className="foot-link"
+							data-hover
+						>
+							GitHub
+						</a>
+						<a href="#problem" className="foot-link" data-hover>
+							Benchmarks
+						</a>
+						<a href="#caps" className="foot-link" data-hover>
+							Architecture
+						</a>
+						<a
+							href="mailto:ayushpanigrahi84@gmail.com"
+							className="foot-link"
+							data-hover
+						>
+							Contact
+						</a>
 					</div>
 					<div className="foot-c">© 2026 — every word, on the record.</div>
 				</div>
