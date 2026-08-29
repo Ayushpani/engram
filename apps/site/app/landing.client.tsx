@@ -168,7 +168,7 @@ export default function Landing() {
 					if (idx > -1) setDot(idx)
 				}
 			},
-			{ rootMargin: "-40% 0px -40% 0px" },
+			{ rootMargin: "-30% 0px -50% 0px" },
 		)
 		sections.forEach((s) => secIO.observe(s))
 		setDot(0)
@@ -201,36 +201,39 @@ export default function Landing() {
 			const total = story.offsetHeight - innerHeight
 			if (total <= 0) return
 			const p = clamp(-story.getBoundingClientRect().top / total)
+			// Compressed timeline: all reveals finished by p=0.55, then the
+			// completed tableau holds visible until end. Prevents the empty
+			// half-scrolled state that made the section feel like a blank room.
 			let j = 0
 			stWords.forEach((w, i) => {
 				const k = w.getAttribute("data-k")
 				if (k === "say" || k === "ret") {
-					const a = clamp((p - (0.03 + i * 0.03)) / 0.06)
+					const a = clamp((p - (0.02 + i * 0.018)) / 0.05)
 					w.style.opacity = String(a)
 					w.style.transform = `translateY(${(1 - a) * 0.5}em)`
 					if (k === "ret") {
 						const stk = w.querySelector<HTMLElement>(".stk")
 						if (stk)
-							stk.style.transform = `scaleX(${clamp((p - (0.4 + j * 0.025)) / 0.07)})`
+							stk.style.transform = `scaleX(${clamp((p - (0.28 + j * 0.018)) / 0.05)})`
 						j++
 					}
 				} else if (k === "cue") {
-					const c = clamp((p - 0.55) / 0.05)
+					const c = clamp((p - 0.38) / 0.05)
 					w.style.opacity = String(c)
 					w.style.transform = `translateY(${(1 - c) * 0.45}em)`
 				} else if (k === "fix") {
-					const f = clamp((p - 0.6) / 0.06)
+					const f = clamp((p - 0.44) / 0.06)
 					w.style.opacity = String(f)
 					w.style.transform = `scale(${0.86 + f * 0.14}) translateY(${(1 - f) * 0.35}em)`
 				}
 			})
-			const cd = clamp((p - 0.7) / 0.08)
+			const cd = clamp((p - 0.52) / 0.08)
 			if (stCard) {
 				stCard.style.opacity = String(cd)
 				stCard.style.transform = `translateY(${(1 - cd) * 30}px)`
 			}
-			stWave?.classList.toggle("show", p > 0.03 && p < 0.97)
-			const ph = p < 0.4 ? 0 : p < 0.55 ? 1 : p < 0.7 ? 2 : 3
+			stWave?.classList.toggle("show", p > 0.02 && p < 0.98)
+			const ph = p < 0.28 ? 0 : p < 0.38 ? 1 : p < 0.5 ? 2 : 3
 			stPhs.forEach((el) =>
 				el.classList.toggle("on", Number(el.getAttribute("data-p")) === ph),
 			)
