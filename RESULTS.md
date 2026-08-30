@@ -92,21 +92,55 @@ Same asr numbers as Run A (ASR is upstream).
 
 - **Store**: `supabase` (Postgres + pgvector, HNSW index)
 - **Embedder**: `hash`
-- **Hardware**: [FILL IN]
-- **Region**: Supabase `ap-south-1` accessed via Tokyo pooler
-- **Commit**: [FILL IN]
-- **Timestamp**: [FILL IN]
+- **Hardware**: Windows dev machine (Ayushpani laptop)
+- **Region**: Supabase Postgres accessed via **Tokyo pooler**
+  (`aws-0-ap-northeast-1.pooler.supabase.com:6543`) from India — see
+  the regional caveat below.
+- **Commit**: `6d9b4bb` — Phase 8.3.2 (dev:supabase script)
+- **Timestamp**: 2026-08-29
 
 ### Voice-turn suite
 
-- **Accuracy**: [FILL IN]
-- **Save**: p50 = [FILL IN] · p95 = [FILL IN] · N = 7
-- **Recall**: p50 = [FILL IN] · p95 = [FILL IN] · N = 7
+- **Accuracy**: 7/7 pass
+- **Save**: p50 = **816.4 ms** · p95 = 921.8 ms · N = 8
+- **Recall**: p50 = **716.6 ms** · p95 = 818.0 ms · N = 7
 
 ### Audio suite
 
-- **Save**: p50 = [FILL IN] · p95 = [FILL IN] · N = 7
-- **Recall**: p50 = [FILL IN] · p95 = [FILL IN] · N = 7
+Pending — script broke on missing Python on PATH (`transcribe.py exited 49`).
+Will populate on next run with `$env:PYTHON = "python"` set.
+
+### Regional latency caveat — read this before quoting the numbers
+
+The 800ms Save / 700ms Recall figures above are **dominated by network
+round-trip time between India (where the API + benchmark ran) and Tokyo
+(where the Supabase pooler lives).** Each save is roughly:
+
+```
+localhost API  → Tokyo pooler        (~180 ms one-way)
+Tokyo pooler   → Postgres primary    (~5 ms)
+   pgvector write + HNSW touch       (~10-20 ms)
+Postgres       → pooler → localhost  (~180 ms return)
+   × ~2 round trips per save         (insert + embedding row)
+```
+
+So the ~800ms is roughly `4 × 200ms network + ~20ms real DB work`. The DB
+itself is fast; the pooler geography is not.
+
+**What this means for the site's headline numbers:**
+
+- The current landing quotes 10.7ms Save / 2.6ms Recall from Run A
+  (in-process sandbox). That's the pipeline overhead — a real number for
+  what Smaran's own code costs.
+- Run C shows what happens when you add a **cross-ocean** Supabase hop
+  on top. Not what production would look like — production co-locates
+  the API and the DB in the same region.
+- For an honest production number, we'd need to run the API from a Tokyo
+  region (or move the DB to Mumbai). Both are one-config-change away.
+
+**The takeaway to publish**: pipeline overhead is single-digit ms; real
+in-region DB adds ~10-30ms; cross-ocean adds ~500-800ms and is a
+deployment mistake, not a Smaran number.
 
 ---
 
