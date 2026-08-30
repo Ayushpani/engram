@@ -35,14 +35,25 @@ if (isSandbox) {
 	store = createSupabaseStore(db)
 }
 
-const embedder: Embedder =
-	env.EMBEDDER === "openai" && env.OPENAI_API_KEY
-		? createOpenAIEmbedder({
-				apiKey: env.OPENAI_API_KEY,
-				model: env.OPENAI_EMBED_MODEL,
-				baseUrl: env.OPENAI_BASE_URL,
-			})
-		: new HashEmbedder()
+// NOTE: fail loud on misconfigured openai — silent fall-through to
+// HashEmbedder would poison benchmarks (results labelled 'openai' would
+// actually be measuring hash).
+let embedder: Embedder
+if (env.EMBEDDER === "openai") {
+	if (!env.OPENAI_API_KEY) {
+		throw new Error(
+			"EMBEDDER=openai but OPENAI_API_KEY is unset. Provide the key or set EMBEDDER=hash.",
+		)
+	}
+	embedder = createOpenAIEmbedder({
+		apiKey: env.OPENAI_API_KEY,
+		model: env.OPENAI_EMBED_MODEL,
+		baseUrl: env.OPENAI_BASE_URL,
+	})
+} else {
+	embedder = new HashEmbedder()
+}
+const embedderName: "hash" | "openai" = env.EMBEDDER
 
 const core = createCore({
 	store,
@@ -54,7 +65,7 @@ const app = new Hono()
 	.use(logger())
 	.use(cors({ origin: env.CORS_ORIGIN }))
 	.get("/health", (c) =>
-		c.json({ ok: true, store: env.STORE, embedder: env.EMBEDDER }),
+		c.json({ ok: true, store: env.STORE, embedder: embedderName }),
 	)
 	.get("/", (c) =>
 		c.json({
