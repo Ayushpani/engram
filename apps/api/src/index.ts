@@ -137,6 +137,11 @@ function createSandboxResolver() {
 				source: "builtin" as const,
 			}
 		},
+		resolveEmbedder: async (tenantId: string) => ({
+			tenantId,
+			embedder,
+			source: "builtin" as const,
+		}),
 		invalidate: () => {},
 	}
 }

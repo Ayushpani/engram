@@ -1,3 +1,8 @@
+import {
+	createOpenAIEmbedder,
+	HashEmbedder,
+	type Embedder,
+} from "@repo/core"
 import { schema, type Db } from "@repo/db"
 import {
 	createHttpReranker,
@@ -7,16 +12,24 @@ import {
 import { and, desc, eq, isNull, or } from "drizzle-orm"
 
 /**
- * Resolves the reranker (and, once distilled models ship, embedder) each
- * tenant is currently bound to. Falls back to the platform default row
- * (tenant_id NULL) then to the built-in HeuristicReranker when no row
- * exists at all. Result cached in-process per tenant with a short TTL so
- * the hot recall path never round-trips to Postgres for this.
+ * Resolves the reranker AND embedder each tenant is currently bound to
+ * (the model_registry table's `role` enum has always included
+ * "embedder" — resolution for it was simply never implemented). Falls
+ * back to the platform default row (tenant_id NULL) then to a built-in
+ * default when no row exists. Cached in-process per tenant with a short
+ * TTL so the hot save/recall path never round-trips to Postgres for
+ * this.
  */
 
 export interface ResolvedRerankers {
 	tenantId: string
 	reranker: Reranker
+	source: "tenant" | "platform" | "builtin"
+}
+
+export interface ResolvedEmbedder {
+	tenantId: string
+	embedder: Embedder
 	source: "tenant" | "platform" | "builtin"
 }
 
@@ -26,41 +39,59 @@ interface RerankerConfig {
 	apiKey?: string
 }
 
-interface CacheEntry {
-	value: ResolvedRerankers
+interface EmbedderConfig {
+	apiKey?: string
+	model?: string
+	dim?: number
+	baseUrl?: string
+}
+
+interface CacheEntry<T> {
+	value: T
 	expiresAt: number
 }
 
 const TTL_MS = 30_000
 
+async function resolveRow(
+	db: Db,
+	role: "reranker" | "embedder",
+	tenantId: string,
+) {
+	const rows = await db
+		.select()
+		.from(schema.modelRegistry)
+		.where(
+			and(
+				eq(schema.modelRegistry.role, role),
+				or(
+					eq(schema.modelRegistry.tenantId, tenantId),
+					isNull(schema.modelRegistry.tenantId),
+				),
+			),
+		)
+		.orderBy(desc(schema.modelRegistry.tenantId))
+
+	return (
+		rows.find((r) => r.activatedAt !== null && r.tenantId === tenantId) ??
+		rows.find((r) => r.activatedAt !== null && r.tenantId === null)
+	)
+}
+
 export function createModelResolver(db: Db) {
-	const cache = new Map<string, CacheEntry>()
-	const builtIn = new HeuristicReranker()
+	const rerankerCache = new Map<string, CacheEntry<ResolvedRerankers>>()
+	const embedderCache = new Map<string, CacheEntry<ResolvedEmbedder>>()
+	const builtInReranker = new HeuristicReranker()
+	const builtInEmbedder = new HashEmbedder()
 
 	async function resolve(tenantId: string): Promise<ResolvedRerankers> {
 		const now = Date.now()
-		const cached = cache.get(tenantId)
+		const cached = rerankerCache.get(tenantId)
 		if (cached && cached.expiresAt > now) return cached.value
 
-		const rows = await db
-			.select()
-			.from(schema.modelRegistry)
-			.where(
-				and(
-					eq(schema.modelRegistry.role, "reranker"),
-					or(
-						eq(schema.modelRegistry.tenantId, tenantId),
-						isNull(schema.modelRegistry.tenantId),
-					),
-				),
-			)
-			.orderBy(desc(schema.modelRegistry.tenantId))
+		const active = await resolveRow(db, "reranker", tenantId)
 
-		const active =
-			rows.find((r) => r.activatedAt !== null && r.tenantId === tenantId) ??
-			rows.find((r) => r.activatedAt !== null && r.tenantId === null)
-
-		let reranker: Reranker = builtIn
+		let reranker: Reranker = builtInReranker
 		let source: ResolvedRerankers["source"] = "builtin"
 		if (active) {
 			source = active.tenantId === tenantId ? "tenant" : "platform"
@@ -72,20 +103,50 @@ export function createModelResolver(db: Db) {
 					apiKey: cfg.apiKey,
 				})
 			} else if (active.provider === "builtin") {
-				reranker = builtIn
+				reranker = builtInReranker
 			}
 		}
 
 		const value: ResolvedRerankers = { tenantId, reranker, source }
-		cache.set(tenantId, { value, expiresAt: now + TTL_MS })
+		rerankerCache.set(tenantId, { value, expiresAt: now + TTL_MS })
+		return value
+	}
+
+	async function resolveEmbedder(tenantId: string): Promise<ResolvedEmbedder> {
+		const now = Date.now()
+		const cached = embedderCache.get(tenantId)
+		if (cached && cached.expiresAt > now) return cached.value
+
+		const active = await resolveRow(db, "embedder", tenantId)
+
+		let embedder: Embedder = builtInEmbedder
+		let source: ResolvedEmbedder["source"] = "builtin"
+		if (active) {
+			source = active.tenantId === tenantId ? "tenant" : "platform"
+			const cfg = (active.config as EmbedderConfig) ?? {}
+			if (active.provider === "openai" && cfg.apiKey) {
+				embedder = createOpenAIEmbedder({
+					apiKey: cfg.apiKey,
+					model: cfg.model,
+					dim: cfg.dim,
+					baseUrl: cfg.baseUrl,
+				})
+			} else if (active.provider === "builtin") {
+				embedder = builtInEmbedder
+			}
+		}
+
+		const value: ResolvedEmbedder = { tenantId, embedder, source }
+		embedderCache.set(tenantId, { value, expiresAt: now + TTL_MS })
 		return value
 	}
 
 	function invalidate(tenantId: string) {
-		cache.delete(tenantId)
+		rerankerCache.delete(tenantId)
+		embedderCache.delete(tenantId)
 	}
 
-	return { resolve, invalidate }
+	return { resolve, resolveEmbedder, invalidate }
 }
 
 export type ModelResolver = ReturnType<typeof createModelResolver>

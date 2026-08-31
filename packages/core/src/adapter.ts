@@ -117,10 +117,9 @@ export async function handleMemoryToolCall(
 		const topK = Number(call.input.topK ?? 5)
 		if (!query) return { name: call.name, content: "error: empty query" }
 		const res = await client.recall({ query, topK, ...scope })
-		if (res.hits.length === 0)
-			return { name: call.name, content: "no memories found" }
+		if (res.hits.length === 0) return { name: call.name, content: "" }
 		const body = res.hits
-			.map((h, i) => `${i + 1}. [${h.memory.kind}] ${h.memory.text}`)
+			.map((h) => `<memory kind="${h.memory.kind}">${h.memory.text}</memory>`)
 			.join("\n")
 		return { name: call.name, content: body }
 	}
@@ -147,12 +146,14 @@ export async function buildRecalledContext(
 		includeCrossSession: opts.includeCrossSession ?? true,
 	})
 	if (res.hits.length === 0) return ""
+	// Structural delimiter format, not natural-language framing prose —
+	// prior versions injected English instruction sentences ("Relevant
+	// memories from prior turns...", "Use these silently...") into every
+	// adapter's prompt regardless of the tenant's locale. An XML-like tag
+	// is language-neutral and every major model already treats tagged
+	// blocks as structured context rather than user-facing text.
 	const lines = res.hits.map(
-		(h, i) => `${i + 1}. [${h.memory.kind}] ${h.memory.text}`,
+		(h) => `<memory kind="${h.memory.kind}">${h.memory.text}</memory>`,
 	)
-	return [
-		"Relevant memories from prior turns and sessions:",
-		...lines,
-		"Use these silently — do not repeat them verbatim unless the user asks.",
-	].join("\n")
+	return ["<recalled-memories>", ...lines, "</recalled-memories>"].join("\n")
 }
