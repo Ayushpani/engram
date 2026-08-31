@@ -1,3 +1,4 @@
+import { createClassifier, type Classifier } from "./classify.ts"
 import { applyConfidence, reciprocalRankFusion, rankByDecay } from "./fusion.ts"
 import type { Embedder } from "./embedder.ts"
 import type { Consolidator } from "./consolidator.ts"
@@ -101,6 +102,7 @@ export function createCore(deps: CoreDeps): MemoryCore {
 	const { store, embedder, consolidator, graph } = deps
 	const newId = deps.newId ?? (() => cryptoId())
 	const now = deps.now ?? (() => new Date())
+	const classifier: Classifier = createClassifier(embedder)
 
 	const bus = new SessionBus()
 
@@ -108,13 +110,18 @@ export function createCore(deps: CoreDeps): MemoryCore {
 		const candidates = await consolidator.consolidate(input)
 		if (candidates.length === 0) return []
 		const vecs = await embedder.embedBatch(candidates.map((c) => c.text))
+		// Classify by nearest embedding centroid whenever the consolidator
+		// didn't already assign a kind — reuses `vecs`, no extra embedder call.
+		const kinds = await Promise.all(
+			candidates.map((c, i) => c.kind ?? classifier.classify(vecs[i]!)),
+		)
 		const rows: MemoryRow[] = candidates.map((c, i) => ({
 			id: newId(),
 			tenantId: input.tenantId,
 			userId: input.userId ?? null,
 			sessionId: input.sessionId ?? null,
 			text: c.text,
-			kind: c.kind,
+			kind: kinds[i]!,
 			source: input.source ?? "text",
 			embedding: vecs[i]!,
 			metadata: input.metadata ?? {},
