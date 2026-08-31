@@ -438,6 +438,9 @@
     "packages/core": {
       "name": "@repo/core",
       "version": "0.0.0",
+      "dependencies": {
+        "@repo/language": "workspace:*",
+      },
       "devDependencies": {
         "typescript": "5.8.3",
       },
@@ -545,6 +548,9 @@
     "packages/models": {
       "name": "@repo/models",
       "version": "0.0.0",
+      "dependencies": {
+        "@repo/language": "workspace:*",
+      },
       "devDependencies": {
         "typescript": "5.8.3",
       },

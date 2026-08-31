@@ -7,7 +7,7 @@ import {
 	type Embedder,
 	type MemoryStore,
 } from "@repo/core"
-import { createDb, createSupabaseStore, type Db } from "@repo/db"
+import { createDb, createGraphStore, createSupabaseStore, type Db } from "@repo/db"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { logger } from "hono/logger"
@@ -59,6 +59,9 @@ const core = createCore({
 	store,
 	embedder,
 	consolidator: new HeuristicConsolidator(),
+	// Sandbox mode has no Postgres, so no entity/relations tables — dense
+	// + keyword channels still fuse fine without the graph channel.
+	graph: isSandbox ? undefined : createGraphStore(db!),
 })
 
 const app = new Hono()

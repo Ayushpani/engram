@@ -7,6 +7,8 @@
  * once training data is available.
  */
 
+import { tokenize as icuTokenize } from "@repo/language"
+
 export interface RerankCandidate {
 	id: string
 	text: string
@@ -115,9 +117,10 @@ export function createHttpReranker(opts: HttpRerankerOptions): Reranker {
 	}
 }
 
+// Previously a 4-script charset whitelist (Latin/Devanagari/Bengali/Oriya)
+// that silently dropped every other script's characters during scoring.
+// `Intl.Segmenter`-backed tokenize() from @repo/language handles any
+// script the runtime's ICU knows, with no maintained list.
 function tokenize(s: string): string[] {
-	return s
-		.toLowerCase()
-		.split(/[^a-z0-9ऀ-ॿঀ-৿଀-ൿ]+/)
-		.filter((t) => t.length > 2)
+	return icuTokenize(s).filter((t) => t.length > 2)
 }

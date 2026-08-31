@@ -1,11 +1,18 @@
-import type { MemoryRow, MemoryStore, SearchParams, SearchRow } from "./core.ts"
+import { tokenize } from "@repo/language"
+import type {
+	KeywordSearchParams,
+	MemoryRow,
+	MemoryStore,
+	SearchParams,
+	SearchRow,
+} from "./core.ts"
 import type { Memory } from "./types.ts"
 
 /**
  * In-process MemoryStore for the try-it-now sandbox and unit tests.
- * Cosine similarity computed in JS. Not durable — data is lost when
- * the process exits. Use @repo/db/createSupabaseStore for anything
- * beyond a demo.
+ * Cosine similarity + naive tokenized-overlap keyword scoring, both in JS.
+ * Not durable — data is lost when the process exits. Use
+ * @repo/db/createSupabaseStore for anything beyond a demo.
  */
 
 interface Row {
@@ -20,6 +27,13 @@ interface Row {
 	metadata: Record<string, unknown>
 	createdAt: string
 	updatedAt: string
+	validFrom: string
+	validUntil: string | null
+	supersedesId: string | null
+	confidenceAlpha: number
+	confidenceBeta: number
+	accessCount: number
+	lastAccessedAt: string | null
 }
 
 export class InMemoryStore implements MemoryStore {
@@ -41,6 +55,13 @@ export class InMemoryStore implements MemoryStore {
 				metadata: r.metadata,
 				createdAt: now,
 				updatedAt: now,
+				validFrom: now,
+				validUntil: null,
+				supersedesId: null,
+				confidenceAlpha: 1,
+				confidenceBeta: 1,
+				accessCount: 0,
+				lastAccessedAt: null,
 			}
 			this.rows.set(r.id, row)
 			out.push(this.toMemory(row))
@@ -53,15 +74,31 @@ export class InMemoryStore implements MemoryStore {
 		if (row && row.tenantId === tenantId) this.rows.delete(id)
 	}
 
+	async reviseMemory(tenantId: string, oldId: string, newId: string): Promise<void> {
+		const old = this.rows.get(oldId)
+		const next = this.rows.get(newId)
+		if (!old || old.tenantId !== tenantId) return
+		const now = new Date().toISOString()
+		old.validUntil = now
+		old.updatedAt = now
+		if (next) next.supersedesId = oldId
+	}
+
+	async touchAccess(tenantId: string, ids: string[]): Promise<void> {
+		const now = new Date().toISOString()
+		for (const id of ids) {
+			const row = this.rows.get(id)
+			if (row && row.tenantId === tenantId) {
+				row.accessCount += 1
+				row.lastAccessedAt = now
+			}
+		}
+	}
+
 	async search(params: SearchParams): Promise<SearchRow[]> {
 		const q = params.queryVec
 		const scored: Array<{ row: Row; distance: number }> = []
-		for (const row of this.rows.values()) {
-			if (row.tenantId !== params.tenantId) continue
-			if (params.userId && row.userId !== params.userId) continue
-			if (!params.includeCrossSession && row.sessionId !== params.sessionId) {
-				continue
-			}
+		for (const row of this.matching(params)) {
 			const distance = cosineDistance(q, row.embedding)
 			scored.push({ row, distance })
 		}
@@ -71,6 +108,49 @@ export class InMemoryStore implements MemoryStore {
 			distance,
 			sessionMatch: row.sessionId === params.sessionId,
 		}))
+	}
+
+	/** Naive tokenized-overlap keyword scoring — sandbox stand-in for Postgres tsvector/GIN. */
+	async searchKeyword(params: KeywordSearchParams): Promise<SearchRow[]> {
+		const qTokens = new Set(tokenize(params.queryText))
+		if (qTokens.size === 0) return []
+		const scored: Array<{ row: Row; overlap: number }> = []
+		for (const row of this.matching(params)) {
+			const docTokens = new Set(tokenize(row.text))
+			let overlap = 0
+			for (const t of qTokens) if (docTokens.has(t)) overlap++
+			if (overlap > 0) scored.push({ row, overlap })
+		}
+		scored.sort((a, b) => b.overlap - a.overlap)
+		return scored.slice(0, params.topK).map(({ row, overlap }) => ({
+			memory: this.toMemory(row),
+			distance: 1 - overlap / qTokens.size,
+			sessionMatch: row.sessionId === params.sessionId,
+		}))
+	}
+
+	private *matching(params: {
+		tenantId: string
+		userId: string | null
+		sessionId: string | null
+		includeCrossSession: boolean
+		asOf?: Date
+	}): Generator<Row> {
+		const asOf = params.asOf?.toISOString()
+		for (const row of this.rows.values()) {
+			if (row.tenantId !== params.tenantId) continue
+			if (params.userId && row.userId !== params.userId) continue
+			if (!params.includeCrossSession && row.sessionId !== params.sessionId) {
+				continue
+			}
+			if (asOf) {
+				if (row.validFrom > asOf) continue
+				if (row.validUntil && row.validUntil <= asOf) continue
+			} else if (row.validUntil) {
+				continue // default recall = current facts only
+			}
+			yield row
+		}
 	}
 
 	size(): number {
@@ -93,6 +173,13 @@ export class InMemoryStore implements MemoryStore {
 			metadata: row.metadata,
 			createdAt: row.createdAt,
 			updatedAt: row.updatedAt,
+			validFrom: row.validFrom,
+			validUntil: row.validUntil,
+			supersedesId: row.supersedesId,
+			confidenceAlpha: row.confidenceAlpha,
+			confidenceBeta: row.confidenceBeta,
+			accessCount: row.accessCount,
+			lastAccessedAt: row.lastAccessedAt,
 		}
 	}
 }
