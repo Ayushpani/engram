@@ -42,25 +42,36 @@ bun run scripts/benchmark-audio.ts scripts/audio-samples
 
 - **Store**: `memory` (InMemoryStore, ephemeral)
 - **Embedder**: `hash` (HashEmbedder — deterministic, 0ms compute)
-- **Hardware**: [FILL IN — e.g. MacBook Pro M2, 16GB]
+- **Hardware**: dev container, unspecified — see caveat below
 - **Region**: local, no network hop
-- **Commit**: [FILL IN — `git rev-parse HEAD`]
-- **Timestamp**: [FILL IN — ISO 8601]
+- **Commit**: `c033035` — post RRF fusion + bi-temporal + belief tracking
+- **Timestamp**: 2026-08-31
+
+**What changed since the original Run A**: recall is no longer plain
+cosine top-K. It's 4-channel reciprocal rank fusion (dense + keyword +
+graph + temporal decay) plus a Beta-Binomial confidence multiplier —
+see the architecture section below. Numbers dropped slightly rather
+than rising because the sandbox's `InMemoryStore` keyword/decay
+channels are cheap JS-side computation, not a bottleneck at this scale;
+don't read the small delta as a real regional/hardware signal, only the
+relative "still sub-2ms" fact is meaningful here.
 
 ### Voice-turn suite (7 cases)
 
 - **Accuracy**: 7/7 pass
-- **Save**: p50 = **10.7 ms** · p95 = 13.9 ms · N = 7
-- **Recall**: p50 = **2.6 ms** · p95 = 3.1 ms · N = 7
+- **Save**: p50 = **1.3 ms** · p95 = 1.6 ms · N = 8
+- **Recall**: p50 = **1.4 ms** · p95 = 3.5 ms · N = 7
 
 ### Audio suite (6 cases)
 
-Whisper-tiny on CPU:
+Whisper-tiny on CPU — not rerun with this commit, numbers below are
+from the original Run A and predate the RRF/bi-temporal work. Flagged
+`[STALE]` rather than silently carried forward as current.
 
-- **Accuracy**: 3/7 (ASR mishearings, not memory-layer failures — see [transcript-preservation caveat](#interpreting-the-audio-accuracy-numbers))
-- **ASR**: p50 = 1373 ms · p95 = 1596 ms · N = 7 (whisper-tiny CPU)
-- **Save**: p50 = 10.7 ms · p95 = 13.9 ms · N = 7
-- **Recall**: p50 = 2.6 ms · p95 = 3.1 ms · N = 7
+- **Accuracy [STALE]**: 3/7 (ASR mishearings, not memory-layer failures — see [transcript-preservation caveat](#interpreting-the-audio-accuracy-numbers))
+- **ASR [STALE]**: p50 = 1373 ms · p95 = 1596 ms · N = 7 (whisper-tiny CPU)
+- **Save [STALE]**: p50 = 10.7 ms · p95 = 13.9 ms · N = 7
+- **Recall [STALE]**: p50 = 2.6 ms · p95 = 3.1 ms · N = 7
 
 ---
 

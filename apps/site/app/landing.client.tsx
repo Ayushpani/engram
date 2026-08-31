@@ -809,7 +809,7 @@ export default function Landing() {
 						<div className="stat">
 							<b>Save p50</b>
 							<strong>
-								<span data-count="10.7" data-dec="1">
+								<span data-count="1.3" data-dec="1">
 									0
 								</span>
 								<u>ms</u>
@@ -818,7 +818,7 @@ export default function Landing() {
 						<div className="stat g">
 							<b>Recall p50</b>
 							<strong>
-								<span data-count="2.6" data-dec="1">
+								<span data-count="1.4" data-dec="1">
 									0
 								</span>
 								<u>ms</u>
@@ -932,7 +932,7 @@ export default function Landing() {
 								<span>
 									smaran voice layer — full recall, reranked, injected
 								</span>
-								<span className="tot">2.6ms</span>
+								<span className="tot">1.4ms</span>
 							</div>
 							<div className="bz-track">
 								<div
@@ -1012,11 +1012,11 @@ export default function Landing() {
 						</div>
 						<div className="g">
 							<span className="k">Save</span>
-							<span className="v">10.7ms</span>
+							<span className="v">1.3ms</span>
 						</div>
 						<div className="g">
 							<span className="k">Recall</span>
-							<span className="v vg">2.6ms</span>
+							<span className="v vg">1.4ms</span>
 						</div>
 					</div>
 					<div className="st-rail" id="stRail">
@@ -1169,8 +1169,10 @@ export default function Landing() {
 							<div className="ss-tag">02 · Store</div>
 							<div className="ss-t">Postgres · pgvector · HNSW</div>
 							<p>
-								Vector search on managed Postgres. HNSW index tunes recall/speed
-								per tenant. No vendor lock-in, no separate vector DB to operate.
+								Recall fuses four channels — vector (HNSW), keyword (GIN
+								full-text), entity graph, and recency decay — via reciprocal
+								rank fusion. All on managed Postgres. No vendor lock-in, no
+								separate vector DB to operate.
 							</p>
 						</div>
 						<div className="ss-cell rv d3">
