@@ -191,6 +191,30 @@ export const modelRegistry = pgTable(
 	}),
 )
 
+export const profiles = pgTable(
+	"profiles",
+	{
+		id: text("id").primaryKey(),
+		tenantId: text("tenant_id")
+			.notNull()
+			.references(() => tenants.id, { onDelete: "cascade" }),
+		userId: text("user_id").notNull(),
+		summary: text("summary").notNull(),
+		sourceMemoryIds: jsonb("source_memory_ids").notNull().default(sql`'[]'::jsonb`),
+		confidenceAlpha: real("confidence_alpha").notNull().default(1),
+		confidenceBeta: real("confidence_beta").notNull().default(1),
+		updatedAt: timestamp("updated_at", { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+	},
+	(t) => ({
+		tenantUserIdx: uniqueIndex("profiles_tenant_user_idx").on(
+			t.tenantId,
+			t.userId,
+		),
+	}),
+)
+
 export const relations = pgTable(
 	"relations",
 	{

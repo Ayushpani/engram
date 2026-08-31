@@ -19,6 +19,7 @@ import { graphRouter } from "./routes/graph.ts"
 import { ingestRouter } from "./routes/ingest.ts"
 import { memoriesRouter } from "./routes/memories.ts"
 import { modelsRouter } from "./routes/models.ts"
+import { profileRouter } from "./routes/profile.ts"
 import { recallRouter } from "./routes/recall.ts"
 import { sessionsRouter } from "./routes/sessions.ts"
 
@@ -97,6 +98,7 @@ if (isSandbox) {
 		.route("/v1/dpdp", dpdpRouter(db!))
 		.route("/v1/graph", graphRouter(db!))
 		.route("/v1/models", modelsRouter(db!, modelResolver))
+		.route("/v1/profile", profileRouter(db!))
 }
 
 const port = env.PORT
