@@ -2,6 +2,16 @@ import { zValidator } from "@hono/zod-validator"
 import type { MemoryCore } from "@repo/core"
 import { applySelfCorrection, normalizeCodeSwitched } from "@repo/language"
 import { Hono } from "hono"
+
+// NOTE: @repo/core also exports applySelfCorrectionSemantic — an
+// embedding-prototype cue classifier meant to replace this module's
+// English STRONG_CUES phrase list. It is NOT wired in here yet: tested
+// against HashEmbedder (the only embedder available in this environment)
+// it regresses the self-correction suite from 7/7 to 4/7, because a hash
+// embedder carries no real semantics for nearest-centroid comparison to
+// work against. Cutting over needs validation against a real semantic
+// embedder (OpenAI or better) first — shipping it as the sandbox default
+// on unverified behavior would break the product's own flagship demo.
 import { z } from "zod"
 import { auth } from "../auth.ts"
 
