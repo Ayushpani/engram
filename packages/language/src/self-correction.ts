@@ -89,44 +89,15 @@ const CONTENT_ANCHORS = [
 	"zip",
 ]
 
-const STOPWORDS = new Set([
-	"the",
-	"a",
-	"an",
-	"and",
-	"or",
-	"but",
-	"is",
-	"it",
-	"in",
-	"to",
-	"of",
-	"for",
-	"on",
-	"at",
-	"by",
-	"with",
-	"i",
-	"my",
-	"our",
-	"we",
-	"they",
-	"them",
-	"this",
-	"that",
-	"was",
-	"are",
-	"were",
-	"be",
-	"do",
-	"does",
-	"did",
-	"have",
-	"has",
-	"had",
-	"will",
-	"would",
-])
+import { tokenize } from "./tokenize.ts"
+
+// Previously a fixed English function-word list. Real stopword filtering
+// (corpus-relative IDF, see tokenize.ts) needs a per-tenant document-
+// frequency table this module doesn't have access to. Rather than fake
+// language-neutrality with a bigger hardcoded list, this now does the one
+// thing that's honestly language-agnostic without corpus stats: drop very
+// short tokens (which correlates with function words across most scripts
+// without asserting anything about which words those are).
 
 export interface Correction {
 	kind: "replace" | "patch"
@@ -291,8 +262,5 @@ function sharesAnchorOrEntity(
 }
 
 function contentWords(text: string): string[] {
-	return text
-		.toLowerCase()
-		.split(/[^\p{L}\p{N}]+/u)
-		.filter((w) => w.length >= 3 && !STOPWORDS.has(w))
+	return tokenize(text).filter((w) => w.length >= 3)
 }

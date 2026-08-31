@@ -7,7 +7,7 @@ import {
 	type Embedder,
 	type MemoryStore,
 } from "@repo/core"
-import { createDb, createSupabaseStore, type Db } from "@repo/db"
+import { createDb, createGraphStore, createSupabaseStore, type Db } from "@repo/db"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { logger } from "hono/logger"
@@ -19,6 +19,7 @@ import { graphRouter } from "./routes/graph.ts"
 import { ingestRouter } from "./routes/ingest.ts"
 import { memoriesRouter } from "./routes/memories.ts"
 import { modelsRouter } from "./routes/models.ts"
+import { profileRouter } from "./routes/profile.ts"
 import { recallRouter } from "./routes/recall.ts"
 import { sessionsRouter } from "./routes/sessions.ts"
 
@@ -35,26 +36,40 @@ if (isSandbox) {
 	store = createSupabaseStore(db)
 }
 
-const embedder: Embedder =
-	env.EMBEDDER === "openai" && env.OPENAI_API_KEY
-		? createOpenAIEmbedder({
-				apiKey: env.OPENAI_API_KEY,
-				model: env.OPENAI_EMBED_MODEL,
-				baseUrl: env.OPENAI_BASE_URL,
-			})
-		: new HashEmbedder()
+// NOTE: fail loud on misconfigured openai — silent fall-through to
+// HashEmbedder would poison benchmarks (results labelled 'openai' would
+// actually be measuring hash).
+let embedder: Embedder
+if (env.EMBEDDER === "openai") {
+	if (!env.OPENAI_API_KEY) {
+		throw new Error(
+			"EMBEDDER=openai but OPENAI_API_KEY is unset. Provide the key or set EMBEDDER=hash.",
+		)
+	}
+	embedder = createOpenAIEmbedder({
+		apiKey: env.OPENAI_API_KEY,
+		model: env.OPENAI_EMBED_MODEL,
+		baseUrl: env.OPENAI_BASE_URL,
+	})
+} else {
+	embedder = new HashEmbedder()
+}
+const embedderName: "hash" | "openai" = env.EMBEDDER
 
 const core = createCore({
 	store,
 	embedder,
 	consolidator: new HeuristicConsolidator(),
+	// Sandbox mode has no Postgres, so no entity/relations tables — dense
+	// + keyword channels still fuse fine without the graph channel.
+	graph: isSandbox ? undefined : createGraphStore(db!),
 })
 
 const app = new Hono()
 	.use(logger())
 	.use(cors({ origin: env.CORS_ORIGIN }))
 	.get("/health", (c) =>
-		c.json({ ok: true, store: env.STORE, embedder: env.EMBEDDER }),
+		c.json({ ok: true, store: env.STORE, embedder: embedderName }),
 	)
 	.get("/", (c) =>
 		c.json({
@@ -83,6 +98,7 @@ if (isSandbox) {
 		.route("/v1/dpdp", dpdpRouter(db!))
 		.route("/v1/graph", graphRouter(db!))
 		.route("/v1/models", modelsRouter(db!, modelResolver))
+		.route("/v1/profile", profileRouter(db!))
 }
 
 const port = env.PORT
@@ -121,6 +137,11 @@ function createSandboxResolver() {
 				source: "builtin" as const,
 			}
 		},
+		resolveEmbedder: async (tenantId: string) => ({
+			tenantId,
+			embedder,
+			source: "builtin" as const,
+		}),
 		invalidate: () => {},
 	}
 }

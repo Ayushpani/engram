@@ -12,6 +12,9 @@
 	"scripts": {
 		"check-types": "tsc --noEmit"
 	},
+	"dependencies": {
+		"@repo/language": "workspace:*"
+	},
 	"devDependencies": {
 		"typescript": "5.8.3"
 	}

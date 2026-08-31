@@ -12,6 +12,8 @@ const recallInput = z.object({
 	topK: z.number().int().min(1).max(50).default(8),
 	includeCrossSession: z.boolean().default(true),
 	rerank: z.boolean().default(false),
+	/** Point-in-time recall: ISO timestamp, defaults to now (current facts only). */
+	asOf: z.string().datetime().optional(),
 })
 
 export function recallRouter(core: MemoryCore, resolver: ModelResolver) {

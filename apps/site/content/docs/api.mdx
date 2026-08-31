@@ -34,19 +34,43 @@ One-shot save. Runs the full normalizer + self-correction pipeline and commits.
 
 ```json
 {
-  "saved": true,
-  "memoryId": "mem_01H...",
-  "text": "confirm my order four three two one",
-  "corrections": [
-    { "kind": "replace", "retracted": "one two three four", "kept": "four three two one" }
-  ],
-  "latency_ms": 1.8
+  "memories": [
+    {
+      "id": "mem_01H...",
+      "text": "confirm my order four three two one",
+      "sessionId": "sess_abc",
+      "kind": "fact",
+      "validFrom": "2026-08-31T14:30:00Z",
+      "validUntil": null,
+      "supersedesId": null,
+      "confidenceAlpha": 1,
+      "confidenceBeta": 1,
+      "accessCount": 0,
+      "lastAccessedAt": null,
+      "createdAt": "2026-08-31T14:30:00Z",
+      "updatedAt": "2026-08-31T14:30:00Z"
+    }
+  ]
 }
 ```
 
+`validUntil: null` means this fact is current. When a later save is
+detected as a near-duplicate correction of an existing fact (cross-
+session, by embedding similarity), the old row's `validUntil` is closed
+out and its id appears as this new row's `supersedesId` — you don't
+need to track memory ids yourself for this to work.
+
+`confidenceAlpha`/`confidenceBeta` are a Beta-Binomial belief posterior
+(`confidence = alpha / (alpha + beta)`), not a flat scalar — it
+strengthens as independent mentions corroborate the same fact across
+sessions.
+
 ## POST /v1/recall
 
-Semantic recall over a session's stored memories.
+Recall fuses four channels — vector similarity, keyword full-text,
+entity graph, and recency/frequency decay — via reciprocal rank
+fusion, then applies each hit's belief confidence as a final score
+modulator. Not plain vector search.
 
 **Request**
 
@@ -55,9 +79,14 @@ Semantic recall over a session's stored memories.
   "query": "what did the caller confirm",
   "sessionId": "sess_abc",
   "topK": 5,
-  "includeCrossSession": false
+  "includeCrossSession": false,
+  "asOf": "2026-08-15T00:00:00Z"
 }
 ```
+
+`asOf` is optional — point-in-time recall. Omit it for "current facts
+only" (the default). Pass a past timestamp to see what was true as of
+that instant, even if it's since been corrected.
 
 **Response**
 
@@ -69,14 +98,21 @@ Semantic recall over a session's stored memories.
         "id": "mem_01H...",
         "text": "confirm my order four three two one",
         "sessionId": "sess_abc",
-        "createdAt": "2026-08-29T14:30:00Z"
+        "kind": "fact",
+        "createdAt": "2026-08-31T14:30:00Z"
       },
-      "score": 0.91
+      "score": 0.91,
+      "tier": "session",
+      "channels": { "dense": 1, "keyword": 2, "temporal": 1 }
     }
   ],
-  "latency_ms": 0.9
+  "latencyMs": { "total": 2, "embed": 1, "search": 1, "rerank": 0 }
 }
 ```
+
+`channels` shows the rank this hit held in each retrieval channel
+before fusion — absent for a channel means the hit didn't surface
+there at all. Useful for debugging why something did or didn't recall.
 
 ## POST /v1/ingest/partial
 
@@ -97,6 +133,58 @@ Freezes the buffer, runs self-correction, writes to storage. Exactly once per tu
 ```
 
 Response is the same shape as `POST /v1/memories`.
+
+## GET /v1/profile
+
+Fetch the standing per-user profile — a consolidated summary folded
+from recurring facts across all of a user's sessions, so a voice agent
+can pull stable context at call start with one point-lookup instead of
+a fresh recall. Postgres-backed deployments only (not sandbox mode).
+
+```
+GET /v1/profile?userId=u_alice
+```
+
+**Response**
+
+```json
+{
+  "summary": "Lives in Powai, Trikutta Towers. Phone ends 913.",
+  "confidence": 0.83,
+  "sourceMemoryIds": ["mem_01H...", "mem_01J..."],
+  "updatedAt": "2026-08-31T09:00:00Z"
+}
+```
+
+`404` if no profile has been consolidated for this user yet.
+
+## POST /v1/profile/consolidate
+
+Recomputes the profile from the user's current (non-superseded)
+memories: clusters them by embedding similarity, keeps clusters with
+2+ corroborating memories, and folds each into one summary line.
+Confidence is Beta-Binomial — more corroborating mentions means a
+tighter, more confident posterior, not a bigger number from a single
+model guess. No cron trigger yet; call this on whatever cadence suits
+your deployment.
+
+```
+POST /v1/profile/consolidate?userId=u_alice
+```
+
+**Response**
+
+```json
+{
+  "consolidated": true,
+  "summary": "Lives in Powai, Trikutta Towers. Phone ends 913.",
+  "confidence": 0.83,
+  "sourceMemoryIds": ["mem_01H...", "mem_01J..."]
+}
+```
+
+`{ "consolidated": false, "reason": "not enough recurring evidence" }`
+if no cluster had 2+ corroborating memories yet.
 
 ## Error codes
 

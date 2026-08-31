@@ -191,6 +191,73 @@ export function createGraphStore(db: Db) {
 			}
 		},
 
+		/**
+		 * Fuzzy entity lookup for the recall graph channel: which entities
+		 * does this query text plausibly refer to, tolerant of typos/
+		 * transliteration variance (pg_trgm similarity, not exact match).
+		 */
+		async searchEntitiesByText(
+			tenantId: string,
+			queryText: string,
+			limit = 3,
+			minSimilarity = 0.2,
+		): Promise<EntityRow[]> {
+			const rows = await db.execute(sql`
+				SELECT id, tenant_id, name, kind, metadata
+				FROM entities
+				WHERE tenant_id = ${tenantId}
+					AND similarity(name, ${queryText}) > ${minSimilarity}
+				ORDER BY similarity(name, ${queryText}) DESC
+				LIMIT ${limit}
+			`)
+			return (
+				rows as unknown as Array<{
+					id: string
+					tenant_id: string
+					name: string
+					kind: string
+					metadata: Record<string, unknown> | null
+				}>
+			).map((r) => ({
+				id: r.id,
+				tenantId: r.tenant_id,
+				name: r.name,
+				kind: r.kind,
+				metadata: r.metadata ?? {},
+			}))
+		},
+
+		/**
+		 * The recall graph channel, end to end: fuzzy-match entities
+		 * mentioned in the query, then pull in memories reachable within
+		 * `maxHops` of any of them. One extra query per matched entity, at
+		 * most `entityLimit` of them — cheap at this scale.
+		 */
+		async graphChannel(
+			tenantId: string,
+			queryText: string,
+			maxHops = 2,
+			entityLimit = 3,
+			memoryLimit = 20,
+		): Promise<string[]> {
+			const matched = await this.searchEntitiesByText(
+				tenantId,
+				queryText,
+				entityLimit,
+			)
+			const memoryIds = new Set<string>()
+			for (const entity of matched) {
+				const { memoryIds: hop } = await this.traverse(
+					tenantId,
+					entity.id,
+					maxHops,
+					memoryLimit,
+				)
+				for (const id of hop) memoryIds.add(id)
+			}
+			return Array.from(memoryIds)
+		},
+
 		async fetchMemoriesByIds(tenantId: string, ids: string[]) {
 			if (ids.length === 0) return []
 			return db

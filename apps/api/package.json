@@ -6,6 +6,7 @@
 	"scripts": {
 		"dev": "bun run --hot src/index.ts",
 		"dev:app": "bun run --hot src/index.ts",
+		"dev:supabase": "bun --env-file=../../.env run --hot src/index.ts",
 		"start": "bun run src/index.ts",
 		"check-types": "tsc --noEmit"
 	},

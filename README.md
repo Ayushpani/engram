@@ -154,16 +154,21 @@ Smaran is a working codebase, not yet a validated product. Being explicit about 
 
 **Working end-to-end today** (verified in a live sandbox):
 - Save, recall, forget, streaming ingest, DPDP endpoints, graph traverse
+- Recall = 4-channel reciprocal rank fusion (dense vector + keyword + entity graph + recency/frequency decay), not plain vector search
+- Bi-temporal memory: point-in-time recall (`asOf`), auto-supersession of corrected facts across sessions
+- Beta-Binomial belief tracking — confidence strengthens with corroborating evidence instead of a flat scalar
+- Per-user consolidated profile (`/v1/profile`) — evidence-gated summary, no LLM call in its default form
 - Provider adapters for Anthropic, OpenAI, Gemini, Vercel AI SDK, LangGraph, Mastra, Vapi, LiveKit, MCP
 - Hindi/Hinglish detection + filler stripping, entity extraction, session coreference
 - Barge-in rollback, hot-cache tier, speculative prefetch
-- Per-tenant reranker registry with atomic activation
+- Per-tenant reranker AND embedder registry with atomic activation
 - Cloudflare Worker edge tier
 - Sandbox mode with no external dependencies
 
 **Shipped but not proven yet**:
 - Recall quality — the default `HashEmbedder` is a deterministic stub; real embeddings work via `EMBEDDER=openai` (any `/v1/embeddings` host, including free-tier Ollama), but published benchmark numbers do not yet exist.
 - Latency — architecturally supported (sub-200ms with in-region hosting), not yet measured on real voice-agent traffic.
+- Semantic (embedding-based) self-correction — a language-agnostic replacement for the current English-only retraction cue list exists (`applySelfCorrectionSemantic`) but regressed under the sandbox's stub embedder in testing, so it isn't wired into the live route yet. Needs validation against a real embedder first.
 
 **On the roadmap** (planned, not yet code):
 - Distilled voice-tuned embedder + reranker (needs collected call data to train)
