@@ -74,7 +74,11 @@ export class InMemoryStore implements MemoryStore {
 		if (row && row.tenantId === tenantId) this.rows.delete(id)
 	}
 
-	async reviseMemory(tenantId: string, oldId: string, newId: string): Promise<void> {
+	async reviseMemory(
+		tenantId: string,
+		oldId: string,
+		newId: string,
+	): Promise<void> {
 		const old = this.rows.get(oldId)
 		const next = this.rows.get(newId)
 		if (!old || old.tenantId !== tenantId) return

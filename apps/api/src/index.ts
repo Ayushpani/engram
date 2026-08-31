@@ -7,7 +7,12 @@ import {
 	type Embedder,
 	type MemoryStore,
 } from "@repo/core"
-import { createDb, createGraphStore, createSupabaseStore, type Db } from "@repo/db"
+import {
+	createDb,
+	createGraphStore,
+	createSupabaseStore,
+	type Db,
+} from "@repo/db"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { logger } from "hono/logger"

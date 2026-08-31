@@ -74,7 +74,7 @@ function cosine(a: Float32Array, b: Float32Array): number {
 }
 
 function centroid(vecs: Float32Array[]): Float32Array {
-	const dim = vecs[0]!.length
+	const dim = vecs[0]?.length
 	const out = new Float32Array(dim)
 	for (const v of vecs) for (let i = 0; i < dim; i++) out[i]! += v[i]!
 	for (let i = 0; i < dim; i++) out[i]! /= vecs.length
@@ -111,7 +111,7 @@ export function createClassifier(embedder: Embedder): Classifier {
 		async classify(vec: Float32Array): Promise<Kind> {
 			const c = await getCentroids()
 			let best: Kind = "fact"
-			let bestScore = -Infinity
+			let bestScore = Number.NEGATIVE_INFINITY
 			for (const k of KINDS) {
 				const score = cosine(vec, c[k])
 				if (score > bestScore) {

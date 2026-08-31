@@ -38,7 +38,8 @@ export function clusterMemories(
 	threshold: number = CLUSTER_SIMILARITY_THRESHOLD,
 ): ClusterableMemory[][] {
 	const parent = memories.map((_, i) => i)
-	function find(i: number): number {
+	function find(start: number): number {
+		let i = start
 		while (parent[i] !== i) {
 			parent[i] = parent[parent[i]!]!
 			i = parent[i]!
@@ -53,7 +54,7 @@ export function clusterMemories(
 
 	for (let i = 0; i < memories.length; i++) {
 		for (let j = i + 1; j < memories.length; j++) {
-			if (cosine(memories[i]!.embedding, memories[j]!.embedding) >= threshold) {
+			if (cosine(memories[i]?.embedding, memories[j]?.embedding) >= threshold) {
 				union(i, j)
 			}
 		}
@@ -82,7 +83,9 @@ export function consolidateProfile(
 	memories: ClusterableMemory[],
 	minEvidence: number = MIN_EVIDENCE_TO_INCLUDE,
 ): ProfileResult | null {
-	const clusters = clusterMemories(memories).filter((c) => c.length >= minEvidence)
+	const clusters = clusterMemories(memories).filter(
+		(c) => c.length >= minEvidence,
+	)
 	if (clusters.length === 0) return null
 
 	const lines: string[] = []
@@ -90,7 +93,9 @@ export function consolidateProfile(
 	let belief = neutralBelief()
 
 	for (const cluster of clusters) {
-		const representative = [...cluster].sort((a, b) => b.text.length - a.text.length)[0]!
+		const representative = [...cluster].sort(
+			(a, b) => b.text.length - a.text.length,
+		)[0]!
 		lines.push(representative.text)
 		for (const m of cluster) sourceMemoryIds.push(m.id)
 		for (let i = 1; i < cluster.length; i++) belief = corroborate(belief)

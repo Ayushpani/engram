@@ -25,7 +25,11 @@ export interface MemoryStore {
 	/** Keyword (lexical/exact-token) channel — language-neutral tokenization at the store level. */
 	searchKeyword(params: KeywordSearchParams): Promise<SearchRow[]>
 	/** Closes out the prior memory's validity window and links `newId` as its replacement, in one transaction. */
-	reviseMemory(tenantId: string, oldId: MemoryId, newId: MemoryId): Promise<void>
+	reviseMemory(
+		tenantId: string,
+		oldId: MemoryId,
+		newId: MemoryId,
+	): Promise<void>
 	/** Bumps accessCount/lastAccessedAt for memories returned by a recall — best-effort, feeds future decay ranking. */
 	touchAccess(tenantId: string, ids: MemoryId[]): Promise<void>
 }
@@ -150,10 +154,15 @@ export function createCore(deps: CoreDeps): MemoryCore {
 				includeCrossSession: true,
 			})
 			const match = near.find(
-				(r) => r.memory.id !== memories[0]!.id && r.distance < SLOT_MATCH_DISTANCE,
+				(r) =>
+					r.memory.id !== memories[0]?.id && r.distance < SLOT_MATCH_DISTANCE,
 			)
 			if (match) {
-				await store.reviseMemory(input.tenantId, match.memory.id, memories[0].id)
+				await store.reviseMemory(
+					input.tenantId,
+					match.memory.id,
+					memories[0].id,
+				)
 			}
 		}
 
@@ -187,8 +196,14 @@ export function createCore(deps: CoreDeps): MemoryCore {
 		// over whatever the other three surfaced — no extra query needed).
 		const [denseRows, keywordRows, graphIds] = await Promise.all([
 			store.search({ ...baseParams, queryVec, topK: topK * 3 }),
-			store.searchKeyword({ ...baseParams, queryText: query.query, topK: topK * 3 }),
-			graph ? graph.graphChannel(query.tenantId, query.query) : Promise.resolve([]),
+			store.searchKeyword({
+				...baseParams,
+				queryText: query.query,
+				topK: topK * 3,
+			}),
+			graph
+				? graph.graphChannel(query.tenantId, query.query)
+				: Promise.resolve([]),
 		])
 		const t2 = performance.now()
 
@@ -213,7 +228,10 @@ export function createCore(deps: CoreDeps): MemoryCore {
 		const ranked = Array.from(fused.entries())
 			.map(([id, rrfScore]) => {
 				const row = byId.get(id)!
-				const belief = { alpha: row.memory.confidenceAlpha, beta: row.memory.confidenceBeta }
+				const belief = {
+					alpha: row.memory.confidenceAlpha,
+					beta: row.memory.confidenceBeta,
+				}
 				return { row, score: applyConfidence(rrfScore, belief) }
 			})
 			.sort((a, b) => b.score - a.score)
@@ -303,7 +321,7 @@ class SessionBus {
 					})
 				},
 				return: () => {
-					set!.delete(listener)
+					set?.delete(listener)
 					return Promise.resolve({ value: undefined, done: true })
 				},
 			}),
@@ -314,7 +332,5 @@ class SessionBus {
 function cryptoId(): string {
 	const bytes = new Uint8Array(16)
 	crypto.getRandomValues(bytes)
-	return (
-		"mem_" + Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("")
-	)
+	return `mem_${Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("")}`
 }
