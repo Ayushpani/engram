@@ -39,13 +39,17 @@ export function profileRouter(db: Db) {
 			const memories = await store.fetchCurrentMemories(tenantId, userId)
 			const result = consolidateProfile(memories)
 			if (!result) {
-				return c.json({ consolidated: false, reason: "not enough recurring evidence" })
+				return c.json({
+					consolidated: false,
+					reason: "not enough recurring evidence",
+				})
 			}
 			await store.upsertProfile(tenantId, userId, result)
 			return c.json({
 				consolidated: true,
 				summary: result.summary,
-				confidence: result.belief.alpha / (result.belief.alpha + result.belief.beta),
+				confidence:
+					result.belief.alpha / (result.belief.alpha + result.belief.beta),
 				sourceMemoryIds: result.sourceMemoryIds,
 			})
 		})

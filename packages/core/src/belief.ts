@@ -34,10 +34,7 @@ export function neutralBelief(): Belief {
  * different session counts more than a same-session repetition (which is
  * likely the same utterance restated, not new evidence).
  */
-export function corroborate(
-	belief: Belief,
-	weight = 1,
-): Belief {
+export function corroborate(belief: Belief, weight = 1): Belief {
 	return { alpha: belief.alpha + weight, beta: belief.beta }
 }
 

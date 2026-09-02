@@ -102,8 +102,10 @@ export function createRetractionClassifier(
 	}
 }
 
-let cachedCentroids: Promise<{ cue: Float32Array; nonCue: Float32Array }> | null =
-	null
+let cachedCentroids: Promise<{
+	cue: Float32Array
+	nonCue: Float32Array
+}> | null = null
 
 async function getCentroids(
 	embedder: Embedder,
@@ -132,19 +134,24 @@ export async function applySelfCorrectionSemantic(
 		return { text: trimmed, corrections: [], segments: rawClauses }
 	}
 
-	const { cue: cueCentroid, nonCue: nonCueCentroid } = await getCentroids(embedder)
+	const { cue: cueCentroid, nonCue: nonCueCentroid } =
+		await getCentroids(embedder)
 	const classifier = createRetractionClassifier(cueCentroid, nonCueCentroid)
 
 	// Punctuation splits clauses apart but an inline cue ("actually bandra
 	// west") isn't bounded by punctuation from the content that follows it
 	// — so for each clause, also test its leading 1-2 tokens as a
 	// candidate cue prefix and strip it if it classifies as one.
-	const candidates: Array<{ text: string; kind: "clause" | "prefix1" | "prefix2" }> =
-		[]
+	const candidates: Array<{
+		text: string
+		kind: "clause" | "prefix1" | "prefix2"
+	}> = []
 	for (const clause of rawClauses) {
 		const tokens = tokenize(clause)
-		if (tokens.length <= CUE_MAX_TOKENS) candidates.push({ text: clause, kind: "clause" })
-		if (tokens.length > 1) candidates.push({ text: tokens[0]!, kind: "prefix1" })
+		if (tokens.length <= CUE_MAX_TOKENS)
+			candidates.push({ text: clause, kind: "clause" })
+		if (tokens.length > 1)
+			candidates.push({ text: tokens[0]!, kind: "prefix1" })
 		if (tokens.length > 2) {
 			candidates.push({ text: `${tokens[0]} ${tokens[1]}`, kind: "prefix2" })
 		}
@@ -152,7 +159,9 @@ export async function applySelfCorrectionSemantic(
 	const uniqueTexts = Array.from(new Set(candidates.map((c) => c.text)))
 	const vecs = uniqueTexts.length ? await embedder.embedBatch(uniqueTexts) : []
 	const cueOf = new Map<string, boolean>()
-	uniqueTexts.forEach((t, i) => cueOf.set(t, classifier.isCue(vecs[i]!)))
+	uniqueTexts.forEach((t, i) => {
+		cueOf.set(t, classifier.isCue(vecs[i]!))
+	})
 
 	const segments: string[] = []
 	const corrections: Correction[] = []
@@ -257,7 +266,9 @@ function replaceLastToken(
 	const last = matches[matches.length - 1]!
 	const start = last.index ?? 0
 	return (
-		haystack.slice(0, start) + replacement + haystack.slice(start + last[0].length)
+		haystack.slice(0, start) +
+		replacement +
+		haystack.slice(start + last[0].length)
 	)
 }
 
@@ -278,7 +289,7 @@ function cosine(a: Float32Array, b: Float32Array): number {
 }
 
 function centroid(vecs: Float32Array[]): Float32Array {
-	const dim = vecs[0]!.length
+	const dim = vecs[0]?.length
 	const out = new Float32Array(dim)
 	for (const v of vecs) for (let i = 0; i < dim; i++) out[i]! += v[i]!
 	for (let i = 0; i < dim; i++) out[i]! /= vecs.length

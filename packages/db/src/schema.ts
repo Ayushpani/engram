@@ -162,8 +162,10 @@ export const entities = pgTable(
 	},
 	(t) => ({
 		tenantNameIdx: index("entities_tenant_name_idx").on(t.tenantId, t.name),
-		nameTrgmIdx: index("entities_name_trgm_idx")
-			.using("gin", sql`${t.name} gin_trgm_ops`),
+		nameTrgmIdx: index("entities_name_trgm_idx").using(
+			"gin",
+			sql`${t.name} gin_trgm_ops`,
+		),
 	}),
 )
 
@@ -200,7 +202,9 @@ export const profiles = pgTable(
 			.references(() => tenants.id, { onDelete: "cascade" }),
 		userId: text("user_id").notNull(),
 		summary: text("summary").notNull(),
-		sourceMemoryIds: jsonb("source_memory_ids").notNull().default(sql`'[]'::jsonb`),
+		sourceMemoryIds: jsonb("source_memory_ids")
+			.notNull()
+			.default(sql`'[]'::jsonb`),
 		confidenceAlpha: real("confidence_alpha").notNull().default(1),
 		confidenceBeta: real("confidence_beta").notNull().default(1),
 		updatedAt: timestamp("updated_at", { withTimezone: true })

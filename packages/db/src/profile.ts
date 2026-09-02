@@ -5,11 +5,24 @@ import { memories, profiles } from "./schema.ts"
 
 export interface ProfileStore {
 	/** Current (valid_until IS NULL) memories for a user, with embeddings, for clustering input. */
-	fetchCurrentMemories(tenantId: string, userId: string): Promise<ClusterableMemory[]>
-	upsertProfile(tenantId: string, userId: string, result: ProfileResult): Promise<void>
-	getProfile(tenantId: string, userId: string): Promise<
-		{ summary: string; confidence: number; sourceMemoryIds: string[]; updatedAt: string } | null
-	>
+	fetchCurrentMemories(
+		tenantId: string,
+		userId: string,
+	): Promise<ClusterableMemory[]>
+	upsertProfile(
+		tenantId: string,
+		userId: string,
+		result: ProfileResult,
+	): Promise<void>
+	getProfile(
+		tenantId: string,
+		userId: string,
+	): Promise<{
+		summary: string
+		confidence: number
+		sourceMemoryIds: string[]
+		updatedAt: string
+	} | null>
 }
 
 function toVec(raw: unknown): Float32Array {
@@ -30,7 +43,11 @@ export function createProfileStore(db: Db): ProfileStore {
 	return {
 		async fetchCurrentMemories(tenantId, userId) {
 			const rows = await db
-				.select({ id: memories.id, text: memories.text, embedding: memories.embedding })
+				.select({
+					id: memories.id,
+					text: memories.text,
+					embedding: memories.embedding,
+				})
 				.from(memories)
 				.where(
 					and(
@@ -39,7 +56,11 @@ export function createProfileStore(db: Db): ProfileStore {
 						isNull(memories.validUntil),
 					),
 				)
-			return rows.map((r) => ({ id: r.id, text: r.text, embedding: toVec(r.embedding) }))
+			return rows.map((r) => ({
+				id: r.id,
+				text: r.text,
+				embedding: toVec(r.embedding),
+			}))
 		},
 
 		async upsertProfile(tenantId, userId, result) {
@@ -71,12 +92,15 @@ export function createProfileStore(db: Db): ProfileStore {
 			const [row] = await db
 				.select()
 				.from(profiles)
-				.where(and(eq(profiles.tenantId, tenantId), eq(profiles.userId, userId)))
+				.where(
+					and(eq(profiles.tenantId, tenantId), eq(profiles.userId, userId)),
+				)
 				.limit(1)
 			if (!row) return null
 			return {
 				summary: row.summary,
-				confidence: row.confidenceAlpha / (row.confidenceAlpha + row.confidenceBeta),
+				confidence:
+					row.confidenceAlpha / (row.confidenceAlpha + row.confidenceBeta),
 				sourceMemoryIds: (row.sourceMemoryIds as string[]) ?? [],
 				updatedAt: row.updatedAt.toISOString(),
 			}

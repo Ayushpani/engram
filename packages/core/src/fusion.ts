@@ -56,7 +56,10 @@ export function decayScore(
 }
 
 /** Rank a candidate pool by decayScore, most-recent/most-accessed first. */
-export function rankByDecay(memories: Memory[], now: Date = new Date()): string[] {
+export function rankByDecay(
+	memories: Memory[],
+	now: Date = new Date(),
+): string[] {
 	return [...memories]
 		.sort((a, b) => {
 			const da = decayScore(a.lastAccessedAt ?? a.createdAt, a.accessCount, now)

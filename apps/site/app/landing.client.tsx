@@ -317,100 +317,6 @@ export default function Landing() {
 		}
 		addEventListener("scroll", onScroll, { passive: true })
 
-		// console clock + typing loop + slots + mini bars
-		const conClock = $<HTMLElement>("#conClock")
-		const conT0 = performance.now()
-		const hl = $<HTMLElement>("#hlText")
-		const conSlots = $<HTMLElement>("#conSlots")
-		const conLat = $<HTMLElement>("#conLat")
-		const conBars = $<HTMLElement>("#conBars")
-		const cbEls: HTMLElement[] = []
-		if (conBars) {
-			for (let ci = 0; ci < 24; ci++) {
-				const cb = document.createElement("i")
-				cb.style.height = "5px"
-				conBars.appendChild(cb)
-				cbEls.push(cb)
-			}
-		}
-		const SAMPLES = [
-			{ a: "confirm order ", w: "#1234", c: " — sorry — ", r: "#4321" },
-			{ a: "let's meet at ", w: "3pm", c: " — actually — ", r: "3:30pm" },
-			{ a: "reply-to is ", w: "old@ex.com", c: " — wait — ", r: "new@ex.com" },
-			{ a: "deliver to gate ", w: "2", c: " — no, — ", r: "gate 3" },
-		]
-		const SLOTS: [string, string][] = [
-			["order.id", '"ORD-4321"'],
-			["meeting.time", '"15:30 IST"'],
-			["contact.email", '"new@ex.com"'],
-			["delivery.gate", '"3"'],
-		]
-		let slotIdx = 0
-		const addSlot = () => {
-			if (!conSlots) return
-			const s = SLOTS[slotIdx % SLOTS.length]
-			slotIdx++
-			const row = document.createElement("div")
-			row.className = "slot"
-			const k = document.createElement("span")
-			k.className = "sk"
-			k.textContent = s[0]
-			const v = document.createElement("span")
-			v.className = "sv"
-			v.textContent = s[1]
-			row.appendChild(k)
-			row.appendChild(v)
-			conSlots.insertBefore(row, conSlots.firstChild)
-			while (conSlots.children.length > 3)
-				conSlots.removeChild(conSlots.lastChild as Node)
-		}
-		addSlot()
-		addSlot()
-
-		const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
-		const typeInto = (parent: HTMLElement, text: string, cls?: string) => {
-			const s = document.createElement("span")
-			if (cls) s.className = cls
-			parent.appendChild(s)
-			return new Promise<HTMLSpanElement>((res) => {
-				let i = 0
-				const step = () => {
-					if (i < text.length) {
-						s.textContent = (s.textContent || "") + text[i]
-						i++
-						setTimeout(step, 24 + Math.random() * 34)
-					} else res(s)
-				}
-				step()
-			})
-		}
-		let cancelled = false
-		const liveLoop = async () => {
-			if (!hl) return
-			if (RM) {
-				const s0 = SAMPLES[0]
-				hl.innerHTML = `<span class="w">${s0.a}${s0.w}</span><span class="c">${s0.c}</span><span class="r">${s0.r}</span>`
-				return
-			}
-			let i = 0
-			while (!cancelled) {
-				const s = SAMPLES[i % SAMPLES.length]
-				hl.textContent = ""
-				await wait(400)
-				await typeInto(hl, s.a, "w")
-				const wEl = await typeInto(hl, s.w, "w")
-				await wait(550)
-				wEl.classList.add("struck")
-				await typeInto(hl, s.c, "c")
-				await typeInto(hl, s.r, "r")
-				addSlot()
-				if (conLat) conLat.textContent = (2 + Math.random() * 0.9).toFixed(1)
-				await wait(2300)
-				i++
-			}
-		}
-		const liveTimer = setTimeout(liveLoop, 1600)
-
 		// wave canvas
 		const cv = $<HTMLCanvasElement>("#ctaWave")
 		const ctx = cv?.getContext("2d") || null
@@ -463,7 +369,7 @@ export default function Landing() {
 				const en = clamp(amp / 26)
 				const a = 0.15 + en * 0.7
 				ctx.fillStyle =
-					en > 0.28 ? `rgba(5,98,239,${a})` : `rgba(33,26,17,${a})`
+					en > 0.28 ? `rgba(61,139,255,${a})` : `rgba(226,229,228,${a * 0.7})`
 				const yPos = mid - bh / 2
 				ctx.fillRect(x, yPos, 3.5, bh)
 			}
@@ -576,20 +482,6 @@ export default function Landing() {
 			velS += (vel - velS) * 0.1
 			vel *= 0.6
 
-			const el = (t - conT0) / 1000
-			const cm = ("0" + Math.floor(el / 60)).slice(-2)
-			const cs = ("0" + Math.floor(el % 60)).slice(-2)
-			const cd = Math.floor((el % 1) * 10)
-			if (conClock) conClock.textContent = `${cm}:${cs}.${cd}`
-
-			for (let i = 0; i < cbEls.length; i++) {
-				const hgt =
-					5 +
-					Math.abs(Math.sin(t * 0.004 + i * 0.55)) * 14 +
-					Math.abs(Math.cos(t * 0.0026 + i * 0.3)) * 5
-				cbEls[i].style.height = hgt.toFixed(1) + "px"
-			}
-
 			if (!RM) {
 				mqTick(velS)
 				heroParallax()
@@ -611,9 +503,7 @@ export default function Landing() {
 		onScroll()
 
 		return () => {
-			cancelled = true
 			cancelAnimationFrame(rafId)
-			clearTimeout(liveTimer)
 			removeEventListener("scroll", onScroll)
 			removeEventListener("mousemove", onMove)
 		}
@@ -766,7 +656,18 @@ export default function Landing() {
 						</p>
 						<div className="hero-btns rv" data-d=".55s">
 							<a href="#story" className="btn btn-dark magnet" data-hover>
-								Hear it work
+								<span className="btn-label">Hear it work</span>
+								<span className="btn-arrow" aria-hidden="true">
+									<svg viewBox="0 0 14 14" fill="none">
+										<path
+											d="M3 11L11 3M11 3H5M11 3V9"
+											stroke="#fff"
+											strokeWidth="1.4"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+										/>
+									</svg>
+								</span>
 							</a>
 							<a
 								href="https://github.com/Ayushpani/smaran"
@@ -780,27 +681,6 @@ export default function Landing() {
 							</a>
 						</div>
 					</div>
-
-					<aside className="console rv" data-d=".5s">
-						<div className="con-top">
-							<span className="rd" />
-							MEMORY CONSOLE
-							<span className="clk" id="conClock">
-								00:00.0
-							</span>
-						</div>
-						<div className="con-tr" id="conTr">
-							<span id="hlText" />
-							<span className="con-caret" />
-						</div>
-						<div className="con-slots" id="conSlots" />
-						<div className="con-foot">
-							<div className="con-bars" id="conBars" />
-							<div className="con-lat">
-								recall <b id="conLat">2.6</b>ms
-							</div>
-						</div>
-					</aside>
 				</div>
 
 				<div className="strip">
@@ -1466,7 +1346,18 @@ const completion = await memory.wrap(openai).chat.completions.create({
 							data-hover
 							data-label="REPO"
 						>
-							Star on GitHub
+							<span className="btn-label">Star on GitHub</span>
+							<span className="btn-arrow" aria-hidden="true">
+								<svg viewBox="0 0 14 14" fill="none">
+									<path
+										d="M3 11L11 3M11 3H5M11 3V9"
+										stroke="#fff"
+										strokeWidth="1.4"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									/>
+								</svg>
+							</span>
 						</a>
 						<button className="npm" id="npmBtn" data-hover data-label="COPY">
 							npm i @smaran/sdk

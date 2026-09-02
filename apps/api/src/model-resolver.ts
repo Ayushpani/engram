@@ -1,8 +1,4 @@
-import {
-	createOpenAIEmbedder,
-	HashEmbedder,
-	type Embedder,
-} from "@repo/core"
+import { createOpenAIEmbedder, HashEmbedder, type Embedder } from "@repo/core"
 import { schema, type Db } from "@repo/db"
 import {
 	createHttpReranker,

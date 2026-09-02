@@ -1,17 +1,26 @@
 :root {
-	--bg: #f4f1ea;
-	--paper: #fbf6ea;
-	--paper2: #eae2d0;
-	--ink: #211a11;
-	--ink2: #574c3a;
-	--mut: #8e8069;
-	--line: rgba(33, 26, 17, 0.16);
-	--soft: rgba(33, 26, 17, 0.07);
-	--primary: #0562ef;
-	--primary-dim: #0447ae;
-	--navy: #07224f;
-	--moss: #5b7444;
-	--umber: #8a7a5f;
+	/* Dark cinematic landing theme. Docs overrides these back to the
+	   original light values on .doc-root — see that rule below. */
+	--bg: #05060a;
+	--paper: rgba(20, 20, 22, 0.6);
+	--paper2: rgba(255, 255, 255, 0.04);
+	--ink: #f2f1ec;
+	--ink2: rgba(226, 229, 228, 0.84);
+	--mut: rgba(226, 229, 228, 0.52);
+	--line: rgba(255, 255, 255, 0.13);
+	--soft: rgba(255, 255, 255, 0.06);
+	--primary: #3d8bff;
+	--primary-dim: #2563d6;
+	--navy: #0a2a52;
+	--moss: #7fa864;
+	--umber: #c9b48c;
+	--glass-grad: linear-gradient(
+		145deg,
+		rgba(24, 22, 20, 0.8),
+		rgba(5, 12, 14, 0.86)
+	);
+	--glass-border: rgba(255, 255, 255, 0.15);
+	--glass-blur: blur(16px) saturate(108%);
 	--disp: "Young Serif", Georgia, serif;
 	--ital: "Newsreader", Georgia, serif;
 	--sans: "Space Grotesk", system-ui, sans-serif;
@@ -48,7 +57,7 @@ body {
 }
 ::selection {
 	background: var(--primary);
-	color: var(--paper);
+	color: #fff;
 }
 a {
 	color: inherit;
@@ -153,7 +162,7 @@ h2.big em {
 .cur-ring {
 	width: 34px;
 	height: 34px;
-	border: 1.5px solid rgba(33, 26, 17, 0.4);
+	border: 1.5px solid rgba(255, 255, 255, 0.4);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -175,8 +184,8 @@ h2.big em {
 .cur-dot.hov {
 	width: 40px;
 	height: 40px;
-	background: rgba(5, 98, 239, 0.13);
-	mix-blend-mode: multiply;
+	background: rgba(61, 139, 255, 0.35);
+	mix-blend-mode: screen;
 }
 .cur-ring.hov {
 	width: 56px;
@@ -209,9 +218,9 @@ h2.big em {
 	align-items: center;
 	gap: 28px;
 	padding: 10px 12px 10px 22px;
-	background: rgba(244, 241, 234, 0.85);
-	backdrop-filter: blur(14px);
-	border: 1px solid var(--line);
+	background: rgba(10, 10, 13, 0.55);
+	backdrop-filter: var(--glass-blur);
+	border: 1px solid var(--glass-border);
 	border-radius: 999px;
 	transform: translateX(-50%);
 	transition:
@@ -222,7 +231,7 @@ h2.big em {
 	transform: translate(-50%, -140%);
 }
 .nav.shadow {
-	box-shadow: 0 10px 26px -14px rgba(33, 26, 17, 0.3);
+	box-shadow: 0 10px 26px -14px rgba(0, 0, 0, 0.5);
 }
 .brand {
 	font-family: var(--disp);
@@ -261,16 +270,19 @@ h2.big em {
 	display: inline-flex;
 	align-items: center;
 	gap: 7px;
-	background: var(--ink);
-	color: var(--paper);
+	background: #fff;
+	color: #101010;
 	font-size: 12.5px;
 	font-weight: 500;
 	padding: 9px 18px;
 	border-radius: 999px;
-	transition: background 0.3s;
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.6),
+		0 1px 5px rgba(0, 0, 0, 0.34);
+	transition: filter 0.3s;
 }
 .ncta:hover {
-	background: var(--primary);
+	filter: brightness(0.94);
 }
 @media (max-width: 900px) {
 	.nlinks {
@@ -396,16 +408,11 @@ h2.big em {
 }
 .hero-grid {
 	display: grid;
-	grid-template-columns: 1.25fr 0.85fr;
-	gap: 48px;
-	align-items: center;
+	grid-template-columns: 1fr;
+	max-width: 760px;
+	gap: 34px;
+	align-items: start;
 	flex: 1;
-}
-@media (max-width: 1020px) {
-	.hero-grid {
-		grid-template-columns: 1fr;
-		gap: 34px;
-	}
 }
 .hero-kicker {
 	display: flex;
@@ -432,13 +439,15 @@ h2.big em {
 	font-weight: 400;
 	font-size: clamp(52px, 7.6vw, 116px);
 	line-height: 0.98;
-	letter-spacing: -0.015em;
+	letter-spacing: -0.025em;
 }
 .hline {
 	display: block;
 	overflow: hidden;
 	padding-bottom: 0.06em;
 	margin-bottom: -0.06em;
+	transform-origin: left center;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 .hw {
 	display: inline-block;
@@ -506,7 +515,7 @@ h2.big em {
 	border-radius: 999px;
 	transition:
 		transform 0.35s var(--ease),
-		background 0.3s,
+		filter 0.3s,
 		border-color 0.3s,
 		color 0.3s;
 	will-change: transform;
@@ -517,21 +526,47 @@ h2.big em {
 	width: 13px;
 	height: 13px;
 }
+/* Primary CTA: solid white pill, dark inset arrow-box, two-tone. */
 .btn-dark {
-	background: var(--ink);
-	color: var(--paper);
+	position: relative;
+	background: #fff;
+	color: #111;
+	padding: 12px 46px 12px 22px;
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.38);
 }
 .btn-dark:hover {
-	background: var(--primary);
+	filter: brightness(0.95);
 }
+.btn-dark .btn-label {
+	pointer-events: none;
+}
+.btn-dark .btn-arrow {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	bottom: 5px;
+	width: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 999px;
+	background: #070909;
+}
+.btn-dark .btn-arrow svg {
+	width: 12px;
+	height: 12px;
+}
+/* Secondary CTA: the same pill shape, glass instead of solid. */
 .btn-line {
-	border: 1.5px solid var(--line);
+	border: 1.5px solid var(--glass-border);
 	color: var(--ink);
-	background: transparent;
+	background: rgba(255, 255, 255, 0.04);
+	backdrop-filter: var(--glass-blur);
 }
 .btn-line:hover {
 	border-color: var(--primary);
-	color: var(--primary-dim);
+	color: var(--primary);
+	filter: brightness(1.1);
 }
 .hero-ghost {
 	position: absolute;
@@ -542,7 +577,7 @@ h2.big em {
 	line-height: 1;
 	letter-spacing: -8px;
 	color: var(--primary);
-	opacity: 0.055;
+	opacity: 0.1;
 	pointer-events: none;
 	user-select: none;
 	will-change: transform;
@@ -883,7 +918,7 @@ h2.big em {
 	justify-content: center;
 	font-family: var(--mono);
 	font-size: 10px;
-	color: var(--paper);
+	color: rgba(255, 255, 255, 0.92);
 	letter-spacing: 0.05em;
 	position: relative;
 	z-index: 2;
@@ -1174,7 +1209,7 @@ h2.big em {
 	font-family: var(--dev);
 	font-size: clamp(140px, 24vw, 320px);
 	color: var(--primary);
-	opacity: 0.08;
+	opacity: 0.12;
 	line-height: 1;
 	transform: translate(-50%, -50%);
 	pointer-events: none;
@@ -1251,15 +1286,16 @@ h2.big em {
 }
 .stkc {
 	position: sticky;
-	background: var(--paper);
-	border: 1px solid var(--line);
+	background: var(--glass-grad);
+	border: 1px solid var(--glass-border);
+	backdrop-filter: var(--glass-blur);
 	border-radius: 22px;
 	padding: clamp(26px, 3.4vw, 44px);
 	display: grid;
 	grid-template-columns: auto 1fr auto;
 	gap: 14px 40px;
 	align-items: center;
-	box-shadow: 0 -12px 40px -20px rgba(33, 26, 17, 0.25);
+	box-shadow: 0 -12px 40px -20px rgba(0, 0, 0, 0.5);
 	transition:
 		transform 0.55s var(--ease),
 		opacity 0.55s,
@@ -1505,8 +1541,9 @@ h2.big em {
 	min-width: 370px;
 	max-width: 370px;
 	flex-shrink: 0;
-	background: var(--paper);
-	border: 1px solid var(--line);
+	background: var(--glass-grad);
+	border: 1px solid var(--glass-border);
+	backdrop-filter: var(--glass-blur);
 	border-radius: 16px;
 	padding: 18px 20px;
 	transition:
@@ -1517,7 +1554,7 @@ h2.big em {
 .ac:hover {
 	transform: translateY(-8px) rotate(0deg) !important;
 	border-color: var(--primary);
-	box-shadow: 0 24px 44px -26px rgba(33, 26, 17, 0.35);
+	box-shadow: 0 24px 44px -26px rgba(0, 0, 0, 0.55);
 }
 .ac:nth-child(odd) {
 	rotate: -0.6deg;
@@ -1751,9 +1788,9 @@ h2.big em {
 	cursor: pointer;
 }
 .copy:hover {
-	background: var(--ink);
-	color: var(--paper);
-	border-color: var(--ink);
+	background: #fff;
+	color: #111;
+	border-color: #fff;
 }
 .copy svg {
 	width: 11px;
@@ -1785,7 +1822,7 @@ h2.big em {
 	font-weight: 500;
 }
 .ts {
-	color: #4e6b39;
+	color: #8fbf72;
 }
 .tc {
 	color: var(--mut);
@@ -1912,8 +1949,8 @@ h2.big em {
 	bottom: 26px;
 	left: 50%;
 	transform: translate(-50%, 90px);
-	background: var(--ink);
-	color: var(--paper);
+	background: #fff;
+	color: #111;
 	font-family: var(--mono);
 	font-size: 12px;
 	padding: 12px 22px;
@@ -1931,6 +1968,23 @@ h2.big em {
    ===================================================================== */
 
 .doc-root {
+	/* Landing goes dark in this phase; docs stays the original light
+	   theme. Re-declaring the full light token set here overrides the
+	   (now-dark) :root values for every var(--token) reference inside
+	   .doc-root's subtree, since custom properties cascade. */
+	--bg: #f4f1ea;
+	--paper: #fbf6ea;
+	--paper2: #eae2d0;
+	--ink: #211a11;
+	--ink2: #574c3a;
+	--mut: #8e8069;
+	--line: rgba(33, 26, 17, 0.16);
+	--soft: rgba(33, 26, 17, 0.07);
+	--primary: #0562ef;
+	--primary-dim: #0447ae;
+	--navy: #07224f;
+	--moss: #5b7444;
+	--umber: #8a7a5f;
 	background: var(--bg);
 }
 .doc-shell {
