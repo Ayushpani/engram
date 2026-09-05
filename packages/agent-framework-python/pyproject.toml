@@ -3,13 +3,13 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "engram-agent-framework"
-version = "1.0.0"
-description = "Memory tools and middleware for Microsoft Agent Framework with engram"
+name = "smaran-agent-framework"
+version = "0.1.0"
+description = "Memory tools and middleware for Microsoft Agent Framework with Smaran"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
-keywords = ["agent-framework", "engram", "ai", "memory", "microsoft"]
+keywords = ["agent-framework", "smaran", "ai", "memory", "microsoft"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -25,7 +25,7 @@ classifiers = [
 requires-python = ">=3.10"
 dependencies = [
     "agent-framework-core>=1.0.0rc3",
-    "engram>=3.1.0",
+    "smaran>=0.1.0",
     "typing-extensions>=4.0.0",
 ]
 
@@ -41,15 +41,14 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://engram.ai"
-Repository = "https://github.com/engramai/engram"
-Documentation = "https://engram.ai/docs"
+Homepage = "https://github.com/Ayushpani/smaran"
+Repository = "https://github.com/Ayushpani/smaran"
 
 [tool.hatch.build]
 include = ["src/*"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/engram_agent_framework"]
+packages = ["src/smaran_agent_framework"]
 
 [tool.isort]
 profile = "black"

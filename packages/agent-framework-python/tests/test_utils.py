@@ -1,86 +1,37 @@
 """Tests for utility functions."""
 
 import pytest
+from smaran import MemoryHit
 
-from engram_agent_framework.utils import (
-    DeduplicatedMemories,
+from smaran_agent_framework.utils import (
     SimpleLogger,
-    convert_profile_to_markdown,
     create_logger,
-    deduplicate_memories,
+    format_memories_to_text,
+    wrap_memory_injection,
 )
 
 
-class TestDeduplicateMemories:
-    def test_empty_inputs(self) -> None:
-        result = deduplicate_memories()
-        assert result.static == []
-        assert result.dynamic == []
-        assert result.search_results == []
+class TestFormatMemoriesToText:
+    def test_empty_hits(self) -> None:
+        assert format_memories_to_text([]) == ""
 
-    def test_static_only(self) -> None:
-        result = deduplicate_memories(
-            static=[{"memory": "User likes Python"}],
-        )
-        assert result.static == ["User likes Python"]
-        assert result.dynamic == []
-        assert result.search_results == []
-
-    def test_deduplication_priority(self) -> None:
-        result = deduplicate_memories(
-            static=[{"memory": "User likes Python"}],
-            dynamic=[{"memory": "User likes Python"}, {"memory": "User works remotely"}],
-            search_results=[{"memory": "User likes Python"}, {"memory": "User prefers async"}],
-        )
-        assert result.static == ["User likes Python"]
-        assert result.dynamic == ["User works remotely"]
-        assert result.search_results == ["User prefers async"]
-
-    def test_string_format(self) -> None:
-        result = deduplicate_memories(
-            static=["User likes Python"],
-            dynamic=["User works remotely"],
-        )
-        assert result.static == ["User likes Python"]
-        assert result.dynamic == ["User works remotely"]
-
-    def test_empty_strings_filtered(self) -> None:
-        result = deduplicate_memories(
-            static=["", "  ", "User likes Python"],
-        )
-        assert result.static == ["User likes Python"]
-
-    def test_none_items_filtered(self) -> None:
-        result = deduplicate_memories(
-            static=[None, {"memory": "valid"}],
-        )
-        assert result.static == ["valid"]
-
-
-class TestConvertProfileToMarkdown:
-    def test_empty_profile(self) -> None:
-        result = convert_profile_to_markdown({"profile": {}})
-        assert result == ""
-
-    def test_static_only(self) -> None:
-        result = convert_profile_to_markdown(
-            {"profile": {"static": ["Likes Python", "Lives in SF"]}}
-        )
-        assert "## Static Profile" in result
+    def test_formats_hits_as_bullets(self) -> None:
+        hits = [MemoryHit(text="Likes Python"), MemoryHit(text="Lives in SF")]
+        result = format_memories_to_text(hits)
         assert "- Likes Python" in result
         assert "- Lives in SF" in result
 
-    def test_both_sections(self) -> None:
-        result = convert_profile_to_markdown(
-            {
-                "profile": {
-                    "static": ["Likes Python"],
-                    "dynamic": ["Asked about AI"],
-                }
-            }
-        )
-        assert "## Static Profile" in result
-        assert "## Dynamic Profile" in result
+
+class TestWrapMemoryInjection:
+    def test_wraps_in_smaran_tags(self) -> None:
+        result = wrap_memory_injection("some memory text")
+        assert result.startswith('<smaran context="user-memories" readonly>')
+        assert result.endswith("</smaran>")
+        assert "some memory text" in result
+
+    def test_uses_custom_context_prompt(self) -> None:
+        result = wrap_memory_injection("memory", context_prompt="Custom prompt")
+        assert "Custom prompt" in result
 
 
 class TestLogger:
@@ -88,7 +39,7 @@ class TestLogger:
         logger = SimpleLogger(verbose=True)
         logger.info("test message")
         captured = capsys.readouterr()
-        assert "[engram] test message" in captured.out
+        assert "[smaran] test message" in captured.out
 
     def test_silent_logger(self, capsys: pytest.CaptureFixture[str]) -> None:
         logger = SimpleLogger(verbose=False)

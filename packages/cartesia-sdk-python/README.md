@@ -1,6 +1,6 @@
-# Smaran Cartesia SDK
+# smaran-cartesia
 
-Memory-enhanced voice agents with [Smaran](https://smaran.ai) and [Cartesia Line](https://cartesia.ai/agents).
+Memory-enhanced voice agents with [Smaran](https://github.com/Ayushpani/smaran) and [Cartesia Line](https://cartesia.ai/agents).
 
 ## Installation
 
@@ -17,10 +17,8 @@ from line.voice_agent_app import VoiceAgentApp
 from smaran_cartesia import SmaranCartesiaAgent
 
 async def get_agent(env, call_request):
-    # Extract container_tag from call metadata (typically user ID)
-    container_tag = call_request.metadata.get("user_id", "default-user")
+    user_id = call_request.metadata.get("user_id", "default-user")
 
-    # Create base LLM agent
     base_agent = LlmAgent(
         model="gemini/gemini-2.5-flash-preview-09-2025",
         config=LlmConfig(
@@ -29,17 +27,16 @@ async def get_agent(env, call_request):
         )
     )
 
-    # Wrap with Smaran
     memory_agent = SmaranCartesiaAgent(
         agent=base_agent,
         api_key=os.getenv("SMARAN_API_KEY"),
-        container_tag=container_tag,
-        custom_id=call_request.call_id,
+        base_url=os.getenv("SMARAN_URL"),
+        user_id=user_id,
+        session_id=call_request.call_id,
     )
 
     return memory_agent
 
-# Create voice agent app
 app = VoiceAgentApp(get_agent=get_agent)
 
 if __name__ == "__main__":
@@ -50,16 +47,14 @@ if __name__ == "__main__":
 
 ### Parameters
 
-| Parameter       | Type         | Required | Description                                                        |
-| --------------- | ------------ | -------- | ------------------------------------------------------------------ |
-| `agent`         | LlmAgent     | **Yes**  | The Cartesia Line agent to wrap                                    |
-| `container_tag` | str          | **Yes**  | Primary container tag for memory scoping (e.g., user ID)           |
-| `custom_id`     | str          | **Yes**  | Custom ID for grouping conversation messages into a single document|
-| `add_memory`    | Literal      | No       | Memory persistence mode: "always" (default) or "never"             |
-| `container_tags`| List[str]    | No       | Additional container tags for organization (e.g., ["org", "prod"]) |
-| `api_key`       | str          | No       | Smaran API key (or set `SMARAN_API_KEY` env var)         |
-| `config`        | MemoryConfig | No       | Advanced configuration                                             |
-| `base_url`      | str          | No       | Custom API endpoint                                                |
+| Parameter    | Type         | Required | Description                                              |
+| ------------ | ------------ | -------- | ---------------------------------------------------------- |
+| `agent`      | LlmAgent     | **Yes**  | The Cartesia Line agent to wrap                            |
+| `user_id`    | str          | **Yes**  | User identifier memories are scoped to                     |
+| `session_id` | str          | **Yes**  | Conversation/call ID, used to group saved messages          |
+| `api_key`    | str          | No       | Smaran API key (or set `SMARAN_API_KEY` env var)            |
+| `base_url`   | str          | No       | Smaran API base URL (or set `SMARAN_URL` env var)           |
+| `config`     | MemoryConfig | No       | Advanced configuration                                      |
 
 ### Advanced Configuration
 
@@ -68,54 +63,23 @@ from smaran_cartesia import SmaranCartesiaAgent
 
 memory_agent = SmaranCartesiaAgent(
     agent=base_agent,
-    container_tag="user-123",
-    custom_id="conversation-456",
-    add_memory="always",           # "always" (default) or "never"
-    container_tags=["org-acme", "prod"],  # Optional: additional tags
+    user_id="user-123",
+    session_id="conversation-456",
     config=SmaranCartesiaAgent.MemoryConfig(
-        search_limit=10,           # Max memories to retrieve
-        search_threshold=0.1,      # Similarity threshold
-        mode="full",               # "profile", "query", or "full"
-        system_prompt="Based on previous conversations, I recall:\n\n",
+        search_limit=5,           # Max memories to recall per turn
+        system_prompt="Based on previous conversations:\n\n",
+        save_memory=True,         # Save new memories after each turn
     ),
 )
-
-# Read-only mode - retrieve memories but don't save new ones
-read_only_agent = SmaranCartesiaAgent(
-    agent=base_agent,
-    container_tag="user-123",
-    custom_id="conversation-456",
-    add_memory="never",  # Only retrieve, don't save
-)
 ```
-
-### Memory Modes
-
-| Mode        | Static Profile | Dynamic Profile | Search Results |
-| ----------- | -------------- | --------------- | -------------- |
-| `"profile"` | Yes            | Yes             | No             |
-| `"query"`   | No             | No              | Yes            |
-| `"full"`    | Yes            | Yes             | Yes            |
 
 ## How It Works
 
-1. **Intercepts events** - Listens for `UserTurnEnded` events from Cartesia Line
-2. **Retrieves memories** - Queries Smaran `/v4/profile` API with user's message
-3. **Enriches context** - Adds memories to event history as system message
-4. **Stores messages** - Sends conversation to Smaran (background, non-blocking)
-5. **Passes to agent** - Forwards enriched event to wrapped LlmAgent
-
-### What Gets Stored
-
-User and assistant messages are sent to Smaran:
-
-```json
-{
-  "content": "User: What's the weather?\nAssistant: It's sunny today!",
-  "container_tags": ["user-123", "org-acme", "prod"],
-  "metadata": { "platform": "cartesia" }
-}
-```
+1. **Intercepts events** — listens for `UserTurnEnded` events from Cartesia Line
+2. **Recalls memories** — queries Smaran's `/v1/recall` API with the user's message
+3. **Enriches context** — injects recalled facts into the agent's system prompt
+4. **Saves messages** — sends conversation turns to Smaran's `/v1/memories` API in the background, non-blocking
+5. **Passes to agent** — forwards the enriched event to the wrapped `LlmAgent`
 
 ## Architecture
 
@@ -129,15 +93,15 @@ User Speaks (Audio)
 UserTurnEnded Event {content: "user message", history: [...]}
     ↓
 ┌──────────────────────────────────────────────┐
-│   SMARAN CARTESIA AGENT (Wrapper)       │
-│                                              │
-│  process(env, event):                        │
-│    1. Intercept UserTurnEnded                │
-│    2. Extract user message                   │
-│    3. Query Smaran API                  │
-│    4. Enrich event.history with memories     │
-│    5. Pass to wrapped LlmAgent               │
-│    6. Store conversation (async background)  │
+│   SMARAN CARTESIA AGENT (Wrapper)             │
+│                                                │
+│  process(env, event):                         │
+│    1. Intercept UserTurnEnded                 │
+│    2. Extract user message                    │
+│    3. Recall from Smaran                      │
+│    4. Inject recalled memories into prompt    │
+│    5. Pass to wrapped LlmAgent                │
+│    6. Save conversation (async background)    │
 └──────────────────────────────────────────────┘
     ↓
 AgentSendText Event {text: "response"}
@@ -147,84 +111,22 @@ AgentSendText Event {text: "response"}
 Audio Output
 ```
 
-## Comparison with Pipecat SDK
+## Comparison with the Pipecat SDK
 
 | Aspect                  | Pipecat                        | Cartesia Line                |
-| ----------------------- | ------------------------------ | ---------------------------- |
-| **Integration Pattern** | Extends `FrameProcessor`       | Wrapper around `LlmAgent`    |
-| **Event Handling**      | `process_frame()` method       | `process()` method           |
-| **Events**              | `LLMContextFrame`, `LLMMessagesFrame` | `UserTurnEnded`, `CallStarted` |
-| **Context Object**      | `LLMContext.get_messages()`    | `event.history`              |
-| **Memory Injection**    | Modify `context.add_message()` | Modify `event.history`       |
-
-## Full Example with Tools
-
-```python
-import os
-from line.llm_agent import LlmAgent, LlmConfig
-from line.tools import LoopbackTool
-from line.voice_agent_app import VoiceAgentApp
-from smaran_cartesia import SmaranCartesiaAgent
-
-# Define custom tools
-async def get_weather(location: str) -> str:
-    return f"The weather in {location} is sunny, 72°F"
-
-weather_tool = LoopbackTool(
-    name="get_weather",
-    description="Get current weather for a location",
-    function=get_weather
-)
-
-async def get_agent(env, call_request):
-    container_tag = call_request.metadata.get("user_id", "default-user")
-    org_id = call_request.metadata.get("org_id")
-
-    # Create LLM agent with tools
-    base_agent = LlmAgent(
-        model="gemini/gemini-2.5-flash-preview-09-2025",
-        tools=[weather_tool],
-        config=LlmConfig(
-            system_prompt="You are a personal assistant with memory and tools.",
-            introduction="Hi! How can I help you today?"
-        )
-    )
-
-    # Wrap with Smaran
-    memory_agent = SmaranCartesiaAgent(
-        agent=base_agent,
-        api_key=os.getenv("SMARAN_API_KEY"),
-        container_tag=container_tag,
-        custom_id=call_request.call_id,
-        container_tags=[org_id] if org_id else None,
-        config=SmaranCartesiaAgent.MemoryConfig(
-            mode="full",
-            search_limit=15,
-            search_threshold=0.15,
-        )
-    )
-
-    return memory_agent
-
-app = VoiceAgentApp(get_agent=get_agent)
-```
+| ----------------------- | ------------------------------- | ----------------------------- |
+| **Integration pattern** | Extends `FrameProcessor`        | Wrapper around `LlmAgent`     |
+| **Event handling**      | `process_frame()` method        | `process()` method            |
+| **Events**              | `LLMContextFrame`                | `UserTurnEnded`, `CallStarted` |
+| **Context object**      | `LLMContext.get_messages()`     | `event.history`                |
 
 ## Development
 
 ```bash
-# Clone repository
-git clone https://github.com/smaranai/smaran
+git clone https://github.com/Ayushpani/smaran
 cd smaran/packages/cartesia-sdk-python
-
-# Install in development mode
 pip install -e ".[dev]"
-
-# Run tests
 pytest
-
-# Format code
-black .
-isort .
 ```
 
 ## License

@@ -1,10 +1,10 @@
-"""Custom exceptions for Engram Pipecat integration."""
+"""Exceptions raised by the Smaran Python client."""
 
 from typing import Optional
 
 
-class EngramPipecatError(Exception):
-    """Base exception for all Engram Pipecat errors."""
+class SmaranError(Exception):
+    """Base exception for all Smaran client errors."""
 
     def __init__(self, message: str, original_error: Optional[Exception] = None):
         super().__init__(message)
@@ -17,20 +17,12 @@ class EngramPipecatError(Exception):
         return self.message
 
 
-class ConfigurationError(EngramPipecatError):
-    """Raised when there are configuration issues (e.g., missing API key, invalid params)."""
+class SmaranConfigurationError(SmaranError):
+    """Raised when the client is missing required configuration (API key, base URL)."""
 
 
-class MemoryRetrievalError(EngramPipecatError):
-    """Raised when memory retrieval operations fail."""
-
-
-class MemoryStorageError(EngramPipecatError):
-    """Raised when memory storage operations fail."""
-
-
-class APIError(EngramPipecatError):
-    """Raised when Engram API requests fail."""
+class SmaranAPIError(SmaranError):
+    """Raised when the Smaran API returns an error response."""
 
     def __init__(
         self,
@@ -46,13 +38,13 @@ class APIError(EngramPipecatError):
     def __str__(self) -> str:
         parts = [self.message]
         if self.status_code:
-            parts.append(f"Status: {self.status_code}")
+            parts.append(f"status={self.status_code}")
         if self.response_text:
-            parts.append(f"Response: {self.response_text}")
+            parts.append(f"response={self.response_text[:300]}")
         if self.original_error:
-            parts.append(f"Cause: {self.original_error}")
+            parts.append(f"cause={self.original_error}")
         return " | ".join(parts)
 
 
-class NetworkError(EngramPipecatError):
-    """Raised when network operations fail."""
+class SmaranNetworkError(SmaranError):
+    """Raised when a request to the Smaran API fails at the network level."""

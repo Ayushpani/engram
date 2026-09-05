@@ -1,30 +1,30 @@
+"""Manual smoke test — chat with a memory-enabled agent from the terminal.
+
+Requires SMARAN_API_KEY, SMARAN_URL, and OPENAI_API_KEY in the environment.
+Not part of the pytest suite.
+"""
+
 import asyncio
 import os
+
 from agent_framework.openai import OpenAIResponsesClient
-from engram_agent_framework import (
-    AgentEngram,
-    EngramChatMiddleware,
-    EngramMiddlewareOptions,
-    EngramTools,
-)
+
+from smaran_agent_framework import AgentSmaran, SmaranChatMiddleware, SmaranMiddlewareOptions, SmaranTools
 
 
 async def main():
-    conn = AgentEngram(
-        api_key=os.environ["ENGRAM_API_KEY"],
-        container_tag="test-user-123",
+    conn = AgentSmaran(
+        api_key=os.environ["SMARAN_API_KEY"],
+        base_url=os.environ["SMARAN_URL"],
+        user_id="test-user-123",
     )
 
-    middleware = EngramChatMiddleware(
+    middleware = SmaranChatMiddleware(
         conn,
-        options=EngramMiddlewareOptions(
-            mode="full",
-            verbose=True,
-            add_memory="always",
-        ),
+        options=SmaranMiddlewareOptions(verbose=True, save_conversations=True),
     )
 
-    tools = EngramTools(conn)
+    tools = SmaranTools(conn)
 
     agent = OpenAIResponsesClient(api_key=os.environ["OPENAI_API_KEY"], model_id="gpt-4o-mini").as_agent(
         name="MemoryAgent",

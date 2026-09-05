@@ -1,10 +1,10 @@
-"""Custom exceptions for Engram Agent Framework integration."""
+"""Exceptions for the Smaran Agent Framework integration."""
 
 from typing import Optional
 
 
-class EngramError(Exception):
-    """Base exception for all Engram-related errors."""
+class SmaranError(Exception):
+    """Base exception for all Smaran-related errors."""
 
     def __init__(self, message: str, original_error: Optional[Exception] = None):
         super().__init__(message)
@@ -17,14 +17,12 @@ class EngramError(Exception):
         return self.message
 
 
-class EngramConfigurationError(EngramError):
+class SmaranConfigurationError(SmaranError):
     """Raised when there are configuration issues (e.g., missing API key)."""
 
-    pass
 
-
-class EngramAPIError(EngramError):
-    """Raised when Engram API requests fail."""
+class SmaranAPIError(SmaranError):
+    """Raised when Smaran API requests fail."""
 
     def __init__(
         self,
@@ -48,19 +46,13 @@ class EngramAPIError(EngramError):
         return " | ".join(parts)
 
 
-class EngramMemoryOperationError(EngramError):
-    """Raised when memory operations (search, add) fail."""
-
-    pass
+class SmaranMemoryOperationError(SmaranError):
+    """Raised when memory operations (recall, save) fail."""
 
 
-class EngramTimeoutError(EngramError):
-    """Raised when operations timeout."""
-
-    pass
+class SmaranTimeoutError(SmaranError):
+    """Raised when operations time out."""
 
 
-class EngramNetworkError(EngramError):
+class SmaranNetworkError(SmaranError):
     """Raised when network operations fail."""
-
-    pass

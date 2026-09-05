@@ -1,125 +1,81 @@
-"""Tests for Engram context provider."""
+"""Tests for SmaranContextProvider."""
+
+from types import SimpleNamespace
+from unittest.mock import AsyncMock
 
 import pytest
+from smaran import MemoryHit
 
-from engram_agent_framework import AgentEngram, EngramContextProvider
-
-
-def _make_conn(**kwargs):
-    kwargs.setdefault("api_key", "test-key")
-    kwargs.setdefault("container_tag", "user-123")
-    return AgentEngram(**kwargs)
+from smaran_agent_framework import AgentSmaran, SmaranContextProvider
 
 
-class TestContextProviderConfiguration:
-    def test_accepts_connection(self) -> None:
-        conn = _make_conn()
-        provider = EngramContextProvider(conn)
-        assert provider._container_tag == "user-123"
-        assert provider.source_id == "engram"
+@pytest.fixture
+def connection() -> AgentSmaran:
+    return AgentSmaran(api_key="test-key", base_url="https://example.com", user_id="user-123")
 
-    def test_uses_connection_client(self) -> None:
-        conn = _make_conn()
-        provider = EngramContextProvider(conn)
-        assert provider._client is conn.client
 
-    def test_custom_source_id(self) -> None:
-        conn = _make_conn()
-        provider = EngramContextProvider(
-            conn, source_id="custom-source"
+def _context_with_messages(messages: list[dict]) -> SimpleNamespace:
+    injected = []
+    return SimpleNamespace(
+        input_messages=messages,
+        extend_instructions=lambda text, source: injected.append((text, source)),
+        _injected=injected,
+    )
+
+
+class TestSmaranContextProvider:
+    @pytest.mark.asyncio
+    async def test_before_run_injects_recalled_memories(self, connection: AgentSmaran) -> None:
+        provider = SmaranContextProvider(connection)
+        connection.client.recall = AsyncMock(
+            return_value=[MemoryHit(text="Likes Python", score=0.9)]
         )
-        assert provider.source_id == "custom-source"
+        context = _context_with_messages([{"role": "user", "content": "what do I like?"}])
 
-    def test_default_mode(self) -> None:
-        conn = _make_conn()
-        provider = EngramContextProvider(conn)
-        assert provider._mode == "full"
+        await provider.before_run(agent=None, session=None, context=context, state={})
 
-    def test_custom_mode(self) -> None:
-        conn = _make_conn()
-        provider = EngramContextProvider(conn, mode="profile")
-        assert provider._mode == "profile"
+        connection.client.recall.assert_awaited_once()
+        assert len(context._injected) == 1
+        assert "Likes Python" in context._injected[0][0]
 
-    def test_store_conversations_default(self) -> None:
-        conn = _make_conn()
-        provider = EngramContextProvider(conn)
-        assert provider._store_conversations is False
+    @pytest.mark.asyncio
+    async def test_before_run_skips_when_no_user_message(self, connection: AgentSmaran) -> None:
+        provider = SmaranContextProvider(connection)
+        connection.client.recall = AsyncMock()
+        context = _context_with_messages([])
 
-    def test_conversation_id_from_connection(self) -> None:
-        conn = _make_conn(conversation_id="conv-xyz")
-        provider = EngramContextProvider(conn)
-        assert provider._connection.conversation_id == "conv-xyz"
-        assert provider._connection.custom_id == "conversation_conv-xyz"
+        await provider.before_run(agent=None, session=None, context=context, state={})
 
-    def test_entity_context_from_connection(self) -> None:
-        conn = _make_conn(entity_context="User prefers TypeScript")
-        provider = EngramContextProvider(conn)
-        assert provider._connection.entity_context == "User prefers TypeScript"
+        connection.client.recall.assert_not_awaited()
 
+    @pytest.mark.asyncio
+    async def test_before_run_no_injection_when_no_hits(self, connection: AgentSmaran) -> None:
+        provider = SmaranContextProvider(connection)
+        connection.client.recall = AsyncMock(return_value=[])
+        context = _context_with_messages([{"role": "user", "content": "hello"}])
 
-class TestExtractQuery:
-    def test_dict_messages(self) -> None:
-        conn = _make_conn()
-        provider = EngramContextProvider(conn)
+        await provider.before_run(agent=None, session=None, context=context, state={})
 
-        class MockContext:
-            input_messages = [
-                {"role": "user", "content": "Hello!"},
-                {"role": "assistant", "content": "Hi!"},
-                {"role": "user", "content": "How are you?"},
-            ]
+        assert context._injected == []
 
-        result = provider._extract_query_from_context(MockContext())
-        assert result == "How are you?"
+    @pytest.mark.asyncio
+    async def test_after_run_does_nothing_when_store_conversations_false(
+        self, connection: AgentSmaran
+    ) -> None:
+        provider = SmaranContextProvider(connection, store_conversations=False)
+        connection.client.save = AsyncMock()
+        context = _context_with_messages([{"role": "user", "content": "hello"}])
 
-    def test_empty_messages(self) -> None:
-        conn = _make_conn()
-        provider = EngramContextProvider(conn)
+        await provider.after_run(agent=None, session=None, context=context, state={})
 
-        class MockContext:
-            input_messages = []
+        connection.client.save.assert_not_awaited()
 
-        result = provider._extract_query_from_context(MockContext())
-        assert result == ""
+    @pytest.mark.asyncio
+    async def test_after_run_saves_conversation_when_enabled(self, connection: AgentSmaran) -> None:
+        provider = SmaranContextProvider(connection, store_conversations=True)
+        connection.client.save = AsyncMock(return_value=True)
+        context = _context_with_messages([{"role": "user", "content": "hello"}])
 
-    def test_no_messages_attr(self) -> None:
-        conn = _make_conn()
-        provider = EngramContextProvider(conn)
+        await provider.after_run(agent=None, session=None, context=context, state={})
 
-        class MockContext:
-            pass
-
-        result = provider._extract_query_from_context(MockContext())
-        assert result == ""
-
-
-class TestExtractConversation:
-    def test_basic_conversation(self) -> None:
-        conn = _make_conn()
-        provider = EngramContextProvider(conn)
-
-        class MockContext:
-            input_messages = [
-                {"role": "user", "content": "Hello!"},
-            ]
-            response = None
-
-        result = provider._extract_conversation_from_context(MockContext())
-        assert "User: Hello!" in result
-
-    def test_with_response(self) -> None:
-        conn = _make_conn()
-        provider = EngramContextProvider(conn)
-
-        class MockResponse:
-            text = "Hi there!"
-
-        class MockContext:
-            input_messages = [
-                {"role": "user", "content": "Hello!"},
-            ]
-            response = MockResponse()
-
-        result = provider._extract_conversation_from_context(MockContext())
-        assert "User: Hello!" in result
-        assert "Assistant: Hi there!" in result
+        connection.client.save.assert_awaited_once()

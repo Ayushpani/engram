@@ -1,392 +1,71 @@
-"""Tests for tools module."""
+"""Tests for Smaran OpenAI tools."""
 
-import os
-from dotenv import load_dotenv
-import pytest
 import json
-from typing import List
+from unittest.mock import AsyncMock, patch
 
-from openai.types.chat import ChatCompletionMessageToolCall
+import pytest
+from smaran import MemoryHit
 
-load_dotenv()
-
-# Import from the installed package or src directly
-try:
-    # Try importing from the installed package first
-    from engram_openai_sdk import (
-        EngramTools,
-        EngramToolsConfig,
-        create_engram_tools,
-        get_memory_tool_definitions,
-        execute_memory_tool_calls,
-        create_search_memories_tool,
-        create_add_memory_tool,
-    )
-except ImportError:
-    # Fallback to importing from src directory
-    import sys
-    import os
-
-    # Add src directory to path
-    sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), "src"))
-    from tools import (
-        EngramTools,
-        EngramToolsConfig,
-        create_engram_tools,
-        get_memory_tool_definitions,
-        execute_memory_tool_calls,
-        create_search_memories_tool,
-        create_add_memory_tool,
-    )
-
-# These classes don't exist in the current codebase - commenting out for now
-# EngramOpenAI,
-# EngramInfiniteChatConfigWithProviderName,
+from smaran_openai import SmaranTools
 
 
 @pytest.fixture
-def test_api_key() -> str:
-    """Get test Engram API key from environment."""
-    api_key = os.getenv("ENGRAM_API_KEY")
-    if not api_key:
-        pytest.skip("ENGRAM_API_KEY environment variable is required for tests")
-    return api_key
+def tools() -> SmaranTools:
+    return SmaranTools("sk_test", {"base_url": "https://example.com", "user_id": "user-123"})
 
 
-@pytest.fixture
-def test_provider_api_key() -> str:
-    """Get test provider API key from environment."""
-    api_key = os.getenv("PROVIDER_API_KEY")
-    if not api_key:
-        pytest.skip("PROVIDER_API_KEY environment variable is required for tests")
-    return api_key
+class TestSmaranTools:
+    @pytest.mark.asyncio
+    async def test_search_memories_success(self, tools: SmaranTools) -> None:
+        with patch.object(
+            tools.client, "recall", AsyncMock(return_value=[MemoryHit(text="Likes Python", score=0.9)])
+        ) as mock_recall:
+            result = await tools.search_memories(information_to_get="favorite language")
 
-
-@pytest.fixture
-def test_base_url() -> str:
-    """Get test base URL from environment."""
-    return os.getenv("ENGRAM_BASE_URL", "")
-
-
-@pytest.fixture
-def test_model_name() -> str:
-    """Get test model name from environment."""
-    return os.getenv("MODEL_NAME", "gpt-5-nano")
-
-
-class TestToolInitialization:
-    """Test tool initialization."""
-
-    def test_create_tools_with_default_configuration(self, test_api_key: str):
-        """Test creating tools with default configuration."""
-        config: EngramToolsConfig = {}
-        tools = EngramTools(test_api_key, config)
-
-        assert tools is not None
-        assert tools.get_tool_definitions() is not None
-        assert (
-            len(tools.get_tool_definitions()) == 2
-        )  # Currently has search_memories and add_memory
-
-    def test_create_tools_with_helper(self, test_api_key: str):
-        """Test creating tools with createEngramTools helper."""
-        tools = create_engram_tools(
-            test_api_key,
-            {
-                "project_id": "test-project",
-            },
+        assert result["success"] is True
+        assert result["count"] == 1
+        assert result["results"][0]["text"] == "Likes Python"
+        mock_recall.assert_awaited_once_with(
+            query="favorite language", user_id="user-123", session_id=None, top_k=5
         )
-
-        assert tools is not None
-        assert tools.get_tool_definitions() is not None
-
-    def test_create_tools_with_custom_base_url(
-        self, test_api_key: str, test_base_url: str
-    ):
-        """Test creating tools with custom baseUrl."""
-        if not test_base_url:
-            pytest.skip("ENGRAM_BASE_URL not provided")
-
-        config: EngramToolsConfig = {
-            "base_url": test_base_url,
-        }
-        tools = EngramTools(test_api_key, config)
-
-        assert tools is not None
-        assert (
-            len(tools.get_tool_definitions()) == 2
-        )  # Currently has search_memories and add_memory
-
-    def test_create_tools_with_project_id(self, test_api_key: str):
-        """Test creating tools with projectId configuration."""
-        config: EngramToolsConfig = {
-            "project_id": "test-project-123",
-        }
-        tools = EngramTools(test_api_key, config)
-
-        assert tools is not None
-        assert (
-            len(tools.get_tool_definitions()) == 2
-        )  # Currently has search_memories and add_memory
-
-    def test_create_tools_with_custom_container_tags(self, test_api_key: str):
-        """Test creating tools with custom container tags."""
-        config: EngramToolsConfig = {
-            "container_tags": ["custom-tag-1", "custom-tag-2"],
-        }
-        tools = EngramTools(test_api_key, config)
-
-        assert tools is not None
-        assert (
-            len(tools.get_tool_definitions()) == 2
-        )  # Currently has search_memories and add_memory
-
-
-class TestToolDefinitions:
-    """Test tool definitions."""
-
-    def test_return_proper_openai_function_definitions(self):
-        """Test returning proper OpenAI function definitions."""
-        definitions = get_memory_tool_definitions()
-
-        assert definitions is not None
-        assert len(definitions) == 2  # Currently has search_memories and add_memory
-
-        # Check searchMemories
-        search_tool = next(
-            (d for d in definitions if d["function"]["name"] == "search_memories"), None
-        )
-        assert search_tool is not None
-        assert search_tool["type"] == "function"
-        assert "information_to_get" in search_tool["function"]["parameters"]["required"]
-
-        # Check addMemory
-        add_tool = next(
-            (d for d in definitions if d["function"]["name"] == "add_memory"), None
-        )
-        assert add_tool is not None
-        assert add_tool["type"] == "function"
-        assert "memory" in add_tool["function"]["parameters"]["required"]
-
-    def test_consistent_tool_definitions_from_class_and_helper(self, test_api_key: str):
-        """Test that tool definitions are consistent between class and helper."""
-        tools = EngramTools(test_api_key)
-        class_definitions = tools.get_tool_definitions()
-        helper_definitions = get_memory_tool_definitions()
-
-        assert class_definitions == helper_definitions
-
-
-class TestMemoryOperations:
-    """Test memory operations."""
 
     @pytest.mark.asyncio
-    async def test_search_memories(self, test_api_key: str, test_base_url: str):
-        """Test searching memories."""
-        config: EngramToolsConfig = {
-            "project_id": "test-search",
-        }
-        if test_base_url:
-            config["base_url"] = test_base_url
+    async def test_search_memories_handles_errors(self, tools: SmaranTools) -> None:
+        with patch.object(tools.client, "recall", AsyncMock(side_effect=RuntimeError("boom"))):
+            result = await tools.search_memories(information_to_get="anything")
 
-        tools = EngramTools(test_api_key, config)
-
-        result = await tools.search_memories(
-            information_to_get="test preferences",
-            limit=5,
-        )
-
-        assert result is not None
-        assert "success" in result
-        assert isinstance(result["success"], bool)
-
-        if result["success"]:
-            assert "results" in result
-            assert "count" in result
-            assert isinstance(result["count"], int)
-        else:
-            assert "error" in result
+        assert result["success"] is False
+        assert "boom" in result["error"]
 
     @pytest.mark.asyncio
-    async def test_add_memory(self, test_api_key: str, test_base_url: str):
-        """Test adding memory."""
-        config: EngramToolsConfig = {
-            "container_tags": ["test-add-memory"],
-        }
-        if test_base_url:
-            config["base_url"] = test_base_url
+    async def test_add_memory_success(self, tools: SmaranTools) -> None:
+        with patch.object(tools.client, "save", AsyncMock(return_value=True)) as mock_save:
+            result = await tools.add_memory(memory="Likes Python")
 
-        tools = EngramTools(test_api_key, config)
-
-        result = await tools.add_memory(
-            memory="User prefers dark roast coffee in the morning - test memory"
-        )
-
-        assert result is not None
-        assert "success" in result
-        assert isinstance(result["success"], bool)
-
-        if result["success"]:
-            assert "memory" in result
-        else:
-            assert "error" in result
-
-
-class TestIndividualToolCreators:
-    """Test individual tool creators."""
-
-    def test_create_individual_search_tool(self, test_api_key: str):
-        """Test creating individual search tool."""
-        search_tool = create_search_memories_tool(
-            test_api_key,
-            {
-                "project_id": "test-individual",
-            },
-        )
-
-        assert search_tool is not None
-        assert search_tool.definition is not None
-        assert callable(search_tool.execute)
-        assert search_tool.definition["function"]["name"] == "search_memories"
-
-    def test_create_individual_add_tool(self, test_api_key: str):
-        """Test creating individual add tool."""
-        add_tool = create_add_memory_tool(
-            test_api_key,
-            {
-                "project_id": "test-individual",
-            },
-        )
-
-        assert add_tool is not None
-        assert add_tool.definition is not None
-        assert callable(add_tool.execute)
-        assert add_tool.definition["function"]["name"] == "add_memory"
-
-
-class TestOpenAIIntegration:
-    """Test OpenAI integration."""
-
-    def test_placeholder(self):
-        """Placeholder test for OpenAI integration."""
-        # TODO: Implement proper OpenAI integration tests when
-        # EngramOpenAI and EngramInfiniteChatConfigWithProviderName classes are available
-        assert True
-
-    # TODO: Uncomment this test when EngramOpenAI and
-    # EngramInfiniteChatConfigWithProviderName classes are implemented
-
-    # @pytest.mark.asyncio
-    # async def test_work_with_engram_openai_for_function_calling(
-    #     self,
-    #     test_api_key: str,
-    #     test_provider_api_key: str,
-    #     test_model_name: str,
-    #     test_base_url: str,
-    # ):
-    #     """Test working with EngramOpenAI for function calling."""
-    #     client = EngramOpenAI(
-    #         test_api_key,
-    #         EngramInfiniteChatConfigWithProviderName(
-    #             provider_name="openai",
-    #             provider_api_key=test_provider_api_key,
-    #         ),
-    #     )
-
-    #     tools_config: EngramToolsConfig = {
-    #         "project_id": "test-openai-integration",
-    #     }
-    #     if test_base_url:
-    #         tools_config["base_url"] = test_base_url
-
-    #     tools = EngramTools(test_api_key, tools_config)
-
-    #     response = await client.chat_completion(
-    #         messages=[
-    #             {
-    #                 "role": "system",
-    #                 "content": (
-    #                     "You are a helpful assistant with access to user memories. "
-    #                     "When the user asks you to remember something, use the add_memory tool."
-    #                 ),
-    #             },
-    #             {
-    #                 "role": "user",
-    #                 "content": "Please remember that I prefer tea over coffee",
-    #             },
-    #         ],
-    #         model=test_model_name,
-    #         tools=tools.get_tool_definitions(),
-    #     )
-
-    #     assert response is not None
-    #     assert hasattr(response, "choices")
-
-    #     choice = response.choices[0]
-    #     assert choice.message is not None
-
-    #     # If the model decided to use function calling, test the execution
-    #     if hasattr(choice.message, "tool_calls") and choice.message.tool_calls:
-    #         tool_results = await execute_memory_tool_calls(
-    #             test_api_key,
-    #             choice.message.tool_calls,
-    #             tools_config,
-    #         )
-
-    #         assert tool_results is not None
-    #         assert len(tool_results) == len(choice.message.tool_calls)
-
-    #         for result in tool_results:
-    #             assert result["role"] == "tool"
-    #             assert "content" in result
-    #             assert "tool_call_id" in result
+        assert result["success"] is True
+        assert result["saved"] is True
+        mock_save.assert_awaited_once_with(text="Likes Python", user_id="user-123", session_id=None)
 
     @pytest.mark.asyncio
-    async def test_handle_multiple_tool_calls(
-        self, test_api_key: str, test_base_url: str
-    ):
-        """Test handling multiple tool calls."""
-        tools_config: EngramToolsConfig = {
-            "container_tags": ["test-multi-tools"],
-        }
-        if test_base_url:
-            tools_config["base_url"] = test_base_url
+    async def test_execute_tool_call_routes_to_search(self, tools: SmaranTools) -> None:
+        tool_call = type(
+            "FakeToolCall",
+            (),
+            {
+                "function": type(
+                    "FakeFn",
+                    (),
+                    {"name": "search_memories", "arguments": json.dumps({"information_to_get": "x"})},
+                )()
+            },
+        )()
 
-        # Simulate tool calls (normally these would come from OpenAI)
-        mock_tool_calls: List[ChatCompletionMessageToolCall] = [
-            ChatCompletionMessageToolCall(
-                id="call_1",
-                type="function",
-                function={
-                    "name": "search_memories",
-                    "arguments": json.dumps({"information_to_get": "preferences"}),
-                },
-            ),
-            ChatCompletionMessageToolCall(
-                id="call_2",
-                type="function",
-                function={
-                    "name": "add_memory",
-                    "arguments": json.dumps(
-                        {"memory": "Test memory for multiple calls"}
-                    ),
-                },
-            ),
-        ]
+        with patch.object(tools.client, "recall", AsyncMock(return_value=[])):
+            result_json = await tools.execute_tool_call(tool_call)
 
-        results = await execute_memory_tool_calls(
-            test_api_key, mock_tool_calls, tools_config
-        )
+        assert json.loads(result_json)["success"] is True
 
-        assert results is not None
-        assert len(results) == 2
-
-        assert results[0]["tool_call_id"] == "call_1"
-        assert results[1]["tool_call_id"] == "call_2"
-
-        for result in results:
-            assert result["role"] == "tool"
-            assert "content" in result
-
-            content = json.loads(result["content"])
-            assert "success" in content
+    def test_get_tool_definitions_returns_two_tools(self, tools: SmaranTools) -> None:
+        defs = tools.get_tool_definitions()
+        names = [d["function"]["name"] for d in defs]
+        assert names == ["search_memories", "add_memory"]

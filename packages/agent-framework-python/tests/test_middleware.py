@@ -1,113 +1,81 @@
-"""Tests for Engram middleware."""
+"""Tests for SmaranChatMiddleware."""
+
+from types import SimpleNamespace
+from unittest.mock import AsyncMock
 
 import pytest
+from smaran import MemoryHit
 
-from engram_agent_framework import (
-    AgentEngram,
-    EngramChatMiddleware,
-    EngramMiddlewareOptions,
-)
-from engram_agent_framework.middleware import (
-    _get_last_user_message,
-    _get_conversation_content,
-)
+from smaran_agent_framework import AgentSmaran, SmaranChatMiddleware, SmaranMiddlewareOptions
 
 
-def _make_conn(**kwargs):
-    kwargs.setdefault("api_key", "test-key")
-    kwargs.setdefault("container_tag", "user-123")
-    return AgentEngram(**kwargs)
+@pytest.fixture
+def connection() -> AgentSmaran:
+    return AgentSmaran(api_key="test-key", base_url="https://example.com", user_id="user-123")
 
 
-class TestGetLastUserMessage:
-    def test_dict_messages(self) -> None:
-        messages = [
-            {"role": "system", "content": "You are helpful."},
-            {"role": "user", "content": "Hello!"},
-            {"role": "assistant", "content": "Hi there!"},
-            {"role": "user", "content": "How are you?"},
-        ]
-        assert _get_last_user_message(messages) == "How are you?"
-
-    def test_no_user_message(self) -> None:
-        messages = [
-            {"role": "system", "content": "You are helpful."},
-            {"role": "assistant", "content": "Hi!"},
-        ]
-        assert _get_last_user_message(messages) == ""
-
-    def test_empty_messages(self) -> None:
-        assert _get_last_user_message([]) == ""
-        assert _get_last_user_message(None) == ""
-
-    def test_content_parts(self) -> None:
-        messages = [
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": "Hello"},
-                    {"type": "text", "text": "world"},
-                ],
-            }
-        ]
-        assert _get_last_user_message(messages) == "Hello world"
+def _context_with_messages(messages: list[dict]) -> SimpleNamespace:
+    return SimpleNamespace(messages=messages)
 
 
-class TestGetConversationContent:
-    def test_basic_conversation(self) -> None:
-        messages = [
-            {"role": "user", "content": "Hello!"},
-            {"role": "assistant", "content": "Hi there!"},
-            {"role": "user", "content": "How are you?"},
-        ]
-        result = _get_conversation_content(messages)
-        assert "User: Hello!" in result
-        assert "Assistant: Hi there!" in result
-        assert "User: How are you?" in result
-
-
-class TestMiddlewareOptions:
-    def test_defaults(self) -> None:
-        options = EngramMiddlewareOptions()
-        assert options.verbose is False
-        assert options.mode == "profile"
-        assert options.add_memory == "never"
-
-    def test_custom_options(self) -> None:
-        options = EngramMiddlewareOptions(
-            verbose=True,
-            mode="full",
-            add_memory="always",
+class TestSmaranChatMiddleware:
+    @pytest.mark.asyncio
+    async def test_process_injects_memories_into_system_message(
+        self, connection: AgentSmaran
+    ) -> None:
+        middleware = SmaranChatMiddleware(connection)
+        connection.client.recall = AsyncMock(
+            return_value=[MemoryHit(text="Likes Python", score=0.9)]
         )
-        assert options.verbose is True
-        assert options.mode == "full"
-        assert options.add_memory == "always"
+        context = _context_with_messages(
+            [
+                {"role": "system", "content": "You are helpful."},
+                {"role": "user", "content": "what do I like?"},
+            ]
+        )
+        call_next = AsyncMock()
 
+        await middleware.process(context, call_next)
 
-class TestMiddlewareConfiguration:
-    def test_accepts_connection(self) -> None:
-        conn = _make_conn()
-        middleware = EngramChatMiddleware(conn)
-        assert middleware._container_tag == "user-123"
+        call_next.assert_awaited_once()
+        assert "Likes Python" in context.messages[0]["content"]
 
-    def test_uses_connection_client(self) -> None:
-        conn = _make_conn()
-        middleware = EngramChatMiddleware(conn)
-        assert middleware._engram_client is conn.client
+    @pytest.mark.asyncio
+    async def test_process_skips_recall_when_no_user_message(
+        self, connection: AgentSmaran
+    ) -> None:
+        middleware = SmaranChatMiddleware(connection)
+        connection.client.recall = AsyncMock()
+        context = _context_with_messages([{"role": "system", "content": "You are helpful."}])
+        call_next = AsyncMock()
 
-    def test_conversation_id_from_connection(self) -> None:
-        conn = _make_conn(conversation_id="conv-abc")
-        middleware = EngramChatMiddleware(conn)
-        assert middleware._connection.conversation_id == "conv-abc"
-        assert middleware._connection.custom_id == "conversation_conv-abc"
+        await middleware.process(context, call_next)
 
-    def test_auto_generated_conversation_id(self) -> None:
-        conn = _make_conn()
-        middleware = EngramChatMiddleware(conn)
-        assert middleware._connection.conversation_id is not None
-        assert len(middleware._connection.conversation_id) > 0
+        connection.client.recall.assert_not_awaited()
+        call_next.assert_awaited_once()
 
-    def test_entity_context_from_connection(self) -> None:
-        conn = _make_conn(entity_context="User is a Python developer")
-        middleware = EngramChatMiddleware(conn)
-        assert middleware._connection.entity_context == "User is a Python developer"
+    @pytest.mark.asyncio
+    async def test_process_saves_conversation_when_enabled(self, connection: AgentSmaran) -> None:
+        middleware = SmaranChatMiddleware(
+            connection, options=SmaranMiddlewareOptions(save_conversations=True)
+        )
+        connection.client.recall = AsyncMock(return_value=[])
+        connection.client.save = AsyncMock(return_value=True)
+        context = _context_with_messages([{"role": "user", "content": "my birthday is March 14"}])
+        call_next = AsyncMock()
+
+        await middleware.process(context, call_next)
+        await middleware.wait_for_background_tasks()
+
+        connection.client.save.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_process_continues_when_recall_fails(self, connection: AgentSmaran) -> None:
+        middleware = SmaranChatMiddleware(connection)
+        connection.client.recall = AsyncMock(side_effect=RuntimeError("network error"))
+        context = _context_with_messages([{"role": "user", "content": "hello"}])
+        call_next = AsyncMock()
+
+        await middleware.process(context, call_next)
+
+        call_next.assert_awaited_once()
