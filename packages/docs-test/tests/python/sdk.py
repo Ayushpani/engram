@@ -3,12 +3,12 @@ import time
 from pathlib import Path
 from dotenv import load_dotenv
 import httpx
-import engram
-from engram import Engram
+import smaran
+from smaran import Smaran
 
 load_dotenv()
 
-client = Engram()
+client = Smaran()
 
 
 def test_documents_crud():
@@ -74,11 +74,11 @@ def test_error_handling():
     try:
         client.documents.add(content="Test content")
         print("✓ Error handling pattern works")
-    except engram.APIConnectionError:
+    except smaran.APIConnectionError:
         print("APIConnectionError handled")
-    except engram.RateLimitError:
+    except smaran.RateLimitError:
         print("RateLimitError handled")
-    except engram.APIStatusError:
+    except smaran.APIStatusError:
         print("APIStatusError handled")
 
 
@@ -87,15 +87,15 @@ def test_client_config():
     print("\n=== Client Configuration ===")
 
     # Retries
-    client2 = Engram(max_retries=0)
+    client2 = Smaran(max_retries=0)
     print("✓ max_retries config")
 
     # Timeout
-    client3 = Engram(timeout=20.0)
+    client3 = Smaran(timeout=20.0)
     print("✓ timeout config")
 
     # Granular timeout
-    client4 = Engram(timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0))
+    client4 = Smaran(timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0))
     print("✓ granular timeout config")
 
     # Per-request options
@@ -126,7 +126,7 @@ def test_context_manager():
     """Test context manager"""
     print("\n=== Context Manager ===")
 
-    with Engram() as temp_client:
+    with Smaran() as temp_client:
         print("✓ Context manager works")
 
 

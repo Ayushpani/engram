@@ -1,16 +1,16 @@
 ---
-title: 'Engram SDKs'
+title: 'Smaran SDKs'
 sidebarTitle: "Python and JavaScript SDKs"
-description: 'Learn how to use engram with Python and JavaScript'
+description: 'Learn how to use smaran with Python and JavaScript'
 ---
 
 For more information, see the full updated references at
 
 <Columns cols={2}>
-  <Card title="Python SDK" icon="python" href="https://pypi.org/project/engram/">
+  <Card title="Python SDK" icon="python" href="https://pypi.org/project/smaran/">
   </Card>
 
-  <Card title="Javascript SDK" icon="js" href="https://www.npmjs.com/package/engram">
+  <Card title="Javascript SDK" icon="js" href="https://www.npmjs.com/package/smaran">
   </Card>
 </Columns>
 
@@ -21,7 +21,7 @@ For more information, see the full updated references at
 
 ```sh
 # install from PyPI
-pip install --pre engram
+pip install --pre smaran
 ```
 
 ## Usage
@@ -29,10 +29,10 @@ pip install --pre engram
 
 ```python
 import os
-from engram import Engram
+from smaran import Smaran
 
-client = Engram(
-    api_key=os.environ.get("ENGRAM_API_KEY"),  # This is the default and can be omitted
+client = Smaran(
+    api_key=os.environ.get("SMARAN_API_KEY"),  # This is the default and can be omitted
 )
 
 response = client.search.documents(
@@ -46,16 +46,16 @@ print(response.results)
 ## Installation
 
 ```sh
-npm install engram
+npm install smaran
 ```
 
 ## Usage
 
 ```js
-import Engram from 'engram';
+import Smaran from 'smaran';
 
-const client = new Engram({
-  apiKey: process.env['ENGRAM_API_KEY'], // This is the default and can be omitted
+const client = new Smaran({
+  apiKey: process.env['SMARAN_API_KEY'], // This is the default and can be omitted
 });
 
 async function main() {

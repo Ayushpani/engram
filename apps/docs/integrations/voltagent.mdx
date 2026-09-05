@@ -1,45 +1,45 @@
 ---
 title: "VoltAgent"
 sidebarTitle: "VoltAgent"
-description: "Integrate Engram with VoltAgent for long-term memory in AI agents"
+description: "Integrate Smaran with VoltAgent for long-term memory in AI agents"
 icon: "bolt"
 ---
 
-Engram integrates with [VoltAgent](https://github.com/VoltAgent/voltagent), providing long-term memory capabilities for AI agents. Your VoltAgent applications will remember past conversations and provide personalized responses based on user history.
+Smaran integrates with [VoltAgent](https://github.com/VoltAgent/voltagent), providing long-term memory capabilities for AI agents. Your VoltAgent applications will remember past conversations and provide personalized responses based on user history.
 
 <Note>
   Migrating to v2 from 1.4.x? Check the [migration guide](/migration/tools-v2-upgrade).
 </Note>
 
-<Card title="@engram/tools on npm" icon="npm" href="https://www.npmjs.com/package/@engram/tools">
+<Card title="@smaran/tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaran/tools">
     Check out the NPM page for more details
 </Card>
 
 ## Installation
 
 ```bash
-npm install @engram/tools @voltagent/core
+npm install @smaran/tools @voltagent/core
 ```
 
 Set up your API key as an environment variable:
 
 ```bash
-export ENGRAM_API_KEY=your_engram_api_key
+export SMARAN_API_KEY=your_smaran_api_key
 ```
 
-You can obtain an API key from [console.engram.ai](https://console.engram.ai).
+You can obtain an API key from [console.smaran.ai](https://console.smaran.ai).
 
 ## Quick Start
 
-Engram provides a `withEngram` wrapper that enhances any VoltAgent agent config with automatic memory retrieval and storage:
+Smaran provides a `withSmaran` wrapper that enhances any VoltAgent agent config with automatic memory retrieval and storage:
 
 ```typescript
-import { withEngram } from "@engram/tools/voltagent"
+import { withSmaran } from "@smaran/tools/voltagent"
 import { Agent } from "@voltagent/core"
 import { openai } from "@ai-sdk/openai"
 
-// Create an agent with Engram memory capabilities
-const configWithMemory = withEngram({
+// Create an agent with Smaran memory capabilities
+const configWithMemory = withSmaran({
   agentConfig: {
     name: "my-agent",
     instructions: "You are a helpful assistant.",
@@ -61,7 +61,7 @@ const result = await agent.generateText({
   **Memory saving is enabled by default** in the VoltAgent integration. To disable it:
 
   ```typescript
-  const configWithMemory = withEngram({
+  const configWithMemory = withSmaran({
     agentConfig: {
       name: "my-agent",
       instructions: "You are a helpful assistant.",
@@ -76,18 +76,18 @@ const result = await agent.generateText({
 
 ## How It Works
 
-When integrated with VoltAgent, Engram hooks into two lifecycle events:
+When integrated with VoltAgent, Smaran hooks into two lifecycle events:
 
 ### 1. Memory Retrieval (onPrepareMessages)
 
-Before each LLM call, Engram automatically:
+Before each LLM call, Smaran automatically:
 - Extracts the user's latest message
 - Searches for relevant memories scoped to the `containerTag`
 - Injects retrieved memories into the system prompt
 
 ### 2. Conversation Saving (onEnd)
 
-After each agent response, the conversation is saved to Engram for future retrieval. This requires a `customId` to be set.
+After each agent response, the conversation is saved to Smaran for future retrieval. This requires a `customId` to be set.
 
 ## Memory Modes
 
@@ -98,7 +98,7 @@ After each agent response, the conversation is saved to Engram for future retrie
 | `"full"`    | Combines profile AND query-based search     | Complete memory (recommended)  |
 
 ```typescript
-const configWithMemory = withEngram({
+const configWithMemory = withSmaran({
   agentConfig: {
     name: "my-agent",
     instructions: "You are a helpful assistant.",
@@ -113,7 +113,7 @@ const configWithMemory = withEngram({
 ## Configuration Options
 
 ```typescript
-const configWithMemory = withEngram({
+const configWithMemory = withSmaran({
   // Agent configuration
   agentConfig: {
     name: "my-agent",
@@ -141,8 +141,8 @@ const configWithMemory = withEngram({
   metadata: { source: "voltagent" },                   // Attached to saved conversations
 
   // API
-  apiKey: "sk-...",                // Falls back to ENGRAM_API_KEY env var
-  baseUrl: "https://api.engram.ai",
+  apiKey: "sk-...",                // Falls back to SMARAN_API_KEY env var
+  baseUrl: "https://api.smaran.ai",
 })
 ```
 

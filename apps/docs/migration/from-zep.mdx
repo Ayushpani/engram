@@ -1,12 +1,12 @@
 ---
-title: "Migrating from Zep to Engram"
-description: "Quick guide to migrate from Zep to Engram"
+title: "Migrating from Zep to Smaran"
+description: "Quick guide to migrate from Zep to Smaran"
 sidebarTitle: "From Zep"
 ---
 
 ## Key Differences
 
-| Zep AI | Engram |
+| Zep AI | Smaran |
 |--------|-------------|
 | Sessions & Messages | Documents & Container Tags |
 | `session.create()` | Use `containerTags` parameter |
@@ -18,11 +18,11 @@ sidebarTitle: "From Zep"
 <CodeGroup>
 
 ```bash Python
-pip install engram
+pip install smaran
 ```
 
 ```bash TypeScript
-npm install engram
+npm install smaran
 ```
 
 </CodeGroup>
@@ -30,13 +30,13 @@ npm install engram
 <CodeGroup>
 
 ```python Python
-from engram import Engram
-client = Engram(api_key="your-api-key")
+from smaran import Smaran
+client = Smaran(api_key="your-api-key")
 ```
 
 ```typescript TypeScript
-import { Engram } from "engram";
-const client = new Engram({ apiKey: "your-api-key" });
+import { Smaran } from "smaran";
+const client = new Smaran({ apiKey: "your-api-key" });
 ```
 
 </CodeGroup>
@@ -54,7 +54,7 @@ session = client.session.create(
 )
 ```
 
-```python Engram
+```python Smaran
 # No explicit session creation - use containerTag
 containerTag = ["user_123"]
 ```
@@ -72,7 +72,7 @@ client.memory.add(
 )
 ```
 
-```python Engram
+```python Smaran
 client.add({
     "content": "User prefers dark mode",
     "containerTag": ["user_123"]
@@ -92,7 +92,7 @@ results = client.memory.search(
 )
 ```
 
-```python Engram
+```python Smaran
 results = client.search.execute({
     "q": "preferences",
     "containerTag": ["user_123"],
@@ -110,7 +110,7 @@ results = client.search.execute({
 memories = client.memory.get(session_id="user_123")
 ```
 
-```python Engram
+```python Smaran
 documents = client.documents.list({
     "containerTag": ["user_123"],
     "limit": 100
@@ -121,7 +121,7 @@ documents = client.documents.list({
 
 ## Migration Steps
 
-1. **Replace client initialization** - Use Engram client instead of Zep
+1. **Replace client initialization** - Use Smaran client instead of Zep
 2. **Map sessions to container tags** - Replace `session_id="user_123"` with `containerTag: ["user_123"]`
 3. **Update method calls** - Use `add()` and `search.execute()` instead of `memory.add()` and `memory.search()`
 4. **Change search parameter** - Use `q` instead of `text`
@@ -148,10 +148,10 @@ results = client.memory.search("user_123", {
 })
 ```
 
-```python Engram
-from engram import Engram
+```python Smaran
+from smaran import Smaran
 
-client = Engram(api_key="...")
+client = Smaran(api_key="...")
 containerTag = ["user_123"]
 
 client.add({
@@ -174,7 +174,7 @@ results = client.search.execute({
 - **No session creation needed** - Just use `containerTag` in requests
 - **Messages are documents** - Store with `metadata.role` and `metadata.type`
 - **Async processing** - Documents may take a moment to be searchable
-- **Response structure** - Engram returns chunks with scores, not direct memory content
+- **Response structure** - Smaran returns chunks with scores, not direct memory content
 
 ## Migrating Existing Data
 
@@ -186,13 +186,13 @@ Complete migration in one script:
 
 ```typescript TypeScript
 import { ZepClient } from "@getzep/zep-js";
-import { Engram } from "engram";
+import { Smaran } from "smaran";
 
 // Initialize clients
 const zep = new ZepClient({ apiKey: "your_zep_api_key" });
-const engram = new Engram({ apiKey: "your_engram_api_key" });
+const smaran = new Smaran({ apiKey: "your_smaran_api_key" });
 
-// Export from Zep and import to Engram
+// Export from Zep and import to Smaran
 const sessionIds = ["session_1", "session_2"]; // Add your session IDs
 
 for (const sessionId of sessionIds) {
@@ -201,7 +201,7 @@ for (const sessionId of sessionIds) {
 
   for (const mem of memories) {
     if (mem.content) {
-      await engram.add({
+      await smaran.add({
         content: mem.content,
         containerTag: [`session_${sessionId}`, `user_${memory.user_id || "unknown"}`],
         metadata: {
@@ -221,13 +221,13 @@ console.log("Migration complete!");
 
 ```python Python
 from zep_python import ZepClient
-from engram import Engram
+from smaran import Smaran
 
 # Initialize clients
 zep = ZepClient(api_key="your_zep_api_key")
-engram = Engram(api_key="your_engram_api_key")
+smaran = Smaran(api_key="your_smaran_api_key")
 
-# Export from Zep and import to Engram
+# Export from Zep and import to Smaran
 session_ids = ["session_1", "session_2"]  # Add your session IDs
 
 for session_id in session_ids:
@@ -236,7 +236,7 @@ for session_id in session_ids:
 
     for mem in memories:
         if mem.content:
-            engram.add({
+            smaran.add({
                 "content": mem.content,
                 "containerTag": [f"session_{session_id}", f"user_{memory.user_id or 'unknown'}"],
                 "metadata": {
@@ -259,7 +259,7 @@ For a complete migration script with error handling, verification, and progress 
 
 ```typescript
 import { ZepClient } from "@getzep/zep-js";
-import { Engram } from "engram";
+import { Smaran } from "smaran";
 import * as dotenv from "dotenv";
 import * as fs from "fs";
 
@@ -273,11 +273,11 @@ interface MigrationStats {
 
 async function migrateFromZep(
   zepApiKey: string,
-  engramApiKey: string,
+  smaranApiKey: string,
   sessionIds: string[]
 ) {
   const zep = new ZepClient({ apiKey: zepApiKey });
-  const engram = new Engram({ apiKey: engramApiKey });
+  const smaran = new Smaran({ apiKey: smaranApiKey });
 
   const stats: MigrationStats = { imported: 0, failed: 0, skipped: 0 };
   const exportedData: any = {};
@@ -312,7 +312,7 @@ async function migrateFromZep(
   fs.writeFileSync(backupFile, JSON.stringify(exportedData, null, 2));
   console.log(`💾 Backup saved to: ${backupFile}`);
 
-  // Import to Engram
+  // Import to Smaran
   let totalMemories = 0;
   for (const [sessionId, data] of Object.entries(exportedData) as any) {
     const containerTag = ["imported_from_zep", `session_${sessionId}`];
@@ -328,7 +328,7 @@ async function migrateFromZep(
           continue;
         }
 
-        await engram.add({
+        await smaran.add({
           content: memory.content,
           containerTag: containerTag,
           metadata: {
@@ -359,7 +359,7 @@ async function migrateFromZep(
 const sessionIds = ["session_1", "session_2"]; // Add your session IDs
 migrateFromZep(
   process.env.ZEP_API_KEY!,
-  process.env.ENGRAM_API_KEY!,
+  process.env.SMARAN_API_KEY!,
   sessionIds
 ).catch(console.error);
 ```
@@ -367,6 +367,6 @@ migrateFromZep(
 
 ## Resources
 
-- [Engram SDKs](/integrations/engram-sdk)
+- [Smaran SDKs](/integrations/smaran-sdk)
 - [API Reference](/memory-api/overview)
 - [Search Documentation](/search)

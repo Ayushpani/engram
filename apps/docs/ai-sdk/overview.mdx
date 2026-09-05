@@ -1,19 +1,19 @@
 ---
 title: "AI SDK Integration"
-description: "Use Engram with Vercel AI SDK for seamless memory management"
+description: "Use Smaran with Vercel AI SDK for seamless memory management"
 sidebarTitle: "Overview"
 ---
 
-The Engram AI SDK provides native integration with Vercel's AI SDK through two approaches: **User Profiles** for automatic personalization and **Memory Tools** for agent-based interactions.
+The Smaran AI SDK provides native integration with Vercel's AI SDK through two approaches: **User Profiles** for automatic personalization and **Memory Tools** for agent-based interactions.
 
-<Card title="Engram tools on npm" icon="npm" href="https://www.npmjs.com/package/@engram/tools">
+<Card title="Smaran tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaran/tools">
     Check out the NPM page for more details
 </Card>
 
 ## Installation
 
 ```bash
-npm install @engram/tools
+npm install @smaran/tools
 ```
 
 ## User Profiles with Middleware
@@ -22,11 +22,11 @@ Automatically inject user profiles into every LLM call for instant personalizati
 
 ```typescript
 import { generateText } from "ai"
-import { withEngram } from "@engram/tools/ai-sdk"
+import { withSmaran } from "@smaran/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
-// Wrap your model with Engram - profiles are automatically injected
-const modelWithMemory = withEngram(openai("gpt-5"), {
+// Wrap your model with Smaran - profiles are automatically injected
+const modelWithMemory = withSmaran(openai("gpt-5"), {
   containerTag: "user-123",
   customId: "conversation-456",
 })
@@ -42,7 +42,7 @@ const result = await generateText({
   **Memory saving is enabled by default** (`addMemory: "always"`). New conversations are persisted automatically. To opt out, set `addMemory: "never"`:
 
   ```typescript
-  const modelWithMemory = withEngram(openai("gpt-5"), {
+  const modelWithMemory = withSmaran(openai("gpt-5"), {
     containerTag: "user-123",
     customId: "conversation-456",
     addMemory: "never",
@@ -60,7 +60,7 @@ Add memory capabilities to AI agents with search, add, and fetch operations.
 ```typescript
 import { streamText } from "ai"
 import { createAnthropic } from "@ai-sdk/anthropic"
-import { engramTools } from "@engram/tools/ai-sdk"
+import { smaranTools } from "@smaran/tools/ai-sdk"
 
 const anthropic = createAnthropic({
   apiKey: "YOUR_ANTHROPIC_KEY"
@@ -69,7 +69,7 @@ const anthropic = createAnthropic({
 const result = await streamText({
   model: anthropic("claude-3-sonnet"),
   prompt: "Remember that my name is Alice",
-  tools: engramTools("YOUR_ENGRAM_KEY")
+  tools: smaranTools("YOUR_SMARAN_KEY")
 })
 ```
 

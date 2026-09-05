@@ -1,31 +1,31 @@
 ---
 title: "Claude Memory Tool"
-description: "Enable Claude's persistent memory capabilities with Engram as the backend"
+description: "Enable Claude's persistent memory capabilities with Smaran as the backend"
 ---
 
-Enable Claude's native memory tool functionality with Engram as the persistent storage backend. Claude can automatically store and retrieve information across conversations using familiar filesystem operations.
+Enable Claude's native memory tool functionality with Smaran as the persistent storage backend. Claude can automatically store and retrieve information across conversations using familiar filesystem operations.
 
-<Card title="Engram tools on npm" icon="npm" href="https://www.npmjs.com/package/@engram/tools">
+<Card title="Smaran tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaran/tools">
     Check out the NPM page for more details
 </Card>
 
 ## Installation
 
 ```bash
-npm install @engram/tools @anthropic-ai/sdk
+npm install @smaran/tools @anthropic-ai/sdk
 ```
 
 ## Quick Start
 
 ```typescript
 import Anthropic from "@anthropic-ai/sdk"
-import { createClaudeMemoryTool } from "@engram/tools/claude-memory"
+import { createClaudeMemoryTool } from "@smaran/tools/claude-memory"
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
 })
 
-const memoryTool = createClaudeMemoryTool(process.env.ENGRAM_API_KEY!, {
+const memoryTool = createClaudeMemoryTool(process.env.SMARAN_API_KEY!, {
   projectId: 'my-app',
 })
 
@@ -57,7 +57,7 @@ async function chatWithMemory(userMessage: string) {
 
 Claude's memory tool uses a filesystem metaphor to manage persistent information:
 
-- **Files**: Individual memory items stored as Engram documents
+- **Files**: Individual memory items stored as Smaran documents
 - **Directories**: Organized using path structure (e.g., `/memories/user-preferences`)
 - **Operations**: View, create, edit, delete, and rename files
 - **Path Normalization**: Paths like `/memories/preferences` are stored as `--memories--preferences`
@@ -67,13 +67,13 @@ Claude's memory tool uses a filesystem metaphor to manage persistent information
 ### Basic Configuration
 
 ```typescript
-import { createClaudeMemoryTool } from "@engram/tools/claude-memory"
+import { createClaudeMemoryTool } from "@smaran/tools/claude-memory"
 
 const memoryTool = createClaudeMemoryTool(
-  process.env.ENGRAM_API_KEY!,
+  process.env.SMARAN_API_KEY!,
   {
     projectId: 'my-app',           // Project identifier
-    baseUrl: 'https://api.engram.ai', // Optional: custom API endpoint
+    baseUrl: 'https://api.smaran.ai', // Optional: custom API endpoint
   }
 )
 ```
@@ -82,7 +82,7 @@ const memoryTool = createClaudeMemoryTool(
 
 ```typescript
 const memoryTool = createClaudeMemoryTool(
-  process.env.ENGRAM_API_KEY!,
+  process.env.SMARAN_API_KEY!,
   {
     containerTags: ['user:alice', 'app:chat'],
   }
@@ -99,7 +99,7 @@ List directory contents or read file contents:
 
 ```typescript
 // Claude will automatically check /memories/ directory
-// This maps to searching Engram documents with path prefix
+// This maps to searching Smaran documents with path prefix
 ```
 
 ### Create Files
@@ -117,7 +117,7 @@ Update existing memories using string replacement:
 
 ```typescript
 // Claude performs str_replace on file contents
-// Updates the corresponding Engram document
+// Updates the corresponding Smaran document
 ```
 
 ### Delete Files
@@ -126,7 +126,7 @@ Remove information:
 
 ```typescript
 // Claude deletes: /memories/old-data.txt
-// Removes document from Engram
+// Removes document from Smaran
 ```
 
 ### Rename Files
@@ -135,7 +135,7 @@ Reorganize memory structure:
 
 ```typescript
 // Claude renames: /memories/temp.txt -> /memories/final.txt
-// Updates document customId in Engram
+// Updates document customId in Smaran
 ```
 
 ## Complete Chat Example
@@ -144,13 +144,13 @@ Here's a full example with conversation handling:
 
 ```typescript
 import Anthropic from "@anthropic-ai/sdk"
-import { createClaudeMemoryTool, type MemoryCommand } from "@engram/tools/claude-memory"
+import { createClaudeMemoryTool, type MemoryCommand } from "@smaran/tools/claude-memory"
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
 })
 
-const memoryTool = createClaudeMemoryTool(process.env.ENGRAM_API_KEY!, {
+const memoryTool = createClaudeMemoryTool(process.env.SMARAN_API_KEY!, {
   projectId: 'chat-app',
 })
 
@@ -286,7 +286,7 @@ for (const block of response.content) {
 Creates a memory tool instance for Claude.
 
 **Parameters:**
-- `apiKey` (string): Your Engram API key
+- `apiKey` (string): Your Smaran API key
 - `config` (optional):
   - `projectId` (string): Project identifier
   - `containerTags` (string[]): Alternative to projectId
@@ -325,7 +325,7 @@ Claude uses these command types internally:
 
 ```bash
 ANTHROPIC_API_KEY=your_anthropic_key
-ENGRAM_API_KEY=your_engram_key
+SMARAN_API_KEY=your_smaran_key
 ```
 
 ## When to Use

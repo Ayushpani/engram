@@ -8,7 +8,7 @@ Reranking applies a secondary ranking algorithm to improve the relevance order o
 
 ## How Reranking Works
 
-Engram's reranking process:
+Smaran's reranking process:
 
 1. **Initial search** returns results using standard semantic similarity
 2. **Reranker model** analyzes query-result pairs
@@ -27,10 +27,10 @@ The reranker is particularly effective at:
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Engram from 'engram';
+    import Smaran from 'smaran';
 
-    const client = new Engram({
-      apiKey: process.env.ENGRAM_API_KEY!
+    const client = new Smaran({
+      apiKey: process.env.SMARAN_API_KEY!
     });
 
     // Search without reranking
@@ -53,10 +53,10 @@ The reranker is particularly effective at:
   </Tab>
   <Tab title="Python">
     ```python
-    from engram import Engram
+    from smaran import Smaran
     import os
 
-    client = Engram(api_key=os.environ.get("ENGRAM_API_KEY"))
+    client = Smaran(api_key=os.environ.get("SMARAN_API_KEY"))
 
     # Search without reranking
     standard_results = client.search.documents(
@@ -80,8 +80,8 @@ The reranker is particularly effective at:
     ```bash
     # Without reranking
     echo "Standard ranking:"
-    curl -X POST "https://api.engram.ai/v3/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "neural network optimization techniques",
@@ -91,8 +91,8 @@ The reranker is particularly effective at:
 
     # With reranking
     echo "Reranked results:"
-    curl -X POST "https://api.engram.ai/v3/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "neural network optimization techniques",
@@ -200,8 +200,8 @@ Reranking excels with complex, multi-faceted queries:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "sustainable machine learning carbon footprint energy efficiency",
@@ -282,8 +282,8 @@ Reranking also improves memory search results:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "explain transformer architecture attention mechanism",
@@ -369,8 +369,8 @@ Reranking understands domain-specific relationships:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "diabetes treatment insulin resistance metformin",

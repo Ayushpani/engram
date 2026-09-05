@@ -1,14 +1,14 @@
 ---
-title: "Migrating from Mem0 to Engram"
-description: "Complete guide to migrate your data and applications from Mem0 to Engram"
+title: "Migrating from Mem0 to Smaran"
+description: "Complete guide to migrate your data and applications from Mem0 to Smaran"
 sidebarTitle: "From Mem0"
 ---
 
-Migrating from Mem0 to Engram is straightforward. This guide walks you through exporting your memories from Mem0 and importing them into Engram.
+Migrating from Mem0 to Smaran is straightforward. This guide walks you through exporting your memories from Mem0 and importing them into Smaran.
 
-## Why Migrate to Engram?
+## Why Migrate to Smaran?
 
-Engram offers enhanced capabilities over Mem0:
+Smaran offers enhanced capabilities over Mem0:
 - **Knowledge graph** architecture for better context relationships
 - **Multiple content types** (URLs, PDFs, images, videos)
 - **Generous free tier** (100k tokens) with affordable pricing
@@ -20,7 +20,7 @@ Complete migration in one script:
 
 ```python
 from mem0 import MemoryClient
-from engram import Engram
+from smaran import Smaran
 import json, time
 
 # Export from Mem0
@@ -32,11 +32,11 @@ export = mem0.create_memory_export(
 time.sleep(5)
 data = mem0.get_memory_export(memory_export_id=export["id"])
 
-# Import to Engram
-engram = Engram(api_key="your_engram_api_key")
+# Import to Smaran
+smaran = Smaran(api_key="your_smaran_api_key")
 for memory in data["memories"]:
     if memory.get("content"):
-        engram.memories.add(
+        smaran.memories.add(
             content=memory["content"],
             container_tags=["imported_from_mem0"]
         )
@@ -103,32 +103,32 @@ print("Migration complete!")
     ```
   </Step>
 
-  <Step title="Set Up Engram">
-    Create your Engram account and get your API key:
+  <Step title="Set Up Smaran">
+    Create your Smaran account and get your API key:
 
-    1. Sign up at [console.engram.ai](https://console.engram.ai)
+    1. Sign up at [console.smaran.ai](https://console.smaran.ai)
     2. Create a new project
     3. Generate an API key from the dashboard
 
     ```bash
     # Set your environment variable
-    export ENGRAM_API_KEY="your_engram_api_key"
+    export SMARAN_API_KEY="your_smaran_api_key"
     ```
   </Step>
 
-  <Step title="Import to Engram">
-    Simple script to import your Mem0 memories into Engram:
+  <Step title="Import to Smaran">
+    Simple script to import your Mem0 memories into Smaran:
 
     ```python
     import json
-    from engram import Engram
+    from smaran import Smaran
 
     # Load your Mem0 export
     with open("mem0_export.json", "r") as f:
         mem0_data = json.load(f)
 
-    # Connect to Engram
-    client = Engram(api_key="your_engram_api_key")
+    # Connect to Smaran
+    client = Smaran(api_key="your_smaran_api_key")
 
     # Import memories
     for memory in mem0_data["memories"]:
@@ -138,7 +138,7 @@ print("Migration complete!")
         if not content:
             continue
 
-        # Import to Engram
+        # Import to Smaran
         try:
             result = client.add(
                 content=content,
@@ -160,7 +160,7 @@ print("Migration complete!")
 
 ## API Migration Reference
 
-Here's how common Mem0 operations map to Engram:
+Here's how common Mem0 operations map to Smaran:
 
 ### Adding Memories
 
@@ -176,10 +176,10 @@ client.add(
 )
 ```
 
-```python Engram
-from engram import Engram
+```python Smaran
+from smaran import Smaran
 
-client = Engram(api_key="...")
+client = Smaran(api_key="...")
 client.add(
     content="User prefers dark mode",
     container_tags=["user_alice"]
@@ -199,7 +199,7 @@ results = client.search(
 )
 ```
 
-```python Engram
+```python Smaran
 results = client.documents.search(
     query="user preferences",
     container_tags=["user_alice"]
@@ -218,7 +218,7 @@ memories = client.get_all(
 )
 ```
 
-```python Engram
+```python Smaran
 memories = client.documents.list(
     container_tags=["user_alice"],
     limit=100
@@ -235,18 +235,18 @@ memories = client.documents.list(
 client.delete(memory_id="mem_123")
 ```
 
-```python Engram
+```python Smaran
 client.documents.delete("mem_123")
 ```
 
 </CodeGroup>
 
 <Note>
-For enterprise migrations, [contact us](mailto:support@engram.ai) for assistance.
+For enterprise migrations, [contact us](mailto:support@smaran.ai) for assistance.
 </Note>
 
 ## Next Steps
 
-1. [Explore](/how-it-works) how Engram works
+1. [Explore](/how-it-works) how Smaran works
 2. Read the [quickstart](/quickstart) and add and retrieve your first memories
 3. [Connect](/connectors/overview) to Google Drive, Notion, and OneDrive with automatic syncing

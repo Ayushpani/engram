@@ -1,13 +1,13 @@
 ---
 title: "OpenAI SDK"
 sidebarTitle: "OpenAI SDK"
-description: "Memory tools for OpenAI function calling with Engram integration"
+description: "Memory tools for OpenAI function calling with Smaran integration"
 icon: "/images/openai.svg"
 ---
 
-Add memory capabilities to the official OpenAI SDKs using Engram. Two approaches available:
+Add memory capabilities to the official OpenAI SDKs using Smaran. Two approaches available:
 
-1. **`withEngram` wrapper** - Automatic memory injection into system prompts (zero-config)
+1. **`withSmaran` wrapper** - Automatic memory injection into system prompts (zero-config)
 2. **Function calling tools** - Explicit tool calls for search/add memory operations
 
 <Note>
@@ -15,40 +15,40 @@ Add memory capabilities to the official OpenAI SDKs using Engram. Two approaches
 </Note>
 
 <Tip>
-**New to Engram?** Start with `withEngram` for the simplest integration. It automatically injects relevant memories into your prompts.
+**New to Smaran?** Start with `withSmaran` for the simplest integration. It automatically injects relevant memories into your prompts.
 </Tip>
 
 <CardGroup>
-<Card title="Engram tools on npm" icon="npm" href="https://www.npmjs.com/package/@engram/tools">
+<Card title="Smaran tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaran/tools">
     Check out the NPM page for more details
 </Card>
-<Card title="Engram AI SDK" icon="python" href="https://pypi.org/project/engram-openai-sdk/">
+<Card title="Smaran AI SDK" icon="python" href="https://pypi.org/project/smaran-openai-sdk/">
     Check out the PyPI page for more details
 </Card>
 </CardGroup>
 
 ---
 
-## withEngram Wrapper
+## withSmaran Wrapper
 
 The simplest way to add memory to your OpenAI client. Wraps your client to automatically inject relevant memories into system prompts.
 
 ### Installation
 
 ```bash
-npm install @engram/tools openai
+npm install @smaran/tools openai
 ```
 
 ### Quick Start
 
 ```typescript
 import OpenAI from "openai"
-import { withEngram } from "@engram/tools/openai"
+import { withSmaran } from "@smaran/tools/openai"
 
 const openai = new OpenAI()
 
 // Wrap client with memory - memories auto-injected into system prompts
-const client = withEngram(openai, {
+const client = withSmaran(openai, {
   containerTag: "user-123",     // Required: identifies the user/container
   customId: "conversation-456", // Required: groups messages into the same document 
   mode: "full",                 // "profile" | "query" | "full"
@@ -68,7 +68,7 @@ const response = await client.chat.completions.create({
 ### Configuration Options
 
 ```typescript
-const client = withEngram(openai, {
+const client = withSmaran(openai, {
   // Required: identifies the user/container
   containerTag: "user-123",
 
@@ -100,7 +100,7 @@ const client = withEngram(openai, {
 ### Works with Responses API Too
 
 ```typescript
-const client = withEngram(openai, { containerTag: "user-123", customId: "conv-456", mode: "full" })
+const client = withSmaran(openai, { containerTag: "user-123", customId: "conv-456", mode: "full" })
 
 // Memories injected into instructions
 const response = await client.responses.create({
@@ -113,7 +113,7 @@ const response = await client.responses.create({
 ### Environment Variables
 
 ```bash
-ENGRAM_API_KEY=your_engram_key
+SMARAN_API_KEY=your_smaran_key
 OPENAI_API_KEY=your_openai_key
 ```
 
@@ -129,14 +129,14 @@ For explicit control over memory operations, use function calling tools. The mod
 
 ```bash Python
 # Using uv (recommended)
-uv add engram-openai-sdk
+uv add smaran-openai-sdk
 
 # Or with pip
-pip install engram-openai-sdk
+pip install smaran-openai-sdk
 ```
 
 ```bash JavaScript/TypeScript
-npm install @engram/tools
+npm install @smaran/tools
 ```
 
 </CodeGroup>
@@ -148,15 +148,15 @@ npm install @engram/tools
 ```python Python SDK
 import asyncio
 import openai
-from engram_openai import EngramTools, execute_memory_tool_calls
+from smaran_openai import SmaranTools, execute_memory_tool_calls
 
 async def main():
     # Initialize OpenAI client
     client = openai.AsyncOpenAI(api_key="your-openai-api-key")
 
-    # Initialize Engram tools
-    tools = EngramTools(
-        api_key="your-engram-api-key",
+    # Initialize Smaran tools
+    tools = SmaranTools(
+        api_key="your-smaran-api-key",
         config={"project_id": "my-project"}
     )
 
@@ -179,7 +179,7 @@ async def main():
     # Handle tool calls if present
     if response.choices[0].message.tool_calls:
         tool_results = await execute_memory_tool_calls(
-            api_key="your-engram-api-key",
+            api_key="your-smaran-api-key",
             tool_calls=response.choices[0].message.tool_calls,
             config={"project_id": "my-project"}
         )
@@ -191,7 +191,7 @@ asyncio.run(main())
 ```
 
 ```typescript JavaScript/TypeScript SDK
-import { engramTools, getToolDefinitions, createToolCallExecutor } from "@engram/tools/openai"
+import { smaranTools, getToolDefinitions, createToolCallExecutor } from "@smaran/tools/openai"
 import OpenAI from "openai"
 
 const client = new OpenAI({
@@ -202,7 +202,7 @@ const client = new OpenAI({
 const toolDefinitions = getToolDefinitions()
 
 // Create tool executor
-const executeToolCall = createToolCallExecutor(process.env.ENGRAM_API_KEY!, {
+const executeToolCall = createToolCallExecutor(process.env.SMARAN_API_KEY!, {
   projectId: "your-project-id",
 })
 
@@ -236,10 +236,10 @@ if (completion.choices[0]?.message.tool_calls) {
 <CodeGroup>
 
 ```python Python Configuration
-from engram_openai import EngramTools
+from smaran_openai import SmaranTools
 
-tools = EngramTools(
-    api_key="your-engram-api-key",
+tools = SmaranTools(
+    api_key="your-smaran-api-key",
     config={
         "project_id": "my-project",  # or use container_tags
         "base_url": "https://custom-endpoint.com",  # optional
@@ -248,9 +248,9 @@ tools = EngramTools(
 ```
 
 ```typescript JavaScript Configuration
-import { engramTools } from "@engram/tools/openai"
+import { smaranTools } from "@smaran/tools/openai"
 
-const tools = engramTools(process.env.ENGRAM_API_KEY!, {
+const tools = smaranTools(process.env.SMARAN_API_KEY!, {
   containerTags: ["your-user-id"],
   baseUrl: "https://custom-endpoint.com", // optional
 })
@@ -318,7 +318,7 @@ Use tools separately for more granular control:
 <CodeGroup>
 
 ```python Python Individual Tools
-from engram_openai import (
+from smaran_openai import (
     create_search_memories_tool,
     create_add_memory_tool
 )
@@ -334,10 +334,10 @@ tools_list = [search_tool, add_tool]
 import {
   createSearchMemoriesTool,
   createAddMemoryTool
-} from "@engram/tools/openai"
+} from "@smaran/tools/openai"
 
-const searchTool = createSearchMemoriesTool(process.env.ENGRAM_API_KEY!)
-const addTool = createAddMemoryTool(process.env.ENGRAM_API_KEY!)
+const searchTool = createSearchMemoriesTool(process.env.SMARAN_API_KEY!)
+const addTool = createAddMemoryTool(process.env.SMARAN_API_KEY!)
 
 // Use individual tools
 const toolDefinitions = [searchTool.definition, addTool.definition]
@@ -354,12 +354,12 @@ Here's a complete example showing a multi-turn conversation with memory:
 ```python Complete Python Example
 import asyncio
 import openai
-from engram_openai import EngramTools, execute_memory_tool_calls
+from smaran_openai import SmaranTools, execute_memory_tool_calls
 
 async def chat_with_memory():
     client = openai.AsyncOpenAI()
-    tools = EngramTools(
-        api_key="your-engram-api-key",
+    tools = SmaranTools(
+        api_key="your-smaran-api-key",
         config={"project_id": "chat-example"}
     )
 
@@ -391,7 +391,7 @@ async def chat_with_memory():
             messages.append(response.choices[0].message)
 
             tool_results = await execute_memory_tool_calls(
-                api_key="your-engram-api-key",
+                api_key="your-smaran-api-key",
                 tool_calls=response.choices[0].message.tool_calls,
                 config={"project_id": "chat-example"}
             )
@@ -417,11 +417,11 @@ asyncio.run(chat_with_memory())
 
 ```typescript Complete JavaScript Example
 import OpenAI from "openai"
-import { getToolDefinitions, createToolCallExecutor } from "@engram/tools/openai"
+import { getToolDefinitions, createToolCallExecutor } from "@smaran/tools/openai"
 import readline from 'readline'
 
 const client = new OpenAI()
-const executeToolCall = createToolCallExecutor(process.env.ENGRAM_API_KEY!, {
+const executeToolCall = createToolCallExecutor(process.env.SMARAN_API_KEY!, {
   projectId: "chat-example",
 })
 
@@ -505,13 +505,13 @@ Handle errors gracefully in your applications:
 <CodeGroup>
 
 ```python Python Error Handling
-from engram_openai import EngramTools
+from smaran_openai import SmaranTools
 import openai
 
 async def safe_chat():
     try:
         client = openai.AsyncOpenAI()
-        tools = EngramTools(api_key="your-api-key")
+        tools = SmaranTools(api_key="your-api-key")
 
         response = await client.chat.completions.create(
             model="gpt-5",
@@ -527,7 +527,7 @@ async def safe_chat():
 
 ```typescript JavaScript Error Handling
 import OpenAI from "openai"
-import { getToolDefinitions } from "@engram/tools/openai"
+import { getToolDefinitions } from "@smaran/tools/openai"
 
 async function safeChat() {
   try {
@@ -555,13 +555,13 @@ async function safeChat() {
 
 ### Python SDK
 
-#### `EngramTools`
+#### `SmaranTools`
 
 **Constructor**
 ```python
-EngramTools(
+SmaranTools(
     api_key: str,
-    config: Optional[EngramToolsConfig] = None
+    config: Optional[SmaranToolsConfig] = None
 )
 ```
 
@@ -577,16 +577,16 @@ EngramTools(
 execute_memory_tool_calls(
     api_key: str,
     tool_calls: List[ToolCall],
-    config: Optional[EngramToolsConfig] = None
+    config: Optional[SmaranToolsConfig] = None
 ) -> List[dict]
 ```
 
 ### JavaScript SDK
 
-#### `engramTools`
+#### `smaranTools`
 
 ```typescript
-engramTools(
+smaranTools(
   apiKey: string,
   config?: { projectId?: string; baseUrl?: string }
 )
@@ -606,9 +606,9 @@ createToolCallExecutor(
 Set these environment variables:
 
 ```bash
-ENGRAM_API_KEY=your_engram_key
+SMARAN_API_KEY=your_smaran_key
 OPENAI_API_KEY=your_openai_key
-ENGRAM_BASE_URL=https://custom-endpoint.com  # optional
+SMARAN_BASE_URL=https://custom-endpoint.com  # optional
 ```
 
 ## Development
@@ -628,7 +628,7 @@ uv sync --dev
 uv run pytest
 
 # Type checking
-uv run mypy src/engram_openai
+uv run mypy src/smaran_openai
 
 # Formatting
 uv run black src/ tests/

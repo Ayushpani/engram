@@ -3,7 +3,7 @@ title: 'Bring Your Own Key (BYOK)'
 description: 'Configure your own OAuth application credentials for enhanced security and control'
 ---
 
-By default, engram uses its own OAuth applications to connect to third-party providers. However, you can configure your own OAuth application credentials for enhanced security and control. This is particularly useful for enterprise customers who want to maintain control over their data access.
+By default, smaran uses its own OAuth applications to connect to third-party providers. However, you can configure your own OAuth application credentials for enhanced security and control. This is particularly useful for enterprise customers who want to maintain control over their data access.
 
 <Danger>
   Some providers like Google Drive require extensive verification and approval before you can use custom keys.
@@ -27,23 +27,23 @@ OneDrive: https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/Applicatio
 3. Configure the redirect URL, set it to:
 
 ```
-https://api.engram.ai/v3/connections/auth/callback/{provider}
+https://api.smaran.ai/v3/connections/auth/callback/{provider}
 ```
 
 For example, if you are using Google Drive, the redirect URL would be:
 
 ```
-https://api.engram.ai/v3/connections/auth/callback/google-drive
+https://api.smaran.ai/v3/connections/auth/callback/google-drive
 ```
 
 4. Configure the client ID and client secret in the `PATCH /v3/settings` endpoint.
 
 <CodeGroup>
 ```typescript Typescript
-import Engram from 'engram';
+import Smaran from 'smaran';
 
-const client = new Engram({
-  apiKey: process.env['ENGRAM_API_KEY'],
+const client = new Smaran({
+  apiKey: process.env['SMARAN_API_KEY'],
 });
 
 // Example: Configure Google Drive custom OAuth credentials
@@ -69,10 +69,10 @@ const settings = await client.settings.update({
 ```
 
 ```python Python
-from engram import engram
+from smaran import smaran
 
-client = engram(
-    api_key=os.environ.get("ENGRAM_API_KEY"),  # This is the default and can be omitted
+client = smaran(
+    api_key=os.environ.get("SMARAN_API_KEY"),  # This is the default and can be omitted
 )
 
 # Example: Configure Google Drive custom OAuth credentials
@@ -100,7 +100,7 @@ settings = client.settings.update(
 ```bash cURL
 # Example: Configure Google Drive custom OAuth credentials
 curl --request PATCH \
-  --url https://api.engram.ai/v3/settings \
+  --url https://api.smaran.ai/v3/settings \
   --header 'Authorization: Bearer <token>' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -111,7 +111,7 @@ curl --request PATCH \
 
 # Example: Configure Notion custom OAuth credentials
 curl --request PATCH \
-  --url https://api.engram.ai/v3/settings \
+  --url https://api.smaran.ai/v3/settings \
   --header 'Authorization: Bearer <token>' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -122,7 +122,7 @@ curl --request PATCH \
 
 # Example: Configure OneDrive custom OAuth credentials
 curl --request PATCH \
-  --url https://api.engram.ai/v3/settings \
+  --url https://api.smaran.ai/v3/settings \
   --header 'Authorization: Bearer <token>' \
   --header 'Content-Type: application/json' \
   --data '{

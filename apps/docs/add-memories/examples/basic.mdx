@@ -1,9 +1,9 @@
 ---
 title: "Basic Usage"
-description: "Simple examples of adding text content to Engram"
+description: "Simple examples of adding text content to Smaran"
 ---
 
-Learn how to add basic text content to Engram with simple, practical examples.
+Learn how to add basic text content to Smaran with simple, practical examples.
 
 ## Add Simple Text
 
@@ -30,8 +30,8 @@ print(response)
 ```
 
 ```bash cURL
-curl -X POST "https://api.engram.ai/v3/documents" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "content": "Artificial intelligence is transforming how we work and live"
@@ -67,8 +67,8 @@ print(response['id'])
 ```
 
 ```bash cURL
-curl -X POST "https://api.engram.ai/v3/documents" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "content": "Q4 2024 revenue exceeded projections by 15%",
@@ -109,8 +109,8 @@ client.add(
 ```
 
 ```bash cURL
-curl -X POST "https://api.engram.ai/v3/documents" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "content": "New onboarding flow reduces drop-off by 30%",
@@ -160,8 +160,8 @@ for note in notes:
 
 ```bash cURL
 # Add each note with separate requests
-curl -X POST "https://api.engram.ai/v3/documents" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"content": "API redesign discussion", "containerTag": "meeting_2024_01_15"}'
 ```
@@ -216,14 +216,14 @@ client.add(
 
 ```bash cURL
 # Web page
-curl -X POST "https://api.engram.ai/v3/documents" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"content": "https://example.com/article", "containerTag": "articles"}'
 
 # YouTube video
-curl -X POST "https://api.engram.ai/v3/documents" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"content": "https://youtube.com/watch?v=dQw4w9WgXcQ", "containerTag": "videos"}'
 ```
@@ -232,7 +232,7 @@ curl -X POST "https://api.engram.ai/v3/documents" \
 
 ## Add Markdown Content
 
-Engram preserves markdown formatting.
+Smaran preserves markdown formatting.
 
 <CodeGroup>
 
@@ -269,8 +269,8 @@ client.add(
 ```
 
 ```bash cURL
-curl -X POST "https://api.engram.ai/v3/documents" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"content": "# Project Documentation\n\n## Features\n- **Real-time sync**\n- **AI search**", "containerTag": "docs"}'
 ```

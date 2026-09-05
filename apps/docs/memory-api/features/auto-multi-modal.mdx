@@ -1,16 +1,16 @@
 ---
 title: "Auto Multi Modal"
-description: "engram automatically detects the content type of the document you are adding."
+description: "smaran automatically detects the content type of the document you are adding."
 icon: "sparkles"
 ---
 
-engram is natively multi-modal, and can automatically detect the content type of the document you are adding.
+smaran is natively multi-modal, and can automatically detect the content type of the document you are adding.
 
 We use the best of breed tools to extract content from URLs, and process it for optimal memory storage.
 
 ## Automatic Content Type Detection
 
-engram automatically detects the content type of the document you're adding. Simply pass your content to the API, and engram will handle the rest.
+smaran automatically detects the content type of the document you're adding. Simply pass your content to the API, and smaran will handle the rest.
 
 <Tabs>
   <Tab title="How It Works">
@@ -43,9 +43,9 @@ All you need to do is pass the content to the `/documents` endpoint:
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/documents \
+curl https://api.smaran.ai/v3/documents \
   --request POST \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   -d '{"content": "https://example.com/article"}'
 ```
 
@@ -64,13 +64,13 @@ client.add.create(
 </CodeGroup>
 
 <Note>
-  engram uses [Markdowner](https://md.dhr.wtf) to extract content from
+  smaran uses [Markdowner](https://md.dhr.wtf) to extract content from
   URLs.
 </Note>
 
 ## Supported Content Types
 
-engram supports a wide range of content formats to ensure versatility in memory creation:
+smaran supports a wide range of content formats to ensure versatility in memory creation:
 
 <Grid cols={2}>
   <Card title="Text Content" icon="document-text">
@@ -125,7 +125,7 @@ engram supports a wide range of content formats to ensure versatility in memory 
 
 <Steps>
   <Step title="Content Detection">
-    engram automatically identifies the content type based on the input provided.
+    smaran automatically identifies the content type based on the input provided.
   </Step>
 
 <Step title="Content Extraction">

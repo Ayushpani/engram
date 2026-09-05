@@ -13,12 +13,12 @@ When building AI agents, developers often treat memory as just another retrieval
 
 **This approach fails because memory isn't about finding similar text—it's about understanding relationships, temporal context, and user state over time.**
 
-## Documents vs Memories in Engram
+## Documents vs Memories in Smaran
 
-Engram makes a clear distinction between these two concepts:
+Smaran makes a clear distinction between these two concepts:
 
 ### Documents: Raw Knowledge
-Documents are the raw content you send to Engram—PDFs, web pages, text files. They represent static knowledge that doesn't change based on who's accessing it.
+Documents are the raw content you send to Smaran—PDFs, web pages, text files. They represent static knowledge that doesn't change based on who's accessing it.
 
 **Characteristics:**
 - **Stateless**: A document about Python programming is the same for everyone
@@ -78,7 +78,7 @@ Let's look at a real scenario that illustrates the problem:
 
   <Tab title="Memory Approach (Right)">
     ```python
-    # Engram understands temporal context
+    # Smaran understands temporal context
     query = "What sneakers should I buy?"
 
     # Memory retrieval considers:
@@ -187,9 +187,9 @@ Memory systems build a knowledge graph that understands:
   </Tab>
 </Tabs>
 
-## How Engram Handles Both
+## How Smaran Handles Both
 
-Engram provides a unified platform that correctly handles both patterns:
+Smaran provides a unified platform that correctly handles both patterns:
 
 ### 1. Document Storage (RAG)
 ```python
@@ -237,7 +237,7 @@ Stop treating memory like a retrieval problem. Your agents need both:
 - **RAG** for accessing knowledge
 - **Memory** for understanding users
 
-Engram provides both capabilities in a unified platform, ensuring your agents have the right context at the right time.
+Smaran provides both capabilities in a unified platform, ensuring your agents have the right context at the right time.
 
 ---
 

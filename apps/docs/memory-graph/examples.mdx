@@ -322,10 +322,10 @@ export default function LoadingGraph() {
 import { MemoryGraphClient } from './memory-graph-client';
 
 async function getGraphData() {
-  const res = await fetch('https://api.engram.ai/v3/documents/documents', {
+  const res = await fetch('https://api.smaran.ai/v3/documents/documents', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${process.env.ENGRAM_API_KEY}`,
+      'Authorization': `Bearer ${process.env.SMARAN_API_KEY}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({

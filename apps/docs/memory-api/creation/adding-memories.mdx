@@ -1,6 +1,6 @@
 ---
 title: "Adding Memories"
-description: "Learn how to add content to engram"
+description: "Learn how to add content to smaran"
 icon: "plus"
 ---
 
@@ -44,10 +44,10 @@ To add a memory, send a POST request to `/add` with your content:
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/documents \
+curl https://api.smaran.ai/v3/documents \
   --request POST \
   --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   --data '{
   "customId": "xyz-my-db-id",
   "content": "This is the content of my memory",
@@ -100,10 +100,10 @@ The API will return a response with an ID and initial status:
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/documents \
+curl https://api.smaran.ai/v3/documents \
   --request POST \
   --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   -d '{
     "content": "https://example.com/article",
     "metadata": {
@@ -163,10 +163,10 @@ You can attribute and partition your data by providing a `userId`:
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/documents \
+curl https://api.smaran.ai/v3/documents \
   --request POST \
   --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   -d '{
     "content": "This is space-specific content",
     "userId": "space_123",
@@ -210,10 +210,10 @@ You can group memories by providing an array of `containerTags`:
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/documents \
+curl https://api.smaran.ai/v3/documents \
   --request POST \
   --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   -d '{
     "content": "This is space-specific content",
     "containerTags": ["user_123", "project_xyz"]
@@ -243,10 +243,10 @@ Check status using the memory ID:
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/documents/mem_abc123 \
+curl https://api.smaran.ai/v3/documents/mem_abc123 \
   --request GET \
   --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer ENGRAM_API_KEY'
+  --header 'Authorization: Bearer SMARAN_API_KEY'
 ```
 
 ```typescript Typescript
@@ -272,9 +272,9 @@ For file uploads, use the dedicated file upload endpoint. You can include `conta
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/documents/file \
+curl https://api.smaran.ai/v3/documents/file \
   --request POST \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   --form 'file=@/path/to/your/file.pdf' \
   --form 'containerTags=["user_123", "project_xyz"]'
 ```
@@ -284,10 +284,10 @@ const formData = new FormData();
 formData.append("file", fileBlob);
 formData.append("containerTags", JSON.stringify(["user_123", "project_xyz"]));
 
-const response = await fetch("https://api.engram.ai/v3/documents/file", {
+const response = await fetch("https://api.smaran.ai/v3/documents/file", {
   method: "POST",
   headers: {
-    Authorization: "Bearer ENGRAM_API_KEY",
+    Authorization: "Bearer SMARAN_API_KEY",
   },
   body: formData,
 });
@@ -301,8 +301,8 @@ with open('/path/to/your/file.pdf', 'rb') as f:
     files = {'file': f}
     data = {'containerTags': json.dumps(["user_123", "project_xyz"])}
     response = requests.post(
-        'https://api.engram.ai/v3/documents/file',
-        headers={'Authorization': 'Bearer ENGRAM_API_KEY'},
+        'https://api.smaran.ai/v3/documents/file',
+        headers={'Authorization': 'Bearer SMARAN_API_KEY'},
         files=files,
         data=data
     )
@@ -317,10 +317,10 @@ If you need to add additional metadata (like title or description) after upload,
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/documents/MEMORY_ID \
+curl https://api.smaran.ai/v3/documents/MEMORY_ID \
   --request PATCH \
   --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   --data '{
     "metadata": {
       "title": "My Document",
@@ -330,11 +330,11 @@ curl https://api.engram.ai/v3/documents/MEMORY_ID \
 ```
 
 ```typescript Typescript
-await fetch(`https://api.engram.ai/v3/documents/${memoryId}`, {
+await fetch(`https://api.smaran.ai/v3/documents/${memoryId}`, {
   method: "PATCH",
   headers: {
     "Content-Type": "application/json",
-    Authorization: "Bearer ENGRAM_API_KEY",
+    Authorization: "Bearer SMARAN_API_KEY",
   },
   body: JSON.stringify({
     metadata: {
@@ -349,10 +349,10 @@ await fetch(`https://api.engram.ai/v3/documents/${memoryId}`, {
 import requests
 
 requests.patch(
-    f'https://api.engram.ai/v3/documents/{memory_id}',
+    f'https://api.smaran.ai/v3/documents/{memory_id}',
     headers={
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ENGRAM_API_KEY'
+        'Authorization': 'Bearer SMARAN_API_KEY'
     },
     json={
         'metadata': {

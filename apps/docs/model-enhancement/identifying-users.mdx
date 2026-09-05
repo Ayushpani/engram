@@ -1,13 +1,13 @@
 ---
 title: "Identifying Users"
-description: "Identifying users in engram"
+description: "Identifying users in smaran"
 ---
 
-You can enable built-in cross-conversational memory by sending engram a `x-sm-user-id`.
+You can enable built-in cross-conversational memory by sending smaran a `x-sm-user-id`.
 
-## How engram Identifies Users and conversations
+## How smaran Identifies Users and conversations
 
-engram will find the user ID in the following places (in order of priority):
+smaran will find the user ID in the following places (in order of priority):
 
 ### `x-sm-user-id` header
 
@@ -23,16 +23,16 @@ You can also add `?userId=xyz` in the URL search parameters, incase the models d
 
 ## Conversation ID
 
-If a conversation identifier is provided, You do not need to send the entire array of messages to engram.
+If a conversation identifier is provided, You do not need to send the entire array of messages to smaran.
 
 ```typescript
-// if you provide conversation ID, You do not need to send all the messages every single time. engram automatically backfills it.
+// if you provide conversation ID, You do not need to send all the messages every single time. smaran automatically backfills it.
 const client = new OpenAI({
     baseURL:
-"https://api.engram.ai/v3/https://api.openai.com/v1",
+"https://api.smaran.ai/v3/https://api.openai.com/v1",
     defaultHeaders: {
-        "x-engram-api-key":
-            "ENGRAM_API_KEY",
+        "x-smaran-api-key":
+            "SMARAN_API_KEY",
         "x-sm-user-id": `dhravya`,
         "x-sm-conversation-id": "conversation-id"
     },

@@ -13,7 +13,7 @@ import type { ToastState } from "./types"
  */
 export function createToast(state: ToastState): HTMLElement {
 	const toast = document.createElement("div")
-	toast.id = ELEMENT_IDS.ENGRAM_TOAST
+	toast.id = ELEMENT_IDS.SMARAN_TOAST
 
 	toast.style.cssText = `
     position: fixed;
@@ -36,9 +36,9 @@ export function createToast(state: ToastState): HTMLElement {
   `
 
 	// Add keyframe animations and fonts if not already present
-	if (!document.getElementById("engram-toast-styles")) {
+	if (!document.getElementById("smaran-toast-styles")) {
 		const style = document.createElement("style")
-		style.id = "engram-toast-styles"
+		style.id = "smaran-toast-styles"
 		style.textContent = `
       @font-face {
         font-family: 'Space Grotesk';
@@ -319,7 +319,7 @@ export function createClaudeInputBarElement(onClick: () => void): HTMLElement {
 	const iconFileName = "/icon-16.png"
 	const iconUrl = browser.runtime.getURL(iconFileName)
 	iconButton.innerHTML = `
-    <img src="${iconUrl}" width="20" height="20" alt="Get Related Memories from engram" style="border-radius: 4px;" />
+    <img src="${iconUrl}" width="20" height="20" alt="Get Related Memories from smaran" style="border-radius: 4px;" />
   `
 
 	iconButton.addEventListener("mouseenter", () => {
@@ -363,7 +363,7 @@ export function createT3InputBarElement(onClick: () => void): HTMLElement {
 	const iconFileName = "/icon-16.png"
 	const iconUrl = browser.runtime.getURL(iconFileName)
 	iconButton.innerHTML = `
-    <img src="${iconUrl}" width="20" height="20" alt="Get Related Memories from engram" style="border-radius: 4px;" />
+    <img src="${iconUrl}" width="20" height="20" alt="Get Related Memories from smaran" style="border-radius: 4px;" />
   `
 
 	iconButton.addEventListener("mouseenter", () => {
@@ -437,8 +437,8 @@ export function createProjectSelectionModal(
 	header.innerHTML = `
 	<div style="display: flex; flex-direction: column; gap: 8px;">
 	    <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-			<img src="${iconUrl}" width="20" height="20" alt="Engram" style="border-radius: 4px;" />
-			Import to Engram
+			<img src="${iconUrl}" width="20" height="20" alt="Smaran" style="border-radius: 4px;" />
+			Import to Smaran
 		</h3>
 		<p style="margin: 0; font-size: 14px; font-weight: 400; color: #ffffff; opacity: 0.7;">
 			The project you want to import your bookmarks to.
@@ -694,7 +694,7 @@ export const DOMUtils = {
 		state: ToastState,
 		duration: number = UI_CONFIG.TOAST_DURATION,
 	): HTMLElement {
-		const existingToast = document.getElementById(ELEMENT_IDS.ENGRAM_TOAST)
+		const existingToast = document.getElementById(ELEMENT_IDS.SMARAN_TOAST)
 
 		if ((state === "success" || state === "error") && existingToast) {
 			const icon = existingToast.querySelector("div")
@@ -753,7 +753,7 @@ export const DOMUtils = {
 		}
 
 		const existingToasts = document.querySelectorAll(
-			`#${ELEMENT_IDS.ENGRAM_TOAST}`,
+			`#${ELEMENT_IDS.SMARAN_TOAST}`,
 		)
 		existingToasts.forEach((toast) => {
 			toast.remove()

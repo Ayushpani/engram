@@ -5,20 +5,20 @@ from openai import OpenAI
 load_dotenv()
 
 
-def test_openai_with_engram():
-    """Test OpenAI SDK with Engram context"""
-    print("=== OpenAI SDK with Engram ===")
+def test_openai_with_smaran():
+    """Test OpenAI SDK with Smaran context"""
+    print("=== OpenAI SDK with Smaran ===")
 
     if not os.getenv("OPENAI_API_KEY"):
         print("⚠ OPENAI_API_KEY not set, skipping live tests")
         return
 
     # This demonstrates manual integration pattern for Python
-    # since @engram/tools is TypeScript-only
+    # since @smaran/tools is TypeScript-only
 
-    from engram import Engram
+    from smaran import Smaran
 
-    memory_client = Engram()
+    memory_client = Smaran()
     openai_client = OpenAI()
 
     USER_ID = "docs-test-openai-py"
@@ -50,16 +50,16 @@ Relevant Memories:
 
 
 def test_save_conversation():
-    """Test saving conversation to Engram"""
+    """Test saving conversation to Smaran"""
     print("\n=== Save Conversation ===")
 
     if not os.getenv("OPENAI_API_KEY"):
         print("⚠ Skipped (no OPENAI_API_KEY)")
         return
 
-    from engram import Engram
+    from smaran import Smaran
 
-    memory_client = Engram()
+    memory_client = Smaran()
     USER_ID = "docs-test-openai-py"
 
     conversation = [
@@ -79,7 +79,7 @@ def main():
     print("OpenAI SDK Integration Tests (Python)")
     print("=====================================\n")
 
-    test_openai_with_engram()
+    test_openai_with_smaran()
     test_save_conversation()
 
     print("\n=====================================")

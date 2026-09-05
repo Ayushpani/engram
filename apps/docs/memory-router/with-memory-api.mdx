@@ -16,9 +16,9 @@ The Memory Router and Memory API share the same memory pool. When you use the sa
 
 ```python
 # Memory created via API
-from engram import Client
+from smaran import Client
 
-api_client = Client(api_key="YOUR_ENGRAM_KEY")
+api_client = Client(api_key="YOUR_SMARAN_KEY")
 
 # Add memory via API
 api_client.add({
@@ -31,9 +31,9 @@ from openai import OpenAI
 
 router_client = OpenAI(
     api_key="YOUR_OPENAI_KEY",
-    base_url="https://api.engram.ai/v3/https://api.openai.com/v1/",
+    base_url="https://api.smaran.ai/v3/https://api.openai.com/v1/",
     default_headers={
-        "x-engram-api-key": "YOUR_ENGRAM_KEY",
+        "x-smaran-api-key": "YOUR_SMARAN_KEY",
         "x-sm-user-id": "user123"  # Same user_id
     }
 )
@@ -60,7 +60,7 @@ api_client.add({
 
 # Step 2: Support agent uses chat with Router
 router_client = OpenAI(
-    base_url="https://api.engram.ai/v3/https://api.openai.com/v1/",
+    base_url="https://api.smaran.ai/v3/https://api.openai.com/v1/",
     default_headers={"x-sm-user-id": "support_agent_123"}
 )
 

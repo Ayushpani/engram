@@ -1,17 +1,17 @@
 ---
 title: "Vibe Coding Setup"
-description: "Automatic Engram integration using AI coding agents"
+description: "Automatic Smaran integration using AI coding agents"
 icon: "zap"
 sidebarTitle: "Install with AI"
 ---
 
-Get your AI coding agent to integrate Engram in minutes. Copy the prompt below, paste it into Claude/GPT/Cursor, and let it do the work.
+Get your AI coding agent to integrate Smaran in minutes. Copy the prompt below, paste it into Claude/GPT/Cursor, and let it do the work.
 
 ## Quick Setup
 
 <CardGroup cols={3}>
 	<Card title="MCP (Claude/Cursor)" icon="plug" href="#mcp-server">
-		Give your agent a way to reference and search through engram docs.
+		Give your agent a way to reference and search through smaran docs.
   </Card>
 
 	<Card title="Copy Prompt" icon="copy" href="#the-prompt">
@@ -25,12 +25,12 @@ Get your AI coding agent to integrate Engram in minutes. Copy the prompt below, 
 
 ## MCP Server
 
-Give your agent a way to reference and search through engram docs.
+Give your agent a way to reference and search through smaran docs.
 
 ### Quick Install
 
 ```bash
-npx -y install-mcp@latest https://engram.ai/docs/mcp --client claude-code --oauth=no -y
+npx -y install-mcp@latest https://smaran.ai/docs/mcp --client claude-code --oauth=no -y
 ```
 
 Replace `claude` with: `cursor`, `opencode`, or `vscode`
@@ -48,24 +48,24 @@ After adding the MCP, paste this in your agent session:
 
 <Accordion title="Copy prompt below." icon='copy'>
 ```
-You are integrating Engram into my application. Engram provides user memory, semantic search, and automatic knowledge extraction for AI applications.
+You are integrating Smaran into my application. Smaran provides user memory, semantic search, and automatic knowledge extraction for AI applications.
 
-Note: You can always reference the documentation by using the **SearchEngramDocs MCP** or running a web search tool for content on **engram.ai/docs**.
+Note: You can always reference the documentation by using the **SearchSmaranDocs MCP** or running a web search tool for content on **smaran.ai/docs**.
 
 CANONICAL API SURFACE (use these, nothing else):
 
-- Auth header: `Authorization: Bearer $ENGRAM_API_KEY` — the only supported auth header
-- Write content:     POST https://api.engram.ai/v3/documents
-- Search:            POST https://api.engram.ai/v4/search
-- Profile + search:  POST https://api.engram.ai/v4/profile
-- Settings:          PATCH https://api.engram.ai/v3/settings
+- Auth header: `Authorization: Bearer $SMARAN_API_KEY` — the only supported auth header
+- Write content:     POST https://api.smaran.ai/v3/documents
+- Search:            POST https://api.smaran.ai/v4/search
+- Profile + search:  POST https://api.smaran.ai/v4/profile
+- Settings:          PATCH https://api.smaran.ai/v3/settings
 - Scoping:           `containerTag` (singular string) in the JSON body — never in a header
 - SDK:               `client.documents.add()`, `client.search.memories()`, `client.profile()`
 
 DO NOT USE — these are deprecated, undocumented, or fabricated by previous AI codegen:
 
 - Endpoints:  /v1/anything, /v3/memories, /v3/search   (use /v3/documents and /v4/search)
-- Headers:    x-engram-api-key, x-api-key, x-sm-user-id, x-sm-project,
+- Headers:    x-smaran-api-key, x-api-key, x-sm-user-id, x-sm-project,
               x-project-id, X-Workspace-Id   (always use Authorization: Bearer)
 - Body keys:  containerTags (plural array), userId, spaces, schema, container,
               tags (top-level), filter (singular)   (use containerTag + filters)
@@ -83,7 +83,7 @@ a "manage my memories" UI to end users or agents.
 
 SCOPING IS LOAD-BEARING. Every write and every search MUST include `containerTag`.
 If you omit it, every user's data collapses into the API key's default bucket — this
-is the single most common bug in AI-generated Engram integrations.
+is the single most common bug in AI-generated Smaran integrations.
 
 STEP 1: ASK ME THESE QUESTIONS
 
@@ -95,9 +95,9 @@ STEP 1: ASK ME THESE QUESTIONS
    - Other
 
 2. How do you want to integrate?
-   - Vercel AI SDK (@engram/tools)
+   - Vercel AI SDK (@smaran/tools)
    - OpenAI plugins
-   - Direct SDK (engram npm/pip)
+   - Direct SDK (smaran npm/pip)
    - Direct API calls
 
 3. Data model?
@@ -116,20 +116,20 @@ STEP 1: ASK ME THESE QUESTIONS
 
 STEP 2: INSTALL
 
-# Get API key: https://console.engram.ai
-npm install engram  # or: pip install engram
-# For Vercel AI SDK: npm install @engram/tools
-export ENGRAM_API_KEY="sm_..."
+# Get API key: https://console.smaran.ai
+npm install smaran  # or: pip install smaran
+# For Vercel AI SDK: npm install @smaran/tools
+export SMARAN_API_KEY="sm_..."
 
 
 STEP 3: CONFIGURE SETTINGS (DO THIS FIRST)
 
 ```typescript
-// PATCH https://api.engram.ai/v3/settings
-fetch('https://api.engram.ai/v3/settings', {
+// PATCH https://api.smaran.ai/v3/settings
+fetch('https://api.smaran.ai/v3/settings', {
   method: 'PATCH',
   headers: {
-    'Authorization': `Bearer ${process.env.ENGRAM_API_KEY}`,
+    'Authorization': `Bearer ${process.env.SMARAN_API_KEY}`,
     'Content-Type': 'application/json',
   },
   body: JSON.stringify({
@@ -167,21 +167,21 @@ Based on their integration choice:
 ```typescript
 import { streamText } from 'ai'
 import { anthropic } from '@ai-sdk/anthropic'
-import { engramTools } from '@engram/tools/ai-sdk'
+import { smaranTools } from '@smaran/tools/ai-sdk'
 
 // Option 1: Agent tools (recommended for agentic flows)
 const result = await streamText({
   model: anthropic('claude-3-5-sonnet-20241022'),
   prompt: userMessage,
-  tools: engramTools(process.env.ENGRAM_API_KEY, {
+  tools: smaranTools(process.env.SMARAN_API_KEY, {
     containerTag: userId  // singular string — never an array
   })
 })
 // Agent gets searchMemories, addMemory, fetchMemory tools
 
 // Option 2: Profile middleware (automatic context injection)
-import { withEngram } from '@engram/tools/ai-sdk'
-const modelWithMemory = withEngram(anthropic('claude-3-5-sonnet-20241022'), {
+import { withSmaran } from '@smaran/tools/ai-sdk'
+const modelWithMemory = withSmaran(anthropic('claude-3-5-sonnet-20241022'), {
   containerTag: userId,
   customId: 'conversation-1',
 })
@@ -197,9 +197,9 @@ const result = await generateText({
 --- DIRECT SDK (WITH PROFILES) ---
 
 ```typescript
-import Engram from 'engram'
+import Smaran from 'smaran'
 
-const client = new Engram()
+const client = new Smaran()
 
 // Before each LLM call:
 const { profile, searchResults } = await client.profile({
@@ -231,9 +231,9 @@ await client.add({
 --- DIRECT SDK (NO PROFILES) ---
 
 ```typescript
-import Engram from 'engram'
+import Smaran from 'smaran'
 
-const client = new Engram()
+const client = new Smaran()
 
 // Search for relevant memories
 const results = await client.search({
@@ -262,9 +262,9 @@ await client.add({
 --- PYTHON VERSION ---
 
 ```python
-from engram import Engram
+from smaran import Smaran
 
-client = Engram()
+client = Smaran()
 
 # With profiles (if they want it)
 profile_data = client.profile(
@@ -285,20 +285,20 @@ client.add(content=f"user: {user_message}\\nassistant: {response}", container_ta
 
 ```bash
 # Add memory
-curl -X POST https://api.engram.ai/v3/documents \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST https://api.smaran.ai/v3/documents \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"content": "conversation", "containerTag": "userId"}'
 
 # Get profile
-curl -X POST https://api.engram.ai/v4/profile \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST https://api.smaran.ai/v4/profile \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"containerTag": "userId", "q": "search query"}'
 
 # Search
-curl -X POST https://api.engram.ai/v4/search \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST https://api.smaran.ai/v4/search \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"q": "query", "containerTag": "userId", "searchMode": "hybrid"}'
 ```
@@ -311,9 +311,9 @@ const formData = new FormData()
 formData.append('file', fileBlob)
 formData.append('containerTag', userId)
 
-await fetch('https://api.engram.ai/v3/documents/file', {
+await fetch('https://api.smaran.ai/v3/documents/file', {
   method: 'POST',
-  headers: { 'Authorization': `Bearer ${process.env.ENGRAM_API_KEY}` },
+  headers: { 'Authorization': `Bearer ${process.env.SMARAN_API_KEY}` },
   body: formData
 })
 
@@ -361,20 +361,20 @@ TESTING:
 
 ```bash
 # 1. Configure settings
-curl -X PATCH https://api.engram.ai/v3/settings \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X PATCH https://api.smaran.ai/v3/settings \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"shouldLLMFilter": true, "filterPrompt": "..."}'
 
 # 2. Add test memory
-curl -X POST https://api.engram.ai/v3/documents \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST https://api.smaran.ai/v3/documents \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"content": "Test", "containerTag": "test_user"}'
 
 # 3. Get profile
-curl -X POST https://api.engram.ai/v4/profile \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST https://api.smaran.ai/v4/profile \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"containerTag": "test_user"}'
 ```
@@ -385,7 +385,7 @@ NOW:
 2. Generate complete working code based on my answers
 3. Include installation, settings config, and full integration
 
-DOCS: https://engram.ai/docs
+DOCS: https://smaran.ai/docs
 ```
 </Accordion>
 
@@ -401,11 +401,11 @@ Interactive setup for Claude Code users.
 
 ```bash
 # 1. Clone repo
-git clone https://github.com/engramai/engram.git
+git clone https://github.com/smaranai/smaran.git
 
 # 2. Copy skill
 mkdir -p ~/.claude/skills
-cp engram/.claude/skills/engram-integrate.md ~/.claude/skills/
+cp smaran/.claude/skills/smaran-integrate.md ~/.claude/skills/
 
 # 3. Restart Claude Code
 ```
@@ -413,7 +413,7 @@ cp engram/.claude/skills/engram-integrate.md ~/.claude/skills/
 ### Use
 
 ```bash
-/engram-integrate
+/smaran-integrate
 ```
 
 The skill asks questions interactively and generates code for your specific setup.
@@ -435,7 +435,7 @@ The skill asks questions interactively and generates code for your specific setu
     Search modes and parameters
   </Card>
 
-  <Card title="API Reference" icon="code" href="https://api.engram.ai/v3/openapi">
+  <Card title="API Reference" icon="code" href="https://api.smaran.ai/v3/openapi">
     Complete API docs
   </Card>
 </CardGroup>

@@ -1,16 +1,16 @@
 ---
-title: 'Engram SDK'
-sidebarTitle: "Engram SDK"
-description: 'Official Python and JavaScript SDKs for Engram'
-icon: "/images/engram.svg"
+title: 'Smaran SDK'
+sidebarTitle: "Smaran SDK"
+description: 'Official Python and JavaScript SDKs for Smaran'
+icon: "/images/smaran.svg"
 ---
 
 <CardGroup cols={2}>
-  <Card title="Python SDK" icon="python" href="https://pypi.org/project/engram/">
-    pip install engram
+  <Card title="Python SDK" icon="python" href="https://pypi.org/project/smaran/">
+    pip install smaran
   </Card>
-  <Card title="JavaScript SDK" icon="js" href="https://www.npmjs.com/package/engram">
-    npm install engram
+  <Card title="JavaScript SDK" icon="js" href="https://www.npmjs.com/package/smaran">
+    npm install smaran
   </Card>
 </CardGroup>
 
@@ -19,16 +19,16 @@ icon: "/images/engram.svg"
     ## Installation
 
     ```bash
-    npm install engram
+    npm install smaran
     ```
 
     ## Quick Start
 
     ```typescript
-    import Engram from 'engram';
+    import Smaran from 'smaran';
 
-    const client = new Engram({
-      apiKey: process.env.ENGRAM_API_KEY,  // Default, can be omitted
+    const client = new Smaran({
+      apiKey: process.env.SMARAN_API_KEY,  // Default, can be omitted
     });
 
     // Add a memory
@@ -80,17 +80,17 @@ icon: "/images/engram.svg"
     ## Installation
 
     ```bash
-    pip install engram
+    pip install smaran
     ```
 
     ## Quick Start
 
     ```python
     import os
-    from engram import Engram
+    from smaran import Smaran
 
-    client = Engram(
-        api_key=os.environ.get("ENGRAM_API_KEY"),  # Default, can be omitted
+    client = Smaran(
+        api_key=os.environ.get("SMARAN_API_KEY"),  # Default, can be omitted
     )
 
     # Add a memory

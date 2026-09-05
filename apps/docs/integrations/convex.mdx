@@ -1,11 +1,11 @@
 ---
 title: "Convex"
 sidebarTitle: "Convex"
-description: "Add persistent memory to Convex apps with Engram"
+description: "Add persistent memory to Convex apps with Smaran"
 icon: "database"
 ---
 
-Convex apps don't have built-in memory for AI. Engram fixes that. You get a memory layer that stores conversations, builds user profiles, and gives your AI context about who it's talking to.
+Convex apps don't have built-in memory for AI. Smaran fixes that. You get a memory layer that stores conversations, builds user profiles, and gives your AI context about who it's talking to.
 
 ## What you can do
 
@@ -19,34 +19,34 @@ Convex apps don't have built-in memory for AI. Engram fixes that. You get a memo
 Install the packages:
 
 ```bash
-npm install engram convex
+npm install smaran convex
 ```
 
 For the AI chat example, also install the AI SDK packages:
 
 ```bash
-npm install @engram/tools @ai-sdk/openai ai
+npm install @smaran/tools @ai-sdk/openai ai
 ```
 
 Set up your environment variable in Convex:
 
 ```bash
-npx convex env set ENGRAM_API_KEY your-engram-api-key
+npx convex env set SMARAN_API_KEY your-smaran-api-key
 ```
 
-<Note>Get your Engram API key from [console.engram.ai](https://console.engram.ai).</Note>
+<Note>Get your Smaran API key from [console.smaran.ai](https://console.smaran.ai).</Note>
 
 ## Basic integration
 
-Create simple helper functions for each Engram operation:
+Create simple helper functions for each Smaran operation:
 
 ```typescript
 // convex/memory.ts
 import { action } from "./_generated/server";
 import { v } from "convex/values";
-import Engram from "engram";
+import Smaran from "smaran";
 
-const memory = new Engram({ apiKey: process.env.ENGRAM_API_KEY });
+const memory = new Smaran({ apiKey: process.env.SMARAN_API_KEY });
 
 // Get user profile and relevant memories
 export const getProfile = action({
@@ -88,7 +88,7 @@ export const searchMemories = action({
 
 ## Example: AI chat with memory
 
-A chat endpoint using the Engram AI SDK middleware. It automatically injects context and saves memories.
+A chat endpoint using the Smaran AI SDK middleware. It automatically injects context and saves memories.
 
 ```typescript
 // convex/chat.ts
@@ -96,13 +96,13 @@ import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
-import { withEngram } from "@engram/tools/ai-sdk";
+import { withSmaran } from "@smaran/tools/ai-sdk";
 
 export const chat = action({
   args: { userId: v.string(), message: v.string() },
   handler: async (ctx, { userId, message }) => {
     // Wrap the model - automatically injects context and saves memories
-    const model = withEngram(openai("gpt-4o-mini"), {
+    const model = withSmaran(openai("gpt-4o-mini"), {
       containerTag: userId,
       customId: `convex-chat-${userId}`,
       mode: "full",
@@ -145,9 +145,9 @@ export default defineSchema({
 import { action, mutation, query } from "./_generated/server";
 import { api } from "./_generated/api";
 import { v } from "convex/values";
-import Engram from "engram";
+import Smaran from "smaran";
 
-const memory = new Engram({ apiKey: process.env.ENGRAM_API_KEY });
+const memory = new Smaran({ apiKey: process.env.SMARAN_API_KEY });
 
 // Store in Convex
 export const storeMemory = mutation({
@@ -161,16 +161,16 @@ export const storeMemory = mutation({
   },
 });
 
-// Add memory to both Engram and Convex
+// Add memory to both Smaran and Convex
 export const addMemory = action({
   args: { userId: v.string(), content: v.string() },
   handler: async (ctx, { userId, content }) => {
-    // Add to Engram
+    // Add to Smaran
     await memory.add({ content, containerTag: userId });
     
     // Store in Convex
     // Note: in production, handle partial failures — if the Convex mutation
-    // fails after the Engram write succeeds, the two stores will be out of sync.
+    // fails after the Smaran write succeeds, the two stores will be out of sync.
     await ctx.runMutation(api.memory.storeMemory, { userId, content });
   },
 });

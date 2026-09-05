@@ -1,11 +1,11 @@
 ---
 title: "Claude Desktop"
-description: "Manual setup for engram MCP in Claude Desktop with step-by-step screenshots"
+description: "Manual setup for smaran MCP in Claude Desktop with step-by-step screenshots"
 icon: "monitor"
 sidebarTitle: "Claude Desktop"
 ---
 
-This guide walks through the **manual** install for [Claude Desktop](https://claude.ai/download): edit `claude_desktop_config.json`, add the engram server, then finish in **Connectors**. For a one-line CLI install instead, see [Setup and Usage](/engram-mcp/setup).
+This guide walks through the **manual** install for [Claude Desktop](https://claude.ai/download): edit `claude_desktop_config.json`, add the smaran server, then finish in **Connectors**. For a one-line CLI install instead, see [Setup and Usage](/smaran-mcp/setup).
 
 <Note>
   Config file location: **macOS** `~/Library/Application Support/Claude/claude_desktop_config.json` · **Windows** `%APPDATA%\Claude\claude_desktop_config.json`
@@ -13,53 +13,53 @@ This guide walks through the **manual** install for [Claude Desktop](https://cla
 
 ## Step 1 — Copy the configuration
 
-Copy the engram block below. You will paste it inside `mcpServers` in a later step.
+Copy the smaran block below. You will paste it inside `mcpServers` in a later step.
 
 ```json
 {
   "mcpServers": {
-    "engram": {
+    "smaran": {
       "command": "npx",
       "args": [
         "-y",
         "mcp-remote@latest",
-        "https://mcp.engram.ai/mcp"
+        "https://mcp.smaran.ai/mcp"
       ]
     }
   }
 }
 ```
 
-This is the same configuration shown in the engram dashboard when you choose **Claude Desktop** for MCP setup.
+This is the same configuration shown in the smaran dashboard when you choose **Claude Desktop** for MCP setup.
 
 ## Step 2 — Open Developer settings and Edit Config
 
 In Claude Desktop, open **Settings → Developer**, then click **Edit Config**.
 
-![Claude Desktop settings: Developer in the sidebar and Edit Config highlighted](/images/engram-mcp/claude-desktop/step-1.png)
+![Claude Desktop settings: Developer in the sidebar and Edit Config highlighted](/images/smaran-mcp/claude-desktop/step-1.png)
 
 ## Step 3 — Open claude_desktop_config.json
 
 When `claude_desktop_config.json` opens in your editor, keep it ready for the next step.
 
-![File list with claude_desktop_config.json selected](/images/engram-mcp/claude-desktop/step-2.png)
+![File list with claude_desktop_config.json selected](/images/smaran-mcp/claude-desktop/step-2.png)
 
 ## Step 4 — Paste under mcpServers and save
 
 Paste what you copied under `mcpServers` (merge with existing servers if the file already has some), then save.
 
-![JSON editor showing engram mcpServers configuration](/images/engram-mcp/claude-desktop/step-3.png)
+![JSON editor showing smaran mcpServers configuration](/images/smaran-mcp/claude-desktop/step-3.png)
 
 ## Step 5 — Restart and configure in Connectors
 
-Restart Claude Desktop. Open **Settings → Connectors**, find **engram**, and click **Configure**.
+Restart Claude Desktop. Open **Settings → Connectors**, find **smaran**, and click **Configure**.
 
-![Claude Desktop Connectors settings with engram and Configure highlighted](/images/engram-mcp/claude-desktop/step-4.png)
+![Claude Desktop Connectors settings with smaran and Configure highlighted](/images/smaran-mcp/claude-desktop/step-4.png)
 
 ## Step 6 — Done
 
-engram is installed in your Claude Desktop and ready to use.
+smaran is installed in your Claude Desktop and ready to use.
 
 ---
 
-**See also:** [Overview](/engram-mcp/mcp) · [Setup and Usage](/engram-mcp/setup)
+**See also:** [Overview](/smaran-mcp/mcp) · [Setup and Usage](/smaran-mcp/setup)

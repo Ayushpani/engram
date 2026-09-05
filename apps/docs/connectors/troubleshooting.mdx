@@ -52,14 +52,14 @@ if failed:
 
 ```bash cURL
 # List all connections
-curl -X POST "https://api.engram.ai/v3/connections/list" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/connections/list" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"containerTags": ["user-123"]}'
 
 # Check document status
-curl -X POST "https://api.engram.ai/v3/documents/list" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents/list" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"containerTags": ["user-123"], "source": "notion"}'
 ```
@@ -189,7 +189,7 @@ Business accounts may have additional restrictions:
 If emails aren't syncing in real-time but scheduled/manual sync works:
 
 1. Real-time sync uses Google Cloud Pub/Sub webhooks
-2. Watch subscriptions expire after 7 days (engram auto-renews)
+2. Watch subscriptions expire after 7 days (smaran auto-renews)
 3. Only INBOX label triggers real-time updates
 4. Trigger a manual sync to verify the connection is healthy:
 

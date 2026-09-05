@@ -1,11 +1,11 @@
 ---
 title: "OpenAI Agents SDK"
 sidebarTitle: "OpenAI Agents SDK"
-description: "Add persistent memory to OpenAI agents with Engram"
+description: "Add persistent memory to OpenAI agents with Smaran"
 icon: "/images/openai.svg"
 ---
 
-OpenAI's Agents SDK gives you a straightforward way to build agents with tools, handoffs, and guardrails. But agents don't remember users between sessions. Engram adds that missing piece: your agents can store what they learn and recall it later.
+OpenAI's Agents SDK gives you a straightforward way to build agents with tools, handoffs, and guardrails. But agents don't remember users between sessions. Smaran adds that missing piece: your agents can store what they learn and recall it later.
 
 ## What you can do
 
@@ -18,18 +18,18 @@ OpenAI's Agents SDK gives you a straightforward way to build agents with tools, 
 Install the packages:
 
 ```bash
-pip install openai-agents engram python-dotenv
+pip install openai-agents smaran python-dotenv
 ```
 
 Set up your environment:
 
 ```bash
 # .env
-ENGRAM_API_KEY=your-engram-api-key
+SMARAN_API_KEY=your-smaran-api-key
 OPENAI_API_KEY=your-openai-api-key
 ```
 
-<Note>Get your Engram API key from [console.engram.ai](https://console.engram.ai).</Note>
+<Note>Get your Smaran API key from [console.smaran.ai](https://console.smaran.ai).</Note>
 
 ## Basic integration
 
@@ -38,12 +38,12 @@ The simplest approach: fetch user context and pass it in the agent's instruction
 ```python
 import os
 from agents import Agent, Runner
-from engram import Engram
+from smaran import Smaran
 from dotenv import load_dotenv
 
 load_dotenv()
 
-memory = Engram()
+memory = Smaran()
 
 def get_user_context(user_id: str, query: str) -> str:
     """Fetch profile and relevant memories for a user."""
@@ -99,7 +99,7 @@ async def run_with_memory(user_id: str, message: str) -> str:
 
 ### User profiles
 
-Engram keeps two buckets of user info:
+Smaran keeps two buckets of user info:
 
 - **Static facts**: Stuff that doesn't change much (preferences, job, expertise)
 - **Dynamic context**: What they're working on right now
@@ -151,9 +151,9 @@ You can give agents direct access to memory operations. They'll decide when to s
 
 ```python
 from agents import Agent, Runner, function_tool
-from engram import Engram
+from smaran import Smaran
 
-memory = Engram()
+memory = Smaran()
 
 @function_tool
 def search_memories(query: str, user_id: str) -> str:
@@ -211,14 +211,14 @@ A support agent that knows who it's talking to. Past tickets, account info, comm
 ```python
 import os
 from agents import Agent, Runner, function_tool
-from engram import Engram
+from smaran import Smaran
 from dotenv import load_dotenv
 
 load_dotenv()
 
 class SupportAgent:
     def __init__(self):
-        self.memory = Engram()
+        self.memory = Smaran()
 
     def get_customer_context(self, customer_id: str, issue: str) -> dict:
         """Pull customer profile and past support interactions."""
@@ -327,7 +327,7 @@ from agents import Agent, Runner
 class AgentTeam:
     def __init__(self, user_id: str):
         self.user_id = user_id
-        self.memory = Engram()
+        self.memory = Smaran()
 
     def get_shared_context(self, topic: str) -> str:
         """Get context that all agents can use."""

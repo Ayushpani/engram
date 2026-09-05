@@ -176,7 +176,7 @@ export default function Home() {
 					<form onSubmit={handleSubmit} className="flex items-center gap-3">
 						<input
 							type="password"
-							placeholder="Enter your Engram API key"
+							placeholder="Enter your Smaran API key"
 							value={apiKey}
 							onChange={(e) => setApiKey(e.target.value)}
 							className="w-80 rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-2 text-sm text-white placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"

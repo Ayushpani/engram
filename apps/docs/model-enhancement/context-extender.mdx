@@ -1,12 +1,12 @@
 ---
-title: "engram Infinite Chat"
-description: "Build chat applications with unlimited context using engram's intelligent proxy"
+title: "smaran Infinite Chat"
+description: "Build chat applications with unlimited context using smaran's intelligent proxy"
 tag: "BETA"
 ---
 
 import GettingAPIKey from '/snippets/getting-api-key.mdx';
 
-engram Infinite Chat is a powerful solution that gives your chat applications unlimited contextual memory. It works as a transparent proxy in front of your existing LLM provider, intelligently managing long conversations without requiring any changes to your application logic.
+smaran Infinite Chat is a powerful solution that gives your chat applications unlimited contextual memory. It works as a transparent proxy in front of your existing LLM provider, intelligently managing long conversations without requiring any changes to your application logic.
 
 <img
   src="/images/infinite-context.png"
@@ -37,11 +37,11 @@ engram Infinite Chat is a powerful solution that gives your chat applications un
 
 To use the Infinite Chat endpoint, you need to:
 
-### 1. Get a engram API key
+### 1. Get a smaran API key
 
 <GettingAPIKey />
 
-### 2. Add engram in front of any **OpenAI-Compatible** API URL
+### 2. Add smaran in front of any **OpenAI-Compatible** API URL
 
 <CodeGroup>
 
@@ -49,16 +49,16 @@ To use the Infinite Chat endpoint, you need to:
 import OpenAI from "openai";
 
 /**
- * Initialize the OpenAI client with engram proxy
+ * Initialize the OpenAI client with smaran proxy
  * @param {string} OPENAI_API_KEY - Your OpenAI API key
- * @param {string} ENGRAM_API_KEY - Your engram API key
+ * @param {string} SMARAN_API_KEY - Your smaran API key
  * @returns {OpenAI} - Configured OpenAI client
  */
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  baseURL: "https://api.engram.ai/v3/https://api.openai.com/v1",
+  baseURL: "https://api.smaran.ai/v3/https://api.openai.com/v1",
   headers: {
-    "x-engram-api-key": process.env.ENGRAM_API_KEY,
+    "x-smaran-api-key": process.env.SMARAN_API_KEY,
     "x-sm-user-id": "Your_users_id"
   },
 });
@@ -68,11 +68,11 @@ const client = new OpenAI({
 import openai
 import os
 
-# Configure the OpenAI client with engram proxy
-openai.api_base = "https://api.engram.ai/v3/https://api.openai.com/v1"
+# Configure the OpenAI client with smaran proxy
+openai.api_base = "https://api.smaran.ai/v3/https://api.openai.com/v1"
 openai.api_key = os.environ.get("OPENAI_API_KEY")  # Your regular OpenAI key
 openai.default_headers = {
-    "x-engram--api-key": os.environ.get("ENGRAM_API_KEY"),  # Your engram key
+    "x-smaran--api-key": os.environ.get("SMARAN_API_KEY"),  # Your smaran key
 }
 
 # Create a chat completion with unlimited context
@@ -88,7 +88,7 @@ response = openai.ChatCompletion.create(
 
 <Steps>
   <Step title="Transparent Proxying">
-    All requests pass through engram to your chosen LLM provider with zero latency overhead.
+    All requests pass through smaran to your chosen LLM provider with zero latency overhead.
 
     <img
       src="/images/transparent-proxy.png"
@@ -100,7 +100,7 @@ response = openai.ChatCompletion.create(
     Long conversations are automatically broken down into optimized segments using our proprietary chunking algorithm that preserves semantic coherence.
   </Step>
   <Step title="Smart Retrieval">
-    When conversations exceed token limits (20k+), engram intelligently retrieves the most relevant context from previous messages.
+    When conversations exceed token limits (20k+), smaran intelligently retrieves the most relevant context from previous messages.
   </Step>
   <Step title="Automatic Token Management">
     The system intelligently balances token usage, ensuring optimal performance while minimizing costs.
@@ -114,7 +114,7 @@ response = openai.ChatCompletion.create(
 </Accordion>
 
 <Accordion title="Unlimited Context" icon="infinity">
-  No more 8k/32k/128k token limits - conversations can extend indefinitely with engram's advanced retrieval system.
+  No more 8k/32k/128k token limits - conversations can extend indefinitely with smaran's advanced retrieval system.
 </Accordion>
 
 <Accordion title="Improved Response Quality" icon="sparkles">
@@ -194,31 +194,31 @@ response = openai.ChatCompletion.create(
 ## Error Handling
 
 <Note>
-  engram is designed with reliability as the top priority. If any issues occur within the engram processing pipeline, the system will automatically fall back to direct forwarding of your request to the LLM provider, ensuring zero downtime for your applications.
+  smaran is designed with reliability as the top priority. If any issues occur within the smaran processing pipeline, the system will automatically fall back to direct forwarding of your request to the LLM provider, ensuring zero downtime for your applications.
 </Note>
 
 Each response includes diagnostic headers that provide information about the processing:
 
 | Header                           | Description                                                            |
 | -------------------------------- | ---------------------------------------------------------------------- |
-| `x-engram-conversation-id`  | Unique identifier for the conversation thread                          |
-| `x-engram-context-modified` | Indicates whether engram modified the context ("true" or "false") |
-| `x-engram-tokens-processed` | Number of tokens processed in this request                             |
-| `x-engram-chunks-created`   | Number of new chunks created from this conversation                    |
-| `x-engram-chunks-deleted`   | Number of chunks removed (if any)                                      |
-| `x-engram-docs-deleted`     | Number of documents removed (if any)                                   |
+| `x-smaran-conversation-id`  | Unique identifier for the conversation thread                          |
+| `x-smaran-context-modified` | Indicates whether smaran modified the context ("true" or "false") |
+| `x-smaran-tokens-processed` | Number of tokens processed in this request                             |
+| `x-smaran-chunks-created`   | Number of new chunks created from this conversation                    |
+| `x-smaran-chunks-deleted`   | Number of chunks removed (if any)                                      |
+| `x-smaran-docs-deleted`     | Number of documents removed (if any)                                   |
 
-If an error occurs, an additional header `x-engram-error` will be included with details about what went wrong. Your request will still be processed by the underlying LLM provider even if engram encounters an error.
+If an error occurs, an additional header `x-smaran-error` will be included with details about what went wrong. Your request will still be processed by the underlying LLM provider even if smaran encounters an error.
 
 ## Rate Limiting
 
 <Info>
-  Currently, there are no rate limits specific to engram. Your requests are subject only to the rate limits of your underlying LLM provider.
+  Currently, there are no rate limits specific to smaran. Your requests are subject only to the rate limits of your underlying LLM provider.
 </Info>
 
 ## Supported Models
 
-engram works with any OpenAI-compatible API, including:
+smaran works with any OpenAI-compatible API, including:
 
 <CardGroup cols={3}>
   <Card title="OpenAI" icon="openai">

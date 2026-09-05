@@ -34,8 +34,8 @@ Monitor memory processing status and track completion rates using the list endpo
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/documents/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/documents/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"limit": 100}' | \
       jq '.memories | group_by(.status) | map({status: .[0].status, count: length})'
@@ -69,8 +69,8 @@ Monitor memory processing status and track completion rates using the list endpo
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/documents/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/documents/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"limit": 100}' | \
       jq '.memories[] | select(.status | IN("queued", "extracting", "chunking", "embedding", "indexing"))'
@@ -105,8 +105,8 @@ Monitor memory processing status and track completion rates using the list endpo
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/documents/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/documents/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"limit": 100}' | \
       jq '.memories[] | select(.status == "failed") | {id, title, status}'

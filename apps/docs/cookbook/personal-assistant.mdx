@@ -20,14 +20,14 @@ A personal AI assistant that:
     Thoroughly tested, production-ready. Uses FastAPI + Streamlit + OpenAI.
   </Card>
   <Card title="TypeScript + AI SDK" icon="triangle" href="#typescript-implementation">
-    Modern React approach. Uses Next.js + Vercel AI SDK + Engram tools.
+    Modern React approach. Uses Next.js + Vercel AI SDK + Smaran tools.
   </Card>
 </CardGroup>
 
 ## Prerequisites
 
 - **Python 3.8+** or **Node.js 18+**
-- **Engram API key** ([get one here](https://console.engram.ai))
+- **Smaran API key** ([get one here](https://console.smaran.ai))
 - **OpenAI API key** ([get one here](https://platform.openai.com/api-keys))
 
 <Warning>
@@ -44,13 +44,13 @@ Never hardcode API keys in your code. Use environment variables.
 mkdir personal-ai && cd personal-ai
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install engram openai fastapi uvicorn python-dotenv streamlit requests
+pip install smaran openai fastapi uvicorn python-dotenv streamlit requests
 ```
 
 Create a `.env` file:
 
 ```bash
-ENGRAM_API_KEY=your_engram_key_here
+SMARAN_API_KEY=your_smaran_key_here
 OPENAI_API_KEY=your_openai_key_here
 ```
 
@@ -64,7 +64,7 @@ Create `main.py`. Let's build it step by step:
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
 from openai import AsyncOpenAI
-from engram import Engram
+from smaran import Smaran
 import json
 import os
 import uuid
@@ -74,7 +74,7 @@ from dotenv import load_dotenv
 - **FastAPI**: Web framework for building the API endpoint
 - **StreamingResponse**: Enables real-time response streaming (words appear as they're generated)
 - **AsyncOpenAI**: OpenAI client that supports async/await for non-blocking operations
-- **Engram**: Client for storing and retrieving long-term memories
+- **Smaran**: Client for storing and retrieving long-term memories
 - **uuid**: Creates stable, deterministic user IDs from emails
 
 #### Initialize Application and Clients
@@ -84,12 +84,12 @@ load_dotenv()
 app = FastAPI()
 
 openai_client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-engram_client = Engram(api_key=os.getenv("ENGRAM_API_KEY"))
+smaran_client = Smaran(api_key=os.getenv("SMARAN_API_KEY"))
 ```
 
 `load_dotenv()` loads API keys from your `.env` file into environment variables. We create two clients:
 - **OpenAI client**: Handles conversations and generates responses
-- **Engram client**: Stores and retrieves user-specific memories
+- **Smaran client**: Stores and retrieves user-specific memories
 
 These are separate because you can swap providers independently (e.g., switch from OpenAI to Anthropic without changing memory logic).
 
@@ -140,7 +140,7 @@ We use `uuid.NAMESPACE_DNS` as the namespace to ensure uniqueness.
 ```python
 async def search_user_memories(query: str, container_tag: str) -> str:
     try:
-        results = engram_client.search.memories(
+        results = smaran_client.search.memories(
             q=query,
             container_tag=container_tag,
             limit=5
@@ -169,7 +169,7 @@ This searches the user's memory store for context relevant to their current mess
 ```python
 async def add_user_memory(content: str, container_tag: str, email: str = None):
     try:
-        engram_client.add(
+        smaran_client.add(
             content=content,
             container_tag=container_tag,
             metadata={"type": "personal_info", "email": normalize_email(email) if email else None}
@@ -452,13 +452,13 @@ Open `http://localhost:8501` in your browser.
 ```bash
 npx create-next-app@latest personal-ai --typescript --tailwind --app
 cd personal-ai
-npm install @engram/tools ai @ai-sdk/openai
+npm install @smaran/tools ai @ai-sdk/openai
 ```
 
 Create `.env.local`:
 
 ```bash
-ENGRAM_API_KEY=your_engram_key_here
+SMARAN_API_KEY=your_smaran_key_here
 OPENAI_API_KEY=your_openai_key_here
 ```
 
@@ -471,12 +471,12 @@ Create `app/api/chat/route.ts`. Let's break it down:
 ```typescript
 import { streamText } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
-import { engramTools } from '@engram/tools/ai-sdk'
+import { smaranTools } from '@smaran/tools/ai-sdk'
 ```
 
 - **streamText**: Vercel AI SDK function that handles streaming responses and tool calling
 - **createOpenAI**: Factory function to create an OpenAI provider
-- **engramTools**: Pre-built tools for memory search and storage
+- **smaranTools**: Pre-built tools for memory search and storage
 
 #### Initialize OpenAI Provider
 
@@ -560,7 +560,7 @@ const containerTag = `user_${crypto.createHash('sha256').update(email).digest('h
     const result = streamText({
       model: openai('gpt-5'),
       messages,
-      tools: engramTools(process.env.ENGRAM_API_KEY!, {
+      tools: smaranTools(process.env.SMARAN_API_KEY!, {
         containerTags: [containerTag]
       }),
       system: SYSTEM_PROMPT
@@ -577,7 +577,7 @@ This is where the magic happens! Let's break down each parameter:
 - Full conversation history
 - Format: `[{role: "user"|"assistant", content: "..."}]`
 
-**`tools: engramTools(...)`**
+**`tools: smaranTools(...)`**
 - Gives the AI access to memory operations
 - The AI SDK automatically:
   - Decides when to call tools based on the conversation
@@ -596,7 +596,7 @@ This is where the magic happens! Let's break down each parameter:
 1. User: "Remember that I'm vegetarian"
 2. AI SDK detects this is memory-worthy
 3. Automatically calls `addMemory("User is vegetarian")`
-4. Stores in Engram with the user's container tag
+4. Stores in Smaran with the user's container tag
 5. Responds: "Got it, I'll remember that!"
 
 Later:
@@ -792,12 +792,12 @@ Assistant: [Should suggest TypeScript-specific solutions]
 Create `check_memories.py`:
 
 ```python
-from engram import Engram
+from smaran import Smaran
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
-client = Engram(api_key=os.getenv("ENGRAM_API_KEY"))
+client = Smaran(api_key=os.getenv("SMARAN_API_KEY"))
 
 # Replace with your user_id from console logs
 user_id = "your_user_id_here"
@@ -824,10 +824,10 @@ Create `scripts/check-memories.ts`:
 const userId = "your_user_id_here"
 const containerTag = `user_${userId}`
 
-const response = await fetch('https://api.engram.ai/v3/memories', {
+const response = await fetch('https://api.smaran.ai/v3/memories', {
   method: 'POST',
   headers: {
-    'Authorization': `Bearer ${process.env.ENGRAM_API_KEY}`,
+    'Authorization': `Bearer ${process.env.SMARAN_API_KEY}`,
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
@@ -861,4 +861,4 @@ console.log(`Found ${data.memories?.length || 0} memories`)
 
 ---
 
-*Built with Engram. Customize based on your needs.*
+*Built with Smaran. Customize based on your needs.*

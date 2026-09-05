@@ -29,7 +29,7 @@ export function initializeChatGPT() {
 	}
 
 	setTimeout(() => {
-		addEngramButtonToMemoriesDialog()
+		addSmaranButtonToMemoriesDialog()
 		addSaveChatGPTElementBeforeComposerBtn()
 		setupChatGPTAutoFetch()
 	}, 2000)
@@ -58,9 +58,9 @@ function setupChatGPTRouteChangeDetection() {
 	const checkForRouteChange = () => {
 		if (window.location.href !== currentUrl) {
 			currentUrl = window.location.href
-			console.log("ChatGPT route changed, re-adding engram elements")
+			console.log("ChatGPT route changed, re-adding smaran elements")
 			setTimeout(() => {
-				addEngramButtonToMemoriesDialog()
+				addSmaranButtonToMemoriesDialog()
 				addSaveChatGPTElementBeforeComposerBtn()
 				setupChatGPTAutoFetch()
 			}, 1000)
@@ -98,7 +98,7 @@ function setupChatGPTRouteChangeDetection() {
 			chatGPTObserverThrottle = setTimeout(() => {
 				try {
 					chatGPTObserverThrottle = null
-					addEngramButtonToMemoriesDialog()
+					addSmaranButtonToMemoriesDialog()
 					addSaveChatGPTElementBeforeComposerBtn()
 					setupChatGPTAutoFetch()
 				} catch (error) {
@@ -193,7 +193,7 @@ async function getRelatedMemoriesForChatGPT(actionSource: string) {
 	}
 }
 
-function addEngramButtonToMemoriesDialog() {
+function addSmaranButtonToMemoriesDialog() {
 	const dialogs = document.querySelectorAll('[role="dialog"]')
 	let memoriesDialog: HTMLElement | null = null
 
@@ -207,27 +207,27 @@ function addEngramButtonToMemoriesDialog() {
 
 	if (!memoriesDialog) return
 
-	if (memoriesDialog.querySelector("#engram-save-button")) return
+	if (memoriesDialog.querySelector("#smaran-save-button")) return
 
 	const deleteAllContainer = memoriesDialog.querySelector(
 		".flex.items-center.gap-0\\.5",
 	)
 	if (!deleteAllContainer) return
 
-	const engramButton = document.createElement("button")
-	engramButton.id = "engram-save-button"
-	engramButton.className = "btn relative btn-primary-outline mr-2"
+	const smaranButton = document.createElement("button")
+	smaranButton.id = "smaran-save-button"
+	smaranButton.className = "btn relative btn-primary-outline mr-2"
 
 	const iconUrl = browser.runtime.getURL("/icon-16.png")
 
-	engramButton.innerHTML = `
+	smaranButton.innerHTML = `
         <div class="flex items-center justify-center gap-2">
-          <img src="${iconUrl}" alt="engram" style="width: 16px; height: 16px; flex-shrink: 0; border-radius: 2px;" />
-          Save to engram
+          <img src="${iconUrl}" alt="smaran" style="width: 16px; height: 16px; flex-shrink: 0; border-radius: 2px;" />
+          Save to smaran
         </div>
       `
 
-	engramButton.style.cssText = `
+	smaranButton.style.cssText = `
         background: #1C2026 !important;
         color: white !important;
         border: 1px solid #1C2026 !important;
@@ -239,25 +239,25 @@ function addEngramButtonToMemoriesDialog() {
         cursor: pointer !important;
       `
 
-	engramButton.addEventListener("mouseenter", () => {
-		engramButton.style.backgroundColor = "#2B2E33"
+	smaranButton.addEventListener("mouseenter", () => {
+		smaranButton.style.backgroundColor = "#2B2E33"
 	})
 
-	engramButton.addEventListener("mouseleave", () => {
-		engramButton.style.backgroundColor = "#1C2026"
+	smaranButton.addEventListener("mouseleave", () => {
+		smaranButton.style.backgroundColor = "#1C2026"
 	})
 
-	engramButton.addEventListener("click", async () => {
-		await saveMemoriesToEngram()
+	smaranButton.addEventListener("click", async () => {
+		await saveMemoriesToSmaran()
 	})
 
 	deleteAllContainer.insertBefore(
-		engramButton,
+		smaranButton,
 		deleteAllContainer.firstChild,
 	)
 }
 
-async function saveMemoriesToEngram() {
+async function saveMemoriesToSmaran() {
 	try {
 		DOMUtils.showToast("loading")
 
@@ -290,7 +290,7 @@ async function saveMemoriesToEngram() {
 			DOMUtils.showToast("error")
 		}
 	} catch (error) {
-		console.error("Error saving memories to engram:", error)
+		console.error("Error saving memories to smaran:", error)
 		DOMUtils.showToast("error")
 	}
 }
@@ -518,7 +518,7 @@ function addSaveChatGPTElementBeforeComposerBtn() {
 	const composerButtons = document.querySelectorAll("button.composer-btn")
 
 	composerButtons.forEach((button) => {
-		if (button.hasAttribute("data-engram-icon-added-before")) {
+		if (button.hasAttribute("data-smaran-icon-added-before")) {
 			return
 		}
 
@@ -548,7 +548,7 @@ function addSaveChatGPTElementBeforeComposerBtn() {
 			`#${ELEMENT_IDS.CHATGPT_INPUT_BAR_ELEMENT}-before-composer`,
 		)
 		if (existingIcon) {
-			button.setAttribute("data-engram-icon-added-before", "true")
+			button.setAttribute("data-smaran-icon-added-before", "true")
 			return
 		}
 
@@ -560,7 +560,7 @@ function addSaveChatGPTElementBeforeComposerBtn() {
 
 		saveChatGPTElement.id = `${ELEMENT_IDS.CHATGPT_INPUT_BAR_ELEMENT}-before-composer-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
 
-		button.setAttribute("data-engram-icon-added-before", "true")
+		button.setAttribute("data-smaran-icon-added-before", "true")
 
 		grandParent.insertBefore(saveChatGPTElement, parent)
 
@@ -578,12 +578,12 @@ async function setupChatGPTAutoFetch() {
 	const promptTextarea = document.getElementById("prompt-textarea")
 	if (
 		!promptTextarea ||
-		promptTextarea.hasAttribute("data-engram-auto-fetch")
+		promptTextarea.hasAttribute("data-smaran-auto-fetch")
 	) {
 		return
 	}
 
-	promptTextarea.setAttribute("data-engram-auto-fetch", "true")
+	promptTextarea.setAttribute("data-smaran-auto-fetch", "true")
 
 	const handleInput = () => {
 		if (chatGPTDebounceTimeout) {

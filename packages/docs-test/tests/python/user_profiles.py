@@ -1,11 +1,11 @@
 import os
 import time
 from dotenv import load_dotenv
-from engram import Engram
+from smaran import Smaran
 
 load_dotenv()
 
-client = Engram()
+client = Smaran()
 USER_ID = "docs-test-profiles-py"
 
 

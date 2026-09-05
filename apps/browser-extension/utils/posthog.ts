@@ -17,7 +17,7 @@ let posthogInstance: PostHog | null = null
 let initializationPromise: Promise<PostHog> | null = null
 
 export const POSTHOG_CONFIG = {
-	api_host: "https://api.engram.ai/orange",
+	api_host: "https://api.smaran.ai/orange",
 	person_profiles: "identified_only",
 	disable_external_dependency_loading: true,
 	persistence: "localStorage",

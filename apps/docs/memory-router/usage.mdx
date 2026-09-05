@@ -9,15 +9,15 @@ Add unlimited memory to your LLM applications with just a URL change.
 ## Prerequisites
 
 You'll need:
-1. A [Engram API key](https://console.engram.ai)
+1. A [Smaran API key](https://console.smaran.ai)
 2. Your LLM provider's API key
 
 ## Basic Setup
 
 <Steps>
   <Step title="Get Your API Keys">
-    **Engram API Key:**
-    1. Sign up at [console.engram.ai](https://console.engram.ai)
+    **Smaran API Key:**
+    1. Sign up at [console.smaran.ai](https://console.smaran.ai)
     2. Navigate to **API Keys** → **Create API Key**
     3. Copy your key
 
@@ -29,10 +29,10 @@ You'll need:
   </Step>
 
   <Step title="Update Your Base URL">
-    Prepend `https://api.engram.ai/v3/` to your provider's URL:
+    Prepend `https://api.smaran.ai/v3/` to your provider's URL:
 
     ```
-    https://api.engram.ai/v3/[PROVIDER_URL]
+    https://api.smaran.ai/v3/[PROVIDER_URL]
     ```
   </Step>
 
@@ -46,19 +46,19 @@ You'll need:
 <CodeGroup>
 
 ```text OpenAI
-https://api.engram.ai/v3/https://api.openai.com/v1/
+https://api.smaran.ai/v3/https://api.openai.com/v1/
 ```
 
 ```text Anthropic
-https://api.engram.ai/v3/https://api.anthropic.com/v1/
+https://api.smaran.ai/v3/https://api.anthropic.com/v1/
 ```
 
 ```text Google Gemini
-https://api.engram.ai/v3/https://generativelanguage.googleapis.com/v1beta/openai/
+https://api.smaran.ai/v3/https://generativelanguage.googleapis.com/v1beta/openai/
 ```
 
 ```text Groq
-https://api.engram.ai/v3/https://api.groq.com/openai/v1/
+https://api.smaran.ai/v3/https://api.groq.com/openai/v1/
 ```
 
 </CodeGroup>
@@ -72,9 +72,9 @@ https://api.engram.ai/v3/https://api.groq.com/openai/v1/
 
     client = OpenAI(
         api_key="YOUR_OPENAI_API_KEY",
-        base_url="https://api.engram.ai/v3/https://api.openai.com/v1/",
+        base_url="https://api.smaran.ai/v3/https://api.openai.com/v1/",
         default_headers={
-            "x-engram-api-key": "YOUR_ENGRAM_API_KEY",
+            "x-smaran-api-key": "YOUR_SMARAN_API_KEY",
             "x-sm-user-id": "user123"  # Unique user identifier
         }
     )
@@ -97,9 +97,9 @@ https://api.engram.ai/v3/https://api.groq.com/openai/v1/
 
     const client = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
-      baseURL: 'https://api.engram.ai/v3/https://api.openai.com/v1/',
+      baseURL: 'https://api.smaran.ai/v3/https://api.openai.com/v1/',
       defaultHeaders: {
-        'x-engram-api-key': process.env.ENGRAM_API_KEY,
+        'x-smaran-api-key': process.env.SMARAN_API_KEY,
         'x-sm-user-id': 'user123'  // Unique user identifier
       }
     });
@@ -118,9 +118,9 @@ https://api.engram.ai/v3/https://api.groq.com/openai/v1/
 
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/https://api.openai.com/v1/chat/completions" \
+    curl -X POST "https://api.smaran.ai/v3/https://api.openai.com/v1/chat/completions" \
       -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
-      -H "x-engram-api-key: YOUR_ENGRAM_API_KEY" \
+      -H "x-smaran-api-key: YOUR_SMARAN_API_KEY" \
       -H "x-sm-user-id: user123" \
       -H "Content-Type: application/json" \
       -d '{
@@ -140,27 +140,27 @@ If you can't modify headers, pass authentication via URL parameters:
 ```python Python
 client = OpenAI(
     api_key="YOUR_OPENAI_API_KEY",
-    base_url="https://api.engram.ai/v3/https://api.openai.com/v1/chat/completions?userId=user123"
+    base_url="https://api.smaran.ai/v3/https://api.openai.com/v1/chat/completions?userId=user123"
 )
 
-# Then set Engram API key as environment variable:
-# export ENGRAM_API_KEY="your_key_here"
+# Then set Smaran API key as environment variable:
+# export SMARAN_API_KEY="your_key_here"
 ```
 
 ```typescript TypeScript
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  baseURL: 'https://api.engram.ai/v3/https://api.openai.com/v1/chat/completions?userId=user123'
+  baseURL: 'https://api.smaran.ai/v3/https://api.openai.com/v1/chat/completions?userId=user123'
 });
 
-// Set Engram API key as environment variable:
-// ENGRAM_API_KEY="your_key_here"
+// Set Smaran API key as environment variable:
+// SMARAN_API_KEY="your_key_here"
 ```
 
 ```bash cURL
-curl -X POST "https://api.engram.ai/v3/https://api.openai.com/v1/chat/completions?userId=user123" \
+curl -X POST "https://api.smaran.ai/v3/https://api.openai.com/v1/chat/completions?userId=user123" \
   -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
-  -H "x-engram-api-key: YOUR_ENGRAM_API_KEY" \
+  -H "x-smaran-api-key: YOUR_SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"model": "gpt-5", "messages": [{"role": "user", "content": "Hello!"}]}'
 ```

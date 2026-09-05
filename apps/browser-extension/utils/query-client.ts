@@ -1,5 +1,5 @@
 /**
- * React Query configuration for engram browser extension
+ * React Query configuration for smaran browser extension
  */
 import { QueryClient } from "@tanstack/react-query"
 

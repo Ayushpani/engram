@@ -1,6 +1,6 @@
-from engram import Engram
+from smaran import Smaran
 
-client = Engram()
+client = Smaran()
 USER_ID = "dhravya"
 
 conversation = [

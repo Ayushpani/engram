@@ -3,7 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
-  "portless": { "name": "docs.dev.engram", "script": "dev:app", "appPort": 3003 },
+  "portless": { "name": "docs.dev.smaran", "script": "dev:app", "appPort": 3003 },
   "scripts": {
     "dev": "portless",
     "dev:app": "bunx mintlify@latest dev --no-open --port 3003"

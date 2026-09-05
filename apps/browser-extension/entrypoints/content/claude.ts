@@ -29,7 +29,7 @@ export function initializeClaude() {
 	}
 
 	setTimeout(() => {
-		addEngramIconToClaudeInput()
+		addSmaranIconToClaudeInput()
 		setupClaudeAutoFetch()
 	}, 2000)
 
@@ -57,9 +57,9 @@ function setupClaudeRouteChangeDetection() {
 	const checkForRouteChange = () => {
 		if (window.location.href !== currentUrl) {
 			currentUrl = window.location.href
-			console.log("Claude route changed, re-adding engram icon")
+			console.log("Claude route changed, re-adding smaran icon")
 			setTimeout(() => {
-				addEngramIconToClaudeInput()
+				addSmaranIconToClaudeInput()
 				setupClaudeAutoFetch()
 			}, 1000)
 		}
@@ -95,7 +95,7 @@ function setupClaudeRouteChangeDetection() {
 			claudeObserverThrottle = setTimeout(() => {
 				try {
 					claudeObserverThrottle = null
-					addEngramIconToClaudeInput()
+					addSmaranIconToClaudeInput()
 					setupClaudeAutoFetch()
 				} catch (error) {
 					console.error("Error in Claude observer callback:", error)
@@ -118,13 +118,13 @@ function setupClaudeRouteChangeDetection() {
 	}
 }
 
-function addEngramIconToClaudeInput() {
+function addSmaranIconToClaudeInput() {
 	const targetContainers = document.querySelectorAll(
 		".relative.flex-1.flex.items-center.gap-2.shrink.min-w-0",
 	)
 
 	targetContainers.forEach((container) => {
-		if (container.hasAttribute("data-engram-icon-added")) {
+		if (container.hasAttribute("data-smaran-icon-added")) {
 			return
 		}
 
@@ -132,21 +132,21 @@ function addEngramIconToClaudeInput() {
 			`#${ELEMENT_IDS.CLAUDE_INPUT_BAR_ELEMENT}`,
 		)
 		if (existingIcon) {
-			container.setAttribute("data-engram-icon-added", "true")
+			container.setAttribute("data-smaran-icon-added", "true")
 			return
 		}
 
-		const engramIcon = createClaudeInputBarElement(async () => {
+		const smaranIcon = createClaudeInputBarElement(async () => {
 			await getRelatedMemoriesForClaude(
 				POSTHOG_EVENT_KEY.CLAUDE_CHAT_MEMORIES_SEARCHED,
 			)
 		})
 
-		engramIcon.id = `${ELEMENT_IDS.CLAUDE_INPUT_BAR_ELEMENT}-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
+		smaranIcon.id = `${ELEMENT_IDS.CLAUDE_INPUT_BAR_ELEMENT}-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
 
-		container.setAttribute("data-engram-icon-added", "true")
+		container.setAttribute("data-smaran-icon-added", "true")
 
-		container.insertBefore(engramIcon, container.firstChild)
+		container.insertBefore(smaranIcon, container.firstChild)
 	})
 }
 
@@ -154,12 +154,12 @@ async function getRelatedMemoriesForClaude(actionSource: string) {
 	try {
 		let userQuery = ""
 
-		const engramContainer = document.querySelector(
-			'[data-engram-icon-added="true"]',
+		const smaranContainer = document.querySelector(
+			'[data-smaran-icon-added="true"]',
 		)
-		if (engramContainer?.parentElement?.previousElementSibling) {
+		if (smaranContainer?.parentElement?.previousElementSibling) {
 			const pTag =
-				engramContainer.parentElement.previousElementSibling.querySelector(
+				smaranContainer.parentElement.previousElementSibling.querySelector(
 					"p",
 				)
 			userQuery = pTag?.innerText || pTag?.textContent || ""
@@ -610,12 +610,12 @@ async function setupClaudeAutoFetch() {
 
 	if (
 		!textareaElement ||
-		textareaElement.hasAttribute("data-engram-auto-fetch")
+		textareaElement.hasAttribute("data-smaran-auto-fetch")
 	) {
 		return
 	}
 
-	textareaElement.setAttribute("data-engram-auto-fetch", "true")
+	textareaElement.setAttribute("data-smaran-auto-fetch", "true")
 
 	const handleInput = () => {
 		if (claudeDebounceTimeout) {

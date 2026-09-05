@@ -1,35 +1,35 @@
 ---
 title: "OpenAI Codex"
 sidebarTitle: "OpenAI Codex"
-description: "codex-engram — persistent memory for OpenAI Codex CLI"
+description: "codex-smaran — persistent memory for OpenAI Codex CLI"
 icon: "terminal"
 ---
 
-[codex-engram](https://github.com/engramai/codex-engram) wires Engram into the [OpenAI Codex CLI](https://github.com/openai/codex) via hooks and skills. Your agent gets **two layers of memory**:
+[codex-smaran](https://github.com/smaranai/codex-smaran) wires Smaran into the [OpenAI Codex CLI](https://github.com/openai/codex) via hooks and skills. Your agent gets **two layers of memory**:
 
 - **Implicit** (hooks) — automatically recalls context before each prompt and captures conversations after each session.
 - **Explicit** (skills) — lets you or the agent save, search, and manage memories on demand.
 
 ## Get Your API Key
 
-Create a Engram API key from the [API Keys](https://console.engram.ai/keys) page, then export it in your shell profile:
+Create a Smaran API key from the [API Keys](https://console.smaran.ai/keys) page, then export it in your shell profile:
 
 <Tabs>
   <Tab title="macOS / Linux (zsh)">
     ```bash
-    echo 'export ENGRAM_CODEX_API_KEY="sm_..."' >> ~/.zshrc
+    echo 'export SMARAN_CODEX_API_KEY="sm_..."' >> ~/.zshrc
     source ~/.zshrc
     ```
   </Tab>
   <Tab title="macOS / Linux (bash)">
     ```bash
-    echo 'export ENGRAM_CODEX_API_KEY="sm_..."' >> ~/.bashrc
+    echo 'export SMARAN_CODEX_API_KEY="sm_..."' >> ~/.bashrc
     source ~/.bashrc
     ```
   </Tab>
   <Tab title="Windows (PowerShell)">
     ```powershell
-    [System.Environment]::SetEnvironmentVariable("ENGRAM_CODEX_API_KEY", "sm_...", "User")
+    [System.Environment]::SetEnvironmentVariable("SMARAN_CODEX_API_KEY", "sm_...", "User")
     ```
     Restart your terminal after running this.
   </Tab>
@@ -38,14 +38,14 @@ Create a Engram API key from the [API Keys](https://console.engram.ai/keys) page
 ## Install the Plugin
 
 ```bash
-npx codex-engram@latest install
+npx codex-smaran@latest install
 ```
 
 This command:
-- Copies hook and skill scripts to `~/.codex/engram/`
+- Copies hook and skill scripts to `~/.codex/smaran/`
 - Enables `codex_hooks = true` in `~/.codex/config.toml`
 - Registers `UserPromptSubmit` (recall) and `Stop` (capture) hooks in `~/.codex/hooks.json`
-- Installs `engram-search`, `engram-save`, and `engram-forget` skills to `~/.codex/skills/`
+- Installs `smaran-search`, `smaran-save`, and `smaran-forget` skills to `~/.codex/skills/`
 
 Restart Codex CLI after installing.
 
@@ -53,8 +53,8 @@ Restart Codex CLI after installing.
 
 Once installed, the plugin runs automatically on every Codex session:
 
-- **Recall** — Before each prompt, relevant memories and your user profile are fetched from Engram and injected as additional context.
-- **Capture** — After each session ends, the conversation transcript is ingested into Engram, scoped to the current project and user.
+- **Recall** — Before each prompt, relevant memories and your user profile are fetched from Smaran and injected as additional context.
+- **Capture** — After each session ends, the conversation transcript is ingested into Smaran, scoped to the current project and user.
 - **Privacy** — Content wrapped in `<private>...</private>` tags is redacted before storage.
 
 ### Memory Scopes
@@ -66,7 +66,7 @@ Memories are tagged with two container tags per session, auto-derived from your 
 | User | `git config user.email` (hashed) | Memories shared across all your projects |
 | Project | Current working directory (hashed) | Memories scoped to the current repo |
 
-Tags are generated automatically — no configuration needed. You can override them in `~/.codex/engram.json` if needed:
+Tags are generated automatically — no configuration needed. You can override them in `~/.codex/smaran.json` if needed:
 
 ```json
 {
@@ -77,13 +77,13 @@ Tags are generated automatically — no configuration needed. You can override t
 
 ## Explicit Memory Skills
 
-The installer includes three skills that Codex auto-discovers from `~/.codex/skills/`. They use the same `ENGRAM_CODEX_API_KEY` as the hooks — no separate login needed.
+The installer includes three skills that Codex auto-discovers from `~/.codex/skills/`. They use the same `SMARAN_CODEX_API_KEY` as the hooks — no separate login needed.
 
 | Skill | Description |
 |-------|-------------|
-| `engram-search` | Search your memories by natural-language query |
-| `engram-save` | Save important project knowledge to memory |
-| `engram-forget` | Remove outdated or incorrect memories |
+| `smaran-search` | Search your memories by natural-language query |
+| `smaran-save` | Save important project knowledge to memory |
+| `smaran-forget` | Remove outdated or incorrect memories |
 
 These skills let you interact with memory explicitly — for example:
 
@@ -96,18 +96,18 @@ These skills let you interact with memory explicitly — for example:
 ## Verify Installation
 
 ```bash
-npx codex-engram status
+npx codex-smaran status
 ```
 
 Expected output when everything is configured:
 
 ```
-codex-engram status:
+codex-smaran status:
 
-  API key:       ✓ set (ENGRAM_CODEX_API_KEY)
-  Hook scripts:  ✓ installed at ~/.codex/engram
+  API key:       ✓ set (SMARAN_CODEX_API_KEY)
+  Hook scripts:  ✓ installed at ~/.codex/smaran
   hooks.json:    ✓ registered (implicit memory)
-  Skills:        ✓ installed (engram-search, engram-save, engram-forget)
+  Skills:        ✓ installed (smaran-search, smaran-save, smaran-forget)
   config.toml:   ✓ exists
 
 All good! Memory is active.
@@ -116,14 +116,14 @@ All good! Memory is active.
 ## Uninstall
 
 ```bash
-npx codex-engram uninstall
+npx codex-smaran uninstall
 ```
 
-This removes the hook registrations and skill scripts from `~/.codex/engram/`, removes skill directories from `~/.codex/skills/`, and disables `codex_hooks` in `~/.codex/config.toml`. Your existing memories in Engram are preserved.
+This removes the hook registrations and skill scripts from `~/.codex/smaran/`, removes skill directories from `~/.codex/skills/`, and disables `codex_hooks` in `~/.codex/config.toml`. Your existing memories in Smaran are preserved.
 
 ## Configuration
 
-Create `~/.codex/engram.json` to override defaults:
+Create `~/.codex/smaran.json` to override defaults:
 
 ```json
 {
@@ -145,21 +145,21 @@ Create `~/.codex/engram.json` to override defaults:
 | `maxProfileItems` | `5` | Max profile facts injected per prompt |
 | `injectProfile` | `true` | Include user profile in context |
 | `containerTagPrefix` | `"codex"` | Prefix for container tags |
-| `debug` | `false` | Write debug logs to `~/.codex-engram.log` |
+| `debug` | `false` | Write debug logs to `~/.codex-smaran.log` |
 
 ## Logging
 
 Enable debug logging to trace hook activity:
 
 ```bash
-export ENGRAM_DEBUG=true
-tail -f ~/.codex-engram.log
+export SMARAN_DEBUG=true
+tail -f ~/.codex-smaran.log
 ```
 
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="GitHub Repository" icon="github" href="https://github.com/engramai/codex-engram">
+  <Card title="GitHub Repository" icon="github" href="https://github.com/smaranai/codex-smaran">
     Source code, issues, and detailed README.
   </Card>
 

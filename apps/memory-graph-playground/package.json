@@ -2,7 +2,7 @@
   "name": "memory-graph-playground",
   "version": "0.1.0",
   "private": true,
-  "portless": { "name": "graph.dev.engram", "script": "dev:app" },
+  "portless": { "name": "graph.dev.smaran", "script": "dev:app" },
   "scripts": {
     "dev": "portless",
     "dev:app": "next dev --port ${PORT:-3004}",

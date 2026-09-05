@@ -1,14 +1,14 @@
 ---
 title: "Google Drive Connector"
-description: "Connect Google Drive to sync documents into your Engram knowledge base"
+description: "Connect Google Drive to sync documents into your Smaran knowledge base"
 icon: "google-drive"
 ---
 
-Connect Google Drive to sync documents into your Engram knowledge base with OAuth authentication and custom app support.
+Connect Google Drive to sync documents into your Smaran knowledge base with OAuth authentication and custom app support.
 
 ## Sync scope
 
-**Default for new connections:** after OAuth, the user completes a **folder and file** picker (Google Docs, Sheets, Slides, and PDFs). Only items they select are synced and updated until they change the selection (for example from the Engram console).
+**Default for new connections:** after OAuth, the user completes a **folder and file** picker (Google Docs, Sheets, Slides, and PDFs). Only items they select are synced and updated until they change the selection (for example from the Smaran console).
 
 **Whole Drive:** set `metadata.syncScope` to `"full"` when creating the connection so the entire Drive syncs without the picker.
 
@@ -25,10 +25,10 @@ If you use scoped sync and the user has not finished the picker yet, **scheduled
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Engram from 'engram';
+    import Smaran from 'smaran';
 
-    const client = new Engram({
-      apiKey: process.env.ENGRAM_API_KEY!
+    const client = new Smaran({
+      apiKey: process.env.SMARAN_API_KEY!
     });
 
     const connection = await client.connections.create('google-drive', {
@@ -49,10 +49,10 @@ If you use scoped sync and the user has not finished the picker yet, **scheduled
   </Tab>
   <Tab title="Python">
     ```python
-    from engram import Engram
+    from smaran import Smaran
     import os
 
-    client = Engram(api_key=os.environ.get("ENGRAM_API_KEY"))
+    client = Smaran(api_key=os.environ.get("SMARAN_API_KEY"))
 
     connection = client.connections.create(
         'google-drive',
@@ -73,8 +73,8 @@ If you use scoped sync and the user has not finished the picker yet, **scheduled
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/connections/google-drive" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/google-drive" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "redirectUrl": "https://yourapp.com/auth/google-drive/callback",
@@ -96,7 +96,7 @@ For **whole Drive** sync, include `"syncScope": "full"` in `metadata` on the sam
 
 ### 2. Handle OAuth Callback
 
-After the user grants permissions, Google redirects through Engram to finish the connection. With **scoped** sync (`syncScope` omitted or `"selected"`), the user is sent to Engram’s **hosted file and folder picker**; they must complete that step before imports run. With **`syncScope: "full"`**, Engram redirects to your `redirectUrl` (or returns connection details) **without** the picker. You can open the picker again later for an existing connection (Engram console, or `POST /v3/connections/{connectionId}/google-drive/hosted-picker` with an authenticated admin session).
+After the user grants permissions, Google redirects through Smaran to finish the connection. With **scoped** sync (`syncScope` omitted or `"selected"`), the user is sent to Smaran’s **hosted file and folder picker**; they must complete that step before imports run. With **`syncScope: "full"`**, Smaran redirects to your `redirectUrl` (or returns connection details) **without** the picker. You can open the picker again later for an existing connection (Smaran console, or `POST /v3/connections/{connectionId}/google-drive/hosted-picker` with an authenticated admin session).
 
 ### 3. Check Connection Status
 
@@ -127,8 +127,8 @@ After the user grants permissions, Google redirects through Engram to finish the
   <Tab title="cURL">
     ```bash
     # Get connections by provider and tags
-    curl -X POST "https://api.engram.ai/v3/connections/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123", "gdrive-sync"],
@@ -136,8 +136,8 @@ After the user grants permissions, Google redirects through Engram to finish the
       }'
 
     # List synced documents
-    curl -X POST "https://api.engram.ai/v3/documents/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/documents/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123", "gdrive-sync"],
@@ -195,8 +195,8 @@ Based on the API type definitions, Google Drive documents are identified with th
   <Tab title="cURL">
     ```bash
     # List all connections for specific container tags
-    curl -X POST "https://api.engram.ai/v3/connections/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123"]
@@ -249,14 +249,14 @@ Based on the API type definitions, Google Drive documents are identified with th
   <Tab title="cURL">
     ```bash
     # Delete by connection ID
-    curl -X DELETE "https://api.engram.ai/v3/connections/connection_id_123" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY"
+    curl -X DELETE "https://api.smaran.ai/v3/connections/connection_id_123" \
+      -H "Authorization: Bearer $SMARAN_API_KEY"
 
     # Response: {"id": "connection_id_123", "provider": "google-drive"}
 
     # Delete by provider and container tags
-    curl -X DELETE "https://api.engram.ai/v3/connections/google-drive" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X DELETE "https://api.smaran.ai/v3/connections/google-drive" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123"]
@@ -271,7 +271,7 @@ Based on the API type definitions, Google Drive documents are identified with th
 Deleting a connection will:
 - Stop all future syncs from Google Drive
 - Remove the OAuth authorization
-- Keep existing synced documents in Engram (they won't be deleted)
+- Keep existing synced documents in Smaran (they won't be deleted)
 </Note>
 
 ### Manual Sync
@@ -309,12 +309,12 @@ Trigger a manual synchronization:
   <Tab title="cURL">
     ```bash
     # Trigger sync for all Google Drive connections
-    curl -X POST "https://api.engram.ai/v3/connections/google-drive/import" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY"
+    curl -X POST "https://api.smaran.ai/v3/connections/google-drive/import" \
+      -H "Authorization: Bearer $SMARAN_API_KEY"
 
     # Trigger sync for specific container tags
-    curl -X POST "https://api.engram.ai/v3/connections/google-drive/import" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/google-drive/import" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123"]
@@ -367,8 +367,8 @@ Configure your own Google OAuth app using the settings API:
   <Tab title="cURL">
     ```bash
     # Update organization settings
-    curl -X PATCH "https://api.engram.ai/v3/settings" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X PATCH "https://api.smaran.ai/v3/settings" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "googleDriveCustomKeyEnabled": true,
@@ -377,8 +377,8 @@ Configure your own Google OAuth app using the settings API:
       }'
 
     # Get current settings
-    curl -X GET "https://api.engram.ai/v3/settings" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY"
+    curl -X GET "https://api.smaran.ai/v3/settings" \
+      -H "Authorization: Bearer $SMARAN_API_KEY"
     ```
   </Tab>
 </Tabs>
@@ -419,8 +419,8 @@ Configure filtering using the settings API:
   <Tab title="cURL">
     ```bash
     # Configure document filtering
-    curl -X PATCH "https://api.engram.ai/v3/settings" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X PATCH "https://api.smaran.ai/v3/settings" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "shouldLLMFilter": true,

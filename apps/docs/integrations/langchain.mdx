@@ -1,15 +1,15 @@
 ---
 title: "LangChain"
 sidebarTitle: "LangChain"
-description: "Build AI agents with persistent memory using LangChain and Engram"
+description: "Build AI agents with persistent memory using LangChain and Smaran"
 icon: "link"
 ---
 
-Build AI applications with LangChain that remember context across conversations. Engram handles memory storage, retrieval, and user profiling while LangChain manages your conversation flow.
+Build AI applications with LangChain that remember context across conversations. Smaran handles memory storage, retrieval, and user profiling while LangChain manages your conversation flow.
 
 ## Overview
 
-This guide shows how to integrate Engram with LangChain to create AI agents that:
+This guide shows how to integrate Smaran with LangChain to create AI agents that:
 - Maintain user context through automatic profiling
 - Store and retrieve relevant memories semantically
 - Personalize responses based on conversation history
@@ -19,18 +19,18 @@ This guide shows how to integrate Engram with LangChain to create AI agents that
 Install the required packages:
 
 ```bash
-pip install langchain langchain-openai engram python-dotenv
+pip install langchain langchain-openai smaran python-dotenv
 ```
 
 Configure your environment:
 
 ```bash
 # .env
-ENGRAM_API_KEY=your-engram-api-key
+SMARAN_API_KEY=your-smaran-api-key
 OPENAI_API_KEY=your-openai-api-key
 ```
 
-<Note>Get your Engram API key from [console.engram.ai](https://console.engram.ai).</Note>
+<Note>Get your Smaran API key from [console.smaran.ai](https://console.smaran.ai).</Note>
 
 ## Basic Integration
 
@@ -41,14 +41,14 @@ import os
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from engram import Engram
+from smaran import Smaran
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # Initialize clients
 llm = ChatOpenAI(model="gpt-4o")
-memory = Engram()
+memory = Smaran()
 
 def chat(user_id: str, message: str) -> str:
     # 1. Get user profile for context
@@ -94,7 +94,7 @@ Relevant Memories:
 
 ### User Profiles
 
-Engram automatically maintains user profiles with two types of information:
+Smaran automatically maintains user profiles with two types of information:
 
 - **Static facts**: Long-term information about the user (preferences, expertise, background)
 - **Dynamic context**: Recent activity and current focus areas
@@ -157,7 +157,7 @@ from typing import Optional
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from langchain_core.prompts import ChatPromptTemplate
-from engram import Engram
+from smaran import Smaran
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -165,7 +165,7 @@ load_dotenv()
 class CodeReviewAssistant:
     def __init__(self):
         self.llm = ChatOpenAI(model="gpt-4o", temperature=0.3)
-        self.memory = Engram()
+        self.memory = Smaran()
 
     def get_context(self, user_id: str, code: str) -> str:
         """Retrieve user profile and relevant past reviews."""
@@ -267,7 +267,7 @@ class ConversationalAgent:
     def __init__(self, user_id: str):
         self.user_id = user_id
         self.llm = ChatOpenAI(model="gpt-4o")
-        self.memory = Engram()
+        self.memory = Smaran()
         self.messages: list[BaseMessage] = []
 
     def _build_system_prompt(self, query: str) -> str:

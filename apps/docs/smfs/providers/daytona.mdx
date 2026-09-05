@@ -3,14 +3,14 @@ title: "Daytona"
 description: "Give your AI agent persistent memory inside a Daytona sandbox using SMFS"
 ---
 
-Mount a Engram container inside a [Daytona](https://daytona.io) sandbox so
+Mount a Smaran container inside a [Daytona](https://daytona.io) sandbox so
 your agent can read and write memory using standard filesystem commands.
 
 <Warning>
-  Daytona sandboxes currently cannot reach `api.engram.ai` from their
+  Daytona sandboxes currently cannot reach `api.smaran.ai` from their
   datacenter IPs. The SMFS binary still installs (we download it directly from
   GitHub Releases), the FUSE mount still starts, and `pip install
-  claude-agent-sdk` still works — but the runtime sync to Engram fails. We're
+  claude-agent-sdk` still works — but the runtime sync to Smaran fails. We're
   working with Daytona to resolve this. In the meantime, use
   [E2B](/smfs/providers/e2b) or a [self-hosted mount](/smfs/providers/vercel).
 </Warning>
@@ -29,7 +29,7 @@ graph LR
     subgraph Daytona Sandbox
         Agent["Claude Agent"] -->|"cat, ls, echo"| Mount["/home/daytona/memory<br/>(SMFS mount)"]
     end
-    Mount -->|sync| SM["Engram"]
+    Mount -->|sync| SM["Smaran"]
 ```
 
 ### Agent outside the sandbox
@@ -43,12 +43,12 @@ graph LR
     subgraph Sandbox ["Daytona Sandbox"]
         Mount["/home/daytona/memory<br/>(SMFS mount)"]
     end
-    Mount -->|sync| SM["Engram"]
+    Mount -->|sync| SM["Smaran"]
 ```
 
 ## Prerequisites
 
-- A [Engram API key](https://engram.ai)
+- A [Smaran API key](https://smaran.ai)
 - A [Daytona API key](https://app.daytona.io) — go to **API Keys** in the sidebar
 - An [Anthropic API key](https://console.anthropic.com)
 
@@ -65,7 +65,7 @@ from GitHub Releases and add `~/.local/bin` to PATH.
     ```python
     SMFS_INSTALL = (
         "mkdir -p $HOME/.local/bin && "
-        "curl -sL https://github.com/engramai/smfs/releases/download/"
+        "curl -sL https://github.com/smaranai/smfs/releases/download/"
         "v0.0.1-rc2/smfs-linux-x64 -o $HOME/.local/bin/smfs && "
         "chmod +x $HOME/.local/bin/smfs && "
         "echo 'user_allow_other' | sudo tee -a /etc/fuse.conf > /dev/null && "
@@ -77,7 +77,7 @@ from GitHub Releases and add `~/.local/bin` to PATH.
     ```typescript
     const SMFS_INSTALL =
       "mkdir -p $HOME/.local/bin && " +
-      "curl -sL https://github.com/engramai/smfs/releases/download/" +
+      "curl -sL https://github.com/smaranai/smfs/releases/download/" +
       "v0.0.1-rc2/smfs-linux-x64 -o $HOME/.local/bin/smfs && " +
       "chmod +x $HOME/.local/bin/smfs && " +
       "echo 'user_allow_other' | sudo tee -a /etc/fuse.conf > /dev/null && " +
@@ -127,7 +127,7 @@ asyncio.run(main())
     ))
     sandbox = daytona.create(
         env_vars={
-            "ENGRAM_API_KEY": os.environ["ENGRAM_API_KEY"],
+            "SMARAN_API_KEY": os.environ["SMARAN_API_KEY"],
             "ANTHROPIC_API_KEY": os.environ["ANTHROPIC_API_KEY"],
         },
     )
@@ -136,7 +136,7 @@ asyncio.run(main())
     sandbox.process.exec(SMFS_INSTALL)
 
     # Mount memory
-    sandbox.process.exec("$HOME/.local/bin/smfs login --key $ENGRAM_API_KEY")
+    sandbox.process.exec("$HOME/.local/bin/smfs login --key $SMARAN_API_KEY")
     sandbox.process.exec(
         "bash -c '$HOME/.local/bin/smfs mount my_agent --ephemeral"
         " --path /home/daytona/memory --foreground &' && sleep 3"
@@ -160,7 +160,7 @@ asyncio.run(main())
     });
     const sandbox = await daytona.create({
       envVars: {
-        ENGRAM_API_KEY: process.env.ENGRAM_API_KEY!,
+        SMARAN_API_KEY: process.env.SMARAN_API_KEY!,
         ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY!,
       },
     });
@@ -170,7 +170,7 @@ asyncio.run(main())
 
     // Mount memory
     await sandbox.process.exec(
-      "$HOME/.local/bin/smfs login --key $ENGRAM_API_KEY"
+      "$HOME/.local/bin/smfs login --key $SMARAN_API_KEY"
     );
     await sandbox.process.exec(
       "bash -c '$HOME/.local/bin/smfs mount my_agent --ephemeral " +
@@ -205,13 +205,13 @@ remotely via `sandbox.process.exec()`.
     ))
     sandbox = daytona.create(
         env_vars={
-            "ENGRAM_API_KEY": os.environ["ENGRAM_API_KEY"],
+            "SMARAN_API_KEY": os.environ["SMARAN_API_KEY"],
         },
     )
 
     # See "Install SMFS in a Daytona sandbox" above
     sandbox.process.exec(SMFS_INSTALL)
-    sandbox.process.exec("$HOME/.local/bin/smfs login --key $ENGRAM_API_KEY")
+    sandbox.process.exec("$HOME/.local/bin/smfs login --key $SMARAN_API_KEY")
     sandbox.process.exec(
         "bash -c '$HOME/.local/bin/smfs mount my_agent --ephemeral"
         " --path /home/daytona/memory --foreground &' && sleep 3"
@@ -240,14 +240,14 @@ remotely via `sandbox.process.exec()`.
     });
     const sandbox = await daytona.create({
       envVars: {
-        ENGRAM_API_KEY: process.env.ENGRAM_API_KEY!,
+        SMARAN_API_KEY: process.env.SMARAN_API_KEY!,
       },
     });
 
     // See "Install SMFS in a Daytona sandbox" above
     await sandbox.process.exec(SMFS_INSTALL);
     await sandbox.process.exec(
-      "$HOME/.local/bin/smfs login --key $ENGRAM_API_KEY"
+      "$HOME/.local/bin/smfs login --key $SMARAN_API_KEY"
     );
     await sandbox.process.exec(
       "bash -c '$HOME/.local/bin/smfs mount my_agent --ephemeral " +

@@ -1,17 +1,17 @@
 ---
-title: "How Engram Works"
+title: "How Smaran Works"
 description: "Understanding the knowledge graph architecture that powers intelligent memory"
 icon: "cpu"
 ---
 
 
-Engram isn't just another document storage system. It's designed to mirror how human memory actually works - forming connections, evolving over time, and generating insights from accumulated knowledge.
+Smaran isn't just another document storage system. It's designed to mirror how human memory actually works - forming connections, evolving over time, and generating insights from accumulated knowledge.
 
 ![](/images/graph-view.png)
 
 ## The Mental Model
 
-Traditional systems store files. Engram creates a living knowledge graph.
+Traditional systems store files. Smaran creates a living knowledge graph.
 
 <CardGroup cols={2}>
   <Card title="Traditional Systems" icon="folder">
@@ -21,7 +21,7 @@ Traditional systems store files. Engram creates a living knowledge graph.
     - Information stays frozen
   </Card>
 
-  <Card title="Engram" icon="network">
+  <Card title="Smaran" icon="network">
     - Dynamic knowledge graph
     - Rich relationships between memories
     - Semantic understanding
@@ -31,7 +31,7 @@ Traditional systems store files. Engram creates a living knowledge graph.
 
 ## Documents vs Memories
 
-Understanding this distinction is crucial to using Engram effectively.
+Understanding this distinction is crucial to using Smaran effectively.
 
 ### Documents: Your Raw Input
 
@@ -42,11 +42,11 @@ Documents are what you provide - the raw materials:
 - Images with text
 - Videos to transcribe
 
-Think of documents as books you hand to Engram. See [Content Types](/concepts/content-types) for the full list of supported formats.
+Think of documents as books you hand to Smaran. See [Content Types](/concepts/content-types) for the full list of supported formats.
 
 ### Memories: Intelligent Knowledge Units
 
-Memories are what Engram creates - the understanding:
+Memories are what Smaran creates - the understanding:
 - Semantic chunks with meaning
 - Embedded for similarity search
 - Connected through relationships
@@ -55,7 +55,7 @@ Memories are what Engram creates - the understanding:
 Think of memories as the insights and connections your brain makes after reading those books.
 
 <Note>
-**Key Insight**: When you upload a 50-page PDF, Engram doesn't just store it. It breaks it into hundreds of interconnected memories, each understanding its context and relationships to your other knowledge.
+**Key Insight**: When you upload a 50-page PDF, Smaran doesn't just store it. It breaks it into hundreds of interconnected memories, each understanding its context and relationships to your other knowledge.
 </Note>
 
 
@@ -67,15 +67,15 @@ The graph connects memories through three types of relationships. For a deeper d
 
 ### Updates: Information Changes
 
-When new information contradicts or updates existing knowledge, Engram creates an "update" relationship.
+When new information contradicts or updates existing knowledge, Smaran creates an "update" relationship.
 
 <CodeGroup>
 ```text Original Memory
-"You work at Engram as a content engineer"
+"You work at Smaran as a content engineer"
 ```
 
 ```text New Memory (Updates Original)
-"You now work at Engram as the CMO"
+"You now work at Smaran as the CMO"
 ```
 </CodeGroup>
 
@@ -83,13 +83,13 @@ The system tracks which memory is latest with an `isLatest` field, ensuring sear
 
 ### Extends: Information Enriches
 
-When new information adds to existing knowledge without replacing it, Engram creates an "extends" relationship.
+When new information adds to existing knowledge without replacing it, Smaran creates an "extends" relationship.
 
-Continuing our "working at engram" analogy, a memory about what you work on would extend the memory about your role given above.
+Continuing our "working at smaran" analogy, a memory about what you work on would extend the memory about your role given above.
 
 <CodeGroup>
 ```text Original Memory
-"You work at Engram as the CMO"
+"You work at Smaran as the CMO"
 ```
 
 ```text New Memory (Extension) - Separate From Previous
@@ -101,11 +101,11 @@ Both memories remain valid and searchable, providing richer context.
 
 ### Derives: Information Infers
 
-The most sophisticated relationship - when Engram infers new connections from patterns in your knowledge.
+The most sophisticated relationship - when Smaran infers new connections from patterns in your knowledge.
 
 <CodeGroup>
 ```text Memory 1
-"Dhravya is the founder of Engram"
+"Dhravya is the founder of Smaran"
 ```
 
 ```text Memory 2
@@ -113,7 +113,7 @@ The most sophisticated relationship - when Engram infers new connections from pa
 ```
 
 ```text Derived Memory
-"Engram is likely an AI-focused company"
+"Smaran is likely an AI-focused company"
 ```
 </CodeGroup>
 
@@ -139,7 +139,7 @@ Understanding the pipeline helps you optimize your usage:
 
 ## Next Steps
 
-Now that you understand how Engram works:
+Now that you understand how Smaran works:
 
 <CardGroup cols={2}>
   <Card title="Add Memories" icon="plus" href="/add-memories">

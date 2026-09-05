@@ -1,12 +1,12 @@
-# Engram Architecture
+# Smaran Architecture
 
-Deep dive into how Engram works under the hood.
+Deep dive into how Smaran works under the hood.
 
 ## Core Concept: Living Knowledge Graph
 
-Engram fundamentally differs from traditional document storage systems. Instead of maintaining static files in folders, it constructs **a living knowledge graph** where content becomes dynamically interconnected.
+Smaran fundamentally differs from traditional document storage systems. Instead of maintaining static files in folders, it constructs **a living knowledge graph** where content becomes dynamically interconnected.
 
-### Traditional vs. Engram Approach
+### Traditional vs. Smaran Approach
 
 **Traditional Document Storage:**
 ```
@@ -20,7 +20,7 @@ Folder/
 - Keyword-based search only
 - No automatic updates
 
-**Engram Knowledge Graph:**
+**Smaran Knowledge Graph:**
 ```
 Knowledge Graph
 ├── Memory: "User prefers TypeScript"
@@ -185,7 +185,7 @@ Processing complete. Content is now fully searchable and integrated into the kno
 
 ### Memory Versioning
 
-Engram maintains version history through the `Updates` relationship:
+Smaran maintains version history through the `Updates` relationship:
 
 ```
 Memory v1: "User prefers Vue" (isLatest: false)
@@ -260,7 +260,7 @@ Results: Semantically similar + metadata match
 
 ## Container Tag Isolation
 
-Container tags create isolated "spaces" within Engram:
+Container tags create isolated "spaces" within Smaran:
 
 ```
 ┌─────────────────────────────────┐
@@ -383,7 +383,7 @@ The knowledge graph continuously evolves:
 
 ## Performance Characteristics
 
-Engram is designed for high performance and scale:
+Smaran is designed for high performance and scale:
 
 **Real-world metrics:**
 - Search latency: <50ms (p95)
@@ -403,7 +403,7 @@ User query → Embed → Search chunks → Return top-k → LLM
 - No user profiles
 - Pure similarity search
 
-**Engram:**
+**Smaran:**
 ```
 User query → Embed → Graph search → Relationship expansion →
 Filter + rank → User profile enrichment → Return context → LLM
@@ -422,7 +422,7 @@ Filter + rank → User profile enrichment → Return context → LLM
 - No user profile generation
 - Requires manual pipeline construction
 
-**Engram:**
+**Smaran:**
 - End-to-end solution (ingestion → storage → retrieval)
 - Automatic relationship discovery
 - Intelligent chunking
@@ -443,7 +443,7 @@ messages = [
 - No persistence across sessions
 - Linear growth → expensive
 
-**Engram:**
+**Smaran:**
 - Unlimited history
 - Semantic retrieval (only relevant context)
 - Persistent across sessions
@@ -461,7 +461,7 @@ messages = [
        │ REST API
        ↓
 ┌──────────────────────────────────┐
-│     Engram API Layer        │
+│     Smaran API Layer        │
 │  ┌──────────┐  ┌──────────────┐ │
 │  │ /documents│  │   /search    │ │
 │  │ /memories │  │   /profile   │ │
@@ -527,7 +527,7 @@ messages = [
 
 ## Scalability
 
-Engram is designed for scale:
+Smaran is designed for scale:
 
 - **Users**: Millions of concurrent users
 - **Documents**: Billions of documents
@@ -545,7 +545,7 @@ Engram is designed for scale:
 
 ## Summary
 
-Engram's architecture enables:
+Smaran's architecture enables:
 
 1. **Intelligent Memory**: Beyond simple storage, understanding and relationships
 2. **Semantic Search**: Meaning-based retrieval, not keyword matching

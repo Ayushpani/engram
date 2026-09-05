@@ -41,7 +41,7 @@ export interface MemoryData {
 }
 
 /**
- * Engram API payload for storing memories
+ * Smaran API payload for storing memories
  */
 export interface MemoryPayload {
 	containerTags?: string[]
@@ -134,10 +134,10 @@ export class TwitterAPIError extends ExtensionError {
 	}
 }
 
-export class EngramAPIError extends ExtensionError {
+export class SmaranAPIError extends ExtensionError {
 	constructor(message: string, statusCode?: number) {
-		super(message, "ENGRAM_API_ERROR", statusCode)
-		this.name = "EngramAPIError"
+		super(message, "SMARAN_API_ERROR", statusCode)
+		this.name = "SmaranAPIError"
 	}
 }
 

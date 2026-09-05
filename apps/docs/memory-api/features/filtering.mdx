@@ -1,6 +1,6 @@
 ---
 title: "Filtering"
-description: "Learn how to filter content while searching from engram"
+description: "Learn how to filter content while searching from smaran"
 icon: "list-filter-plus"
 ---
 
@@ -16,15 +16,15 @@ A project ID, or even a dynamic one like `user_project_etc`
 
 We recommend using single containerTag in all API requests.
 
-The graph is built on top of the Container Tags. For example, each user / tag in your engram account will have one single graph built for them.
+The graph is built on top of the Container Tags. For example, each user / tag in your smaran account will have one single graph built for them.
 
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/search \
+curl https://api.smaran.ai/v3/search \
   --request POST \
   --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   --data '{
     "q": "machine learning",
     "containerTags": ["user_123"]
@@ -76,10 +76,10 @@ These limits help prevent overly complex queries that could impact performance. 
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/search \
+curl https://api.smaran.ai/v3/search \
   --request POST \
   --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   --data '{
     "q": "machine learning",
     "filters": {
@@ -156,9 +156,9 @@ First, create a memory with participants in the metadata:
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.engram.ai/v3/documents' \
+curl --location 'https://api.smaran.ai/v3/documents' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Bearer ENGRAM_API_KEY' \
+--header 'Authorization: Bearer SMARAN_API_KEY' \
 --data '{
     "content": "quarterly planning meeting discussion",
     "metadata": {
@@ -192,9 +192,9 @@ Then search using the `array_contains` filter:
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.engram.ai/v3/search' \
+curl --location 'https://api.smaran.ai/v3/search' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Bearer ENGRAM_API_KEY' \
+--header 'Authorization: Bearer SMARAN_API_KEY' \
 --data '{
     "q": "meeting",
     "filters": {
@@ -270,10 +270,10 @@ This can be particularly useful for extremely large documents like Books, Podcas
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/search \
+curl https://api.smaran.ai/v3/search \
   --request POST \
   --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   --data '{
     "q": "machine learning",
     "docId": "doc_123"

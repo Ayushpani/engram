@@ -1,16 +1,16 @@
 ---
 title: 'Connectors Overview'
 sidebarTitle: 'Overview'
-description: 'Sync external connections like Google Drive, Notion, OneDrive, Web Crawler with engram'
+description: 'Sync external connections like Google Drive, Notion, OneDrive, Web Crawler with smaran'
 ---
 
-engram can sync external connections like Google Drive, Notion, OneDrive, and Web Crawler.
+smaran can sync external connections like Google Drive, Notion, OneDrive, and Web Crawler.
 
 ### The Flow
 
 For OAuth-based connectors (Notion, Google Drive, OneDrive):
 1. Make a `POST` request to `/v3/connections/{provider}`
-2. engram will return an `authLink` which you can redirect the user to
+2. smaran will return an `authLink` which you can redirect the user to
 3. The user will be redirected to the provider's login page
 4. User is redirected back to your app's `redirectUrl`
 
@@ -23,7 +23,7 @@ For Web Crawler:
 
 ## Sync frequency
 
-engram syncs documents:
+smaran syncs documents:
 - **A document is modified or created (Webhook received)**
     - Note that not all providers are synced via webhook (Instant sync right now)
     - `Google-Drive` and `Notion` documents are synced instantaneously

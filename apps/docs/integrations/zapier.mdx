@@ -1,18 +1,18 @@
 ---
 title: "Zapier"
 sidebarTitle: "Zapier"
-description: "Automate memory management with Engram in Zapier workflows"
+description: "Automate memory management with Smaran in Zapier workflows"
 icon: "bolt"
 ---
 
-With Engram you can now easily add memory to your Zapier workflow steps. Here's how:
+With Smaran you can now easily add memory to your Zapier workflow steps. Here's how:
 
 ## Prerequisites
-- A Engram API Key. Get yours [here](https://console.engram.ai)
+- A Smaran API Key. Get yours [here](https://console.smaran.ai)
 
 ## Step-by-step tutorial
 
-For this tutorial, we're building a simple flow that adds incoming emails in Gmail to Engram.
+For this tutorial, we're building a simple flow that adds incoming emails in Gmail to Smaran.
 
 <Steps>
     <Step title="Make a flow">
@@ -30,7 +30,7 @@ For this tutorial, we're building a simple flow that adds incoming emails in Gma
 
         ![](/images/map-content-to-gmail.png)
     </Step>
-    <Step title="Integrate Engram">
+    <Step title="Integrate Smaran">
         Since we're ingesting data here, we'll use the add documents endpoint.
 
         Add the following code block:
@@ -38,7 +38,7 @@ For this tutorial, we're building a simple flow that adds incoming emails in Gma
         ```python 
             import requests
 
-            url = "https://api.engram.ai/v3/documents"
+            url = "https://api.smaran.ai/v3/documents"
 
             payload = { "content": inputData['content'], "containerTag": "gmail" }
             headers = {
@@ -62,4 +62,4 @@ For this tutorial, we're building a simple flow that adds incoming emails in Gma
 </Note>
 
 
-You can perform other operations like search, filtering, user profiles, etc., by using other Engram API endpoints which can be found in our API Reference tab.
+You can perform other operations like search, filtering, user profiles, etc., by using other Smaran API endpoints which can be found in our API Reference tab.

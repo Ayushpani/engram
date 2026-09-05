@@ -1,5 +1,5 @@
 /**
- * API service for engram browser extension
+ * API service for smaran browser extension
  */
 import { API_ENDPOINTS } from "./constants"
 import { bearerToken, defaultProject, userData } from "./storage"
@@ -8,7 +8,7 @@ import {
 	type MemoryPayload,
 	type Project,
 	type ProjectsResponse,
-	EngramAPIError,
+	SmaranAPIError,
 } from "./types"
 
 /**
@@ -33,7 +33,7 @@ async function makeAuthenticatedRequest<T>(
 ): Promise<T> {
 	const token = await getBearerToken()
 
-	const response = await fetch(`${API_ENDPOINTS.ENGRAM_API}${endpoint}`, {
+	const response = await fetch(`${API_ENDPOINTS.SMARAN_API}${endpoint}`, {
 		...options,
 		credentials: "omit",
 		headers: {
@@ -47,7 +47,7 @@ async function makeAuthenticatedRequest<T>(
 		if (response.status === 401) {
 			throw new AuthenticationError("Invalid or expired token")
 		}
-		throw new EngramAPIError(
+		throw new SmaranAPIError(
 			`API request failed: ${response.statusText}`,
 			response.status,
 		)
@@ -127,7 +127,7 @@ export async function getUserData(): Promise<{
 }
 
 /**
- * Save memory to Engram API
+ * Save memory to Smaran API
  */
 export async function saveMemory(payload: MemoryPayload): Promise<unknown> {
 	try {
@@ -143,7 +143,7 @@ export async function saveMemory(payload: MemoryPayload): Promise<unknown> {
 }
 
 /**
- * Search memories using Engram API
+ * Search memories using Smaran API
  */
 export async function searchMemories(query: string): Promise<unknown> {
 	try {
@@ -162,7 +162,7 @@ export async function searchMemories(query: string): Promise<unknown> {
 }
 
 /**
- * Save tweet to Engram API (specific for Twitter imports)
+ * Save tweet to Smaran API (specific for Twitter imports)
  */
 export async function saveAllTweets(
 	documents: MemoryPayload[],
@@ -183,7 +183,7 @@ export async function saveAllTweets(
 		)
 		return response
 	} catch (error) {
-		if (error instanceof EngramAPIError && error.statusCode === 409) {
+		if (error instanceof SmaranAPIError && error.statusCode === 409) {
 			// Skip if already exists (409 Conflict)
 			return
 		}

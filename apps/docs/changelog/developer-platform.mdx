@@ -12,11 +12,11 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 
 ## March 18, 2026
 
-- **Engram CLI:** New command-line tool for managing memories, documents, profiles, tags, connectors, and API keys directly from the terminal.
+- **Smaran CLI:** New command-line tool for managing memories, documents, profiles, tags, connectors, and API keys directly from the terminal.
 - **PPTX Support:** PowerPoint files (`.pptx`) are now a supported content type for ingestion.
 - **Multiple containerTags on Scoped API Keys:** Scoped API keys can now be assigned to multiple container tags, allowing a single key to access several spaces.
 - **Documents Page in Console:** New dedicated documents browser in the console for viewing, filtering, and managing all ingested content.
-- **`@engram/tools` v1.4.1:** Now exposes raw `searchResults` in `MemoryPromptData`, giving full control over how retrieved memories are formatted in prompts.
+- **`@smaran/tools` v1.4.1:** Now exposes raw `searchResults` in `MemoryPromptData`, giving full control over how retrieved memories are formatted in prompts.
 
 ## March 12, 2026
 
@@ -29,8 +29,8 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 ## March 9, 2026
 
 - **Delete Scoped API Keys:** New `DELETE` endpoint to disable scoped API keys programmatically.
-- **`engram-agent-framework` Python Package:** Official Python package for using Engram with Microsoft's Agent Framework — memory tools and middleware out of the box.
-- **OpenAI SDK Backfill:** Improved compatibility across `engram-openai-sdk` (Python) and `@engram/tools` (TypeScript) OpenAI integrations.
+- **`smaran-agent-framework` Python Package:** Official Python package for using Smaran with Microsoft's Agent Framework — memory tools and middleware out of the box.
+- **OpenAI SDK Backfill:** Improved compatibility across `smaran-openai-sdk` (Python) and `@smaran/tools` (TypeScript) OpenAI integrations.
 - **Bulk Delete in Nova:** Bulk document deletion now available in the Nova app interface.
 
 ## March 5, 2026
@@ -38,22 +38,22 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 - **`extends` Relation Type:** Memory graph now supports `extends` as a relation type, enabling richer knowledge graph connections between documents.
 - **Interactive Memory Graph in MCP:** The MCP server now includes an interactive graph visualization app for exploring memory connections from any MCP-compatible client.
 - **Plugin Auth Connect Page:** New OAuth-style connect page for plugin integrations (Claude Code, OpenCode, OpenClaw).
-- **ViaSocket Integration:** New integration guide for connecting Engram with ViaSocket automation workflows.
+- **ViaSocket Integration:** New integration guide for connecting Smaran with ViaSocket automation workflows.
 
 ## March 2, 2026
 
-- **Configurable Vector Stores:** Bring your own vector store — Engram now supports pluggable vector backends beyond the default.
+- **Configurable Vector Stores:** Bring your own vector store — Smaran now supports pluggable vector backends beyond the default.
 - **List Memories Endpoint:** New `GET /v3/documents` endpoint with pagination, filtering by container tag, status, and metadata.
 
 ## February 26, 2026
 
-- **Self-Hostable Engram:** Run the full Engram stack on your own infrastructure with Docker.
+- **Self-Hostable Smaran:** Run the full Smaran stack on your own infrastructure with Docker.
 - **Console v2:** Complete redesign of the developer console with new navigation, improved billing, and a unified project view.
 - **No More 120 Memory Limit:** The previous cap of 120 memories per container tag has been removed. Store unlimited memories.
 
 ## February 22, 2026
 
-- **Engram Skill for Claude Code:** Install with `npx skills add engramai/skills` — teaches Claude to proactively recommend and implement Engram when building AI apps that need persistent memory, user profiles, or semantic search. Includes ready-to-use TypeScript and Python examples.
+- **Smaran Skill for Claude Code:** Install with `npx skills add smaranai/skills` — teaches Claude to proactively recommend and implement Smaran when building AI apps that need persistent memory, user profiles, or semantic search. Includes ready-to-use TypeScript and Python examples.
 - **Metadata Filtering for Profiles:** User profile search now supports metadata-based filtering for more targeted profile queries.
 - **List Documents with Multiple Container Tags:** New `operator` parameter to query documents spanning multiple container tags.
 - **Deprecate `include: chunks`:** The `include: chunks` parameter in `/v4/search` is deprecated in favor of the `hybrid` search mode.
@@ -73,7 +73,7 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 ## February 3, 2026
 
 - **New Integration Docs:** Added guides for LangGraph, OpenAI Agents SDK, CrewAI, Agno, Mastra, and LangChain — covering all major AI agent frameworks.
-- **Claude Code Integration:** Official integration page for using Engram as persistent memory in Claude Code.
+- **Claude Code Integration:** Official integration page for using Smaran as persistent memory in Claude Code.
 - **Entity Context Documentation:** New docs on how entity extraction and context enrichment work in the memory pipeline.
 - **Authentication Docs:** Comprehensive authentication page with code examples for API key auth, OAuth, and scoped keys.
 
@@ -82,7 +82,7 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 - **Plugin Authentication System:** New auth system for external tool integrations, enabling secure plugin-to-API connections.
 - **Enterprise Plan Support:** Enterprise tier now available in the console with dedicated billing and support options.
 - **Plugin Catalog:** Dedicated plugin page with auth flows for Claude Code, OpenCode, and OpenClaw integrations.
-- **`@engram/tools` — Strict Mode:** Strict mode support for OpenAI function calling, ensuring schema-validated tool calls.
+- **`@smaran/tools` — Strict Mode:** Strict mode support for OpenAI function calling, ensuring schema-validated tool calls.
 
 ## January 14, 2026
 
@@ -92,11 +92,11 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 
 ## January 8, 2026
 
-- **Gmail Connector:** New connector to sync Gmail threads into Engram. Threads are stored in R2 for reliable processing of large mailboxes.
+- **Gmail Connector:** New connector to sync Gmail threads into Smaran. Threads are stored in R2 for reliable processing of large mailboxes.
 - **Container Tag Filters:** Filter documents by container tag in list and search endpoints.
 - **Pagination Improvements:** Improved pagination and document view across the console.
-- **`engram-pipecat` Python Package:** New SDK for integrating Engram with Pipecat voice AI pipelines, including Gemini Live speech-to-speech support.
-- **`@engram/tools` — Prompt Templates:** Customize how memory context is formatted in AI SDK integrations with the new `promptTemplate` option.
+- **`smaran-pipecat` Python Package:** New SDK for integrating Smaran with Pipecat voice AI pipelines, including Gemini Live speech-to-speech support.
+- **`@smaran/tools` — Prompt Templates:** Customize how memory context is formatted in AI SDK integrations with the new `promptTemplate` option.
 
 ## December 30, 2025
 
@@ -106,8 +106,8 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 
 ## December 24, 2025
 
-- **`@engram/tools` — Vercel AI SDK v5/v6:** Now supports both Vercel AI SDK v5 and v6, with automatic version detection.
-- **Conversation Support in SDKs:** `engram` (TypeScript) and `engram-openai-sdk` (Python) now support the conversations API for multi-turn chat with memory.
+- **`@smaran/tools` — Vercel AI SDK v5/v6:** Now supports both Vercel AI SDK v5 and v6, with automatic version detection.
+- **Conversation Support in SDKs:** `smaran` (TypeScript) and `smaran-openai-sdk` (Python) now support the conversations API for multi-turn chat with memory.
 - **MemoryBench:** New open-source benchmark suite for evaluating memory systems, with documentation and CLI.
 
 ## December 17, 2025
@@ -129,14 +129,14 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 
 ## December 5, 2025
 
-- **`@engram/tools` — Browser API Key Support:** `apiKey` can now be passed via options instead of relying on `process.env`, enabling browser-based usage of the tools package.
+- **`@smaran/tools` — Browser API Key Support:** `apiKey` can now be passed via options instead of relying on `process.env`, enabling browser-based usage of the tools package.
 
 ## November 17, 2025
 
 - **Web Crawler Connector:** New connector to crawl and index entire websites with configurable depth and URL patterns.
 - **`@smaran/memory-graph` Package:** New package for building interactive graph visualizations of memory connections, with a standalone playground.
-- **OpenAI Responses API Support:** `@engram/tools` OpenAI integration now supports the Responses API.
-- **`engram-openai-sdk` — Python Middleware:** New `withEngram` middleware for the Python OpenAI SDK, enabling transparent memory injection into OpenAI API calls.
+- **OpenAI Responses API Support:** `@smaran/tools` OpenAI integration now supports the Responses API.
+- **`smaran-openai-sdk` — Python Middleware:** New `withSmaran` middleware for the Python OpenAI SDK, enabling transparent memory injection into OpenAI API calls.
 - **Browser Extension Webpage Capture:** Chrome extension can now capture full webpage content with markdown conversion, not just bookmarks.
 - **Bulk Memory Optimization:** Memory creation now uses bulk inserts for significantly faster batch ingestion.
 
@@ -156,7 +156,7 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 ## September 13, 2025
 
 - **Documentation v2.0:** Complete rewrite with comprehensive API references, cookbook recipes, and production-ready examples for TypeScript, Python, and cURL
-- **AI SDK Integration:** New `@engram/tools/ai-sdk` package for native Vercel AI SDK integration with memory tools and infinite chat capabilities
+- **AI SDK Integration:** New `@smaran/tools/ai-sdk` package for native Vercel AI SDK integration with memory tools and infinite chat capabilities
 - **Bulk Delete Endpoint:** New `DELETE /v3/documents/bulk` endpoint for efficient memory management
 
 ## September 5, 2025
@@ -166,7 +166,7 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 
 ## August 30, 2025
 
-- **MCP (Model Context Protocol) Server:** Launch of engram MCP server for AI model integrations with full project support and auto-detection
+- **MCP (Model Context Protocol) Server:** Launch of smaran MCP server for AI model integrations with full project support and auto-detection
 - **Enhanced Filtering API:** Improved SQL-based filtering with array_contains, numeric operators, and complex AND/OR logic
 
 ## August 15, 2025

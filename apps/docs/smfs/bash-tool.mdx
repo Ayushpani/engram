@@ -1,33 +1,33 @@
 ---
 title: "Bash Tool"
 sidebarTitle: "Bash Tool"
-description: "@engram/bash. The SMFS idea wrapped as a single agent tool, for serverless and edge runtimes."
+description: "@smaran/bash. The SMFS idea wrapped as a single agent tool, for serverless and edge runtimes."
 icon: "terminal"
 ---
 
-`@engram/bash` is the SMFS idea wrapped as a single agent tool: `run_bash(command)`. The "filesystem" is your Engram container. Runs anywhere TypeScript runs. Cloudflare Workers, AWS Lambda, Vercel, Node, the browser. No mount, no FUSE, no local disk.
+`@smaran/bash` is the SMFS idea wrapped as a single agent tool: `run_bash(command)`. The "filesystem" is your Smaran container. Runs anywhere TypeScript runs. Cloudflare Workers, AWS Lambda, Vercel, Node, the browser. No mount, no FUSE, no local disk.
 
 Reach for the Bash Tool when your agent runs somewhere it can't mount a real filesystem.
 
 ## Install
 
 ```bash
-npm install @engram/bash
+npm install @smaran/bash
 ```
 
 Or with bun:
 
 ```bash
-bun add @engram/bash
+bun add @smaran/bash
 ```
 
 ## Quickstart
 
 ```typescript
-import { createBash } from "@engram/bash";
+import { createBash } from "@smaran/bash";
 
 const { bash, toolDescription } = await createBash({
-  apiKey: process.env.ENGRAM_API_KEY!,
+  apiKey: process.env.SMARAN_API_KEY!,
   containerTag: "user_42",
 });
 
@@ -39,7 +39,7 @@ console.log(result.stdout);
 
 - `bash`: the instance with `.exec(cmd)`
 - `toolDescription`: a pre-written tool description ready to hand to the model
-- `configureMemoryPaths(paths)`: scope which paths get extracted into Engram
+- `configureMemoryPaths(paths)`: scope which paths get extracted into Smaran
 - `refresh()`: re-prime the path index after external writes
 
 ## Use it as a model tool
@@ -52,7 +52,7 @@ import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
 
 const { bash, toolDescription } = await createBash({
-  apiKey: process.env.ENGRAM_API_KEY!,
+  apiKey: process.env.SMARAN_API_KEY!,
   containerTag: "user_42",
 });
 
@@ -76,7 +76,7 @@ import Anthropic from "@anthropic-ai/sdk";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
 const { bash, toolDescription } = await createBash({
-  apiKey: process.env.ENGRAM_API_KEY!,
+  apiKey: process.env.SMARAN_API_KEY!,
   containerTag: "user_42",
 });
 
@@ -105,7 +105,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI();
 const { bash, toolDescription } = await createBash({
-  apiKey: process.env.ENGRAM_API_KEY!,
+  apiKey: process.env.SMARAN_API_KEY!,
   containerTag: "user_42",
 });
 
@@ -187,7 +187,7 @@ Standard Unix surface, plus one custom command. Each does what you'd expect.
 
 | Option | Default | Purpose |
 | --- | --- | --- |
-| `apiKey` | required | Engram API key |
+| `apiKey` | required | Smaran API key |
 | `containerTag` | required | Container to expose as the filesystem |
 | `baseURL` | SDK default | Override the API endpoint |
 | `eagerLoad` | `true` | Warm the path index when the instance starts |

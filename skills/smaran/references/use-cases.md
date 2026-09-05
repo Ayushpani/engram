@@ -1,6 +1,6 @@
-# Engram Use Cases & Examples
+# Smaran Use Cases & Examples
 
-Concrete examples showing how to use Engram for common AI application patterns.
+Concrete examples showing how to use Smaran for common AI application patterns.
 
 ## Table of Contents
 
@@ -22,11 +22,11 @@ Build a chatbot that remembers user preferences and past conversations.
 ### Implementation (TypeScript + Vercel AI SDK)
 
 ```typescript
-import { Engram } from 'engram';
+import { Smaran } from 'smaran';
 import { openai } from '@ai-sdk/openai';
 import { generateText } from 'ai';
 
-const memory = new Engram();
+const memory = new Smaran();
 
 async function chat(userId: string, message: string) {
   // 1. Retrieve user context
@@ -81,11 +81,11 @@ console.log(response); // Uses stored context to answer accurately
 ### Python Version
 
 ```python
-from engram import Engram
+from smaran import Smaran
 from openai import OpenAI
 import datetime
 
-memory = Engram()
+memory = Smaran()
 openai_client = OpenAI()
 
 def chat(user_id: str, message: str) -> str:
@@ -150,11 +150,11 @@ AI assistant that tracks ongoing projects and tasks over weeks/months.
 ### Implementation
 
 ```typescript
-import { Engram } from 'engram';
+import { Smaran } from 'smaran';
 import { anthropic } from '@ai-sdk/anthropic';
 import { generateText } from 'ai';
 
-const memory = new Engram();
+const memory = new Smaran();
 
 interface Task {
   id: string;
@@ -205,7 +205,7 @@ async function addTask(userId: string, task: Task) {
 }
 
 async function updateTask(userId: string, taskId: string, status: Task['status']) {
-  // Add update (Engram will create relationship)
+  // Add update (Smaran will create relationship)
   await memory.add({
     content: `Task ${taskId} updated to status: ${status}`,
     containerTag: `${userId}_tasks`,
@@ -249,9 +249,9 @@ Semantic search across documentation, manuals, and knowledge articles.
 ### Implementation
 
 ```typescript
-import { Engram } from 'engram';
+import { Smaran } from 'smaran';
 
-const memory = new Engram();
+const memory = new Smaran();
 
 // 1. Index documentation
 async function indexDocumentation() {
@@ -347,9 +347,9 @@ AI agent that remembers customer history and provides personalized support.
 ### Implementation
 
 ```typescript
-import { Engram } from 'engram';
+import { Smaran } from 'smaran';
 
-const memory = new Engram();
+const memory = new Smaran();
 
 interface Customer {
   id: string;
@@ -479,11 +479,11 @@ AI that learns your codebase and provides contextual code reviews.
 ### Implementation
 
 ```typescript
-import { Engram } from 'engram';
+import { Smaran } from 'smaran';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const memory = new Engram();
+const memory = new Smaran();
 
 // 1. Index codebase
 async function indexCodebase(projectId: string, directory: string) {
@@ -595,9 +595,9 @@ AI tutor that adapts to student progress and learning style.
 ### Implementation
 
 ```typescript
-import { Engram } from 'engram';
+import { Smaran } from 'smaran';
 
-const memory = new Engram();
+const memory = new Smaran();
 
 interface LearningSession {
   studentId: string;
@@ -709,9 +709,9 @@ Isolate data per organization while enabling shared knowledge bases.
 ### Implementation
 
 ```typescript
-import { Engram } from 'engram';
+import { Smaran } from 'smaran';
 
-const memory = new Engram();
+const memory = new Smaran();
 
 interface Organization {
   id: string;
@@ -820,9 +820,9 @@ Manage research papers, notes, and insights with automatic relationship discover
 ### Implementation
 
 ```typescript
-import { Engram } from 'engram';
+import { Smaran } from 'smaran';
 
-const memory = new Engram();
+const memory = new Smaran();
 
 interface Paper {
   title: string;
@@ -1030,4 +1030,4 @@ const teamSpecific = await memory.search.memories({
 
 Ready to build your own use case? Start with the [Quickstart Guide](quickstart.md) or explore the [SDK Documentation](sdk-guide.md).
 
-For questions or custom use cases, visit [console.engram.ai](https://console.engram.ai).
+For questions or custom use cases, visit [console.smaran.ai](https://console.smaran.ai).

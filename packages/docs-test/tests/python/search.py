@@ -1,10 +1,10 @@
 import os
 from dotenv import load_dotenv
-from engram import Engram
+from smaran import Smaran
 
 load_dotenv()
 
-client = Engram()
+client = Smaran()
 
 
 def test_search_modes():

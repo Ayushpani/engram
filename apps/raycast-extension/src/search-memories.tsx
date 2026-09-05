@@ -11,7 +11,7 @@ import {
 import { useState, useEffect } from "react"
 import { searchMemories, type SearchResult } from "./api"
 import { usePromise } from "@raycast/utils"
-import { withEngram } from "./withEngram"
+import { withSmaran } from "./withSmaran"
 
 const extractContent = (memory: SearchResult) => {
 	if (memory.chunks && memory.chunks.length > 0) {
@@ -52,7 +52,7 @@ const truncateContent = (content: string, maxLength = 100) => {
 	return `${content.substring(0, maxLength)}...`
 }
 
-export default withEngram(Command)
+export default withSmaran(Command)
 function Command() {
 	const [searchText, setSearchText] = useState("")
 
@@ -119,7 +119,7 @@ function Command() {
 				<List.EmptyView
 					icon={Icon.MagnifyingGlass}
 					title="Search Your Memories"
-					description="Type to search through your Engram collection"
+					description="Type to search through your Smaran collection"
 				/>
 			) : hasSearched ? (
 				<List.EmptyView

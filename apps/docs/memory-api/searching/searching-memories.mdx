@@ -1,6 +1,6 @@
 ---
 title: "Searching Memories"
-description: "Learn how to search for and retrieve content from engram"
+description: "Learn how to search for and retrieve content from smaran"
 ---
 
 <Accordion title="Best Practices" defaultOpen icon="sparkles">
@@ -28,9 +28,9 @@ To search through your memories, send a POST request to `/search`:
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/search?q=machine+learning+concepts&limit=10 \
+curl https://api.smaran.ai/v3/search?q=machine+learning+concepts&limit=10 \
   --request GET \
-  --header 'Authorization: Bearer ENGRAM_API_KEY'
+  --header 'Authorization: Bearer SMARAN_API_KEY'
 ```
 
 ```typescript Typescript
@@ -140,9 +140,9 @@ By default, the search API excludes memories that have been marked as forgotten 
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v4/search \
+curl https://api.smaran.ai/v4/search \
   --request POST \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
     "q": "old project notes",

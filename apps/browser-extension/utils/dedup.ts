@@ -21,7 +21,7 @@ class LocalSemanticCache {
     if (this.initialized) return;
 
     return new Promise<void>((resolve, reject) => {
-      const request = indexedDB.open('engram-semantic-cache', 1);
+      const request = indexedDB.open('smaran-semantic-cache', 1);
       
       request.onerror = () => reject(request.error);
       

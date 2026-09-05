@@ -1,16 +1,16 @@
 ---
 title: Quickstart
-description: Make your first API call to Engram - add and retrieve memories.
+description: Make your first API call to Smaran - add and retrieve memories.
 icon: "play"
 ---
 
 <Tip>
-**Using Vercel AI SDK?** Check out the [AI SDK integration](/integrations/ai-sdk) for the cleanest implementation with `@engram/tools/ai-sdk`.
+**Using Vercel AI SDK?** Check out the [AI SDK integration](/integrations/ai-sdk) for the cleanest implementation with `@smaran/tools/ai-sdk`.
 </Tip>
 
 ## Memory API
 
-**Step 1.** Sign up for [Engram's Developer Platform](http://console.engram.ai) to get the API key. Click on **API Keys -> Create API Key** to generate one.
+**Step 1.** Sign up for [Smaran's Developer Platform](http://console.smaran.ai) to get the API key. Click on **API Keys -> Create API Key** to generate one.
 
 ![create api key](./images/create-api.png)
 
@@ -19,14 +19,14 @@ icon: "play"
 <Tabs>
 <Tab title="Python">
 ```bash
-pip install engram
-export ENGRAM_API_KEY="YOUR_API_KEY"
+pip install smaran
+export SMARAN_API_KEY="YOUR_API_KEY"
 ```
 </Tab>
 <Tab title="TypeScript">
 ```bash
-npm install engram
-export ENGRAM_API_KEY="YOUR_API_KEY"
+npm install smaran
+export SMARAN_API_KEY="YOUR_API_KEY"
 ```
 </Tab>
 </Tabs>
@@ -36,9 +36,9 @@ export ENGRAM_API_KEY="YOUR_API_KEY"
 <Tabs>
 <Tab title="Python">
 ```python
-from engram import Engram
+from smaran import Smaran
 
-client = Engram()
+client = Smaran()
 USER_ID = "dhravya"
 
 conversation = [
@@ -77,9 +77,9 @@ client.add(
 </Tab>
 <Tab title="TypeScript">
 ```typescript
-import Engram from "engram";
+import Smaran from "smaran";
 
-const client = new Engram();
+const client = new Smaran();
 const USER_ID = "dhravya";
 
 const conversation = [
@@ -117,7 +117,7 @@ await client.add({
 </Tab>
 </Tabs>
 
-That's it! Engram automatically:
+That's it! Smaran automatically:
 - Extracts memories from conversations
 - Builds and maintains user profiles (static facts + dynamic context)
 - Returns relevant context for personalized LLM responses

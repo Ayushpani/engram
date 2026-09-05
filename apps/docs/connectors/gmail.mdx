@@ -4,7 +4,7 @@ description: "Sync email threads from Gmail with real-time Pub/Sub webhooks and 
 icon: "mail"
 ---
 
-Connect Gmail to automatically sync email threads into your engram knowledge base. Supports real-time updates via Google Cloud Pub/Sub webhooks and incremental synchronization.
+Connect Gmail to automatically sync email threads into your smaran knowledge base. Supports real-time updates via Google Cloud Pub/Sub webhooks and incremental synchronization.
 
 <Note>
 **Scale Plan Required:** The Gmail connector is available on Scale and Enterprise plans only.
@@ -17,10 +17,10 @@ Connect Gmail to automatically sync email threads into your engram knowledge bas
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Engram from 'engram';
+    import Smaran from 'smaran';
 
-    const client = new Engram({
-      apiKey: process.env.ENGRAM_API_KEY!
+    const client = new Smaran({
+      apiKey: process.env.SMARAN_API_KEY!
     });
 
     const connection = await client.connections.create('gmail', {
@@ -40,10 +40,10 @@ Connect Gmail to automatically sync email threads into your engram knowledge bas
   </Tab>
   <Tab title="Python">
     ```python
-    from engram import Engram
+    from smaran import Smaran
     import os
 
-    client = Engram(api_key=os.environ.get("ENGRAM_API_KEY"))
+    client = Smaran(api_key=os.environ.get("SMARAN_API_KEY"))
 
     connection = client.connections.create(
         'gmail',
@@ -63,8 +63,8 @@ Connect Gmail to automatically sync email threads into your engram knowledge bas
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/connections/gmail" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/gmail" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "redirectUrl": "https://yourapp.com/auth/gmail/callback",
@@ -126,8 +126,8 @@ After user grants permissions, Google redirects to your callback URL. The connec
   <Tab title="cURL">
     ```bash
     # Get connections by provider and tags
-    curl -X POST "https://api.engram.ai/v3/connections/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123", "gmail-sync"],
@@ -135,8 +135,8 @@ After user grants permissions, Google redirects to your callback URL. The connec
       }'
 
     # List synced email threads
-    curl -X POST "https://api.engram.ai/v3/documents/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/documents/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123", "gmail-sync"],
@@ -230,8 +230,8 @@ const results = await client.search.documents({
   <Tab title="cURL">
     ```bash
     # List all connections for specific container tags
-    curl -X POST "https://api.engram.ai/v3/connections/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123"]
@@ -273,12 +273,12 @@ const results = await client.search.documents({
   <Tab title="cURL">
     ```bash
     # Delete by connection ID
-    curl -X DELETE "https://api.engram.ai/v3/connections/connection_id_123" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY"
+    curl -X DELETE "https://api.smaran.ai/v3/connections/connection_id_123" \
+      -H "Authorization: Bearer $SMARAN_API_KEY"
 
     # Delete by provider and container tags
-    curl -X DELETE "https://api.engram.ai/v3/connections/gmail" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X DELETE "https://api.smaran.ai/v3/connections/gmail" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123"]
@@ -291,7 +291,7 @@ const results = await client.search.documents({
 Deleting a connection will:
 - Stop all future syncs from Gmail
 - Remove the OAuth authorization
-- Keep existing synced documents in engram (they won't be deleted)
+- Keep existing synced documents in smaran (they won't be deleted)
 </Note>
 
 ### Manual Sync
@@ -329,12 +329,12 @@ Trigger a manual synchronization:
   <Tab title="cURL">
     ```bash
     # Trigger sync for all Gmail connections
-    curl -X POST "https://api.engram.ai/v3/connections/gmail/import" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY"
+    curl -X POST "https://api.smaran.ai/v3/connections/gmail/import" \
+      -H "Authorization: Bearer $SMARAN_API_KEY"
 
     # Trigger sync for specific container tags
-    curl -X POST "https://api.engram.ai/v3/connections/gmail/import" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/gmail/import" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123"]
@@ -356,9 +356,9 @@ Gmail connector supports multiple sync methods:
 
 ### How Real-time Sync Works
 
-1. When a connection is created, engram registers a Gmail API "watch" subscription
+1. When a connection is created, smaran registers a Gmail API "watch" subscription
 2. Gmail sends notifications to a Google Cloud Pub/Sub topic when emails change
-3. engram receives these notifications and fetches updated threads
+3. smaran receives these notifications and fetches updated threads
 4. Watch subscriptions expire after 7 days and are automatically renewed
 
 <Note>
@@ -384,7 +384,7 @@ The Gmail connector requests the following OAuth scopes:
 **Important Limitations:**
 - **Plan requirement**: Requires Scale Plan or Enterprise Plan
 - **INBOX only** for real-time sync: Only INBOX label triggers real-time updates; other labels sync via scheduled sync
-- **Watch expiration**: Gmail watch subscriptions expire after 7 days (automatically renewed by engram)
+- **Watch expiration**: Gmail watch subscriptions expire after 7 days (automatically renewed by smaran)
 - **Document limit**: Default limit is 10,000 threads per connection (configurable via `documentLimit` parameter)
 - **Attachments**: Attachment metadata is stored, but attachment content is not downloaded
 - **Rate limits**: Gmail API rate limits may affect sync speed for accounts with many emails
@@ -420,7 +420,7 @@ window.location.href = newConnection.authLink;
 If real-time sync isn't working:
 
 - Scheduled sync (every 4 hours) and manual sync still work
-- Real-time sync requires engram's Pub/Sub infrastructure
+- Real-time sync requires smaran's Pub/Sub infrastructure
 - Check if the connection was created recently (watch registration happens on creation)
 - Trigger a manual sync to verify the connection is working
 

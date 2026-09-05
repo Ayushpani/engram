@@ -3,7 +3,7 @@ title: "E2B"
 description: "Give your AI agent persistent memory inside an E2B sandbox using SMFS"
 ---
 
-Mount a Engram container inside an [E2B](https://e2b.dev) sandbox so your
+Mount a Smaran container inside an [E2B](https://e2b.dev) sandbox so your
 agent can read and write memory using standard filesystem commands.
 
 ## How it works
@@ -21,7 +21,7 @@ graph LR
     subgraph E2B Sandbox
         Agent["Claude Agent"] -->|"cat, ls, echo"| Mount["/home/user/memory<br/>(SMFS mount)"]
     end
-    Mount -->|sync| SM["Engram"]
+    Mount -->|sync| SM["Smaran"]
 ```
 
 ### Agent outside the sandbox
@@ -36,12 +36,12 @@ graph LR
     subgraph Sandbox ["E2B Sandbox"]
         Mount["/home/user/memory<br/>(SMFS mount)"]
     end
-    Mount -->|sync| SM["Engram"]
+    Mount -->|sync| SM["Smaran"]
 ```
 
 ## Prerequisites
 
-- A [Engram API key](https://engram.ai)
+- A [Smaran API key](https://smaran.ai)
 - An [E2B API key](https://e2b.dev)
 - An [Anthropic API key](https://console.anthropic.com)
 
@@ -106,7 +106,7 @@ asyncio.run(main())
         template="your-template-id",
         timeout=300,
         envs={
-            "ENGRAM_API_KEY": os.environ["ENGRAM_API_KEY"],
+            "SMARAN_API_KEY": os.environ["SMARAN_API_KEY"],
             "ANTHROPIC_API_KEY": os.environ["ANTHROPIC_API_KEY"],
         },
     )
@@ -116,7 +116,7 @@ asyncio.run(main())
 
     # Mount memory. We background the foreground daemon so this command returns,
     # then sleep briefly to let the FUSE mount come up before the agent reads it.
-    sbx.commands.run("smfs login --key $ENGRAM_API_KEY")
+    sbx.commands.run("smfs login --key $SMARAN_API_KEY")
     sbx.commands.run(
         "bash -c 'smfs mount my_agent --ephemeral"
         " --path /home/user/memory --foreground &' && sleep 3"
@@ -139,7 +139,7 @@ asyncio.run(main())
       template: "your-template-id",
       timeoutMs: 300_000,
       envs: {
-        ENGRAM_API_KEY: process.env.ENGRAM_API_KEY!,
+        SMARAN_API_KEY: process.env.SMARAN_API_KEY!,
         ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY!,
       },
     });
@@ -149,7 +149,7 @@ asyncio.run(main())
 
     // Mount memory. We background the foreground daemon so this command returns,
     // then sleep briefly to let the FUSE mount come up before the agent reads it.
-    await sbx.commands.run("smfs login --key $ENGRAM_API_KEY");
+    await sbx.commands.run("smfs login --key $SMARAN_API_KEY");
     await sbx.commands.run(
       "bash -c 'smfs mount my_agent --ephemeral --path /home/user/memory --foreground &' && sleep 3"
     );
@@ -190,13 +190,13 @@ the agent never touches the filesystem directly.
         template="your-template-id",
         timeout=300,
         envs={
-            "ENGRAM_API_KEY": os.environ["ENGRAM_API_KEY"],
+            "SMARAN_API_KEY": os.environ["SMARAN_API_KEY"],
         },
     )
 
     # Set up SMFS inside the sandbox
     sbx.commands.run("sudo chmod 666 /dev/fuse")
-    sbx.commands.run("smfs login --key $ENGRAM_API_KEY")
+    sbx.commands.run("smfs login --key $SMARAN_API_KEY")
     sbx.commands.run(
         "bash -c 'smfs mount my_agent --ephemeral"
         " --path /home/user/memory --foreground &' && sleep 3"
@@ -224,13 +224,13 @@ the agent never touches the filesystem directly.
       template: "your-template-id",
       timeoutMs: 300_000,
       envs: {
-        ENGRAM_API_KEY: process.env.ENGRAM_API_KEY!,
+        SMARAN_API_KEY: process.env.SMARAN_API_KEY!,
       },
     });
 
     // Set up SMFS inside the sandbox
     await sbx.commands.run("sudo chmod 666 /dev/fuse");
-    await sbx.commands.run("smfs login --key $ENGRAM_API_KEY");
+    await sbx.commands.run("smfs login --key $SMARAN_API_KEY");
     await sbx.commands.run(
       "bash -c 'smfs mount my_agent --ephemeral --path /home/user/memory --foreground &' && sleep 3"
     );
@@ -256,7 +256,7 @@ the agent never touches the filesystem directly.
 ## Tips
 
 - Use `--ephemeral` for sandbox mounts — keeps the cache in memory only, but
-  writes still push to Engram
+  writes still push to Smaran
 - Use `smfs grep 'query'` for semantic search across all files in the container
 - Without a custom template, add the install steps to your run script:
   ```python

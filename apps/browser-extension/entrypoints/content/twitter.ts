@@ -14,12 +14,12 @@ import {
 } from "../../utils/ui-components"
 
 async function loadSpaceGroteskFonts(): Promise<void> {
-	if (document.getElementById("engram-modal-styles")) {
+	if (document.getElementById("smaran-modal-styles")) {
 		return Promise.resolve()
 	}
 
 	const style = document.createElement("style")
-	style.id = "engram-modal-styles"
+	style.id = "smaran-modal-styles"
 	style.textContent = `
      @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
     `
@@ -224,9 +224,9 @@ async function showOnboardingToast() {
 	`
 
 	// Add keyframe animations if not already present
-	if (!document.getElementById("engram-onboarding-toast-styles")) {
+	if (!document.getElementById("smaran-onboarding-toast-styles")) {
 		const style = document.createElement("style")
-		style.id = "engram-onboarding-toast-styles"
+		style.id = "smaran-onboarding-toast-styles"
 		style.textContent = `
 			@keyframes smSlideInUp {
 				from { transform: translateY(100%); opacity: 0; }
@@ -256,7 +256,7 @@ async function showOnboardingToast() {
 	const iconUrl = browser.runtime.getURL("/icon-16.png")
 	const icon = document.createElement("img")
 	icon.src = iconUrl
-	icon.alt = "Engram"
+	icon.alt = "Smaran"
 	icon.style.cssText =
 		"width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0; margin-top: 2px;"
 
@@ -272,7 +272,7 @@ async function showOnboardingToast() {
 	description.style.cssText =
 		"font-size: 13px; color: #6b7280; line-height: 1.4;"
 	description.textContent =
-		"You can import all your Twitter bookmarks to Engram with one click."
+		"You can import all your Twitter bookmarks to Smaran with one click."
 
 	textContainer.appendChild(title)
 	textContainer.appendChild(description)
@@ -365,7 +365,7 @@ async function showOnboardingToast() {
 		learnMoreButton.style.backgroundColor = "transparent"
 	})
 	learnMoreButton.addEventListener("click", () => {
-		window.open("https://docs.engram.ai/connectors/twitter", "_blank")
+		window.open("https://docs.smaran.ai/connectors/twitter", "_blank")
 	})
 
 	buttonsContainer.appendChild(importButton)
@@ -456,7 +456,7 @@ function removeAllTwitterUI() {
 		DOMUtils.removeElement(ELEMENT_IDS.TWITTER_IMPORT_PROGRESS_TOAST)
 	}
 	// Remove any folder buttons
-	document.querySelectorAll("[data-engram-button]").forEach((button) => {
+	document.querySelectorAll("[data-smaran-button]").forEach((button) => {
 		button.remove()
 	})
 }
@@ -469,9 +469,9 @@ function showOrUpdateImportProgressToast(message: string, isComplete = false) {
 
 	if (!toast) {
 		// Ensure animation styles are available
-		if (!document.getElementById("engram-onboarding-toast-styles")) {
+		if (!document.getElementById("smaran-onboarding-toast-styles")) {
 			const style = document.createElement("style")
-			style.id = "engram-onboarding-toast-styles"
+			style.id = "smaran-onboarding-toast-styles"
 			style.textContent = `
 				@keyframes smSlideInUp {
 					from { transform: translateY(100%); opacity: 0; }
@@ -515,7 +515,7 @@ function showOrUpdateImportProgressToast(message: string, isComplete = false) {
 		const iconUrl = browser.runtime.getURL("/icon-16.png")
 		const icon = document.createElement("img")
 		icon.src = iconUrl
-		icon.alt = "Engram"
+		icon.alt = "Smaran"
 		icon.id = "sm-import-progress-icon"
 		icon.style.cssText =
 			"width: 20px; height: 20px; border-radius: 4px; flex-shrink: 0; animation: smPulse 1.5s ease-in-out infinite;"
@@ -618,7 +618,7 @@ function addTwitterImportButtonForFolders() {
  * Adds an import button to a bookmark folder element
  */
 function addButtonToElement(element: HTMLElement) {
-	if (element.querySelector("[data-engram-button]")) {
+	if (element.querySelector("[data-smaran-button]")) {
 		return
 	}
 
@@ -632,7 +632,7 @@ function addButtonToElement(element: HTMLElement) {
 		}
 	})
 
-	button.setAttribute("data-engram-button", "true")
+	button.setAttribute("data-smaran-button", "true")
 
 	element.appendChild(button)
 	element.style.flexDirection = "row"

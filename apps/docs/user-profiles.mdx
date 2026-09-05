@@ -7,7 +7,7 @@ icon: "user"
 
 User profiles are extremely short summaries of context about an entity (Usually a user, but can be anything) which includes both the *static* facts about them, as well as a few recent episodes.
 
-> You can think of these as a dynamic compaction that's done by engram in real-time.
+> You can think of these as a dynamic compaction that's done by smaran in real-time.
 
 This profile should be injected into the agent context for truly personalized experiences. To read more, visit [User profiles - Concept](/concepts/user-profiles)
 
@@ -22,9 +22,9 @@ Profiles are built automatically as you [ingest content](/add-memories). No setu
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Engram from 'engram';
+    import Smaran from 'smaran';
 
-    const client = new Engram();
+    const client = new Smaran();
 
     const { profile } = await client.profile({
       containerTag: "user_123"
@@ -36,9 +36,9 @@ Profiles are built automatically as you [ingest content](/add-memories). No setu
   </Tab>
   <Tab title="Python">
     ```python
-    from engram import Engram
+    from smaran import Smaran
 
-    client = Engram()
+    client = Smaran()
 
     result = client.profile(container_tag="user_123")
 
@@ -48,8 +48,8 @@ Profiles are built automatically as you [ingest content](/add-memories). No setu
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/profile" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/profile" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"containerTag": "user_123"}'
     ```
@@ -224,11 +224,11 @@ ${result.searchResults?.results.map(m => m.memory).join('\n') || 'None'}
 
 <Accordion title="AI SDK Integration">
   ```typescript
-  import { withEngram } from "@engram/tools/ai-sdk"
+  import { withSmaran } from "@smaran/tools/ai-sdk"
   import { openai } from "@ai-sdk/openai"
 
   // Profiles automatically injected
-  const model = withEngram(openai("gpt-4"), {
+  const model = withSmaran(openai("gpt-4"), {
     containerTag: "user-123",
     customId: "conv-1",
   })

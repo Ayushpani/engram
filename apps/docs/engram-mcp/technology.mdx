@@ -1,13 +1,13 @@
 ---
 title: 'Technical implementation details'
-description: 'Technical implementation details of engram MCP'
+description: 'Technical implementation details of smaran MCP'
 ---
 
-The technical architecture prioritizes **simplicity and user experience** while maintaining robust functionality. Built as what the creators describe as "the simplest thing you'll see" - essentially a React Router application making fetch calls to the engram API - the entire system was developed and shipped in approximately 5 hours of actual work time.
+The technical architecture prioritizes **simplicity and user experience** while maintaining robust functionality. Built as what the creators describe as "the simplest thing you'll see" - essentially a React Router application making fetch calls to the smaran API - the entire system was developed and shipped in approximately 5 hours of actual work time.
 
 ### Architecture components
 
-- **Backend API**: Built on top of the engram API (https://api.engram.ai/v3)
+- **Backend API**: Built on top of the smaran API (https://api.smaran.ai/v3)
 - **Transport Layer**: Uses Server-Sent Events (SSE) for real-time communication
 - **Dynamic Server Generation**: Creates unique MCP server instances for each user via URL path parameters
 - **Session Management**: Maintains complete user isolation through unique URLs
@@ -17,7 +17,7 @@ The system leverages **Cloudflare's infrastructure** with CPU-based billing, mak
 
 ## The two main components explained
 
-### addToEngram action
+### addToSmaran action
 
 This component **stores user information, preferences, and behavioral patterns** with sophisticated triggering mechanisms:
 
@@ -32,7 +32,7 @@ This component **stores user information, preferences, and behavioral patterns**
 - Personal facts, preferences, and decision-making patterns
 - Rich context including technical details and examples
 
-### searchEngram action
+### searchSmaran action
 
 This component **retrieves relevant information** from stored memories using advanced search capabilities:
 

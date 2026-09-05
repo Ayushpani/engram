@@ -1,24 +1,24 @@
 ---
 title: "Bash Tool (Python)"
 sidebarTitle: "Bash Tool (Python)"
-description: "engram-bash. The SMFS idea wrapped as a single agent tool, for Python agents and serverless runtimes."
+description: "smaran-bash. The SMFS idea wrapped as a single agent tool, for Python agents and serverless runtimes."
 icon: "terminal"
 ---
 
-`engram-bash` is the SMFS idea wrapped as a single agent tool: `run_bash(command)`. The "filesystem" is your Engram container. Runs anywhere Python runs. AWS Lambda, Modal, Fly Machines, Cloud Run, your laptop. No mount, no FUSE, no local disk.
+`smaran-bash` is the SMFS idea wrapped as a single agent tool: `run_bash(command)`. The "filesystem" is your Smaran container. Runs anywhere Python runs. AWS Lambda, Modal, Fly Machines, Cloud Run, your laptop. No mount, no FUSE, no local disk.
 
 Reach for the Bash Tool when your agent runs somewhere it can't mount a real filesystem.
 
 ## Install
 
 ```bash
-pip install engram-bash
+pip install smaran-bash
 ```
 
 Or with uv:
 
 ```bash
-uv add engram-bash
+uv add smaran-bash
 ```
 
 ## Quickstart
@@ -26,12 +26,12 @@ uv add engram-bash
 ```python
 import asyncio
 import os
-from engram_bash import create_bash
+from smaran_bash import create_bash
 
 
 async def main() -> None:
     result = await create_bash(
-        api_key=os.environ["ENGRAM_API_KEY"],
+        api_key=os.environ["SMARAN_API_KEY"],
         container_tag="user_42",
     )
     bash = result.bash
@@ -46,7 +46,7 @@ asyncio.run(main())
 
 - `bash`: a `Shell` instance with `.exec(cmd)`
 - `tool_description`: a pre-written tool description ready to hand to the model
-- `configure_memory_paths(paths)`: scope which paths get extracted into Engram
+- `configure_memory_paths(paths)`: scope which paths get extracted into Smaran
 - `refresh()`: re-prime the path index after external writes
 
 ## Use it as a model tool
@@ -60,12 +60,12 @@ import asyncio
 import os
 
 import anthropic
-from engram_bash import create_bash
+from smaran_bash import create_bash
 
 
 async def run_agent(user_message: str) -> str:
     result = await create_bash(
-        api_key=os.environ["ENGRAM_API_KEY"],
+        api_key=os.environ["SMARAN_API_KEY"],
         container_tag="user_42",
     )
     bash = result.bash
@@ -137,12 +137,12 @@ import json
 import os
 
 from openai import OpenAI
-from engram_bash import create_bash
+from smaran_bash import create_bash
 
 
 async def run_agent(user_message: str) -> str:
     result = await create_bash(
-        api_key=os.environ["ENGRAM_API_KEY"],
+        api_key=os.environ["SMARAN_API_KEY"],
         container_tag="user_42",
     )
     bash = result.bash
@@ -201,7 +201,7 @@ asyncio.run(run_agent("List my notes"))
 
 ### Claude Agent SDK
 
-The [Claude Agent SDK](https://docs.claude.com/en/api/agent-sdk/overview) ships with built-in `Bash`, `Read`, and `Write` tools. If your agent runs somewhere SMFS can be mounted (a long-lived process on macOS or Linux), point those built-ins at an SMFS mount and you don't need `engram-bash` at all — the agent just sees your container as a directory.
+The [Claude Agent SDK](https://docs.claude.com/en/api/agent-sdk/overview) ships with built-in `Bash`, `Read`, and `Write` tools. If your agent runs somewhere SMFS can be mounted (a long-lived process on macOS or Linux), point those built-ins at an SMFS mount and you don't need `smaran-bash` at all — the agent just sees your container as a directory.
 
 See [Mount SMFS](/smfs/mount) for setup, or the [provider guides](/smfs/overview#use-smfs-with-your-sandbox-provider) for sandbox-specific instructions.
 
@@ -234,7 +234,7 @@ See the [TypeScript Bash Tool reference](/smfs/bash-tool#commands-the-agent-can-
 
 | Option | Default | Purpose |
 | --- | --- | --- |
-| `api_key` | required | Engram API key |
+| `api_key` | required | Smaran API key |
 | `container_tag` | required | Container to expose as the filesystem |
 | `base_url` | `None` | Override the API endpoint |
 | `eager_load` | `True` | Warm the path index when the instance starts |

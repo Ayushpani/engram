@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-Mem0 to Engram Migration Script
+Mem0 to Smaran Migration Script
 ========================================
-Simple script to migrate memories from Mem0 to Engram.
+Simple script to migrate memories from Mem0 to Smaran.
 
 Prerequisites:
 1. Install required packages:
-   pip install mem0ai engram python-dotenv
+   pip install mem0ai smaran python-dotenv
 
 2. Set environment variables:
    export MEM0_API_KEY="your_mem0_api_key"
    export MEM0_ORG_ID="your_org_id"  # Optional
    export MEM0_PROJECT_ID="your_project_id"  # Optional
-   export ENGRAM_API_KEY="your_engram_api_key"
+   export SMARAN_API_KEY="your_smaran_api_key"
 
 Usage:
    python mem0-migration-script.py
@@ -26,7 +26,7 @@ from typing import Any, Dict, Optional
 
 from dotenv import load_dotenv
 from mem0 import MemoryClient
-from engram import Engram
+from smaran import Smaran
 
 # Load environment variables
 load_dotenv()
@@ -112,14 +112,14 @@ def export_from_mem0(
         raise
 
 
-def import_to_engram(mem0_data: Dict[str, Any], api_key: str) -> Dict[str, int]:
+def import_to_smaran(mem0_data: Dict[str, Any], api_key: str) -> Dict[str, int]:
     """
-    Import Mem0 memories into Engram
+    Import Mem0 memories into Smaran
     """
-    print("\n🚀 Starting import to Engram...")
+    print("\n🚀 Starting import to Smaran...")
 
-    # Initialize Engram client
-    client = Engram(api_key=api_key)
+    # Initialize Smaran client
+    client = Smaran(api_key=api_key)
 
     memories = mem0_data.get("memories", [])
     if not memories:
@@ -203,7 +203,7 @@ def import_to_engram(mem0_data: Dict[str, Any], api_key: str) -> Dict[str, int]:
             if memory.get("metadata") and isinstance(memory["metadata"], dict):
                 metadata.update(memory["metadata"])
 
-            # Import to Engram
+            # Import to Smaran
             result = client.add(
                 content=content,
                 container_tags=container_tags,
@@ -231,14 +231,14 @@ def verify_migration(api_key: str, expected_count: int):
     """
     print("\n🔍 Verifying migration...")
 
-    client = Engram(api_key=api_key)
+    client = Smaran(api_key=api_key)
 
     try:
         # Check imported memories
         result = client.documents.list(container_tags=["imported_from_mem0"], limit=100)
 
         total_imported = result["pagination"]["totalItems"]
-        print(f"✅ Found {total_imported} imported memories in Engram")
+        print(f"✅ Found {total_imported} imported memories in Smaran")
 
         # Show sample memories
         if result["memories"]:
@@ -264,22 +264,22 @@ def verify_migration(api_key: str, expected_count: int):
 def main():
     """Main migration function"""
     print("=" * 60)
-    print("🎯 mem0 to Engram Migration Tool")
+    print("🎯 mem0 to Smaran Migration Tool")
     print("=" * 60)
 
     # Get credentials from environment
     mem0_api_key = os.getenv("MEM0_API_KEY")
     mem0_org_id = os.getenv("MEM0_ORG_ID")
     mem0_project_id = os.getenv("MEM0_PROJECT_ID")
-    engram_api_key = os.getenv("ENGRAM_API_KEY")
+    smaran_api_key = os.getenv("SMARAN_API_KEY")
 
     # Validate credentials
     if not mem0_api_key:
         print("❌ Error: MEM0_API_KEY environment variable not set")
         return
 
-    if not engram_api_key:
-        print("❌ Error: ENGRAM_API_KEY environment variable not set")
+    if not smaran_api_key:
+        print("❌ Error: SMARAN_API_KEY environment variable not set")
         return
 
     try:
@@ -298,18 +298,18 @@ def main():
             filters=filters,
         )
 
-        # Step 2: Import to Engram
-        print("\n📥 STEP 2: Import to Engram")
+        # Step 2: Import to Smaran
+        print("\n📥 STEP 2: Import to Smaran")
         print("-" * 40)
 
-        stats = import_to_engram(mem0_data, engram_api_key)
+        stats = import_to_smaran(mem0_data, smaran_api_key)
 
         # Step 3: Verify migration
         print("\n✔️  STEP 3: Verification")
         print("-" * 40)
 
         expected_count = len(mem0_data.get("memories", []))
-        verify_migration(engram_api_key, expected_count)
+        verify_migration(smaran_api_key, expected_count)
 
         # Final summary
         print("\n" + "=" * 60)

@@ -11,7 +11,7 @@ Memory tools allow AI agents to search, add, and fetch memories.
 ```typescript
 import { streamText } from "ai"
 import { createOpenAI } from "@ai-sdk/openai"
-import { engramTools } from "@engram/tools/ai-sdk"
+import { smaranTools } from "@smaran/tools/ai-sdk"
 
 const openai = createOpenAI({
   apiKey: "YOUR_OPENAI_KEY"
@@ -20,7 +20,7 @@ const openai = createOpenAI({
 const result = await streamText({
   model: openai("gpt-5"),
   prompt: "Remember that my name is Alice",
-  tools: engramTools("YOUR_ENGRAM_KEY")
+  tools: smaranTools("YOUR_SMARAN_KEY")
 })
 ```
 
@@ -34,7 +34,7 @@ Semantic search through user memories:
 const result = await streamText({
   model: openai("gpt-5"),
   prompt: "What are my dietary preferences?",
-  tools: engramTools("API_KEY")
+  tools: smaranTools("API_KEY")
 })
 
 // The AI will automatically call searchMemories tool
@@ -50,7 +50,7 @@ Store new information:
 const result = await streamText({
   model: anthropic("claude-3-sonnet"),
   prompt: "Remember that I'm allergic to peanuts",
-  tools: engramTools("API_KEY")
+  tools: smaranTools("API_KEY")
 })
 
 // The AI will automatically call addMemory tool
@@ -66,7 +66,7 @@ Retrieve specific memory by ID:
 const result = await streamText({
   model: openai("gpt-5"),
   prompt: "Get the details of memory abc123",
-  tools: engramTools("API_KEY")
+  tools: smaranTools("API_KEY")
 })
 
 // The AI will automatically call fetchMemory tool
@@ -83,7 +83,7 @@ import {
   searchMemoriesTool,
   addMemoryTool,
   fetchMemoryTool
-} from "@engram/tools/ai-sdk"
+} from "@smaran/tools/ai-sdk"
 
 // Use only search tool
 const result = await streamText({
