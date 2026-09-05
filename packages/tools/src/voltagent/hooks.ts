@@ -30,7 +30,7 @@ import {
  *
  * @example
  * ```typescript
- * import { createSmaranHooks } from "@smaran/tools/voltagent"
+ * import { createSmaranHooks } from "@smaranai/tools/voltagent"
  *
  * const hooks = createSmaranHooks("user-123", {
  *   mode: "full",

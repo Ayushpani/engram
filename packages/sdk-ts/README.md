@@ -1,9 +1,9 @@
-# `@repo/sdk-ts`
+# `@smaranai/sdk-ts`
 
 Thin typed client for the memory API. Zero dependencies.
 
 ```ts
-import { Smaran } from "@repo/sdk-ts"
+import { Smaran } from "@smaranai/sdk-ts"
 
 const memory = new Smaran({
 	apiKey: process.env.SMARAN_API_KEY!,

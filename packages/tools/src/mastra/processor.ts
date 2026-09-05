@@ -107,7 +107,7 @@ function getEffectiveCustomId(
  * @example
  * ```typescript
  * import { Agent } from "@mastra/core/agent"
- * import { SmaranInputProcessor } from "@smaran/tools/mastra"
+ * import { SmaranInputProcessor } from "@smaranai/tools/mastra"
  * import { openai } from "@ai-sdk/openai"
  *
  * const agent = new Agent({
@@ -211,7 +211,7 @@ export class SmaranInputProcessor implements Processor {
  * @example
  * ```typescript
  * import { Agent } from "@mastra/core/agent"
- * import { SmaranOutputProcessor } from "@smaran/tools/mastra"
+ * import { SmaranOutputProcessor } from "@smaranai/tools/mastra"
  * import { openai } from "@ai-sdk/openai"
  *
  * const agent = new Agent({
@@ -330,7 +330,7 @@ export class SmaranOutputProcessor implements Processor {
  * @example
  * ```typescript
  * import { Agent } from "@mastra/core/agent"
- * import { createSmaranProcessor } from "@smaran/tools/mastra"
+ * import { createSmaranProcessor } from "@smaranai/tools/mastra"
  * import { openai } from "@ai-sdk/openai"
  *
  * const processor = createSmaranProcessor({
@@ -363,7 +363,7 @@ export function createSmaranProcessor(
  * @example
  * ```typescript
  * import { Agent } from "@mastra/core/agent"
- * import { createSmaranOutputProcessor } from "@smaran/tools/mastra"
+ * import { createSmaranOutputProcessor } from "@smaranai/tools/mastra"
  * import { openai } from "@ai-sdk/openai"
  *
  * const processor = createSmaranOutputProcessor({
@@ -398,7 +398,7 @@ export function createSmaranOutputProcessor(
  * @example
  * ```typescript
  * import { Agent } from "@mastra/core/agent"
- * import { createSmaranProcessors } from "@smaran/tools/mastra"
+ * import { createSmaranProcessors } from "@smaranai/tools/mastra"
  * import { openai } from "@ai-sdk/openai"
  *
  * const { input, output } = createSmaranProcessors({

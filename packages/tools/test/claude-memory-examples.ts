@@ -187,10 +187,10 @@ export async function anthropicSdkExample() {
  * This is what the actual integration would look like with @anthropic-ai/sdk
  */
 export const anthropicIntegrationTemplate = `
-// Install: npm install @anthropic-ai/sdk @smaran/tools
+// Install: npm install @anthropic-ai/sdk @smaranai/tools
 
 import Anthropic from '@anthropic-ai/sdk';
-import { createClaudeMemoryTool } from '@smaran/tools/claude-memory';
+import { createClaudeMemoryTool } from '@smaranai/tools/claude-memory';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,

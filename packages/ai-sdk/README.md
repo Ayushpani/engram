@@ -5,13 +5,13 @@ Vercel AI SDK utilities for smaran
 ## Installation
 
 ```bash
-npm install @smaran/ai-sdk
+npm install @smaranai/ai-sdk
 # or
-bun add @smaran/ai-sdk
+bun add @smaranai/ai-sdk
 # or
-pnpm add @smaran/ai-sdk
+pnpm add @smaranai/ai-sdk
 # or
-yarn add @smaran/ai-sdk
+yarn add @smaranai/ai-sdk
 ```
 
 ## Features
@@ -107,7 +107,7 @@ interface ConfigWithProviderUrl {
 smaran tools allow AI agents to interact with user memories for enhanced context and personalization.
 
 ```typescript
-import { smaranTools } from '@smaran/ai-sdk'
+import { smaranTools } from '@smaranai/ai-sdk'
 import { generateText } from 'ai'
 
 const result = await generateText({
@@ -133,7 +133,7 @@ const result = await generateText({
 ### Complete Memory Tools Example
 
 ```typescript
-import { smaranTools } from '@smaran/ai-sdk'
+import { smaranTools } from '@smaranai/ai-sdk'
 import { generateText } from 'ai'
 import { openai } from '@ai-sdk/openai'
 
@@ -231,7 +231,7 @@ import {
   searchMemoriesTool,
   addMemoryTool,
   fetchMemoryTool
-} from '@smaran/ai-sdk'
+} from '@smaranai/ai-sdk'
 
 const searchTool = searchMemoriesTool('your-api-key', {
   projectId: 'your-project-id'

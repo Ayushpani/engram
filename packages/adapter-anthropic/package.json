@@ -1,5 +1,5 @@
 {
-	"name": "@repo/adapter-anthropic",
+	"name": "@smaranai/adapter-anthropic",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",

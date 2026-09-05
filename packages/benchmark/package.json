@@ -1,5 +1,5 @@
 {
-  "name": "@smaran/benchmark",
+  "name": "@smaranai/benchmark",
   "version": "1.0.0",
   "private": true,
   "description": "Benchmark framework for SuperMemory performance testing",

@@ -15,7 +15,7 @@ composes it into a live-call shape.
 ## Sketch
 
 ```ts
-import { Smaran } from "@repo/sdk-ts"
+import { Smaran } from "@smaranai/sdk-ts"
 import { HotCache, StreamingSession } from "@repo/voice"
 
 const memory = new Smaran({ apiKey: process.env.SMARAN_API_KEY! })

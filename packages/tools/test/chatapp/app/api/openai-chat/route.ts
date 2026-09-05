@@ -1,5 +1,5 @@
 import { OpenAI } from "openai"
-import { withSmaran } from "@smaran/tools/openai"
+import { withSmaran } from "@smaranai/tools/openai"
 
 export const runtime = "nodejs"
 

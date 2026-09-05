@@ -6,7 +6,7 @@ description: "Memory tools for OpenAI function calling with Smaran integration"
 Add memory capabilities to the official OpenAI SDKs using Smaran's function calling tools. These plugins provide seamless integration with OpenAI's chat completions and function calling features.
 
 <CardGroup>
-<Card title="Smaran tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaran/tools">
+<Card title="Smaran tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaranai/tools">
     Check out the NPM page for more details
 </Card>
 <Card title="Smaran AI SDK" icon="python" href="https://pypi.org/project/smaran-openai-sdk/">
@@ -27,7 +27,7 @@ pip install smaran-openai-sdk
 ```
 
 ```bash JavaScript/TypeScript
-npm install @smaran/tools
+npm install @smaranai/tools
 ```
 
 </CodeGroup>
@@ -82,7 +82,7 @@ asyncio.run(main())
 ```
 
 ```typescript JavaScript/TypeScript SDK
-import { smaranTools, getToolDefinitions, createToolCallExecutor } from "@smaran/tools/openai"
+import { smaranTools, getToolDefinitions, createToolCallExecutor } from "@smaranai/tools/openai"
 import OpenAI from "openai"
 
 const client = new OpenAI({
@@ -139,7 +139,7 @@ tools = SmaranTools(
 ```
 
 ```typescript JavaScript Configuration
-import { smaranTools } from "@smaran/tools/openai"
+import { smaranTools } from "@smaranai/tools/openai"
 
 const tools = smaranTools(process.env.SMARAN_API_KEY!, {
   containerTags: ["your-user-id"],
@@ -252,7 +252,7 @@ import {
   createSearchMemoriesTool,
   createAddMemoryTool,
   createFetchMemoryTool
-} from "@smaran/tools/openai"
+} from "@smaranai/tools/openai"
 
 const searchTool = createSearchMemoriesTool(process.env.SMARAN_API_KEY!)
 const addTool = createAddMemoryTool(process.env.SMARAN_API_KEY!)
@@ -336,7 +336,7 @@ asyncio.run(chat_with_memory())
 
 ```typescript Complete JavaScript Example
 import OpenAI from "openai"
-import { getToolDefinitions, createToolCallExecutor } from "@smaran/tools/openai"
+import { getToolDefinitions, createToolCallExecutor } from "@smaranai/tools/openai"
 import readline from 'readline'
 
 const client = new OpenAI()
@@ -446,7 +446,7 @@ async def safe_chat():
 
 ```typescript JavaScript Error Handling
 import OpenAI from "openai"
-import { getToolDefinitions } from "@smaran/tools/openai"
+import { getToolDefinitions } from "@smaranai/tools/openai"
 
 async function safeChat() {
   try {

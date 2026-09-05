@@ -1,4 +1,4 @@
-# `@repo/adapter-google`
+# `@smaranai/adapter-google`
 
 Memory tools + auto-context for Google Gemini (`@google/genai`) and the
 Google Agent Kit.
@@ -7,8 +7,8 @@ Google Agent Kit.
 
 ```ts
 import { GoogleGenAI } from "@google/genai"
-import { Smaran } from "@repo/sdk-ts"
-import { handleFunctionCall, memoryTools } from "@repo/adapter-google"
+import { Smaran } from "@smaranai/sdk-ts"
+import { handleFunctionCall, memoryTools } from "@smaranai/adapter-google"
 
 const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY })
 const memory = new Smaran({ apiKey: process.env.SMARAN_API_KEY! })
@@ -29,7 +29,7 @@ for (const call of res.functionCalls ?? []) {
 ## Auto-context (silent recall)
 
 ```ts
-import { withRecalledContext } from "@repo/adapter-google"
+import { withRecalledContext } from "@smaranai/adapter-google"
 
 const { systemInstruction, contents } = await withRecalledContext(
 	memory,

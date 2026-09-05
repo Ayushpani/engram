@@ -80,18 +80,18 @@ The API needs one env var (`DATABASE_URL`) — a Supabase free-tier Postgres wor
 | [`@repo/language`](packages/language) | Script/language detection across Latin + 8 Indian scripts, Hindi/Hinglish filler removal, heuristic NER, session-scoped coreference. |
 | [`@repo/data-pipeline`](packages/data-pipeline) | PII scrubbing (Aadhaar/PAN/GSTIN/UPI) + training-pair extraction for future distilled models. |
 | [`@repo/models`](packages/models) | Reranker contract with heuristic + HTTP + WASM slots. |
-| [`@repo/sdk-ts`](packages/sdk-ts) | Zero-dependency TypeScript client. |
+| [`@smaranai/sdk-ts`](packages/sdk-ts) | Zero-dependency TypeScript client. |
 
 ### LLM & agent-framework adapters
 
 | Package | Coverage |
 | --- | --- |
-| [`@repo/adapter-anthropic`](packages/adapter-anthropic) | Anthropic Messages + Claude Agent SDK |
-| [`@repo/adapter-openai`](packages/adapter-openai) | OpenAI Chat/Responses/Agents/Codex + Groq/Together/DeepSeek/xAI/Fireworks/Ollama/LM Studio/vLLM |
-| [`@repo/adapter-google`](packages/adapter-google) | Google Gemini + Agent Kit |
-| [`@repo/adapter-vercel-ai`](packages/adapter-vercel-ai) | Vercel AI SDK |
-| [`@repo/adapter-langgraph`](packages/adapter-langgraph) | LangGraph.js |
-| [`@repo/adapter-mastra`](packages/adapter-mastra) | Mastra |
+| [`@smaranai/adapter-anthropic`](packages/adapter-anthropic) | Anthropic Messages + Claude Agent SDK |
+| [`@smaranai/adapter-openai`](packages/adapter-openai) | OpenAI Chat/Responses/Agents/Codex + Groq/Together/DeepSeek/xAI/Fireworks/Ollama/LM Studio/vLLM |
+| [`@smaranai/adapter-google`](packages/adapter-google) | Google Gemini + Agent Kit |
+| [`@smaranai/adapter-vercel-ai`](packages/adapter-vercel-ai) | Vercel AI SDK |
+| [`@smaranai/adapter-langgraph`](packages/adapter-langgraph) | LangGraph.js |
+| [`@smaranai/adapter-mastra`](packages/adapter-mastra) | Mastra |
 
 Every adapter exposes both **model-driven tools** (the model calls `memory_save` / `memory_recall` itself) and **silent context injection** (`withRecalledContext` prepends relevant memories to the system prompt). Compose both on the same call.
 
@@ -99,8 +99,8 @@ Every adapter exposes both **model-driven tools** (the model calls `memory_save`
 
 | Package | Coverage |
 | --- | --- |
-| [`@repo/adapter-vapi`](packages/adapter-vapi) | Vapi server-URL webhook (functions + transcripts) |
-| [`@repo/adapter-livekit`](packages/adapter-livekit) | LiveKit Agents (Pipecat by shape) |
+| [`@smaranai/adapter-vapi`](packages/adapter-vapi) | Vapi server-URL webhook (functions + transcripts) |
+| [`@smaranai/adapter-livekit`](packages/adapter-livekit) | LiveKit Agents (Pipecat by shape) |
 
 ### Applications
 
@@ -121,7 +121,7 @@ Full endpoint reference: [`DOCS.md`](DOCS.md).
 ```ts
 // Anthropic Claude — model decides when to save/recall
 import Anthropic from "@anthropic-ai/sdk"
-import { handleToolUse, memoryTools, withRecalledContext } from "@repo/adapter-anthropic"
+import { handleToolUse, memoryTools, withRecalledContext } from "@smaranai/adapter-anthropic"
 
 const res = await anthropic.messages.create({
   model: "claude-…",
@@ -133,7 +133,7 @@ const res = await anthropic.messages.create({
 
 ```ts
 // Vapi voice agent — memory follows the caller across sessions
-import { handleVapiEvent, memoryFunctions } from "@repo/adapter-vapi"
+import { handleVapiEvent, memoryFunctions } from "@smaranai/adapter-vapi"
 
 app.post("/vapi", async (c) => {
   const result = await handleVapiEvent(await c.req.json().then(b => b.message), {
@@ -204,7 +204,7 @@ CI runs type-check + Biome on every PR — see [`.github/workflows/ci.yml`](.git
                                    │  MemoryClient (shared)
                                    ▼
                    ┌──────────────────────────────────────┐
-                   │  @repo/sdk-ts  ──▶  HTTP + SSE       │
+                   │  @smaranai/sdk-ts  ──▶  HTTP + SSE       │
                    └───────────────┬──────────────────────┘
                                    ▼
                        ┌───────────────────────┐

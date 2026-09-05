@@ -452,7 +452,7 @@ Open `http://localhost:8501` in your browser.
 ```bash
 npx create-next-app@latest personal-ai --typescript --tailwind --app
 cd personal-ai
-npm install @smaran/tools ai @ai-sdk/openai
+npm install @smaranai/tools ai @ai-sdk/openai
 ```
 
 Create `.env.local`:
@@ -471,7 +471,7 @@ Create `app/api/chat/route.ts`. Let's break it down:
 ```typescript
 import { streamText } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
-import { smaranTools } from '@smaran/tools/ai-sdk'
+import { smaranTools } from '@smaranai/tools/ai-sdk'
 ```
 
 - **streamText**: Vercel AI SDK function that handles streaming responses and tool calling

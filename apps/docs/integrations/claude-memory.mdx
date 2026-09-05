@@ -14,14 +14,14 @@ This integration works with Claude's built-in `memory` tool type, introduced in 
 ## Installation
 
 ```bash
-npm install @smaran/tools @anthropic-ai/sdk
+npm install @smaranai/tools @anthropic-ai/sdk
 ```
 
 ## Quick Start
 
 ```typescript
 import Anthropic from "@anthropic-ai/sdk"
-import { createClaudeMemoryTool } from "@smaran/tools/claude-memory"
+import { createClaudeMemoryTool } from "@smaranai/tools/claude-memory"
 
 const anthropic = new Anthropic()
 
@@ -81,7 +81,7 @@ console.log(response.content[0])
 ## Configuration
 
 ```typescript
-import { createClaudeMemoryTool } from "@smaran/tools/claude-memory"
+import { createClaudeMemoryTool } from "@smaranai/tools/claude-memory"
 
 const memoryTool = createClaudeMemoryTool(process.env.SMARAN_API_KEY!, {
   // Scope memories to a project or user
@@ -188,7 +188,7 @@ All memory paths must start with `/memories/`:
 
 ```typescript
 import Anthropic from "@anthropic-ai/sdk"
-import { createClaudeMemoryTool } from "@smaran/tools/claude-memory"
+import { createClaudeMemoryTool } from "@smaranai/tools/claude-memory"
 
 const anthropic = new Anthropic()
 const memoryTool = createClaudeMemoryTool(process.env.SMARAN_API_KEY!, {

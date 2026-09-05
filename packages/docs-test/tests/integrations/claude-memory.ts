@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { createClaudeMemoryTool } from "@smaran/tools/claude-memory"
+import { createClaudeMemoryTool } from "@smaranai/tools/claude-memory"
 
 async function testConfiguration() {
 	console.log("=== Configuration ===")

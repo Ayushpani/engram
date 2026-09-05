@@ -26,7 +26,7 @@ import {
  *
  * @example
  * ```typescript
- * import { withSmaran } from "@smaran/tools/openai"
+ * import { withSmaran } from "@smaranai/tools/openai"
  * import OpenAI from "openai"
  *
  * // Create OpenAI client with smaran middleware

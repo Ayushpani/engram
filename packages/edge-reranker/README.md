@@ -1,4 +1,4 @@
-# @smaran/edge-reranker
+# @smaranai/edge-reranker
 
 Blazing fast, WASM-compiled Cross-Encoder Reranker for Cloudflare Workers and Edge environments.
 Powered by `tract-onnx` and INT8 quantization, providing near-native inference speeds directly on the Edge.
@@ -12,7 +12,7 @@ Powered by `tract-onnx` and INT8 quantization, providing near-native inference s
 ## Usage
 
 ```typescript
-import { EdgeReranker } from '@smaran/edge-reranker';
+import { EdgeReranker } from '@smaranai/edge-reranker';
 
 const reranker = new EdgeReranker();
 

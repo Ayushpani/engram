@@ -11,14 +11,14 @@ Integrate Smaran with [Mastra](https://mastra.ai) to give your AI agents persist
   Migrating to v2 from 1.4.x? Check the [migration guide](/migration/tools-v2-upgrade).
 </Note>
 
-<Card title="@smaran/tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaran/tools">
+<Card title="@smaranai/tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaranai/tools">
     Check out the NPM page for more details
 </Card>
 
 ## Installation
 
 ```bash
-npm install @smaran/tools @mastra/core
+npm install @smaranai/tools @mastra/core
 ```
 
 ## Quick Start
@@ -27,7 +27,7 @@ Wrap your agent config with `withSmaran` to add memory capabilities:
 
 ```typescript
 import { Agent } from "@mastra/core/agent"
-import { withSmaran } from "@smaran/tools/mastra"
+import { withSmaran } from "@smaranai/tools/mastra"
 import { openai } from "@ai-sdk/openai"
 
 // Create agent with memory-enhanced config
@@ -190,8 +190,8 @@ Customize how memories are formatted and injected. The template receives `userMe
 
 ```typescript
 import { Agent } from "@mastra/core/agent"
-import { withSmaran } from "@smaran/tools/mastra"
-import type { MemoryPromptData } from "@smaran/tools/mastra"
+import { withSmaran } from "@smaranai/tools/mastra"
+import type { MemoryPromptData } from "@smaranai/tools/mastra"
 
 const claudePrompt = (data: MemoryPromptData) => `
 <context>
@@ -227,7 +227,7 @@ Inject memories without saving conversations:
 
 ```typescript
 import { Agent } from "@mastra/core/agent"
-import { createSmaranProcessor } from "@smaran/tools/mastra"
+import { createSmaranProcessor } from "@smaranai/tools/mastra"
 import { openai } from "@ai-sdk/openai"
 
 const agent = new Agent({
@@ -252,7 +252,7 @@ Save conversations without memory injection:
 
 ```typescript
 import { Agent } from "@mastra/core/agent"
-import { createSmaranOutputProcessor } from "@smaran/tools/mastra"
+import { createSmaranOutputProcessor } from "@smaranai/tools/mastra"
 import { openai } from "@ai-sdk/openai"
 
 const agent = new Agent({
@@ -274,7 +274,7 @@ Use the factory function for shared configuration:
 
 ```typescript
 import { Agent } from "@mastra/core/agent"
-import { createSmaranProcessors } from "@smaran/tools/mastra"
+import { createSmaranProcessors } from "@smaranai/tools/mastra"
 import { openai } from "@ai-sdk/openai"
 
 const { input, output } = createSmaranProcessors({
@@ -302,7 +302,7 @@ For server setups where one agent instance handles multiple concurrent conversat
 ```typescript
 import { Agent } from "@mastra/core/agent"
 import { RequestContext, MASTRA_THREAD_ID_KEY } from "@mastra/core/request-context"
-import { withSmaran } from "@smaran/tools/mastra"
+import { withSmaran } from "@smaranai/tools/mastra"
 import { openai } from "@ai-sdk/openai"
 
 const agent = new Agent(withSmaran(

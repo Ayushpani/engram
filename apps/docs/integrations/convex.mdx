@@ -25,7 +25,7 @@ npm install smaran convex
 For the AI chat example, also install the AI SDK packages:
 
 ```bash
-npm install @smaran/tools @ai-sdk/openai ai
+npm install @smaranai/tools @ai-sdk/openai ai
 ```
 
 Set up your environment variable in Convex:
@@ -96,7 +96,7 @@ import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
-import { withSmaran } from "@smaran/tools/ai-sdk";
+import { withSmaran } from "@smaranai/tools/ai-sdk";
 
 export const chat = action({
   args: { userId: v.string(), message: v.string() },

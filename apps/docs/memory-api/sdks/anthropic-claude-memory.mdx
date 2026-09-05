@@ -5,21 +5,21 @@ description: "Enable Claude's persistent memory capabilities with Smaran as the 
 
 Enable Claude's native memory tool functionality with Smaran as the persistent storage backend. Claude can automatically store and retrieve information across conversations using familiar filesystem operations.
 
-<Card title="Smaran tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaran/tools">
+<Card title="Smaran tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaranai/tools">
     Check out the NPM page for more details
 </Card>
 
 ## Installation
 
 ```bash
-npm install @smaran/tools @anthropic-ai/sdk
+npm install @smaranai/tools @anthropic-ai/sdk
 ```
 
 ## Quick Start
 
 ```typescript
 import Anthropic from "@anthropic-ai/sdk"
-import { createClaudeMemoryTool } from "@smaran/tools/claude-memory"
+import { createClaudeMemoryTool } from "@smaranai/tools/claude-memory"
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
@@ -67,7 +67,7 @@ Claude's memory tool uses a filesystem metaphor to manage persistent information
 ### Basic Configuration
 
 ```typescript
-import { createClaudeMemoryTool } from "@smaran/tools/claude-memory"
+import { createClaudeMemoryTool } from "@smaranai/tools/claude-memory"
 
 const memoryTool = createClaudeMemoryTool(
   process.env.SMARAN_API_KEY!,
@@ -144,7 +144,7 @@ Here's a full example with conversation handling:
 
 ```typescript
 import Anthropic from "@anthropic-ai/sdk"
-import { createClaudeMemoryTool, type MemoryCommand } from "@smaran/tools/claude-memory"
+import { createClaudeMemoryTool, type MemoryCommand } from "@smaranai/tools/claude-memory"
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,

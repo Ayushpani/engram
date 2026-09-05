@@ -1,4 +1,4 @@
-# `@repo/adapter-vapi`
+# `@smaranai/adapter-vapi`
 
 Memory for [Vapi](https://vapi.ai) voice agents. Handles the server-URL
 webhook shape: function calls become memory ops, live transcripts flow into
@@ -8,9 +8,9 @@ a `StreamingSession`, and the response body is exactly what Vapi expects.
 
 ```ts
 import { Hono } from "hono"
-import { Smaran } from "@repo/sdk-ts"
+import { Smaran } from "@smaranai/sdk-ts"
 import { HotCache, StreamingSession } from "@repo/voice"
-import { handleVapiEvent, memoryFunctions } from "@repo/adapter-vapi"
+import { handleVapiEvent, memoryFunctions } from "@smaranai/adapter-vapi"
 
 const memory = new Smaran({ apiKey: process.env.SMARAN_API_KEY! })
 const cache = new HotCache({ ttlMs: 60_000 })

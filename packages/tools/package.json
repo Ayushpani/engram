@@ -1,5 +1,5 @@
 {
-  "name": "@smaran/tools",
+  "name": "@smaranai/tools",
   "type": "module",
   "version": "2.0.0",
   "description": "Memory tools for AI SDK, OpenAI, Voltagent and Mastra with smaran",

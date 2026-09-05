@@ -11,14 +11,14 @@ Smaran integrates with [VoltAgent](https://github.com/VoltAgent/voltagent), prov
   Migrating to v2 from 1.4.x? Check the [migration guide](/migration/tools-v2-upgrade).
 </Note>
 
-<Card title="@smaran/tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaran/tools">
+<Card title="@smaranai/tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaranai/tools">
     Check out the NPM page for more details
 </Card>
 
 ## Installation
 
 ```bash
-npm install @smaran/tools @voltagent/core
+npm install @smaranai/tools @voltagent/core
 ```
 
 Set up your API key as an environment variable:
@@ -34,7 +34,7 @@ You can obtain an API key from [console.smaran.ai](https://console.smaran.ai).
 Smaran provides a `withSmaran` wrapper that enhances any VoltAgent agent config with automatic memory retrieval and storage:
 
 ```typescript
-import { withSmaran } from "@smaran/tools/voltagent"
+import { withSmaran } from "@smaranai/tools/voltagent"
 import { Agent } from "@voltagent/core"
 import { openai } from "@ai-sdk/openai"
 

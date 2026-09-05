@@ -7,7 +7,7 @@ import {
 	searchMemoriesTool,
 	addMemoryTool,
 	type MemoryPromptData,
-} from "@smaran/tools/ai-sdk"
+} from "@smaranai/tools/ai-sdk"
 
 async function testMiddleware() {
 	console.log("=== Middleware ===")

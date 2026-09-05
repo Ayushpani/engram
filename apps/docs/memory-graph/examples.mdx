@@ -10,8 +10,8 @@ Load documents in chunks for better performance with large datasets.
 ```tsx
 'use client';
 
-import { MemoryGraph } from '@smaran/memory-graph';
-import type { DocumentWithMemories } from '@smaran/memory-graph';
+import { MemoryGraph } from '@smaranai/memory-graph';
+import type { DocumentWithMemories } from '@smaranai/memory-graph';
 import { useCallback, useEffect, useState } from 'react';
 
 export default function PaginatedGraph() {
@@ -75,7 +75,7 @@ export default function PaginatedGraph() {
 ```tsx
 'use client';
 
-import { MemoryGraph } from '@smaran/memory-graph';
+import { MemoryGraph } from '@smaranai/memory-graph';
 import { useState } from 'react';
 
 export default function SearchableGraph() {
@@ -134,7 +134,7 @@ Control space filtering from outside the component.
 ```tsx
 'use client';
 
-import { MemoryGraph } from '@smaran/memory-graph';
+import { MemoryGraph } from '@smaranai/memory-graph';
 import { useState } from 'react';
 
 export default function ControlledSpaceGraph() {
@@ -217,7 +217,7 @@ Use the consumer variant for embedded views with custom styling.
 ```tsx
 'use client';
 
-import { MemoryGraph } from '@smaran/memory-graph';
+import { MemoryGraph } from '@smaranai/memory-graph';
 
 export default function EmbeddedGraph({ documents }) {
   return (
@@ -252,7 +252,7 @@ export default function EmbeddedGraph({ documents }) {
 ```tsx
 'use client';
 
-import { MemoryGraph } from '@smaran/memory-graph';
+import { MemoryGraph } from '@smaranai/memory-graph';
 import { useEffect, useState } from 'react';
 
 export default function LoadingGraph() {
@@ -351,8 +351,8 @@ export default async function GraphPage() {
 // memory-graph-client.tsx
 'use client';
 
-import { MemoryGraph } from '@smaran/memory-graph';
-import type { DocumentWithMemories } from '@smaran/memory-graph';
+import { MemoryGraph } from '@smaranai/memory-graph';
+import type { DocumentWithMemories } from '@smaranai/memory-graph';
 
 interface Props {
   initialDocuments: DocumentWithMemories[];
@@ -375,7 +375,7 @@ export function MemoryGraphClient({ initialDocuments }: Props) {
 ```tsx
 'use client';
 
-import { MemoryGraph } from '@smaran/memory-graph';
+import { MemoryGraph } from '@smaranai/memory-graph';
 import { useState, useEffect } from 'react';
 
 export default function ResponsiveGraph({ documents }) {

@@ -12,7 +12,7 @@ You can always reference the documentation by using the **SearchSmaranDocs MCP**
    - Other
 
 2. How do you want to integrate?
-   - Vercel AI SDK (@smaran/tools)
+   - Vercel AI SDK (@smaranai/tools)
    - OpenAI plugins
    - Direct SDK (smaran npm/pip)
    - Direct API calls
@@ -36,7 +36,7 @@ You can always reference the documentation by using the **SearchSmaranDocs MCP**
 ```bash
 # Get API key: https://console.smaran.ai
 npm install smaran  # or: pip install smaran
-# For Vercel AI SDK: npm install @smaran/tools
+# For Vercel AI SDK: npm install @smaranai/tools
 export SMARAN_API_KEY="sm_..."
 ```
 
@@ -95,7 +95,7 @@ Based on their integration choice:
 ```typescript
 import { streamText } from 'ai'
 import { anthropic } from '@ai-sdk/anthropic'
-import { smaranTools } from '@smaran/tools/ai-sdk'
+import { smaranTools } from '@smaranai/tools/ai-sdk'
 
 // Option 1: Agent tools (recommended for agentic flows)
 const result = await streamText({
@@ -108,7 +108,7 @@ const result = await streamText({
 // Agent gets searchMemories, addMemory, fetchMemory tools
 
 // Option 2: Profile middleware (automatic context injection)
-import { withSmaran } from '@smaran/tools/ai-sdk'
+import { withSmaran } from '@smaranai/tools/ai-sdk'
 const modelWithMemory = withSmaran(anthropic('claude-3-5-sonnet-20241022'), {
   containerTag: userId,
   customId: 'conversation-1',

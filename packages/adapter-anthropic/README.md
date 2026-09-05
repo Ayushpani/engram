@@ -1,4 +1,4 @@
-# `@repo/adapter-anthropic`
+# `@smaranai/adapter-anthropic`
 
 Memory tools + auto-context helpers for the Anthropic Messages API (Claude
 Sonnet, Opus, Haiku) and the Claude Agent SDK. No SDK wrapping — the adapter
@@ -9,8 +9,8 @@ returns tool definitions and messages you pass straight into your own
 
 ```ts
 import Anthropic from "@anthropic-ai/sdk"
-import { Smaran } from "@repo/sdk-ts"
-import { handleToolUse, memoryTools } from "@repo/adapter-anthropic"
+import { Smaran } from "@smaranai/sdk-ts"
+import { handleToolUse, memoryTools } from "@smaranai/adapter-anthropic"
 
 const anthropic = new Anthropic()
 const memory = new Smaran({ apiKey: process.env.SMARAN_API_KEY! })
@@ -34,7 +34,7 @@ for (const block of res.content) {
 ## Auto-context (silent recall)
 
 ```ts
-import { withRecalledContext } from "@repo/adapter-anthropic"
+import { withRecalledContext } from "@smaranai/adapter-anthropic"
 
 const { system, messages } = await withRecalledContext(
 	memory,

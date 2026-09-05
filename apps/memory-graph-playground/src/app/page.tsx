@@ -6,8 +6,8 @@ import {
 	type DocumentWithMemories,
 	type GraphApiDocument,
 	type GraphApiMemory,
-} from "@smaran/memory-graph"
-import { generateMockGraphData } from "@smaran/memory-graph/mock-data"
+} from "@smaranai/memory-graph"
+import { generateMockGraphData } from "@smaranai/memory-graph/mock-data"
 
 interface DocumentsResponse {
 	documents: DocumentWithMemories[]
@@ -169,7 +169,7 @@ export default function Home() {
 							Memory Graph Playground
 						</h1>
 						<p className="text-sm text-zinc-400">
-							Test the @smaran/memory-graph package
+							Test the @smaranai/memory-graph package
 						</p>
 					</div>
 
