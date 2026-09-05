@@ -1,76 +1,31 @@
-# Smaran MCP Server 4.0
+# Smaran MCP Server
 
-A standalone MCP (Model Context Protocol) server for Smaran that gives AI assistants persistent memory across conversations. Built on Cloudflare Workers with Durable Objects for scalable, persistent connections.
+A standalone MCP (Model Context Protocol) server for Smaran, giving any MCP-compatible AI assistant (Claude Desktop, Claude Code, Cursor, Windsurf, and any other MCP client) persistent memory across conversations. Built on Cloudflare Workers with Durable Objects.
 
 ## Features
 
-- **Authentication** - Supports both API keys and OAuth authentication
-- **Persistent Memory** - Save and recall information across sessions
-- **User Profiles** - Auto-generated profiles from stored memories
-- **Project Scoping** - Organize memories by project with `x-sm-project` header
-- **Analytics** - PostHog integration for usage tracking
+- **Simple API key auth** — one Smaran API key, passed as a Bearer token. No accounts, no OAuth flow.
+- **`memory` and `recall` tools** — the two things a memory layer actually needs, mapped directly onto Smaran's real `/v1/memories` and `/v1/recall` API.
+- **Analytics** — optional PostHog integration for usage tracking.
 
 ## Setup
 
-### Quick Install (Recommended)
-
-```bash
-npx -y install-mcp@latest https://mcp.smaran.ai/mcp --client claude --oauth=yes
-```
-
-Replace `claude` with your MCP client: `claude`, `cursor`, `windsurf`, etc.
-
-### Manual Configuration
-
-Add to your MCP client config (Claude Desktop, Cursor, Windsurf, etc.):
+Add to your MCP client config (Claude Desktop, Cursor, Windsurf, Claude Code, etc.):
 
 ```json
 {
   "mcpServers": {
     "smaran": {
-      "url": "https://mcp.smaran.ai/mcp"
-    }
-  }
-}
-```
-
-The server uses OAuth authentication by default. Your MCP client will automatically discover the authorization server via `/.well-known/oauth-protected-resource` and prompt you to authenticate.
-
-### API Key Authentication (Alternative)
-
-If you prefer to use an API key instead of OAuth, you can pass it directly in the `Authorization` header. Get your API key from [app.smaran.ai](https://app.smaran.ai):
-
-```json
-{
-  "mcpServers": {
-    "smaran": {
-      "url": "https://mcp.smaran.ai/mcp",
+      "url": "https://your-mcp-deployment/mcp",
       "headers": {
-        "Authorization": "Bearer sm_your_api_key_here"
+        "Authorization": "Bearer sk_your_smaran_api_key"
       }
     }
   }
 }
 ```
 
-API keys start with `sm_` and are automatically detected. When an API key is provided, OAuth authentication is skipped.
-
-### Project Scoping (Optional)
-
-To scope all operations to a specific project, add the `x-sm-project` header:
-
-```json
-{
-  "mcpServers": {
-    "smaran": {
-      "url": "https://mcp.smaran.ai/mcp",
-      "headers": {
-        "x-sm-project": "your-project-id"
-      }
-    }
-  }
-}
-```
+Get an API key from your self-hosted Smaran deployment (sandbox mode ships with `sk_local_dev` — see the root [README](../../README.md#try-it-in-30-seconds)).
 
 ## Tools
 
@@ -82,56 +37,43 @@ Save or forget information about the user.
 {
   "content": "User prefers dark mode and uses TypeScript",
   "action": "save",
-  "containerTag": "optional-project-tag"
+  "userId": "optional-user-id",
+  "sessionId": "optional-session-id"
 }
 ```
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `content` | string | Yes | The memory content to save or forget |
-| `action` | `"save"` \| `"forget"` | No | Default: `"save"` |
-| `containerTag` | string | No | Project tag to scope the memory |
+| Parameter   | Type                    | Required | Description |
+|-------------|-------------------------|----------|-------------|
+| `content`   | string                  | Yes      | The memory content to save, or a description of what to forget |
+| `action`    | `"save"` \| `"forget"`  | No       | Default: `"save"`. `"forget"` finds the closest matching memory by content and deletes it — no need to know its ID. |
+| `userId`    | string                  | No       | Scope to a specific user. Defaults to a single shared space. |
+| `sessionId` | string                  | No       | Group this memory under a session/conversation. |
 
 ### `recall`
 
-Search memories and get user profile.
+Search the user's memories.
 
 ```json
 {
   "query": "What are the user's programming preferences?",
-  "includeProfile": true,
-  "containerTag": "optional-project-tag"
+  "userId": "optional-user-id",
+  "sessionId": "optional-session-id",
+  "limit": 5
 }
 ```
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `query` | string | Yes | Search query to find relevant memories |
-| `includeProfile` | boolean | No | Include user profile summary. Default: `true` |
-| `containerTag` | string | No | Project tag to scope the search |
-
-### `whoAmI`
-
-Get the current logged-in user's information.
-
-```json
-{}
-```
-
-Returns: `{ userId, email, name, client, sessionId }`
-
-## Resources
-
-| URI | Description |
-|-----|-------------|
-| `smaran://profile` | User profile with stable preferences and recent activity |
-| `smaran://projects` | List of available memory projects |
+| Parameter   | Type   | Required | Description |
+|-------------|--------|----------|-------------|
+| `query`     | string | Yes      | Search query to find relevant memories |
+| `userId`    | string | No       | Scope recall to a specific user |
+| `sessionId` | string | No       | Scope recall to a specific session |
+| `limit`     | number | No       | Max results (1-20). Default: 5 |
 
 ## Prompts
 
-| Name | Description |
-|------|-------------|
-| `context` | User profile and preferences for system context injection |
+| Name      | Description |
+|-----------|-------------|
+| `context` | A reminder for the model to save memory-worthy facts as the conversation goes, and to recall before answering things that might depend on past context. |
 
 ## Development
 
@@ -152,13 +94,12 @@ Create a `.dev.vars` file:
 
 ```env
 API_URL=http://localhost:8787
-or 
-API_URL=https://api.smaran.ai
 ```
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `API_URL` | Main Smaran API URL for OAuth validation | `https://api.smaran.ai` |
+| Variable         | Description                                    | Required |
+|------------------|-------------------------------------------------|----------|
+| `API_URL`        | Your Smaran API URL (self-hosted or managed)     | Yes      |
+| `POSTHOG_API_KEY`| Optional analytics                               | No       |
 
 ### Run Locally
 
@@ -166,9 +107,7 @@ API_URL=https://api.smaran.ai
 bun run dev
 ```
 
-The server will start at `http://localhost:8788`.
-
-**Note:** For local development, you also need the main Smaran API running at the `API_URL` for OAuth token validation.
+The server starts at `http://localhost:8788`. You'll also need the Smaran API itself running at `API_URL` — see [`apps/api`](../api).
 
 ### Deploy
 
@@ -176,34 +115,35 @@ The server will start at `http://localhost:8788`.
 bun run deploy
 ```
 
+Set `API_URL` in `wrangler.jsonc` (or `--var API_URL:...`) to your production Smaran API before deploying — the checked-in default is for local dev only. This deploys to your `*.workers.dev` subdomain; add a `routes` block to `wrangler.jsonc` once you have a custom domain to point at it.
+
 ## Architecture
 
 ```
-┌─────────────────┐  OAuth/API Key ┌──────────────────┐
-│   MCP Client    │◄──────────────►│  Smaran API │
-│ (Claude, Cursor)│                │  (api.smaran.ai)
-└────────┬────────┘                └──────────────────┘
-         │                                   ▲
-         │ MCP Protocol                      │ Auth Validation
-         ▼                                   │
-┌─────────────────────────────────────────────────────┐
-│            Smaran MCP Server                   │
-│         (mcp.smaran.ai/mcp)                   │
-│  ┌─────────────────────────────────────────────┐   │
-│  │           Cloudflare Durable Object          │   │
-│  │  • Session state                             │   │
-│  │  • Client info persistence                   │   │
-│  │  • MCP protocol handling                     │   │
-│  └─────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────┘
+┌─────────────────┐   Bearer API key   ┌──────────────────┐
+│   MCP Client    │◄───────────────────►│   Smaran MCP     │
+│ (Claude, Cursor)│    MCP protocol      │   Server         │
+└─────────────────┘                     └────────┬─────────┘
+                                                   │ Bearer API key,
+                                                   │ forwarded as-is
+                                                   ▼
+                                         ┌──────────────────┐
+                                         │   Smaran API     │
+                                         │  (apps/api)      │
+                                         │  /v1/recall       │
+                                         │  /v1/memories     │
+                                         └──────────────────┘
 ```
+
+The MCP server does not validate API keys itself — it forwards the Bearer
+token on every call, and `apps/api` (the only source of truth for what's
+valid) rejects invalid keys with a normal 401.
 
 ## Tech Stack
 
 - **Runtime:** Cloudflare Workers
-- **State:** Durable Objects with SQLite
+- **State:** Durable Objects (session/client-info persistence)
 - **Framework:** Hono
-- **MCP SDK:** @modelcontextprotocol/sdk + agents
-- **API Client:** smaran SDK
-- **Analytics:** PostHog
-
+- **MCP SDK:** `@modelcontextprotocol/sdk` + `agents`
+- **API Client:** first-party (`src/client.ts`), no third-party SDK
+- **Analytics:** PostHog (optional)

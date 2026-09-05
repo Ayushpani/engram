@@ -1,6 +1,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "engram-mcp",
+	"name": "smaran-mcp",
 	"build": {
 		"command": "bun run build:ui"
 	},
@@ -10,21 +10,18 @@
 
 	"rules": [{ "type": "Text", "globs": ["**/*.html"], "fallthrough": false }],
 
+	// API_URL must point at your own Smaran API deployment (apps/api) — there
+	// is no shared default. This local-dev value assumes apps/api is running
+	// via `bun run dev` in another terminal. Override for production in your
+	// own deployment (e.g. `wrangler deploy --var API_URL:https://...`).
 	"vars": {
-		"API_URL": "https://api.engram.ai"
+		"API_URL": "http://localhost:8787"
 	},
-	"routes": [
-		{
-			"pattern": "mcp.engram.ai",
-			"zone_name": "engram.ai",
-			"custom_domain": true
-		}
-	],
 	"durable_objects": {
 		"bindings": [
 			{
 				"name": "MCP_SERVER",
-				"class_name": "EngramMCP"
+				"class_name": "SmaranMCP"
 			}
 		]
 	},
@@ -32,7 +29,7 @@
 	"migrations": [
 		{
 			"tag": "v1",
-			"new_sqlite_classes": ["EngramMCP"]
+			"new_sqlite_classes": ["SmaranMCP"]
 		}
 	],
 
