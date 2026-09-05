@@ -1,6 +1,6 @@
 # Smaran Pipecat SDK
 
-Memory-enhanced conversational AI pipelines with [Smaran](https://smaran.ai) and [Pipecat](https://github.com/pipecat-ai/pipecat).
+Memory-enhanced conversational AI pipelines with [Smaran](https://github.com/Ayushpani/smaran) and [Pipecat](https://github.com/pipecat-ai/pipecat).
 
 ## Installation
 
@@ -13,24 +13,25 @@ pip install smaran-pipecat
 ```python
 import os
 from pipecat.pipeline.pipeline import Pipeline
-from pipecat.services.openai import OpenAILLMService, OpenAIUserContextAggregator
 from smaran_pipecat import SmaranPipecatService
 
 # Create memory service
 memory = SmaranPipecatService(
     api_key=os.getenv("SMARAN_API_KEY"),
-    user_id="user-123",  # Required: used as container_tag
-    session_id="conversation-456",  # Optional: groups memories by session
+    base_url=os.getenv("SMARAN_URL"),
+    user_id="user-123",
+    session_id="conversation-456",  # Optional: groups saved memories by session
 )
 
-# Create pipeline with memory
+# Add to Pipecat pipeline
 pipeline = Pipeline([
     transport.input(),
     stt,
-    user_context,
-    memory,  # Automatically retrieves and injects relevant memories
+    context_aggregator.user(),
+    memory,  # Automatically recalls and injects relevant memories
     llm,
     transport.output(),
+    context_aggregator.assistant(),
 ])
 ```
 
@@ -38,13 +39,13 @@ pipeline = Pipeline([
 
 ### Parameters
 
-| Parameter    | Type        | Required | Description                                                |
-| ------------ | ----------- | -------- | ---------------------------------------------------------- |
-| `user_id`    | str         | **Yes**  | User identifier - used as container_tag for memory scoping |
-| `session_id` | str         | No       | Session/conversation ID for grouping memories              |
-| `api_key`    | str         | No       | Smaran API key (or set `SMARAN_API_KEY` env var) |
-| `params`     | InputParams | No       | Advanced configuration                                     |
-| `base_url`   | str         | No       | Custom API endpoint                                        |
+| Parameter    | Type        | Required | Description                                          |
+| ------------ | ----------- | -------- | ----------------------------------------------------- |
+| `user_id`    | str         | **Yes**  | User identifier memories are scoped to                |
+| `session_id` | str         | No       | Session/conversation ID for grouping saved memories    |
+| `api_key`    | str         | No       | Smaran API key (or set `SMARAN_API_KEY` env var)       |
+| `base_url`   | str         | No       | Smaran API base URL (or set `SMARAN_URL` env var)      |
+| `params`     | InputParams | No       | Advanced configuration                                 |
 
 ### Advanced Configuration
 
@@ -55,48 +56,20 @@ memory = SmaranPipecatService(
     user_id="user-123",
     session_id="conv-456",
     params=SmaranPipecatService.InputParams(
-        search_limit=10,           # Max memories to retrieve
-        search_threshold=0.1,      # Similarity threshold
-        mode="full",               # "profile", "query", or "full"
+        search_limit=5,             # Max memories to recall per turn
         system_prompt="Based on previous conversations, I recall:\n\n",
+        inject_mode="auto",         # "auto", "system", or "user"
+        save_memory=True,           # Save new memories after each turn
     ),
 )
 ```
 
-### Memory Modes
-
-| Mode        | Static Profile | Dynamic Profile | Search Results |
-| ----------- | -------------- | --------------- | -------------- |
-| `"profile"` | Yes            | Yes             | No             |
-| `"query"`   | No             | No              | Yes            |
-| `"full"`    | Yes            | Yes             | Yes            |
-
 ## How It Works
 
-1. **Intercepts context frames** - Listens for `LLMContextFrame` in the pipeline
-2. **Tracks conversation** - Maintains clean conversation history (no injected memories)
-3. **Retrieves memories** - Queries `/v4/profile` API with user's message
-4. **Injects memories** - Formats and adds to LLM context as system message
-5. **Stores messages** - Sends last user message to Smaran (background, non-blocking)
-
-### What Gets Stored
-
-Only the last user message is sent to Smaran:
-
-```
-User: What's the weather like today?
-```
-
-Stored as:
-
-```json
-{
-  "content": "User: What's the weather like today?",
-  "container_tags": ["user-123"],
-  "custom_id": "conversation-456",
-  "metadata": { "platform": "pipecat" }
-}
-```
+1. **Intercepts context frames** — listens for `LLMContextFrame` in the pipeline
+2. **Recalls memories** — queries Smaran's `/v1/recall` API with the user's latest message
+3. **Injects memories** — formats recalled facts and adds them to the LLM context
+4. **Saves messages** — sends new user/assistant turns to Smaran's `/v1/memories` API in the background, non-blocking
 
 ## Full Example
 
@@ -107,8 +80,7 @@ from fastapi import FastAPI, WebSocket
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.task import PipelineTask
 from pipecat.pipeline.runner import PipelineRunner
-from pipecat.processors.aggregators.openai_llm_context import OpenAILLMContext
-from pipecat.services.google.gemini_live.llm import GeminiLiveLLMService
+from pipecat.processors.aggregators.llm_context import LLMContext, LLMContextAggregatorPair
 from pipecat.transports.websocket.fastapi import (
     FastAPIWebsocketTransport,
     FastAPIWebsocketParams,
@@ -126,16 +98,9 @@ async def websocket_endpoint(websocket: WebSocket):
         params=FastAPIWebsocketParams(audio_in_enabled=True, audio_out_enabled=True),
     )
 
-    # Gemini Live for speech-to-speech
-    llm = GeminiLiveLLMService(
-        api_key=os.getenv("GEMINI_API_KEY"),
-        model="models/gemini-2.5-flash-native-audio-preview-12-2025",
-    )
+    context = LLMContext([{"role": "system", "content": "You are a helpful assistant."}])
+    context_aggregator = LLMContextAggregatorPair(context)
 
-    context = OpenAILLMContext([{"role": "system", "content": "You are a helpful assistant."}])
-    context_aggregator = llm.create_context_aggregator(context)
-
-    # Smaran memory service
     memory = SmaranPipecatService(
         user_id="alice",
         session_id="session-123",
@@ -154,6 +119,10 @@ async def websocket_endpoint(websocket: WebSocket):
     task = PipelineTask(pipeline)
     await runner.run(task)
 ```
+
+Check [Pipecat's own docs](https://docs.pipecat.ai/) for the current LLM
+service and context-aggregator setup for your provider — that surface moves
+fast between Pipecat versions.
 
 ## License
 

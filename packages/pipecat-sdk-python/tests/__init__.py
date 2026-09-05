@@ -1,1 +1,1 @@
-"""Tests for Engram Pipecat SDK."""
+"""Tests for the Smaran Pipecat SDK."""

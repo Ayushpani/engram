@@ -3,24 +3,16 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "smaran-cartesia"
+name = "smaran"
 version = "0.1.0"
-description = "Smaran integration for Cartesia Line - memory-enhanced voice agents"
+description = "Python client for Smaran, voice-native memory infrastructure for AI agents"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
 authors = [
     { name = "Ayush Panigrahi", email = "ayushpanigrahi84@gmail.com" }
 ]
-keywords = [
-    "smaran",
-    "cartesia",
-    "line",
-    "memory",
-    "conversational-ai",
-    "llm",
-    "voice-ai",
-]
+keywords = ["smaran", "memory", "ai", "agents", "voice-ai", "llm"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -32,19 +24,14 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
-    "smaran>=0.1.0",
-    "cartesia-line>=0.2.0",
-    "pydantic>=2.10.0",
-    "loguru>=0.7.3",
+    "httpx>=0.27.0",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.3.5",
     "pytest-asyncio>=0.24.0",
-    "mypy>=1.14.1",
-    "black>=24.8.0",
-    "isort>=5.13.2",
+    "pytest-httpx>=0.30.0",
 ]
 
 [project.urls]
@@ -52,26 +39,7 @@ Homepage = "https://github.com/Ayushpani/smaran"
 Repository = "https://github.com/Ayushpani/smaran"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/smaran_cartesia"]
+packages = ["src/smaran"]
 
 [tool.hatch.build.targets.sdist]
-include = [
-    "/src",
-    "/tests",
-    "/README.md",
-    "/LICENSE",
-]
-
-[tool.black]
-line-length = 100
-target-version = ["py310"]
-
-[tool.isort]
-profile = "black"
-line_length = 100
-
-[tool.mypy]
-python_version = "3.10"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
+include = ["/src", "/tests", "/README.md", "/LICENSE"]

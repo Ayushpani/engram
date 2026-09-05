@@ -1,10 +1,10 @@
-"""Custom exceptions for Engram Cartesia integration."""
+"""Exceptions for the Smaran OpenAI integration."""
 
 from typing import Optional
 
 
-class EngramCartesiaError(Exception):
-    """Base exception for all Engram Cartesia errors."""
+class SmaranError(Exception):
+    """Base exception for all Smaran-related errors."""
 
     def __init__(self, message: str, original_error: Optional[Exception] = None):
         super().__init__(message)
@@ -17,20 +17,12 @@ class EngramCartesiaError(Exception):
         return self.message
 
 
-class ConfigurationError(EngramCartesiaError):
-    """Raised when there are configuration issues (e.g., missing API key, invalid params)."""
+class SmaranConfigurationError(SmaranError):
+    """Raised when there are configuration issues (e.g., missing API key)."""
 
 
-class MemoryRetrievalError(EngramCartesiaError):
-    """Raised when memory retrieval operations fail."""
-
-
-class MemoryStorageError(EngramCartesiaError):
-    """Raised when memory storage operations fail."""
-
-
-class APIError(EngramCartesiaError):
-    """Raised when Engram API requests fail."""
+class SmaranAPIError(SmaranError):
+    """Raised when Smaran API requests fail."""
 
     def __init__(
         self,
@@ -54,5 +46,9 @@ class APIError(EngramCartesiaError):
         return " | ".join(parts)
 
 
-class NetworkError(EngramCartesiaError):
+class SmaranMemoryOperationError(SmaranError):
+    """Raised when memory operations (recall, save) fail."""
+
+
+class SmaranNetworkError(SmaranError):
     """Raised when network operations fail."""

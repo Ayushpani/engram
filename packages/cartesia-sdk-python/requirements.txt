@@ -1,5 +1,5 @@
-# Core dependencies for engram-cartesia
-engram>=3.16.0
+# Core dependencies for smaran-cartesia
+smaran>=0.1.0
 pydantic>=2.10.0
 loguru>=0.7.3
 cartesia-line>=0.2.0
