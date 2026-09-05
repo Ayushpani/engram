@@ -685,11 +685,11 @@ export default function Landing() {
 
 				<div className="strip">
 					<div className="wrap strip-in">
-						<span className="stamp">Verified · CI</span>
+						<span className="stamp">Sandbox benchmark</span>
 						<div className="stat">
 							<b>Save p50</b>
 							<strong>
-								<span data-count="1.3" data-dec="1">
+								<span data-count="10.7" data-dec="1">
 									0
 								</span>
 								<u>ms</u>
@@ -698,26 +698,7 @@ export default function Landing() {
 						<div className="stat g">
 							<b>Recall p50</b>
 							<strong>
-								<span data-count="1.4" data-dec="1">
-									0
-								</span>
-								<u>ms</u>
-							</strong>
-						</div>
-						<div className="stat">
-							<b>Edge rerank</b>
-							<strong>
-								<span data-count="42" data-dec="0">
-									0
-								</span>
-								<u>ms</u>
-							</strong>
-						</div>
-						<div className="stat v">
-							<b>WASM dedup</b>
-							<strong>
-								&lt;
-								<span data-count="0.5" data-dec="1">
+								<span data-count="2.6" data-dec="1">
 									0
 								</span>
 								<u>ms</u>
@@ -733,7 +714,7 @@ export default function Landing() {
 									fontWeight: 400,
 								}}
 							>
-								measured on every commit
+								reproducible — see RESULTS.md
 							</strong>
 						</div>
 					</div>
@@ -812,7 +793,7 @@ export default function Landing() {
 								<span>
 									smaran voice layer — full recall, reranked, injected
 								</span>
-								<span className="tot">1.4ms</span>
+								<span className="tot">2.6ms</span>
 							</div>
 							<div className="bz-track">
 								<div
@@ -831,8 +812,8 @@ export default function Landing() {
 								</div>
 							</div>
 							<div className="bz-cap">
-								hot cache &lt;1ms · WASM dedup 0.4ms · micro-context &lt;150
-								tokens
+								sandbox benchmark, RESULTS.md · hot cache, reranked ·
+								micro-context &lt;150 tokens
 							</div>
 						</div>
 					</div>
@@ -892,11 +873,11 @@ export default function Landing() {
 						</div>
 						<div className="g">
 							<span className="k">Save</span>
-							<span className="v">1.3ms</span>
+							<span className="v">10.7ms</span>
 						</div>
 						<div className="g">
 							<span className="k">Recall</span>
-							<span className="v vg">1.4ms</span>
+							<span className="v vg">2.6ms</span>
 						</div>
 					</div>
 					<div className="st-rail" id="stRail">
@@ -982,12 +963,12 @@ export default function Landing() {
 								</h3>
 								<p>
 									An in-process cache in front of a Cloudflare cross-encoder
-									reranker. Numbers come from CI runs on every commit — not a
-									datasheet promise.
+									reranker. Numbers are from the sandbox benchmark in
+									RESULTS.md — reproducible, not a datasheet promise.
 								</p>
 							</div>
 							<span className="spec">
-								Rust WASM · in-process cache · CI-measured
+								Rust WASM · in-process cache · reproducible benchmark
 							</span>
 						</article>
 						<article className="stkc rv">
@@ -1081,9 +1062,9 @@ export default function Landing() {
 				<div className="tape-st">
 					<div className="tape-head">
 						<div className="rv">
-							<div className="eyebrow">03 — Proof</div>
+							<div className="eyebrow">03 — Demo</div>
 							<h2 className="big">
-								Tested on <em>actual</em> speech turns.
+								How self-correction <em>resolves.</em>
 							</h2>
 						</div>
 						<div
@@ -1128,65 +1109,47 @@ export default function Landing() {
 					<div className="t-track" id="tTrack">
 						{[
 							{
-								f: "order-confirm.wav",
+								f: "order-confirm",
 								b: "Passed",
 								u: "“confirm my order — one two three four, actually four three two one”",
 								del: "order #1234",
 								add: "order #4321",
-								asr: 1596,
-								sv: 31.7,
-								rc: 6.9,
 							},
 							{
-								f: "reschedule.wav",
+								f: "reschedule",
 								b: "Refined",
 								u: "“let's meet at three pm — sorry — three-thirty pm”",
 								del: "meeting 3:00pm",
 								add: "meeting 3:30pm",
-								asr: 1941,
-								sv: 13.9,
-								rc: 2.2,
 							},
 							{
-								f: "contact-update.wav",
+								f: "contact-update",
 								b: "Refined",
 								u: "“reply-to is old at ex, wait, new at ex",
 								del: "old@ex.com",
 								add: "new@ex.com",
-								asr: 1269,
-								sv: 11.2,
-								rc: 3.0,
 							},
 							{
-								f: "support-ticket.wav",
+								f: "support-ticket",
 								b: "Passed",
 								u: "“ticket ID is A-four-five-nine, wait, A-four-nine-five”",
 								del: "ticket A-459",
 								add: "ticket A-495",
-								asr: 1373,
-								sv: 8.7,
-								rc: 1.5,
 							},
 							{
-								f: "hindi-code-switch.wav",
+								f: "hindi-code-switch",
 								b: "Hindi + Eng",
 								hin: true,
 								u: "“delivery bhejo gate two par, actually gate three”",
 								del: "gate 2",
 								add: "gate 3",
-								asr: 1378,
-								sv: 10.7,
-								rc: 3.1,
 							},
 							{
-								f: "progressive-refine.wav",
+								f: "progressive-refine",
 								b: "Refined",
 								u: "“account owner is Acme, Acme Corp Private Limited actually”",
 								del: "Acme",
 								add: "Acme Corp Pvt Ltd",
-								asr: 1143,
-								sv: 8.3,
-								rc: 2.6,
 							},
 						].map((s) => (
 							<article key={s.f} className="ac" data-hover>
@@ -1207,9 +1170,8 @@ export default function Landing() {
 									<div className="ac-add">+ {s.add}</div>
 								</div>
 								<div className="ac-met">
-									<span>ASR {s.asr}ms</span>
-									<span>Save {s.sv}ms</span>
-									<b>Recall {s.rc}ms</b>
+									<span>Save 10.7ms</span>
+									<b>Recall 2.6ms</b>
 								</div>
 							</article>
 						))}
