@@ -7,7 +7,7 @@ import type {
 	GraphApiDocument,
 	GraphApiMemory,
 	MemoryRelation,
-} from "@smaran/memory-graph"
+} from "@smaranai/memory-graph"
 
 const PAGE_SIZE = 100
 

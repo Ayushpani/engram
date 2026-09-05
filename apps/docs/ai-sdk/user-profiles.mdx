@@ -16,7 +16,7 @@ The `withSmaran` middleware automatically injects user profiles into your LLM ca
 
 ```typescript
 import { generateText } from "ai"
-import { withSmaran } from "@smaran/tools/ai-sdk"
+import { withSmaran } from "@smaranai/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 // Wrap any model with Smaran middleware
@@ -137,7 +137,7 @@ Customize how memories are formatted and injected into the system prompt using t
 
 ```typescript
 import { generateText } from "ai"
-import { withSmaran, type MemoryPromptData } from "@smaran/tools/ai-sdk"
+import { withSmaran, type MemoryPromptData } from "@smaranai/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 const customPrompt = (data: MemoryPromptData) => `
@@ -347,7 +347,7 @@ The AI SDK middleware abstracts away the complexity of manual profile management
     Explore the underlying profile API
   </Card>
   
-  <Card title="NPM Package" icon="npm" href="https://www.npmjs.com/package/@smaran/tools">
+  <Card title="NPM Package" icon="npm" href="https://www.npmjs.com/package/@smaranai/tools">
     View the package on NPM
   </Card>
 </CardGroup>

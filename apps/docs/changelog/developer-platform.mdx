@@ -16,7 +16,7 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 - **PPTX Support:** PowerPoint files (`.pptx`) are now a supported content type for ingestion.
 - **Multiple containerTags on Scoped API Keys:** Scoped API keys can now be assigned to multiple container tags, allowing a single key to access several spaces.
 - **Documents Page in Console:** New dedicated documents browser in the console for viewing, filtering, and managing all ingested content.
-- **`@smaran/tools` v1.4.1:** Now exposes raw `searchResults` in `MemoryPromptData`, giving full control over how retrieved memories are formatted in prompts.
+- **`@smaranai/tools` v1.4.1:** Now exposes raw `searchResults` in `MemoryPromptData`, giving full control over how retrieved memories are formatted in prompts.
 
 ## March 12, 2026
 
@@ -30,7 +30,7 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 
 - **Delete Scoped API Keys:** New `DELETE` endpoint to disable scoped API keys programmatically.
 - **`smaran-agent-framework` Python Package:** Official Python package for using Smaran with Microsoft's Agent Framework — memory tools and middleware out of the box.
-- **OpenAI SDK Backfill:** Improved compatibility across `smaran-openai-sdk` (Python) and `@smaran/tools` (TypeScript) OpenAI integrations.
+- **OpenAI SDK Backfill:** Improved compatibility across `smaran-openai-sdk` (Python) and `@smaranai/tools` (TypeScript) OpenAI integrations.
 - **Bulk Delete in Nova:** Bulk document deletion now available in the Nova app interface.
 
 ## March 5, 2026
@@ -82,7 +82,7 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 - **Plugin Authentication System:** New auth system for external tool integrations, enabling secure plugin-to-API connections.
 - **Enterprise Plan Support:** Enterprise tier now available in the console with dedicated billing and support options.
 - **Plugin Catalog:** Dedicated plugin page with auth flows for Claude Code, OpenCode, and OpenClaw integrations.
-- **`@smaran/tools` — Strict Mode:** Strict mode support for OpenAI function calling, ensuring schema-validated tool calls.
+- **`@smaranai/tools` — Strict Mode:** Strict mode support for OpenAI function calling, ensuring schema-validated tool calls.
 
 ## January 14, 2026
 
@@ -96,17 +96,17 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 - **Container Tag Filters:** Filter documents by container tag in list and search endpoints.
 - **Pagination Improvements:** Improved pagination and document view across the console.
 - **`smaran-pipecat` Python Package:** New SDK for integrating Smaran with Pipecat voice AI pipelines, including Gemini Live speech-to-speech support.
-- **`@smaran/tools` — Prompt Templates:** Customize how memory context is formatted in AI SDK integrations with the new `promptTemplate` option.
+- **`@smaranai/tools` — Prompt Templates:** Customize how memory context is formatted in AI SDK integrations with the new `promptTemplate` option.
 
 ## December 30, 2025
 
 - **MCP 4.0:** Major MCP server update with session configuration, project-aware tools on every init, and backward-compatible 3.0 support. Includes the new `context` prompt for automatic user profile injection.
 - **S3 Connector:** New connector to sync documents from Amazon S3 buckets, with console UI for bucket configuration.
-- **Memory Graph Revamp:** Complete rewrite of `@smaran/memory-graph` with improved visualization and performance.
+- **Memory Graph Revamp:** Complete rewrite of `@smaranai/memory-graph` with improved visualization and performance.
 
 ## December 24, 2025
 
-- **`@smaran/tools` — Vercel AI SDK v5/v6:** Now supports both Vercel AI SDK v5 and v6, with automatic version detection.
+- **`@smaranai/tools` — Vercel AI SDK v5/v6:** Now supports both Vercel AI SDK v5 and v6, with automatic version detection.
 - **Conversation Support in SDKs:** `smaran` (TypeScript) and `smaran-openai-sdk` (Python) now support the conversations API for multi-turn chat with memory.
 - **MemoryBench:** New open-source benchmark suite for evaluating memory systems, with documentation and CLI.
 
@@ -129,13 +129,13 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 
 ## December 5, 2025
 
-- **`@smaran/tools` — Browser API Key Support:** `apiKey` can now be passed via options instead of relying on `process.env`, enabling browser-based usage of the tools package.
+- **`@smaranai/tools` — Browser API Key Support:** `apiKey` can now be passed via options instead of relying on `process.env`, enabling browser-based usage of the tools package.
 
 ## November 17, 2025
 
 - **Web Crawler Connector:** New connector to crawl and index entire websites with configurable depth and URL patterns.
-- **`@smaran/memory-graph` Package:** New package for building interactive graph visualizations of memory connections, with a standalone playground.
-- **OpenAI Responses API Support:** `@smaran/tools` OpenAI integration now supports the Responses API.
+- **`@smaranai/memory-graph` Package:** New package for building interactive graph visualizations of memory connections, with a standalone playground.
+- **OpenAI Responses API Support:** `@smaranai/tools` OpenAI integration now supports the Responses API.
 - **`smaran-openai-sdk` — Python Middleware:** New `withSmaran` middleware for the Python OpenAI SDK, enabling transparent memory injection into OpenAI API calls.
 - **Browser Extension Webpage Capture:** Chrome extension can now capture full webpage content with markdown conversion, not just bookmarks.
 - **Bulk Memory Optimization:** Memory creation now uses bulk inserts for significantly faster batch ingestion.
@@ -156,7 +156,7 @@ API updates, new endpoints, SDK releases, and developer-focused features.
 ## September 13, 2025
 
 - **Documentation v2.0:** Complete rewrite with comprehensive API references, cookbook recipes, and production-ready examples for TypeScript, Python, and cURL
-- **AI SDK Integration:** New `@smaran/tools/ai-sdk` package for native Vercel AI SDK integration with memory tools and infinite chat capabilities
+- **AI SDK Integration:** New `@smaranai/tools/ai-sdk` package for native Vercel AI SDK integration with memory tools and infinite chat capabilities
 - **Bulk Delete Endpoint:** New `DELETE /v3/documents/bulk` endpoint for efficient memory management
 
 ## September 5, 2025

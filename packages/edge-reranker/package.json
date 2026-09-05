@@ -1,5 +1,5 @@
 {
-  "name": "@smaran/edge-reranker",
+  "name": "@smaranai/edge-reranker",
   "version": "1.0.0",
   "description": "Blazing fast Edge-optimized Cross-Encoder Reranker using WASM",
   "main": "dist/index.js",

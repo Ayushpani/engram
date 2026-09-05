@@ -16,7 +16,7 @@
     "@ai-sdk/anthropic": "^3.0.15",
     "@ai-sdk/openai": "latest",
     "@anthropic-ai/sdk": "latest",
-    "@smaran/tools": "workspace:*",
+    "@smaranai/tools": "workspace:*",
     "ai": "latest",
     "dotenv": "latest",
     "openai": "latest",

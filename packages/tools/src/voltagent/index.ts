@@ -57,7 +57,7 @@ interface WithSmaranOptions<T extends VoltAgentConfig>
  * @example
  * Basic usage with profile memories:
  * ```typescript
- * import { withSmaran } from "@smaran/tools/voltagent"
+ * import { withSmaran } from "@smaranai/tools/voltagent"
  * import { Agent } from "@voltagent/core"
  * import { VercelAIProvider } from "@voltagent/vercel-ai"
  * import { openai } from "@ai-sdk/openai"

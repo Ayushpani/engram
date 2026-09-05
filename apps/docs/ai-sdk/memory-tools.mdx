@@ -11,7 +11,7 @@ Memory tools allow AI agents to search, add, and fetch memories.
 ```typescript
 import { streamText } from "ai"
 import { createOpenAI } from "@ai-sdk/openai"
-import { smaranTools } from "@smaran/tools/ai-sdk"
+import { smaranTools } from "@smaranai/tools/ai-sdk"
 
 const openai = createOpenAI({
   apiKey: "YOUR_OPENAI_KEY"
@@ -83,7 +83,7 @@ import {
   searchMemoriesTool,
   addMemoryTool,
   fetchMemoryTool
-} from "@smaran/tools/ai-sdk"
+} from "@smaranai/tools/ai-sdk"
 
 // Use only search tool
 const result = await streamText({

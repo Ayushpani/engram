@@ -1,4 +1,4 @@
-# `@repo/adapter-mastra`
+# `@smaranai/adapter-mastra`
 
 Memory tools for [Mastra](https://mastra.ai). Two shapes: raw
 descriptors you wire into your own `createTool` call, or a pass-through
@@ -8,8 +8,8 @@ builder that returns real `Tool` instances when you hand us Mastra's
 ```ts
 import { createTool } from "@mastra/core/tools"
 import { z } from "zod"
-import { Smaran } from "@repo/sdk-ts"
-import { buildMemoryTools } from "@repo/adapter-mastra"
+import { Smaran } from "@smaranai/sdk-ts"
+import { buildMemoryTools } from "@smaranai/adapter-mastra"
 
 const memory = new Smaran({ apiKey: process.env.SMARAN_API_KEY! })
 const scope = { userId: "u_123", sessionId: "sess_abc" }

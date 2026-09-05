@@ -43,7 +43,7 @@ interface AgentConfig {
  * @example
  * ```typescript
  * import { Agent } from "@mastra/core/agent"
- * import { withSmaran } from "@smaran/tools/mastra"
+ * import { withSmaran } from "@smaranai/tools/mastra"
  * import { openai } from "@ai-sdk/openai"
  *
  * const config = withSmaran(

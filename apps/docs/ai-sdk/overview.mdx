@@ -6,14 +6,14 @@ sidebarTitle: "Overview"
 
 The Smaran AI SDK provides native integration with Vercel's AI SDK through two approaches: **User Profiles** for automatic personalization and **Memory Tools** for agent-based interactions.
 
-<Card title="Smaran tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaran/tools">
+<Card title="Smaran tools on npm" icon="npm" href="https://www.npmjs.com/package/@smaranai/tools">
     Check out the NPM page for more details
 </Card>
 
 ## Installation
 
 ```bash
-npm install @smaran/tools
+npm install @smaranai/tools
 ```
 
 ## User Profiles with Middleware
@@ -22,7 +22,7 @@ Automatically inject user profiles into every LLM call for instant personalizati
 
 ```typescript
 import { generateText } from "ai"
-import { withSmaran } from "@smaran/tools/ai-sdk"
+import { withSmaran } from "@smaranai/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 // Wrap your model with Smaran - profiles are automatically injected
@@ -60,7 +60,7 @@ Add memory capabilities to AI agents with search, add, and fetch operations.
 ```typescript
 import { streamText } from "ai"
 import { createAnthropic } from "@ai-sdk/anthropic"
-import { smaranTools } from "@smaran/tools/ai-sdk"
+import { smaranTools } from "@smaranai/tools/ai-sdk"
 
 const anthropic = createAnthropic({
   apiKey: "YOUR_ANTHROPIC_KEY"

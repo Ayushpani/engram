@@ -7,7 +7,7 @@ import type { SmaranToolsConfig } from "./types"
 
 import "dotenv/config"
 
-describe("@smaran/tools", () => {
+describe("@smaranai/tools", () => {
 	// Required API keys - tests will fail if not provided
 	const testApiKey = process.env.SMARAN_API_KEY
 	const testOpenAIKey = process.env.OPENAI_API_KEY

@@ -1,25 +1,25 @@
-# @smaran/memory-graph
+# @smaranai/memory-graph
 
 Interactive graph visualization for documents and their memory connections.
 
-[![npm version](https://img.shields.io/npm/v/@smaran/memory-graph.svg)](https://www.npmjs.com/package/@smaran/memory-graph)
+[![npm version](https://img.shields.io/npm/v/@smaranai/memory-graph.svg)](https://www.npmjs.com/package/@smaranai/memory-graph)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Installation
 
 ```bash
-npm install @smaran/memory-graph
+npm install @smaranai/memory-graph
 # or
-bun add @smaran/memory-graph
+bun add @smaranai/memory-graph
 # or
-pnpm add @smaran/memory-graph
+pnpm add @smaranai/memory-graph
 ```
 
 ## Quick Start
 
 ```tsx
-import { MemoryGraph } from '@smaran/memory-graph';
-import type { DocumentWithMemories } from '@smaran/memory-graph';
+import { MemoryGraph } from '@smaranai/memory-graph';
+import type { DocumentWithMemories } from '@smaranai/memory-graph';
 
 function App() {
   const [documents, setDocuments] = useState<DocumentWithMemories[]>([]);

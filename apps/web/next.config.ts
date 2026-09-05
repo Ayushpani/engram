@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
 		ignoreBuildErrors: true,
 	},
 	transpilePackages: [
-		"@smaran/memory-graph",
+		"@smaranai/memory-graph",
 		"@tiptap/core",
 		"@tiptap/react",
 		"@tiptap/pm",

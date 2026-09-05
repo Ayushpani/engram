@@ -1,5 +1,5 @@
 {
-	"name": "@repo/sdk-ts",
+	"name": "@smaranai/sdk-ts",
 	"version": "0.1.0",
 	"private": true,
 	"type": "module",

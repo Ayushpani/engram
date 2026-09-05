@@ -1,4 +1,4 @@
-# `@repo/adapter-livekit`
+# `@smaranai/adapter-livekit`
 
 Memory for [LiveKit Agents](https://docs.livekit.io/agents/). Wraps the
 `StreamingSession` in a shape you plug into LiveKit's voice-pipeline hooks.
@@ -6,8 +6,8 @@ Works for Pipecat and any other agent runtime that emits partial + final
 transcript events plus function calls.
 
 ```ts
-import { Smaran } from "@repo/sdk-ts"
-import { LiveKitVoiceAdapter, memoryTools } from "@repo/adapter-livekit"
+import { Smaran } from "@smaranai/sdk-ts"
+import { LiveKitVoiceAdapter, memoryTools } from "@smaranai/adapter-livekit"
 
 const memory = new Smaran({ apiKey: process.env.SMARAN_API_KEY! })
 

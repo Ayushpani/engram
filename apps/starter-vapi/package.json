@@ -10,8 +10,8 @@
 		"check-types": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@repo/adapter-vapi": "workspace:*",
-		"@repo/sdk-ts": "workspace:*",
+		"@smaranai/adapter-vapi": "workspace:*",
+		"@smaranai/sdk-ts": "workspace:*",
 		"@repo/voice": "workspace:*",
 		"hono": "^4.11.1",
 		"zod": "^3.25.76"

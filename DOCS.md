@@ -15,7 +15,7 @@ has its own README with a runnable example.
 | --- | --- |
 | [`@repo/core`](./packages/core/README.md) | Provider-agnostic memory engine. Frozen `MemoryCore` / `MemoryStore` / `Embedder` / `Consolidator` contracts every adapter binds to. |
 | [`@repo/db`](./packages/db/README.md) | Drizzle schema + Supabase-backed `MemoryStore`. Graph store in `graph.ts`. |
-| [`@repo/sdk-ts`](./packages/sdk-ts/README.md) | Zero-dep TypeScript client for the API. |
+| [`@smaranai/sdk-ts`](./packages/sdk-ts/README.md) | Zero-dep TypeScript client for the API. |
 | [`@repo/voice`](./packages/voice/README.md) | HotCache, ASR scrubber, StreamingSession, barge-in rollback. |
 | [`@repo/language`](./packages/language/README.md) | Script/language detection, Hindi/Hinglish filler removal, heuristic NER, session coreference. |
 | [`@repo/data-pipeline`](./packages/data-pipeline/README.md) | PII scrubbing + training-pair extraction — feeds Phase 6 distilled-model training. |
@@ -25,19 +25,19 @@ has its own README with a runnable example.
 
 | Package | Providers covered |
 | --- | --- |
-| [`@repo/adapter-anthropic`](./packages/adapter-anthropic/README.md) | Anthropic Messages API + Claude Agent SDK. |
-| [`@repo/adapter-openai`](./packages/adapter-openai/README.md) | OpenAI Chat/Responses/Agents + Codex CLI + every OpenAI-compatible endpoint (Groq, Together, DeepSeek, xAI, Fireworks, Ollama, LM Studio, vLLM). |
-| [`@repo/adapter-google`](./packages/adapter-google/README.md) | Google Gemini + Agent Kit. |
-| [`@repo/adapter-vercel-ai`](./packages/adapter-vercel-ai/README.md) | Vercel AI SDK: `generateText`, `streamText`, Agent/Assistant runtimes. |
-| [`@repo/adapter-langgraph`](./packages/adapter-langgraph/README.md) | LangGraph.js — `memoryToolNodes`, `recallNode`, `memoryToolSchemas`. |
-| [`@repo/adapter-mastra`](./packages/adapter-mastra/README.md) | Mastra — descriptors and a builder for real `Tool` instances. |
+| [`@smaranai/adapter-anthropic`](./packages/adapter-anthropic/README.md) | Anthropic Messages API + Claude Agent SDK. |
+| [`@smaranai/adapter-openai`](./packages/adapter-openai/README.md) | OpenAI Chat/Responses/Agents + Codex CLI + every OpenAI-compatible endpoint (Groq, Together, DeepSeek, xAI, Fireworks, Ollama, LM Studio, vLLM). |
+| [`@smaranai/adapter-google`](./packages/adapter-google/README.md) | Google Gemini + Agent Kit. |
+| [`@smaranai/adapter-vercel-ai`](./packages/adapter-vercel-ai/README.md) | Vercel AI SDK: `generateText`, `streamText`, Agent/Assistant runtimes. |
+| [`@smaranai/adapter-langgraph`](./packages/adapter-langgraph/README.md) | LangGraph.js — `memoryToolNodes`, `recallNode`, `memoryToolSchemas`. |
+| [`@smaranai/adapter-mastra`](./packages/adapter-mastra/README.md) | Mastra — descriptors and a builder for real `Tool` instances. |
 
 ## Voice-platform adapters
 
 | Package | What it handles |
 | --- | --- |
-| [`@repo/adapter-vapi`](./packages/adapter-vapi/README.md) | Vapi server-URL webhook. Function calls → memory ops. Transcripts → StreamingSession. |
-| [`@repo/adapter-livekit`](./packages/adapter-livekit/README.md) | LiveKit Agents (works for Pipecat too). Four hooks: `onPartialTranscript`, `onFinalTranscript`, `handleFunctionCall`, `buildContextPrefix`. |
+| [`@smaranai/adapter-vapi`](./packages/adapter-vapi/README.md) | Vapi server-URL webhook. Function calls → memory ops. Transcripts → StreamingSession. |
+| [`@smaranai/adapter-livekit`](./packages/adapter-livekit/README.md) | LiveKit Agents (works for Pipecat too). Four hooks: `onPartialTranscript`, `onFinalTranscript`, `handleFunctionCall`, `buildContextPrefix`. |
 
 ## Applications
 

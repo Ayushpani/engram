@@ -1,5 +1,5 @@
 import { gateway, streamText, type ModelMessage } from "ai"
-import { withSmaran } from "@smaran/tools/ai-sdk"
+import { withSmaran } from "@smaranai/tools/ai-sdk"
 
 const model = withSmaran(gateway("google/gemini-2.5-flash"), {
 	containerTag: "user-1",

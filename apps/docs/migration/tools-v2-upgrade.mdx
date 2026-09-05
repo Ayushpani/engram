@@ -1,10 +1,10 @@
 ---
-title: 'Upgrading @smaran/tools to v2.0.0'
-description: 'Migrate your code from @smaran/tools 1.4.x to 2.0.0 — config-object signature, customId, and new defaults'
+title: 'Upgrading @smaranai/tools to v2.0.0'
+description: 'Migrate your code from @smaranai/tools 1.4.x to 2.0.0 — config-object signature, customId, and new defaults'
 sidebarTitle: 'Tools: v1.4 → 2.0'
 ---
 
-`@smaran/tools` v2.0.0 unifies the API across all four integrations (Vercel AI SDK, OpenAI, Mastra, VoltAgent) around a single config-object signature and a consistent conversation-grouping concept. This guide walks you through the breaking changes.
+`@smaranai/tools` v2.0.0 unifies the API across all four integrations (Vercel AI SDK, OpenAI, Mastra, VoltAgent) around a single config-object signature and a consistent conversation-grouping concept. This guide walks you through the breaking changes.
 
 <Note>
   This release is **breaking**. Update calls and re-test before bumping in
@@ -25,14 +25,14 @@ sidebarTitle: 'Tools: v1.4 → 2.0'
 ## Install
 
 ```bash
-npm install @smaran/tools@^2.0.0
+npm install @smaranai/tools@^2.0.0
 ```
 
 ## 1. Vercel AI SDK
 
 ```typescript
 // v1.4.x
-import { withSmaran } from '@smaran/tools/ai-sdk';
+import { withSmaran } from '@smaranai/tools/ai-sdk';
 
 const model = withSmaran(openai('gpt-4'), 'user-123', {
   conversationId: 'conv-456',
@@ -42,7 +42,7 @@ const model = withSmaran(openai('gpt-4'), 'user-123', {
 
 ```typescript
 // v2.0.0
-import { withSmaran } from '@smaran/tools/ai-sdk';
+import { withSmaran } from '@smaranai/tools/ai-sdk';
 
 const model = withSmaran(openai('gpt-4'), {
   containerTag: 'user-123',
@@ -60,7 +60,7 @@ const model = withSmaran(openai('gpt-4'), {
 
 ```typescript
 // v1.4.x
-import { withSmaran } from '@smaran/tools/openai';
+import { withSmaran } from '@smaranai/tools/openai';
 
 const client = withSmaran(openai, 'user-123', {
   conversationId: 'conv-456',
@@ -69,7 +69,7 @@ const client = withSmaran(openai, 'user-123', {
 
 ```typescript
 // v2.0.0
-import { withSmaran } from '@smaran/tools/openai';
+import { withSmaran } from '@smaranai/tools/openai';
 
 const client = withSmaran(openai, {
   containerTag: 'user-123',
@@ -88,7 +88,7 @@ Processor constructors and factory functions both moved to a single options argu
 import {
   SmaranInputProcessor,
   createSmaranOutputProcessor,
-} from '@smaran/tools/mastra';
+} from '@smaranai/tools/mastra';
 
 const input = new SmaranInputProcessor('user-123', {
   mode: 'full',
@@ -105,7 +105,7 @@ const output = createSmaranOutputProcessor('user-123', {
 import {
   SmaranInputProcessor,
   createSmaranOutputProcessor,
-} from '@smaran/tools/mastra';
+} from '@smaranai/tools/mastra';
 
 const input = new SmaranInputProcessor({
   containerTag: 'user-123',
@@ -154,7 +154,7 @@ In v1.4.x the Vercel middleware fell back to `client.add` with a synthesized `cu
 
 <Steps>
   <Step title="Bump the dependency">
-    `npm install @smaran/tools@^2.0.0`
+    `npm install @smaranai/tools@^2.0.0`
   </Step>
   <Step title="Find every withSmaran / processor call">
     Grep your codebase for `withSmaran(`, `SmaranInputProcessor`,

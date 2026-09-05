@@ -15,7 +15,7 @@ Build an AI assistant that remembers user preferences and past interactions:
 ```typescript Next.js API Route
 import { streamText } from 'ai'
 import { createAnthropic } from '@ai-sdk/anthropic'
-import { smaranTools } from '@smaran/tools/ai-sdk'
+import { smaranTools } from '@smaranai/tools/ai-sdk'
 
 const anthropic = createAnthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!
@@ -88,7 +88,7 @@ Build a customer support system that remembers customer history:
 ```typescript
 import { streamText } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
-import { smaranTools } from '@smaran/tools/ai-sdk'
+import { smaranTools } from '@smaranai/tools/ai-sdk'
 
 const openai = createOpenAI({
   apiKey: process.env.OPENAI_API_KEY!
@@ -121,7 +121,7 @@ Build an assistant that learns from multiple users but keeps data separate:
 ```typescript
 import { streamText } from 'ai'
 import { createAnthropic } from '@ai-sdk/anthropic'
-import { smaranTools } from '@smaran/tools/ai-sdk'
+import { smaranTools } from '@smaranai/tools/ai-sdk'
 
 const anthropic = createAnthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!
@@ -156,7 +156,7 @@ Combine file upload with memory tools for research assistance:
 ```typescript API Route
 import { streamText } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
-import { smaranTools } from '@smaran/tools/ai-sdk'
+import { smaranTools } from '@smaranai/tools/ai-sdk'
 
 const openai = createOpenAI({
   apiKey: process.env.OPENAI_API_KEY!
@@ -183,7 +183,7 @@ export async function POST(request: Request) {
 ```
 
 ```typescript File Upload Handler
-import { addMemory } from '@smaran/tools'
+import { addMemory } from '@smaranai/tools'
 
 export async function POST(request: Request) {
   const formData = await request.formData()
@@ -221,7 +221,7 @@ import {
   smaranTools,
   searchMemoriesTool,
   addMemoryTool
-} from '@smaran/tools/ai-sdk'
+} from '@smaranai/tools/ai-sdk'
 
 const anthropic = createAnthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!
@@ -276,7 +276,7 @@ Combine Smaran tools with your own custom tools:
 ```typescript
 import { streamText } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
-import { smaranTools } from '@smaran/tools/ai-sdk'
+import { smaranTools } from '@smaranai/tools/ai-sdk'
 import { z } from 'zod'
 
 const openai = createOpenAI({

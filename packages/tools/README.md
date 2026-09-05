@@ -1,4 +1,4 @@
-# @smaran/tools
+# @smaranai/tools
 
 Memory tools for AI SDK, OpenAI, and Mastra with smaran
 
@@ -7,20 +7,20 @@ This package provides smaran tools for AI SDK, OpenAI, and Mastra through dedica
 ## Installation
 
 ```bash
-npm install @smaran/tools
+npm install @smaranai/tools
 ```
 
 ## Usage
 
 The package provides three submodule imports:
-- `@smaran/tools/ai-sdk` - For use with the AI SDK framework (includes `withSmaran` middleware)
-- `@smaran/tools/openai` - For use with OpenAI SDK (includes `withSmaran` middleware and function calling tools)
-- `@smaran/tools/mastra` - For use with Mastra AI agents (includes `withSmaran` wrapper and processors)
+- `@smaranai/tools/ai-sdk` - For use with the AI SDK framework (includes `withSmaran` middleware)
+- `@smaranai/tools/openai` - For use with OpenAI SDK (includes `withSmaran` middleware and function calling tools)
+- `@smaranai/tools/mastra` - For use with Mastra AI agents (includes `withSmaran` wrapper and processors)
 
 ### AI SDK Usage
 
 ```typescript
-import { smaranTools, searchMemoriesTool, addMemoryTool } from "@smaran/tools/ai-sdk"
+import { smaranTools, searchMemoriesTool, addMemoryTool } from "@smaranai/tools/ai-sdk"
 import { createOpenAI } from "@ai-sdk/openai"
 import { generateText } from "ai"
 
@@ -63,7 +63,7 @@ const addTool = addMemoryTool(process.env.SMARAN_API_KEY!, {
 
 ```typescript
 import { generateText } from "ai"
-import { withSmaran } from "@smaran/tools/ai-sdk"
+import { withSmaran } from "@smaranai/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 const modelWithMemory = withSmaran(openai("gpt-5"), {
@@ -85,7 +85,7 @@ Enable verbose logging to see detailed information about memory search and trans
 
 ```typescript
 import { generateText } from "ai"
-import { withSmaran } from "@smaran/tools/ai-sdk"
+import { withSmaran } from "@smaranai/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 const modelWithMemory = withSmaran(openai("gpt-5"), {
@@ -119,7 +119,7 @@ The middleware supports different modes for memory retrieval:
 **Profile Mode (Default)** - Retrieves user profile memories without query filtering:
 ```typescript
 import { generateText } from "ai"
-import { withSmaran } from "@smaran/tools/ai-sdk"
+import { withSmaran } from "@smaranai/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 // Uses profile mode by default - gets all user profile memories
@@ -144,7 +144,7 @@ const result = await generateText({
 **Query Mode** - Searches memories based on the user's message:
 ```typescript
 import { generateText } from "ai"
-import { withSmaran } from "@smaran/tools/ai-sdk"
+import { withSmaran } from "@smaranai/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 const modelWithQuery = withSmaran(openai("gpt-4"), {
@@ -162,7 +162,7 @@ const result = await generateText({
 **Full Mode** - Combines both profile and query results:
 ```typescript
 import { generateText } from "ai"
-import { withSmaran } from "@smaran/tools/ai-sdk"
+import { withSmaran } from "@smaranai/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 const modelWithFull = withSmaran(openai("gpt-4"), {
@@ -184,7 +184,7 @@ The middleware can automatically save user messages as memories:
 **Always Save Memories** - Automatically stores every user message as a memory:
 ```typescript
 import { generateText } from "ai"
-import { withSmaran } from "@smaran/tools/ai-sdk"
+import { withSmaran } from "@smaranai/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 const modelWithAutoSave = withSmaran(openai("gpt-4"), {
@@ -229,7 +229,7 @@ Customize how memories are formatted and injected into the system prompt using t
 
 ```typescript
 import { generateText } from "ai"
-import { withSmaran, type MemoryPromptData } from "@smaran/tools/ai-sdk"
+import { withSmaran, type MemoryPromptData } from "@smaranai/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 const customPrompt = (data: MemoryPromptData) => `
@@ -265,7 +265,7 @@ The `MemoryPromptData` object provides:
 The `withSmaran` function creates an OpenAI client with SuperMemory middleware automatically injected:
 
 ```typescript
-import { withSmaran } from "@smaran/tools/openai"
+import { withSmaran } from "@smaranai/tools/openai"
 
 // Create OpenAI client with smaran middleware
 const openaiWithSmaran = withSmaran(openai, {
@@ -307,7 +307,7 @@ Here's a complete example for a Next.js API route:
 
 ```typescript
 // app/api/chat/route.ts
-import { withSmaran } from "@smaran/tools/openai"
+import { withSmaran } from "@smaranai/tools/openai"
 import type { OpenAI as OpenAIType } from "openai"
 
 export async function POST(req: Request) {
@@ -337,7 +337,7 @@ export async function POST(req: Request) {
 ### OpenAI Function Calling Usage
 
 ```typescript
-import { smaranTools, getToolDefinitions, createToolCallExecutor } from "@smaran/tools/openai"
+import { smaranTools, getToolDefinitions, createToolCallExecutor } from "@smaranai/tools/openai"
 import OpenAI from "openai"
 
 const client = new OpenAI({
@@ -399,7 +399,7 @@ The simplest way to add memory to a Mastra agent - wrap your config before creat
 
 ```typescript
 import { Agent } from "@mastra/core/agent"
-import { withSmaran } from "@smaran/tools/mastra"
+import { withSmaran } from "@smaranai/tools/mastra"
 import { openai } from "@ai-sdk/openai"
 
 // Create agent with memory-enhanced config
@@ -427,7 +427,7 @@ For fine-grained control, use processors directly:
 
 ```typescript
 import { Agent } from "@mastra/core/agent"
-import { createSmaranProcessors } from "@smaran/tools/mastra"
+import { createSmaranProcessors } from "@smaranai/tools/mastra"
 import { openai } from "@ai-sdk/openai"
 
 const { input, output } = createSmaranProcessors({
@@ -455,7 +455,7 @@ Here's a full example showing a multi-turn conversation with memory:
 
 ```typescript
 import { Agent } from "@mastra/core/agent"
-import { createSmaranProcessors } from "@smaran/tools/mastra"
+import { createSmaranProcessors } from "@smaranai/tools/mastra"
 import { openai } from "@ai-sdk/openai"
 
 async function main() {
@@ -527,7 +527,7 @@ const { input } = createSmaranProcessors({
 Customize how memories are formatted in the system prompt:
 
 ```typescript
-import { createSmaranProcessors, type MemoryPromptData } from "@smaran/tools/mastra"
+import { createSmaranProcessors, type MemoryPromptData } from "@smaranai/tools/mastra"
 
 const customTemplate = (data: MemoryPromptData) => `
 <user_context>
@@ -551,7 +551,7 @@ For server setups where one agent instance handles multiple concurrent conversat
 ```typescript
 import { Agent } from "@mastra/core/agent"
 import { RequestContext, MASTRA_THREAD_ID_KEY } from "@mastra/core/request-context"
-import { createSmaranProcessors } from "@smaran/tools/mastra"
+import { createSmaranProcessors } from "@smaranai/tools/mastra"
 
 const { input, output } = createSmaranProcessors({
   containerTag: "user-123",
@@ -615,7 +615,7 @@ interface SmaranToolsConfig {
 When using OpenAI-compatible providers with strict schema validation (e.g., OpenRouter with Azure OpenAI backend), enable strict mode to ensure all schema properties are included in the `required` array:
 
 ```typescript
-import { searchMemoriesTool, addMemoryTool } from "@smaran/tools/ai-sdk"
+import { searchMemoriesTool, addMemoryTool } from "@smaranai/tools/ai-sdk"
 import { createOpenRouter } from "@openrouter/ai-sdk-provider"
 import { streamText } from "ai"
 
@@ -692,14 +692,14 @@ Enable Claude to store and retrieve persistent memory across conversations using
 ### Installation
 
 ```bash
-npm install @smaran/tools @anthropic-ai/sdk
+npm install @smaranai/tools @anthropic-ai/sdk
 ```
 
 ### Basic Usage
 
 ```typescript
 import Anthropic from '@anthropic-ai/sdk'
-import { createClaudeMemoryTool } from '@smaran/tools/claude-memory'
+import { createClaudeMemoryTool } from '@smaranai/tools/claude-memory'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,

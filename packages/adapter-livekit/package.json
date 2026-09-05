@@ -1,5 +1,5 @@
 {
-	"name": "@repo/adapter-livekit",
+	"name": "@smaranai/adapter-livekit",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",

@@ -1,6 +1,6 @@
 import "dotenv/config"
 import OpenAI from "openai"
-import { withSmaran } from "@smaran/tools/openai"
+import { withSmaran } from "@smaranai/tools/openai"
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 

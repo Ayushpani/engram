@@ -1268,8 +1268,8 @@ export default function Landing() {
 						</div>
 						<div className="cpanel on" id="p-livekit">
 							<pre>
-								<code>{`import { LiveKitMemoryAdapter } from "@repo/adapter-livekit";
-import { createMemoryClient } from "@repo/sdk-ts";
+								<code>{`import { LiveKitMemoryAdapter } from "@smaranai/adapter-livekit";
+import { createMemoryClient } from "@smaranai/sdk-ts";
 
 const memory = createMemoryClient({ apiKey: process.env.SMARAN_API_KEY });
 const adapter = new LiveKitMemoryAdapter(memory, { sessionId, userId });
@@ -1283,8 +1283,8 @@ agent.on("user_speech_committed", async (turn) => {
 						</div>
 						<div className="cpanel" id="p-vapi">
 							<pre>
-								<code>{`import { handleVapiWebhook } from "@repo/adapter-vapi";
-import { createMemoryClient } from "@repo/sdk-ts";
+								<code>{`import { handleVapiWebhook } from "@smaranai/adapter-vapi";
+import { createMemoryClient } from "@smaranai/sdk-ts";
 
 const smaran = createMemoryClient({ apiKey: process.env.SMARAN_API_KEY });
 
@@ -1296,7 +1296,7 @@ app.post("/vapi-webhook", async (req, res) => {
 						</div>
 						<div className="cpanel" id="p-claude">
 							<pre>
-								<code>{`import { withRecalledContext, memoryTools } from "@repo/adapter-anthropic";
+								<code>{`import { withRecalledContext, memoryTools } from "@smaranai/adapter-anthropic";
 
 const { system, messages } = await withRecalledContext(smaran, {
   system: "You are an empathetic voice assistant.",
@@ -1312,7 +1312,7 @@ const res = await anthropic.messages.create({
 						</div>
 						<div className="cpanel" id="p-openai">
 							<pre>
-								<code>{`import { OpenAIAdapter } from "@repo/adapter-openai";
+								<code>{`import { OpenAIAdapter } from "@smaranai/adapter-openai";
 
 const memory = new OpenAIAdapter(smaran, { userId, sessionId });
 

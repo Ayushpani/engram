@@ -1,5 +1,5 @@
-import { handleVapiEvent, memoryFunctions } from "@repo/adapter-vapi"
-import { Smaran } from "@repo/sdk-ts"
+import { handleVapiEvent, memoryFunctions } from "@smaranai/adapter-vapi"
+import { Smaran } from "@smaranai/sdk-ts"
 import { type CachedRecall, HotCache, StreamingSession } from "@repo/voice"
 import { Hono } from "hono"
 

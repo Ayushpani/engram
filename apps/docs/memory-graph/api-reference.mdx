@@ -226,7 +226,7 @@ Besides `MemoryGraph`, the package exports individual components for advanced us
 Low-level canvas renderer. Not recommended for direct use.
 
 ```typescript
-import { GraphCanvas } from '@smaran/memory-graph';
+import { GraphCanvas } from '@smaranai/memory-graph';
 ```
 
 ### Legend
@@ -234,7 +234,7 @@ import { GraphCanvas } from '@smaran/memory-graph';
 Graph legend showing node types and counts.
 
 ```typescript
-import { Legend } from '@smaran/memory-graph';
+import { Legend } from '@smaranai/memory-graph';
 ```
 
 ### LoadingIndicator
@@ -242,7 +242,7 @@ import { Legend } from '@smaran/memory-graph';
 Loading state indicator with progress counter.
 
 ```typescript
-import { LoadingIndicator } from '@smaran/memory-graph';
+import { LoadingIndicator } from '@smaranai/memory-graph';
 ```
 
 ### NodeDetailPanel
@@ -250,7 +250,7 @@ import { LoadingIndicator } from '@smaran/memory-graph';
 Side panel showing node details when clicked.
 
 ```typescript
-import { NodeDetailPanel } from '@smaran/memory-graph';
+import { NodeDetailPanel } from '@smaranai/memory-graph';
 ```
 
 ### SpacesDropdown
@@ -258,7 +258,7 @@ import { NodeDetailPanel } from '@smaran/memory-graph';
 Space filter dropdown.
 
 ```typescript
-import { SpacesDropdown } from '@smaran/memory-graph';
+import { SpacesDropdown } from '@smaranai/memory-graph';
 ```
 
 ## Exported Hooks
@@ -268,7 +268,7 @@ import { SpacesDropdown } from '@smaran/memory-graph';
 Processes documents into graph nodes and edges.
 
 ```typescript
-import { useGraphData } from '@smaran/memory-graph';
+import { useGraphData } from '@smaranai/memory-graph';
 
 const { nodes, edges } = useGraphData(
   data,
@@ -284,7 +284,7 @@ const { nodes, edges } = useGraphData(
 Handles pan, zoom, and node interactions.
 
 ```typescript
-import { useGraphInteractions } from '@smaran/memory-graph';
+import { useGraphInteractions } from '@smaranai/memory-graph';
 
 const {
   panX,
@@ -304,7 +304,7 @@ const {
 Color palette used throughout the graph:
 
 ```typescript
-import { colors } from '@smaran/memory-graph';
+import { colors } from '@smaranai/memory-graph';
 
 colors.document.primary;   // Document fill color
 colors.memory.primary;     // Memory fill color
@@ -316,7 +316,7 @@ colors.connection.strong;  // Strong edge color
 Initial zoom and pan settings for variants:
 
 ```typescript
-import { GRAPH_SETTINGS } from '@smaran/memory-graph';
+import { GRAPH_SETTINGS } from '@smaranai/memory-graph';
 
 GRAPH_SETTINGS.console.initialZoom;   // 0.8
 GRAPH_SETTINGS.consumer.initialZoom;  // 0.5
@@ -327,7 +327,7 @@ GRAPH_SETTINGS.consumer.initialZoom;  // 0.5
 Spatial layout configuration:
 
 ```typescript
-import { LAYOUT_CONSTANTS } from '@smaran/memory-graph';
+import { LAYOUT_CONSTANTS } from '@smaranai/memory-graph';
 
 LAYOUT_CONSTANTS.clusterRadius;       // Memory orbit radius
 LAYOUT_CONSTANTS.documentSpacing;     // Distance between documents

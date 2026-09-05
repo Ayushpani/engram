@@ -89,7 +89,7 @@ interface WrapVercelLanguageModelOptions {
  *
  * @example
  * ```typescript
- * import { withSmaran } from "@smaran/tools/ai-sdk"
+ * import { withSmaran } from "@smaranai/tools/ai-sdk"
  * import { openai } from "@ai-sdk/openai"
  *
  * const modelWithMemory = withSmaran(openai("gpt-4"), {

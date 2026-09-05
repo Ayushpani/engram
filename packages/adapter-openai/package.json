@@ -1,5 +1,5 @@
 {
-	"name": "@repo/adapter-openai",
+	"name": "@smaranai/adapter-openai",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
