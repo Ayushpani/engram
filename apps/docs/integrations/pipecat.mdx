@@ -1,38 +1,38 @@
 ---
 title: "Pipecat"
 sidebarTitle: "Pipecat (Voice)"
-description: "Integrate Engram with Pipecat for conversational memory in voice AI agents"
+description: "Integrate Smaran with Pipecat for conversational memory in voice AI agents"
 icon: "/images/pipecat.svg"
 ---
 
-Engram integrates with [Pipecat](https://github.com/pipecat-ai/pipecat), providing long-term memory capabilities for voice AI agents. Your Pipecat applications will remember past conversations and provide personalized responses based on user history.
+Smaran integrates with [Pipecat](https://github.com/pipecat-ai/pipecat), providing long-term memory capabilities for voice AI agents. Your Pipecat applications will remember past conversations and provide personalized responses based on user history.
 
 ## Installation
 
-To use Engram with Pipecat, install the required dependencies:
+To use Smaran with Pipecat, install the required dependencies:
 
 ```bash
-pip install engram-pipecat
+pip install smaran-pipecat
 ```
 
 Set up your API key as an environment variable:
 
 ```bash
-export ENGRAM_API_KEY=your_engram_api_key
+export SMARAN_API_KEY=your_smaran_api_key
 ```
 
-You can obtain an API key from [console.engram.ai](https://console.engram.ai).
+You can obtain an API key from [console.smaran.ai](https://console.smaran.ai).
 
 ## Configuration
 
-Engram integration is provided through the `EngramPipecatService` class in Pipecat:
+Smaran integration is provided through the `SmaranPipecatService` class in Pipecat:
 
 ```python
-from engram_pipecat import EngramPipecatService
-from engram_pipecat.service import InputParams
+from smaran_pipecat import SmaranPipecatService
+from smaran_pipecat.service import InputParams
 
-memory = EngramPipecatService(
-    api_key=os.getenv("ENGRAM_API_KEY"),
+memory = SmaranPipecatService(
+    api_key=os.getenv("SMARAN_API_KEY"),
     user_id="unique_user_id",
     session_id="session_123",
     params=InputParams(
@@ -46,14 +46,14 @@ memory = EngramPipecatService(
 
 ## Pipeline Integration
 
-The `EngramPipecatService` should be positioned between your context aggregator and LLM service in the Pipecat pipeline:
+The `SmaranPipecatService` should be positioned between your context aggregator and LLM service in the Pipecat pipeline:
 
 ```python
 pipeline = Pipeline([
     transport.input(),
     stt,                           # Speech-to-text
     context_aggregator.user(),
-    memory,                        # <- Engram memory service
+    memory,                        # <- Smaran memory service
     llm,
     tts,                           # Text-to-speech
     transport.output(),
@@ -63,11 +63,11 @@ pipeline = Pipeline([
 
 ## How It Works
 
-When integrated with Pipecat, Engram provides two key functionalities:
+When integrated with Pipecat, Smaran provides two key functionalities:
 
 ### 1. Memory Retrieval
 
-When a user message is detected, Engram retrieves relevant memories:
+When a user message is detected, Smaran retrieves relevant memories:
 
 - **Static Profile**: Persistent facts about the user
 - **Dynamic Profile**: Recent context and preferences
@@ -124,18 +124,18 @@ The `inject_mode` parameter controls how memories are added to the LLM context:
 For speech-to-speech models like Gemini Live, the SDK **automatically detects** audio frames and injects memories into the system prompt. No configuration needed:
 
 ```python
-from engram_pipecat import EngramPipecatService
+from smaran_pipecat import SmaranPipecatService
 
 # Auto-detection works out of the box
-memory = EngramPipecatService(
-    api_key=os.getenv("ENGRAM_API_KEY"),
+memory = SmaranPipecatService(
+    api_key=os.getenv("SMARAN_API_KEY"),
     user_id="unique_user_id",
 )
 ```
 
 ## Example: Voice Agent with Memory
 
-Here's a complete example of a Pipecat voice agent with Engram integration:
+Here's a complete example of a Pipecat voice agent with Smaran integration:
 
 ```python
 import os
@@ -157,8 +157,8 @@ from pipecat.transports.websocket.fastapi import (
     FastAPIWebsocketTransport,
 )
 
-from engram_pipecat import EngramPipecatService
-from engram_pipecat.service import InputParams
+from smaran_pipecat import SmaranPipecatService
+from smaran_pipecat.service import InputParams
 
 app = FastAPI()
 
@@ -184,8 +184,8 @@ async def run_bot(websocket_client, user_id: str, session_id: str):
     llm = OpenAILLMService(api_key=os.getenv("OPENAI_API_KEY"), model="gpt-5-mini")
     tts = OpenAITTSService(api_key=os.getenv("OPENAI_API_KEY"), voice="alloy")
 
-    # Engram memory service
-    memory = EngramPipecatService(
+    # Smaran memory service
+    memory = SmaranPipecatService(
         user_id=user_id,
         session_id=session_id,
         params=InputParams(
@@ -232,12 +232,12 @@ if __name__ == "__main__":
 
 ## Example: Gemini Live with Memory
 
-For a complete example using Gemini Live speech-to-speech with Engram, check out the reference implementation:
+For a complete example using Gemini Live speech-to-speech with Smaran, check out the reference implementation:
 
 <Card
   title="Pipecat Memory Example"
   icon="github"
-  href="https://github.com/engramai/pipecat-memory"
+  href="https://github.com/smaranai/pipecat-memory"
 >
   Full working example with Gemini Live, including frontend and backend code.
 </Card>

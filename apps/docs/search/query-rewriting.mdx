@@ -6,11 +6,11 @@ description: "Improve search accuracy with automatic query expansion and rewriti
 
 ![query rewriting](/images/query-rewriting.png)
 
-Query rewriting automatically generates multiple variations of your search query to improve result coverage and accuracy. Engram creates several rewrites, searches through all of them, then merges and deduplicates the results.
+Query rewriting automatically generates multiple variations of your search query to improve result coverage and accuracy. Smaran creates several rewrites, searches through all of them, then merges and deduplicates the results.
 
 ## How Query Rewriting Works
 
-When you enable `rewriteQuery: true`, Engram:
+When you enable `rewriteQuery: true`, Smaran:
 
 1. **Analyzes your original query** for intent and key concepts
 2. **Generates multiple rewrites** with different phrasings and synonyms
@@ -29,10 +29,10 @@ This process adds ~400ms latency but significantly improves result quality, espe
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Engram from 'engram';
+    import Smaran from 'smaran';
 
-    const client = new Engram({
-      apiKey: process.env.ENGRAM_API_KEY!
+    const client = new Smaran({
+      apiKey: process.env.SMARAN_API_KEY!
     });
 
     // Without query rewriting
@@ -55,10 +55,10 @@ This process adds ~400ms latency but significantly improves result quality, espe
   </Tab>
   <Tab title="Python">
     ```python
-    from engram import Engram
+    from smaran import Smaran
     import os
 
-    client = Engram(api_key=os.environ.get("ENGRAM_API_KEY"))
+    client = Smaran(api_key=os.environ.get("SMARAN_API_KEY"))
 
     # Without query rewriting
     basic_results = client.search.documents(
@@ -82,8 +82,8 @@ This process adds ~400ms latency but significantly improves result quality, espe
     ```bash
     # Without query rewriting
     echo "Basic search:"
-    curl -X POST "https://api.engram.ai/v3/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "How do transformers work in AI?",
@@ -93,8 +93,8 @@ This process adds ~400ms latency but significantly improves result quality, espe
 
     # With query rewriting
     echo "Rewritten search:"
-    curl -X POST "https://api.engram.ai/v3/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "How do transformers work in AI?",
@@ -161,8 +161,8 @@ Query rewriting excels at converting conversational questions into effective sea
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "What are the best practices for training deep learning models?",
@@ -248,8 +248,8 @@ Query rewriting helps find content using different technical terminologies:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "CNN architecture patterns",
@@ -336,8 +336,8 @@ Query rewriting works with both document and memory search:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "explain quantum entanglement simply",
@@ -422,8 +422,8 @@ Query rewriting excels at handling queries with multiple concepts:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "machine learning bias fairness algorithmic discrimination",

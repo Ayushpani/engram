@@ -1,6 +1,6 @@
 {
-	"name": "engram-browser-extension",
-	"description": "Browser extension for the engram app",
+	"name": "smaran-browser-extension",
+	"description": "Browser extension for the smaran app",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",

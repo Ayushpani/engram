@@ -16,9 +16,9 @@ Search through your memories and documents with a single API call.
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Engram from 'engram';
+    import Smaran from 'smaran';
 
-    const client = new Engram();
+    const client = new Smaran();
 
     const results = await client.search.memories({
       q: "machine learning",
@@ -34,9 +34,9 @@ Search through your memories and documents with a single API call.
   </Tab>
   <Tab title="Python">
     ```python
-    from engram import Engram
+    from smaran import Smaran
 
-    client = Engram()
+    client = Smaran()
 
     results = client.search.memories(
         q="machine learning",
@@ -51,8 +51,8 @@ Search through your memories and documents with a single API call.
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "machine learning",

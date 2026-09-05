@@ -7,11 +7,11 @@ sidebarTitle: "Overview"
 The Memory Router is a transparent proxy that sits between your application and your LLM provider, automatically managing context and memories without requiring any code changes.
 
 <Note>
-**Live Demo**: Try the Memory Router at [engram.chat](https://engram.chat) to see it in action.
+**Live Demo**: Try the Memory Router at [smaran.chat](https://smaran.chat) to see it in action.
 </Note>
 
 <Tip>
-**Using Vercel AI SDK?** Check out our [AI SDK integration](/integrations/ai-sdk) for the cleanest implementation with `@engram/tools/ai-sdk` - it's our recommended approach for new projects.
+**Using Vercel AI SDK?** Check out our [AI SDK integration](/integrations/ai-sdk) for the cleanest implementation with `@smaran/tools/ai-sdk` - it's our recommended approach for new projects.
 </Tip>
 
 ## What is the Memory Router?
@@ -27,11 +27,11 @@ The Memory Router gives your LLM applications:
 
 <Steps>
   <Step title="Proxy Request">
-    Your application sends requests to Engram instead of directly to your LLM provider
+    Your application sends requests to Smaran instead of directly to your LLM provider
   </Step>
 
   <Step title="Context Management">
-    Engram automatically:
+    Smaran automatically:
     - Removes unnecessary context from long conversations
     - Searches relevant memories from previous interactions
     - Appends the most relevant context to your prompt
@@ -53,7 +53,7 @@ The Memory Router gives your LLM applications:
 - **Drop-in Integration**: Just change your base URL - no other code changes needed
 - **Provider Agnostic**: Works with OpenAI, Anthropic, Google, Groq, and more
 - **Shared Memory Pool**: Memories created via API are available to the Router and vice versa
-- **Automatic Fallback**: If Engram has issues, requests pass through directly
+- **Automatic Fallback**: If Smaran has issues, requests pass through directly
 
 ### For Applications
 
@@ -105,7 +105,7 @@ The Memory Router works with any OpenAI-compatible endpoint:
 
 The Memory Router requires two API keys:
 
-1. **Engram API Key**: For memory management
+1. **Smaran API Key**: For memory management
 2. **Provider API Key**: For your chosen LLM provider
 
 You can provide these via:
@@ -132,24 +132,24 @@ The Memory Router adds diagnostic headers to help you understand what's happenin
 
 | Header | Description |
 |--------|-------------|
-| `x-engram-conversation-id` | Unique conversation identifier |
-| `x-engram-context-modified` | Whether context was modified (`true`/`false`) |
-| `x-engram-tokens-processed` | Number of tokens processed |
-| `x-engram-chunks-created` | New memory chunks created |
-| `x-engram-chunks-retrieved` | Memory chunks added to context |
+| `x-smaran-conversation-id` | Unique conversation identifier |
+| `x-smaran-context-modified` | Whether context was modified (`true`/`false`) |
+| `x-smaran-tokens-processed` | Number of tokens processed |
+| `x-smaran-chunks-created` | New memory chunks created |
+| `x-smaran-chunks-retrieved` | Memory chunks added to context |
 
 ## Error Handling
 
 The Memory Router is designed for reliability:
 
-- **Automatic Fallback**: If Engram encounters an error, your request passes through unmodified
-- **Error Headers**: `x-engram-error` header provides error details
+- **Automatic Fallback**: If Smaran encounters an error, your request passes through unmodified
+- **Error Headers**: `x-smaran-error` header provides error details
 - **Zero Downtime**: Your application continues working even if memory features are unavailable
 
 ## Rate Limits & Pricing
 
 ### Rate Limits
-- No Engram-specific rate limits
+- No Smaran-specific rate limits
 - Subject only to your LLM provider's limits
 
 ### Pricing

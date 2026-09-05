@@ -62,8 +62,8 @@ For multi-language code examples:
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/endpoint \
-  --header 'Authorization: Bearer ENGRAM_API_KEY'
+curl https://api.smaran.ai/v3/endpoint \
+  --header 'Authorization: Bearer SMARAN_API_KEY'
 ```
 
 ```typescript Typescript

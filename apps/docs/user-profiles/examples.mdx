@@ -14,10 +14,10 @@ The most common use case: inject profile data into your LLM's system prompt.
 ```typescript TypeScript
 async function handleChatMessage(userId: string, message: string) {
   // Get user profile
-  const profileResponse = await fetch('https://api.engram.ai/v4/profile', {
+  const profileResponse = await fetch('https://api.smaran.ai/v4/profile', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${process.env.ENGRAM_API_KEY}`,
+      'Authorization': `Bearer ${process.env.SMARAN_API_KEY}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ containerTag: userId })
@@ -55,9 +55,9 @@ import os
 async def handle_chat_message(user_id: str, message: str):
     # Get user profile
     response = requests.post(
-        'https://api.engram.ai/v4/profile',
+        'https://api.smaran.ai/v4/profile',
         headers={
-            'Authorization': f'Bearer {os.getenv("ENGRAM_API_KEY")}',
+            'Authorization': f'Bearer {os.getenv("SMARAN_API_KEY")}',
             'Content-Type': 'application/json'
         },
         json={'containerTag': user_id}
@@ -101,10 +101,10 @@ Combine profile data with query-specific search for comprehensive context:
 ```typescript TypeScript
 async function getFullContext(userId: string, userQuery: string) {
   // Single call gets both profile and search results
-  const response = await fetch('https://api.engram.ai/v4/profile', {
+  const response = await fetch('https://api.smaran.ai/v4/profile', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${process.env.ENGRAM_API_KEY}`,
+      'Authorization': `Bearer ${process.env.SMARAN_API_KEY}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
@@ -144,9 +144,9 @@ ${context.relevantMemories.map(m => m.content).join('\n')}
 async def get_full_context(user_id: str, user_query: str):
     # Single call gets both profile and search results
     response = requests.post(
-        'https://api.engram.ai/v4/profile',
+        'https://api.smaran.ai/v4/profile',
         headers={
-            'Authorization': f'Bearer {os.getenv("ENGRAM_API_KEY")}',
+            'Authorization': f'Bearer {os.getenv("SMARAN_API_KEY")}',
             'Content-Type': 'application/json'
         },
         json={
@@ -188,10 +188,10 @@ Use the optional `threshold` parameter to filter search results by relevance sco
 
 ```typescript TypeScript
 async function getHighQualityContext(userId: string, userQuery: string) {
-  const response = await fetch('https://api.engram.ai/v4/profile', {
+  const response = await fetch('https://api.smaran.ai/v4/profile', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${process.env.ENGRAM_API_KEY}`,
+      'Authorization': `Bearer ${process.env.SMARAN_API_KEY}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
@@ -211,9 +211,9 @@ async function getHighQualityContext(userId: string, userQuery: string) {
 ```python Python
 async def get_high_quality_context(user_id: str, user_query: str):
     response = requests.post(
-        'https://api.engram.ai/v4/profile',
+        'https://api.smaran.ai/v4/profile',
         headers={
-            'Authorization': f'Bearer {os.getenv("ENGRAM_API_KEY")}',
+            'Authorization': f'Bearer {os.getenv("SMARAN_API_KEY")}',
             'Content-Type': 'application/json'
         },
         json={
@@ -239,18 +239,18 @@ For more control, you can call profile and search endpoints separately:
 async function advancedContext(userId: string, query: string) {
   // Parallel requests for profile and search
   const [profileRes, searchRes] = await Promise.all([
-    fetch('https://api.engram.ai/v4/profile', {
+    fetch('https://api.smaran.ai/v4/profile', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.ENGRAM_API_KEY}`,
+        'Authorization': `Bearer ${process.env.SMARAN_API_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ containerTag: userId })
     }),
-    fetch('https://api.engram.ai/v3/search', {
+    fetch('https://api.smaran.ai/v3/search', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.ENGRAM_API_KEY}`,
+        'Authorization': `Bearer ${process.env.SMARAN_API_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -282,10 +282,10 @@ async function withUserProfile(req, res, next) {
   }
 
   try {
-    const response = await fetch('https://api.engram.ai/v4/profile', {
+    const response = await fetch('https://api.smaran.ai/v4/profile', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.ENGRAM_API_KEY}`,
+        'Authorization': `Bearer ${process.env.SMARAN_API_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ containerTag: req.user.id })
@@ -325,10 +325,10 @@ export async function POST(req: NextRequest) {
   const { userId, message } = await req.json();
 
   // Fetch profile
-  const profileRes = await fetch('https://api.engram.ai/v4/profile', {
+  const profileRes = await fetch('https://api.smaran.ai/v4/profile', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${process.env.ENGRAM_API_KEY}`,
+      'Authorization': `Bearer ${process.env.SMARAN_API_KEY}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ containerTag: userId })
@@ -345,15 +345,15 @@ export async function POST(req: NextRequest) {
 
 ## AI SDK Integration
 
-For the cleanest integration, use the Engram AI SDK middleware:
+For the cleanest integration, use the Smaran AI SDK middleware:
 
 ```typescript TypeScript
 import { generateText } from "ai"
-import { withEngram } from "@engram/tools/ai-sdk"
+import { withSmaran } from "@smaran/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 // Simple setup - profiles automatically injected
-const model = withEngram(openai("gpt-4"), {
+const model = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conv-1",
 })

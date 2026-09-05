@@ -1,49 +1,49 @@
-# Engram Quickstart Guide
+# Smaran Quickstart Guide
 
-Get up and running with Engram in under 5 minutes.
+Get up and running with Smaran in under 5 minutes.
 
 ## Step 1: Get Your API Key
 
-1. Visit the [Engram Developer Console](https://console.engram.ai)
+1. Visit the [Smaran Developer Console](https://console.smaran.ai)
 2. Sign up or log in
 3. Navigate to **API Keys → Create API Key**
 4. Copy your API key and save it securely
 
 ## Step 2: Install the SDK
 
-Engram works with the following SDKs natively:
+Smaran works with the following SDKs natively:
 
 ### TypeScript/JavaScript
 ```bash
-npm install engram
+npm install smaran
 ```
 
-📦 View on npm: [https://www.npmjs.com/package/engram](https://www.npmjs.com/package/engram)
+📦 View on npm: [https://www.npmjs.com/package/smaran](https://www.npmjs.com/package/smaran)
 
 ### Python
 ```bash
-pip install engram
+pip install smaran
 # Or for async support with aiohttp
-pip install engram[aiohttp]
+pip install smaran[aiohttp]
 ```
 
-📦 View on PyPI: [https://pypi.org/project/engram/](https://pypi.org/project/engram/)
+📦 View on PyPI: [https://pypi.org/project/smaran/](https://pypi.org/project/smaran/)
 
 ### Other SDKs
 
-Discover all available SDKs and community integrations at [engram.ai/docs](https://engram.ai/docs)
+Discover all available SDKs and community integrations at [smaran.ai/docs](https://smaran.ai/docs)
 
 ## Step 3: Set Environment Variable
 
 Add your API key to your environment:
 
 ```bash
-export ENGRAM_API_KEY="your_api_key_here"
+export SMARAN_API_KEY="your_api_key_here"
 ```
 
 Or add to your `.env` file:
 ```
-ENGRAM_API_KEY=your_api_key_here
+SMARAN_API_KEY=your_api_key_here
 ```
 
 ## Step 4: Basic Usage
@@ -51,10 +51,10 @@ ENGRAM_API_KEY=your_api_key_here
 ### TypeScript Example
 
 ```typescript
-import { Engram } from 'engram';
+import { Smaran } from 'smaran';
 
-const client = new Engram({
-  apiKey: process.env.ENGRAM_API_KEY
+const client = new Smaran({
+  apiKey: process.env.SMARAN_API_KEY
 });
 
 async function main() {
@@ -101,9 +101,9 @@ main();
 
 ```python
 import os
-from engram import Engram
+from smaran import Smaran
 
-client = Engram(api_key=os.environ["ENGRAM_API_KEY"])
+client = Smaran(api_key=os.environ["SMARAN_API_KEY"])
 
 def main():
     # 1. Retrieve context
@@ -152,10 +152,10 @@ if __name__ == "__main__":
 ```python
 import os
 import asyncio
-from engram import AsyncEngram
+from smaran import AsyncSmaran
 
 async def main():
-    client = AsyncEngram(api_key=os.environ["ENGRAM_API_KEY"])
+    client = AsyncSmaran(api_key=os.environ["SMARAN_API_KEY"])
 
     # 1. Retrieve context
     response = await client.profile(
@@ -180,7 +180,7 @@ if __name__ == "__main__":
 
 ## Core Workflow Pattern
 
-The standard Engram workflow follows three steps:
+The standard Smaran workflow follows three steps:
 
 1. **Retrieve Context**: Use `profile()` to get relevant user information
 2. **Enrich Prompt**: Combine context with your system message
@@ -288,6 +288,6 @@ const recommendations = generateRecommendations(profile);
 
 ## Support
 
-- **Documentation**: [engram.ai/docs](https://engram.ai/docs)
-- **Console**: [console.engram.ai](https://console.engram.ai)
-- **GitHub**: [github.com/engramai/engram](https://github.com/engramai/engram)
+- **Documentation**: [smaran.ai/docs](https://smaran.ai/docs)
+- **Console**: [console.smaran.ai](https://console.smaran.ai)
+- **GitHub**: [github.com/smaranai/smaran](https://github.com/smaranai/smaran)

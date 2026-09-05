@@ -106,12 +106,12 @@ export function setupStorageListener() {
 			if (
 				!(
 					window.location.hostname === "localhost" ||
-					window.location.hostname === "engram.ai" ||
-					window.location.hostname === "app.engram.ai"
+					window.location.hostname === "smaran.ai" ||
+					window.location.hostname === "app.smaran.ai"
 				)
 			) {
 				console.log(
-					"Bearer token and user data is only allowed to be used on localhost or engram.ai",
+					"Bearer token and user data is only allowed to be used on localhost or smaran.ai",
 				)
 				return
 			}

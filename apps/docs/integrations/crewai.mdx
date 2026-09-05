@@ -1,11 +1,11 @@
 ---
 title: "CrewAI"
 sidebarTitle: "CrewAI"
-description: "Add persistent memory to CrewAI agents with Engram"
+description: "Add persistent memory to CrewAI agents with Smaran"
 icon: "users"
 ---
 
-CrewAI agents don't remember anything between runs by default. Engram fixes that. You get a memory layer that stores what happened, who the user is, and what they care about. Your crews can pick up where they left off.
+CrewAI agents don't remember anything between runs by default. Smaran fixes that. You get a memory layer that stores what happened, who the user is, and what they care about. Your crews can pick up where they left off.
 
 ## What you can do
 
@@ -18,32 +18,32 @@ CrewAI agents don't remember anything between runs by default. Engram fixes that
 Install the required packages:
 
 ```bash
-pip install crewai engram python-dotenv
+pip install crewai smaran python-dotenv
 ```
 
 Configure your environment:
 
 ```bash
 # .env
-ENGRAM_API_KEY=your-engram-api-key
+SMARAN_API_KEY=your-smaran-api-key
 OPENAI_API_KEY=your-openai-api-key
 ```
 
-<Note>Get your Engram API key from [console.engram.ai](https://console.engram.ai).</Note>
+<Note>Get your Smaran API key from [console.smaran.ai](https://console.smaran.ai).</Note>
 
 ## Basic Integration
 
-Initialize Engram and inject user context into your agent's backstory:
+Initialize Smaran and inject user context into your agent's backstory:
 
 ```python
 import os
 from crewai import Agent, Task, Crew, Process
-from engram import Engram
+from smaran import Smaran
 from dotenv import load_dotenv
 
 load_dotenv()
 
-memory = Engram()
+memory = Smaran()
 
 def build_context(user_id: str, query: str) -> str:
     """Fetch user profile and relevant memories."""
@@ -85,7 +85,7 @@ Use this context to personalize your work.""",
 
 ### User profiles
 
-Engram tracks two kinds of user data:
+Smaran tracks two kinds of user data:
 
 - **Static facts**: Things that don't change often (preferences, job title, tech stack)
 - **Dynamic context**: What the user is working on right now
@@ -140,14 +140,14 @@ This crew has two agents: a researcher and a writer. The researcher adjusts its 
 import os
 from crewai import Agent, Task, Crew, Process
 from crewai_tools import SerperDevTool
-from engram import Engram
+from smaran import Smaran
 from dotenv import load_dotenv
 
 load_dotenv()
 
 class ResearchCrew:
     def __init__(self):
-        self.memory = Engram()
+        self.memory = Smaran()
         self.search_tool = SerperDevTool()
 
     def get_user_context(self, user_id: str, topic: str) -> dict:

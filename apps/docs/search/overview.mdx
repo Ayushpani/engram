@@ -6,20 +6,20 @@ sidebarTitle : "Overview"
 
 ## Prerequisites
 
-Before searching memories, you need to set up the Engram client:
+Before searching memories, you need to set up the Smaran client:
 
 - **Install the SDK** for your language
-- **Get your API key** from [Engram Console](https://console.engram.ai)
+- **Get your API key** from [Smaran Console](https://console.smaran.ai)
 - **Initialize the client** with your API key
 
 <CodeGroup>
 
 ```bash npm
-npm install engram
+npm install smaran
 ```
 
 ```bash pip
-pip install engram
+pip install smaran
 ```
 
 </CodeGroup>
@@ -27,19 +27,19 @@ pip install engram
 <CodeGroup>
 
 ```typescript TypeScript
-import Engram from 'engram';
+import Smaran from 'smaran';
 
-const client = new Engram({
-  apiKey: process.env.ENGRAM_API_KEY!
+const client = new Smaran({
+  apiKey: process.env.SMARAN_API_KEY!
 });
 ```
 
 ```python Python
-from engram import Engram
+from smaran import Smaran
 import os
 
-client = Engram(
-    api_key=os.environ.get("ENGRAM_API_KEY")
+client = Smaran(
+    api_key=os.environ.get("SMARAN_API_KEY")
 )
 ```
 
@@ -66,7 +66,7 @@ client = Engram(
 The key difference between `/v3/search` and `/v4/search` is **documents vs memories**. `/v3/search` searches through the documents and returns matching chunks, whereas `/v4/search` searches through user's memories, preferences and history.
 
 - **Documents:** Refer to the data you ingest like text, pdfs, videos, images, etc. They are sources of ground truth.
-- **Memories:** They are automatically extracted from your documents by Engram. Smaller information chunks inferred from documents and related to each other.
+- **Memories:** They are automatically extracted from your documents by Smaran. Smaller information chunks inferred from documents and related to each other.
 
 Refer to the [ingestion guide](/memory-api/ingesting) to learn more about the difference between documents and memories.
 
@@ -126,8 +126,8 @@ Refer to the [ingestion guide](/memory-api/ingesting) to learn more about the di
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "machine learning accuracy",
@@ -253,8 +253,8 @@ The `/v4/search` endpoint supports a `searchMode` parameter with two options:
   <Tab title="cURL">
     ```bash
     # Memories search (default mode)
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "machine learning accuracy",
@@ -265,8 +265,8 @@ The `/v4/search` endpoint supports a `searchMode` parameter with two options:
       }'
 
     # Hybrid search (memories + chunks)
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "machine learning accuracy",
@@ -362,8 +362,8 @@ print(document.status)     # Processing status
 ```
 
 ```bash cURL
-curl -X GET "https://api.engram.ai/v3/documents/{YOUR-DOCUMENT-ID}" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY"
+curl -X GET "https://api.smaran.ai/v3/documents/{YOUR-DOCUMENT-ID}" \
+  -H "Authorization: Bearer $SMARAN_API_KEY"
 ```
 
 </CodeGroup>
@@ -433,7 +433,7 @@ const preciseSearch = await client.search.documents({
 
 ### 2. Chunk Context vs Exact Matching
 
-By default, Engram returns chunks **with context** (surrounding text):
+By default, Smaran returns chunks **with context** (surrounding text):
 
 ```typescript
 // Default: includes surrounding chunks for context

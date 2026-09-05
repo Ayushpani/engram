@@ -9,7 +9,7 @@ bun install
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) and enter your Engram API key.
+Open [http://localhost:3000](http://localhost:3000) and enter your Smaran API key.
 
 ## Usage Example
 

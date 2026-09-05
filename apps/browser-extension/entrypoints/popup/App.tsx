@@ -286,7 +286,7 @@ function App() {
 							style={{ boxShadow: "inset 0px 1px 3.75px 0px #000" }}
 						>
 							<img
-								alt="engram"
+								alt="smaran"
 								src="./icon-48.png"
 								className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[29px] h-[29px]"
 							/>
@@ -296,7 +296,7 @@ function App() {
 								Your
 							</span>
 							<img
-								alt="engram"
+								alt="smaran"
 								src="./logo-fullmark.svg"
 								className="h-[14.5px] w-auto"
 							/>
@@ -352,7 +352,7 @@ function App() {
 						style={{ boxShadow: "inset 0px 1px 3.75px 0px #000" }}
 					>
 						<img
-							alt="engram"
+							alt="smaran"
 							src="./icon-48.png"
 							className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[29px] h-[29px]"
 						/>
@@ -368,7 +368,7 @@ function App() {
 							})()}
 						</span>
 						<img
-							alt="engram"
+							alt="smaran"
 							src="./logo-fullmark.svg"
 							className="h-[14.5px] w-auto"
 						/>
@@ -606,7 +606,7 @@ function App() {
 											fill="none"
 											xmlns="http://www.w3.org/2000/svg"
 										>
-											<title>Add to Engram</title>
+											<title>Add to Smaran</title>
 											<g clip-path="url(#clip0_2_8851)">
 												<path
 													d="M19.4295 6.3108H12.1691V0H9.82324V6.84734C9.82324 7.57459 10.1103 8.27304 10.6206 8.78766L16.549 14.7664L18.2077 13.0936L13.8291 8.6779H19.4309V6.31219L19.4295 6.3108Z"
@@ -624,7 +624,7 @@ function App() {
 											</defs>
 										</svg>
 
-										{saving ? "Saving..." : "Add to engram"}
+										{saving ? "Saving..." : "Add to smaran"}
 									</button>
 								</div>
 							</div>
@@ -662,7 +662,7 @@ function App() {
 													Import ChatGPT Memories
 												</p>
 												<p className="m-0 text-[14px] text-[#737373] leading-tight">
-													open 'manage' &gt; save your memories to engram
+													open 'manage' &gt; save your memories to smaran
 												</p>
 											</div>
 											<RightArrow className="size-4" />
@@ -863,7 +863,7 @@ function App() {
 
 								<ul className="list-none p-0 m-0 text-left">
 									<li className="py-1.5 text-sm text-neutral-400 relative pl-5 before:content-['•'] before:absolute before:left-0 before:text-neutral-500 before:font-bold">
-										Save any page to your engram
+										Save any page to your smaran
 									</li>
 									<li className="py-1.5 text-sm text-neutral-400 relative pl-5 before:content-['•'] before:absolute before:left-0 before:text-neutral-500 before:font-bold">
 										Import all your Twitter / X Bookmarks
@@ -881,7 +881,7 @@ function App() {
 								<button
 									className="bg-transparent border-none text-sky-400 cursor-pointer underline text-sm p-0 hover:text-sky-300"
 									onClick={() => {
-										window.open("mailto:support@engram.ai", "_blank")
+										window.open("mailto:support@smaran.ai", "_blank")
 									}}
 									type="button"
 								>
@@ -894,7 +894,7 @@ function App() {
 								onClick={() => {
 									chrome.tabs.create({
 										url: import.meta.env.PROD
-											? "https://app.engram.ai/login"
+											? "https://app.smaran.ai/login"
 											: "http://localhost:3000/login",
 									})
 								}}

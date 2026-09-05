@@ -2,11 +2,11 @@
  * API Endpoints
  */
 export const API_ENDPOINTS = {
-	ENGRAM_API: import.meta.env.PROD
-		? "https://api.engram.ai"
+	SMARAN_API: import.meta.env.PROD
+		? "https://api.smaran.ai"
 		: "http://localhost:8787",
-	ENGRAM_WEB: import.meta.env.PROD
-		? "https://app.engram.ai"
+	SMARAN_WEB: import.meta.env.PROD
+		? "https://app.smaran.ai"
 		: "http://localhost:3000",
 } as const
 
@@ -17,8 +17,8 @@ export const ELEMENT_IDS = {
 	TWITTER_IMPORT_BUTTON: "sm-twitter-import-button",
 	TWITTER_ONBOARDING_TOAST: "sm-twitter-onboarding-toast",
 	TWITTER_IMPORT_PROGRESS_TOAST: "sm-twitter-import-progress-toast",
-	ENGRAM_TOAST: "sm-toast",
-	ENGRAM_SAVE_BUTTON: "sm-save-button",
+	SMARAN_TOAST: "sm-toast",
+	SMARAN_SAVE_BUTTON: "sm-save-button",
 	SAVE_TWEET_ELEMENT: "sm-save-tweet-element",
 	CHATGPT_INPUT_BAR_ELEMENT: "sm-chatgpt-input-bar-element",
 	CLAUDE_INPUT_BAR_ELEMENT: "sm-claude-input-bar-element",
@@ -59,7 +59,7 @@ export const DOMAINS = {
 	CHATGPT: ["chatgpt.com", "chat.openai.com"],
 	CLAUDE: ["claude.ai"],
 	T3: ["t3.chat"],
-	ENGRAM: ["localhost", "engram.ai", "app.engram.ai"],
+	SMARAN: ["localhost", "smaran.ai", "app.smaran.ai"],
 } as const
 
 /**

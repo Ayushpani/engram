@@ -11,10 +11,10 @@ Memories search (`POST /v4/search`) provides minimal-latency search optimized fo
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Engram from 'engram';
+    import Smaran from 'smaran';
 
-    const client = new Engram({
-      apiKey: process.env.ENGRAM_API_KEY!
+    const client = new Smaran({
+      apiKey: process.env.SMARAN_API_KEY!
     });
 
     const results = await client.search.memories({
@@ -27,10 +27,10 @@ Memories search (`POST /v4/search`) provides minimal-latency search optimized fo
   </Tab>
   <Tab title="Python">
     ```python
-    from engram import Engram
+    from smaran import Smaran
     import os
 
-    client = Engram(api_key=os.environ.get("ENGRAM_API_KEY"))
+    client = Smaran(api_key=os.environ.get("SMARAN_API_KEY"))
 
     results = client.search.memories(
         q="machine learning applications",
@@ -42,8 +42,8 @@ Memories search (`POST /v4/search`) provides minimal-latency search optimized fo
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "machine learning applications",
@@ -107,8 +107,8 @@ Filter by user, project, or organization:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "project updates",
@@ -144,8 +144,8 @@ Control result quality with similarity threshold:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "artificial intelligence research",
@@ -181,8 +181,8 @@ Improve result quality with secondary ranking:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "quantum computing breakthrough",
@@ -218,8 +218,8 @@ Improve search accuracy with automatic query expansion:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "How do neural networks learn?",
@@ -263,8 +263,8 @@ Include documents, related memories, and summaries:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "machine learning trends",
@@ -314,8 +314,8 @@ Simple metadata filtering for Memories search:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "research findings",
@@ -373,8 +373,8 @@ Optimal configuration for conversational AI:
   <Tab title="cURL">
     ```bash
     # Optimized for chatbot responses
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "user question here",
@@ -439,8 +439,8 @@ Combining features for comprehensive results:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "machine learning model performance",
@@ -509,8 +509,8 @@ Hybrid search mode allows you to search both memories and document chunks in a s
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "machine learning best practices",
@@ -662,8 +662,8 @@ Combining hybrid mode with other features:
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v4/search" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v4/search" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "q": "research findings on AI",

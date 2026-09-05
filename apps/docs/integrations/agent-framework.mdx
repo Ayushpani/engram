@@ -1,11 +1,11 @@
 ---
 title: "Microsoft Agent Framework"
 sidebarTitle: "MS Agent Framework"
-description: "Add persistent memory to Microsoft Agent Framework agents with Engram"
+description: "Add persistent memory to Microsoft Agent Framework agents with Smaran"
 icon: "microsoft"
 ---
 
-Microsoft's [Agent Framework](https://github.com/microsoft/agent-framework) is a Python framework for building AI agents with tools, handoffs, and context providers. Engram integrates natively as a context provider, tool set, or middleware — so your agents remember users across sessions.
+Microsoft's [Agent Framework](https://github.com/microsoft/agent-framework) is a Python framework for building AI agents with tools, handoffs, and context providers. Smaran integrates natively as a context provider, tool set, or middleware — so your agents remember users across sessions.
 
 ## What you can do
 
@@ -19,13 +19,13 @@ Microsoft's [Agent Framework](https://github.com/microsoft/agent-framework) is a
 Install the package:
 
 ```bash
-pip install --pre engram-agent-framework
+pip install --pre smaran-agent-framework
 ```
 
 Or with uv:
 
 ```bash
-uv add --prerelease=allow engram-agent-framework
+uv add --prerelease=allow smaran-agent-framework
 ```
 
 <Warning>The `--pre` / `--prerelease=allow` flag is required because `agent-framework-core` depends on pre-release versions of Azure packages.</Warning>
@@ -34,23 +34,23 @@ Set up your environment:
 
 ```bash
 # .env
-ENGRAM_API_KEY=your-engram-api-key
+SMARAN_API_KEY=your-smaran-api-key
 OPENAI_API_KEY=your-openai-api-key
 ```
 
-<Note>Get your Engram API key from [console.engram.ai](https://console.engram.ai).</Note>
+<Note>Get your Smaran API key from [console.smaran.ai](https://console.smaran.ai).</Note>
 
 ---
 
 ## Connection
 
-All integration points share a single `AgentEngram` connection. This ensures the same API client, container tag, and conversation ID are used across middleware, tools, and context providers.
+All integration points share a single `AgentSmaran` connection. This ensures the same API client, container tag, and conversation ID are used across middleware, tools, and context providers.
 
 ```python
-from engram_agent_framework import AgentEngram
+from smaran_agent_framework import AgentSmaran
 
-conn = AgentEngram(
-    api_key="your-engram-api-key",  # or set ENGRAM_API_KEY env var
+conn = AgentSmaran(
+    api_key="your-smaran-api-key",  # or set SMARAN_API_KEY env var
     container_tag="user-123",            # memory scope (e.g., user ID)
     conversation_id="session-abc",       # optional, auto-generated if omitted
     entity_context="The user is a Python developer.",  # optional
@@ -61,7 +61,7 @@ conn = AgentEngram(
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `api_key` | `str` | env var | Engram API key. Falls back to `ENGRAM_API_KEY` |
+| `api_key` | `str` | env var | Smaran API key. Falls back to `SMARAN_API_KEY` |
 | `container_tag` | `str` | `"msft_agent_chat"` | Memory scope (e.g., user ID) |
 | `conversation_id` | `str` | auto-generated | Groups messages into a conversation |
 | `entity_context` | `str` | `None` | Custom context about the user, prepended to memories |
@@ -69,9 +69,9 @@ conn = AgentEngram(
 Pass this connection to any integration:
 
 ```python
-middleware = EngramChatMiddleware(conn, options=...)
-tools = EngramTools(conn)
-provider = EngramContextProvider(conn, mode="full")
+middleware = SmaranChatMiddleware(conn, options=...)
+tools = SmaranTools(conn)
+provider = SmaranContextProvider(conn, mode="full")
 ```
 
 ---
@@ -84,12 +84,12 @@ The most idiomatic integration. Follows the same pattern as Agent Framework's bu
 import asyncio
 from agent_framework import AgentSession
 from agent_framework.openai import OpenAIResponsesClient
-from engram_agent_framework import AgentEngram, EngramContextProvider
+from smaran_agent_framework import AgentSmaran, SmaranContextProvider
 
 async def main():
-    conn = AgentEngram(container_tag="user-123")
+    conn = AgentSmaran(container_tag="user-123")
 
-    provider = EngramContextProvider(conn, mode="full")
+    provider = SmaranContextProvider(conn, mode="full")
 
     agent = OpenAIResponsesClient().as_agent(
         name="MemoryAgent",
@@ -109,14 +109,14 @@ asyncio.run(main())
 
 ### How it works
 
-1. **`before_run()`** — Searches Engram for the user's profile and relevant memories, then injects them into the session context as additional instructions
-2. **`after_run()`** — If `store_conversations=True`, saves the conversation to Engram so future sessions have more context
+1. **`before_run()`** — Searches Smaran for the user's profile and relevant memories, then injects them into the session context as additional instructions
+2. **`after_run()`** — If `store_conversations=True`, saves the conversation to Smaran so future sessions have more context
 
 ### Configuration options
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `connection` | `AgentEngram` | required | Shared connection |
+| `connection` | `AgentSmaran` | required | Shared connection |
 | `mode` | `str` | `"full"` | `"profile"`, `"query"`, or `"full"` |
 | `store_conversations` | `bool` | `False` | Save conversations after each run |
 | `context_prompt` | `str` | built-in | Custom prompt describing the memories |
@@ -131,11 +131,11 @@ Give agents explicit control over memory operations. The agent decides when to s
 ```python
 import asyncio
 from agent_framework.openai import OpenAIResponsesClient
-from engram_agent_framework import AgentEngram, EngramTools
+from smaran_agent_framework import AgentSmaran, SmaranTools
 
 async def main():
-    conn = AgentEngram(container_tag="user-123")
-    tools = EngramTools(conn)
+    conn = AgentSmaran(container_tag="user-123")
+    tools = SmaranTools(conn)
 
     agent = OpenAIResponsesClient().as_agent(
         name="MemoryAgent",
@@ -169,18 +169,18 @@ Intercept chat requests to automatically inject memory context. Useful when you 
 ```python
 import asyncio
 from agent_framework.openai import OpenAIResponsesClient
-from engram_agent_framework import (
-    AgentEngram,
-    EngramChatMiddleware,
-    EngramMiddlewareOptions,
+from smaran_agent_framework import (
+    AgentSmaran,
+    SmaranChatMiddleware,
+    SmaranMiddlewareOptions,
 )
 
 async def main():
-    conn = AgentEngram(container_tag="user-123")
+    conn = AgentSmaran(container_tag="user-123")
 
-    middleware = EngramChatMiddleware(
+    middleware = SmaranChatMiddleware(
         conn,
-        options=EngramMiddlewareOptions(
+        options=SmaranMiddlewareOptions(
             mode="full",
             add_memory="always",
         ),
@@ -203,7 +203,7 @@ asyncio.run(main())
 ## Memory modes
 
 ```python
-EngramContextProvider(conn, mode="full")  # or "profile" / "query"
+SmaranContextProvider(conn, mode="full")  # or "profile" / "query"
 ```
 
 | Mode | What it fetches | Best for |
@@ -222,36 +222,36 @@ A support agent that remembers customers across sessions:
 import asyncio
 from agent_framework import AgentSession
 from agent_framework.openai import OpenAIResponsesClient
-from engram_agent_framework import (
-    AgentEngram,
-    EngramChatMiddleware,
-    EngramMiddlewareOptions,
-    EngramContextProvider,
-    EngramTools,
+from smaran_agent_framework import (
+    AgentSmaran,
+    SmaranChatMiddleware,
+    SmaranMiddlewareOptions,
+    SmaranContextProvider,
+    SmaranTools,
 )
 
 async def main():
-    conn = AgentEngram(
+    conn = AgentSmaran(
         container_tag="customer-456",
         conversation_id="support-session-789",
         entity_context="Enterprise customer on the Pro plan.",
     )
 
-    provider = EngramContextProvider(
+    provider = SmaranContextProvider(
         conn,
         mode="full",
         store_conversations=True,
     )
 
-    middleware = EngramChatMiddleware(
+    middleware = SmaranChatMiddleware(
         conn,
-        options=EngramMiddlewareOptions(
+        options=SmaranMiddlewareOptions(
             mode="full",
             add_memory="always",
         ),
     )
 
-    tools = EngramTools(conn)
+    tools = SmaranTools(conn)
 
     agent = OpenAIResponsesClient().as_agent(
         name="SupportAgent",
@@ -292,26 +292,26 @@ asyncio.run(main())
 The package provides specific exception types:
 
 ```python
-from engram_agent_framework import (
-    AgentEngram,
-    EngramConfigurationError,
-    EngramAPIError,
-    EngramNetworkError,
+from smaran_agent_framework import (
+    AgentSmaran,
+    SmaranConfigurationError,
+    SmaranAPIError,
+    SmaranNetworkError,
 )
 
 try:
-    conn = AgentEngram()  # no API key set
-except EngramConfigurationError as e:
+    conn = AgentSmaran()  # no API key set
+except SmaranConfigurationError as e:
     print(f"Missing API key: {e}")
 ```
 
 | Exception | When |
 |---|---|
-| `EngramConfigurationError` | Missing API key or invalid config |
-| `EngramAPIError` | API returned an error response |
-| `EngramNetworkError` | Connection failure |
-| `EngramTimeoutError` | Request timed out |
-| `EngramMemoryOperationError` | Memory add/search failed |
+| `SmaranConfigurationError` | Missing API key or invalid config |
+| `SmaranAPIError` | API returned an error response |
+| `SmaranNetworkError` | Connection failure |
+| `SmaranTimeoutError` | Request timed out |
+| `SmaranMemoryOperationError` | Memory add/search failed |
 
 ---
 

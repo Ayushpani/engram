@@ -5,13 +5,13 @@ function Welcome() {
 				{/* Header */}
 				<div className="mb-12">
 					<img
-						alt="engram"
+						alt="smaran"
 						className="h-16 mb-6 mx-auto"
-						src="https://assets.engram.ai/brand/wordmark/dark-transparent.svg"
+						src="https://assets.smaran.ai/brand/wordmark/dark-transparent.svg"
 					/>
 					<p className="text-gray-600 text-lg font-normal max-w-2xl mx-auto">
 						Your AI second brain for saving and organizing everything that
-						matters. Engram learns and remembers everything you save, your
+						matters. Smaran learns and remembers everything you save, your
 						preferences, and understands you.
 					</p>
 				</div>
@@ -19,7 +19,7 @@ function Welcome() {
 				{/* Features Section */}
 				<div className="mb-12">
 					<h2 className="text-2xl font-semibold text-black mb-8">
-						What can you do with engram ?
+						What can you do with smaran ?
 					</h2>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -75,7 +75,7 @@ function Welcome() {
 						onClick={() => {
 							chrome.tabs.create({
 								url: import.meta.env.PROD
-									? "https://app.engram.ai/login"
+									? "https://app.smaran.ai/login"
 									: "http://localhost:3000/login",
 							})
 						}}
@@ -91,11 +91,11 @@ function Welcome() {
 						Learn more at{" "}
 						<a
 							className="text-blue-500 no-underline hover:underline hover:text-blue-700"
-							href="https://engram.ai"
+							href="https://smaran.ai"
 							rel="noopener noreferrer"
 							target="_blank"
 						>
-							engram.ai
+							smaran.ai
 						</a>
 					</p>
 				</div>

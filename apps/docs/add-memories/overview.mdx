@@ -1,27 +1,27 @@
 ---
 title: "Add Memories Overview"
-description: "Add content to Engram through text, files, or URLs"
+description: "Add content to Smaran through text, files, or URLs"
 sidebarTitle: "Overview"
 ---
 
-Add any type of content to Engram - text, files, URLs, images, videos, and more. Everything is automatically processed into searchable memories that form part of your intelligent knowledge graph.
+Add any type of content to Smaran - text, files, URLs, images, videos, and more. Everything is automatically processed into searchable memories that form part of your intelligent knowledge graph.
 
 ## Prerequisites
 
-Before adding memories, you need to set up the Engram client:
+Before adding memories, you need to set up the Smaran client:
 
 - **Install the SDK** for your language
-- **Get your API key** from [Engram Console](https://console.engram.ai)
+- **Get your API key** from [Smaran Console](https://console.smaran.ai)
 - **Initialize the client** with your API key
 
 <CodeGroup>
 
 ```bash npm
-npm install engram
+npm install smaran
 ```
 
 ```bash pip
-pip install engram
+pip install smaran
 ```
 
 </CodeGroup>
@@ -29,19 +29,19 @@ pip install engram
 <CodeGroup>
 
 ```typescript TypeScript
-import Engram from 'engram';
+import Smaran from 'smaran';
 
-const client = new Engram({
-  apiKey: process.env.ENGRAM_API_KEY!
+const client = new Smaran({
+  apiKey: process.env.SMARAN_API_KEY!
 });
 ```
 
 ```python Python
-from engram import Engram
+from smaran import Smaran
 import os
 
-client = Engram(
-    api_key=os.environ.get("ENGRAM_API_KEY")
+client = Smaran(
+    api_key=os.environ.get("SMARAN_API_KEY")
 )
 ```
 
@@ -76,8 +76,8 @@ print(result)
 ```
 
 ```bash cURL
-curl -X POST "https://api.engram.ai/v3/documents" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "content": "Machine learning enables computers to learn from data",
@@ -93,7 +93,7 @@ curl -X POST "https://api.engram.ai/v3/documents" \
 ## Key Concepts
 
 <Note>
-**New to Engram?** Read [How Engram Works](/how-it-works) to understand the knowledge graph architecture and the distinction between documents and memories.
+**New to Smaran?** Read [How Smaran Works](/how-it-works) to understand the knowledge graph architecture and the distinction between documents and memories.
 </Note>
 
 ### Quick Overview
@@ -113,7 +113,7 @@ Add content through three methods:
 ## Endpoints
 
 <Warning>
-Remember, these endpoints add documents. Memories are inferred by Engram.
+Remember, these endpoints add documents. Memories are inferred by Smaran.
 </Warning>
 
 ### Add Content
@@ -139,8 +139,8 @@ client.add(
 ```
 
 ```bash cURL
-curl -X POST "https://api.engram.ai/v3/documents" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"content": "Your content here", "containerTag": "project"}'
 ```
@@ -170,8 +170,8 @@ client.documents.upload_file(
 ```
 
 ```bash cURL
-curl -X POST "https://api.engram.ai/v3/documents/file" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents/file" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -F "file=@document.pdf" \
   -F "containerTags=project"
 ```
@@ -199,8 +199,8 @@ client.documents.update("doc_id", {
 ```
 
 ```bash cURL
-curl -X PATCH "https://api.engram.ai/v3/documents/doc_id" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X PATCH "https://api.smaran.ai/v3/documents/doc_id" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"content": "Updated content"}'
 ```

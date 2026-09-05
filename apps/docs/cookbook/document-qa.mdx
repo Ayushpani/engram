@@ -17,7 +17,7 @@ A document Q&A system that:
 ## Prerequisites
 
 - Node.js 18+ or Python 3.8+
-- Engram API key
+- Smaran API key
 - OpenAI API key
 - Basic understanding of file handling
 
@@ -28,10 +28,10 @@ A document Q&A system that:
 <Tabs>
   <Tab title="Next.js">
     ```typescript lib/document-processor.ts
-    import { Engram } from 'engram'
+    import { Smaran } from 'smaran'
 
-    const client = new Engram({
-      apiKey: process.env.ENGRAM_API_KEY!
+    const client = new Smaran({
+      apiKey: process.env.SMARAN_API_KEY!
     })
 
     interface DocumentUpload {
@@ -131,10 +131,10 @@ A document Q&A system that:
 
     ```typescript app/api/upload-document/route.ts
     import { NextRequest, NextResponse } from 'next/server'
-    import { Engram } from 'engram'
+    import { Smaran } from 'smaran'
 
-    const client = new Engram({
-      apiKey: process.env.ENGRAM_API_KEY!
+    const client = new Smaran({
+      apiKey: process.env.SMARAN_API_KEY!
     })
 
     export async function POST(request: NextRequest) {
@@ -173,7 +173,7 @@ A document Q&A system that:
 
   <Tab title="Python">
     ```python document_processor.py
-    from engram import Engram
+    from smaran import Smaran
     import os
     import json
     from typing import Dict, List, Any, Optional
@@ -182,10 +182,10 @@ A document Q&A system that:
 
     class DocumentProcessor:
         def __init__(self):
-            self.client = Engram(api_key=os.getenv("ENGRAM_API_KEY"))
+            self.client = Smaran(api_key=os.getenv("SMARAN_API_KEY"))
 
         def upload_file(self, file_path: str, collection: str, metadata: Dict[str, Any] = None) -> Dict:
-            """Upload a local file to Engram"""
+            """Upload a local file to Smaran"""
             if metadata is None:
                 metadata = {}
 
@@ -207,7 +207,7 @@ A document Q&A system that:
                 raise
 
         def upload_url(self, url: str, collection: str, metadata: Dict[str, Any] = None) -> Dict:
-            """Upload URL content to Engram"""
+            """Upload URL content to Smaran"""
             if metadata is None:
                 metadata = {}
 
@@ -280,14 +280,14 @@ A document Q&A system that:
     ```typescript app/api/qa/route.ts
     import { streamText } from 'ai'
     import { createOpenAI } from '@ai-sdk/openai'
-    import { Engram } from 'engram'
+    import { Smaran } from 'smaran'
 
     const openai = createOpenAI({
       apiKey: process.env.OPENAI_API_KEY!
     })
 
-    const client = new Engram({
-      apiKey: process.env.ENGRAM_API_KEY!
+    const client = new Smaran({
+      apiKey: process.env.SMARAN_API_KEY!
     })
 
     export async function POST(request: Request) {
@@ -395,14 +395,14 @@ If the question cannot be answered from the provided documents, respond with: "I
     from pydantic import BaseModel
     from typing import List, Dict, Any, Optional
     import openai
-    from engram import Engram
+    from smaran import Smaran
     import json
     import os
 
     app = FastAPI()
 
     openai_client = openai.AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-    engram_client = Engram(api_key=os.getenv("ENGRAM_API_KEY"))
+    smaran_client = Smaran(api_key=os.getenv("SMARAN_API_KEY"))
 
     class QARequest(BaseModel):
         question: str
@@ -419,7 +419,7 @@ If the question cannot be answered from the provided documents, respond with: "I
     async def answer_question(request: QARequest):
         try:
             # Search for relevant documents
-            search_results = engram_client.search.documents(
+            search_results = smaran_client.search.documents(
                 q=request.question,
                 container_tags=[request.collection],
                 limit=8,

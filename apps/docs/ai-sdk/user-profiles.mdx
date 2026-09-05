@@ -6,7 +6,7 @@ sidebarTitle: "User Profiles"
 
 ## Overview
 
-The `withEngram` middleware automatically injects user profiles into your LLM calls, providing instant personalization without manual prompt engineering or API calls.
+The `withSmaran` middleware automatically injects user profiles into your LLM calls, providing instant personalization without manual prompt engineering or API calls.
 
 <Note>
   **New to User Profiles?** Read the [conceptual overview](/user-profiles) to understand what profiles are and why they're powerful for LLM personalization.
@@ -16,11 +16,11 @@ The `withEngram` middleware automatically injects user profiles into your LLM ca
 
 ```typescript
 import { generateText } from "ai"
-import { withEngram } from "@engram/tools/ai-sdk"
+import { withSmaran } from "@smaran/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
-// Wrap any model with Engram middleware
-const modelWithMemory = withEngram(openai("gpt-4"), {
+// Wrap any model with Smaran middleware
+const modelWithMemory = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conversation-456",
 })
@@ -36,7 +36,7 @@ const result = await generateText({
 
 ## How It Works
 
-The `withEngram` middleware:
+The `withSmaran` middleware:
 
 1. **Intercepts** your LLM calls before they reach the model
 2. **Fetches** the user's profile based on the container tag
@@ -49,7 +49,7 @@ All of this happens transparently - you write code as if using a normal model, b
   **Memory saving is enabled by default** (`addMemory: "always"`). New conversations are persisted automatically. To opt out, set `addMemory: "never"`:
 
   ```typescript
-  const model = withEngram(openai("gpt-5"), {
+  const model = withSmaran(openai("gpt-5"), {
     containerTag: "user-123",
     customId: "conversation-456",
     addMemory: "never",
@@ -67,13 +67,13 @@ Retrieves the user's complete profile without query-specific search. Best for ge
 
 ```typescript
 // Default behavior - profile mode
-const model = withEngram(openai("gpt-4"), {
+const model = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conv-1",
 })
 
 // Or explicitly specify
-const model = withEngram(openai("gpt-4"), {
+const model = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conv-1",
   mode: "profile",
@@ -91,7 +91,7 @@ const result = await generateText({
 Searches memories based on the user's specific message. Best for finding relevant information.
 
 ```typescript
-const model = withEngram(openai("gpt-4"), {
+const model = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conv-1",
   mode: "query",
@@ -112,7 +112,7 @@ const result = await generateText({
 Combines profile AND query-based search for comprehensive context. Best for complex interactions.
 
 ```typescript
-const model = withEngram(openai("gpt-4"), {
+const model = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conv-1",
   mode: "full",
@@ -137,7 +137,7 @@ Customize how memories are formatted and injected into the system prompt using t
 
 ```typescript
 import { generateText } from "ai"
-import { withEngram, type MemoryPromptData } from "@engram/tools/ai-sdk"
+import { withSmaran, type MemoryPromptData } from "@smaran/tools/ai-sdk"
 import { openai } from "@ai-sdk/openai"
 
 const customPrompt = (data: MemoryPromptData) => `
@@ -148,7 +148,7 @@ ${data.generalSearchMemories}
 </user_memories>
 `.trim()
 
-const model = withEngram(openai("gpt-4"), {
+const model = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conv-1",
   mode: "full",
@@ -187,7 +187,7 @@ const claudePrompt = (data: MemoryPromptData) => `
 Use the above context to provide personalized responses.
 `.trim()
 
-const model = withEngram(anthropic("claude-3-sonnet"), {
+const model = withSmaran(anthropic("claude-3-sonnet"), {
   containerTag: "user-123",
   customId: "conv-1",
   mode: "full",
@@ -214,7 +214,7 @@ ${relevant.map((r) => `- ${r.memory}`).join("\n")}
 `.trim()
 }
 
-const model = withEngram(openai("gpt-4"), {
+const model = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conv-1",
   mode: "full",
@@ -239,7 +239,7 @@ ${data.generalSearchMemories}
 Use this information to provide personalized and contextually relevant responses.
 `.trim()
 
-const model = withEngram(openai("gpt-4"), {
+const model = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conv-1",
   promptTemplate: brandedPrompt,
@@ -260,7 +260,7 @@ const defaultPrompt = (data: MemoryPromptData) =>
 Enable detailed logging to see exactly what's happening:
 
 ```typescript
-const model = withEngram(openai("gpt-4"), {
+const model = withSmaran(openai("gpt-4"), {
   containerTag: "user-123",
   customId: "conv-1",
   verbose: true,  // Enable detailed logging
@@ -272,12 +272,12 @@ const result = await generateText({
 })
 
 // Console output:
-// [engram] Searching memories for container: user-123
-// [engram] User message: Where do I live?
-// [engram] System prompt exists: false
-// [engram] Found 3 memories
-// [engram] Memory content: You live in San Francisco, California...
-// [engram] Creating new system prompt with memories
+// [smaran] Searching memories for container: user-123
+// [smaran] User message: Where do I live?
+// [smaran] System prompt exists: false
+// [smaran] Found 3 memories
+// [smaran] Memory content: You live in San Francisco, California...
+// [smaran] Creating new system prompt with memories
 ```
 
 ## Comparison with Direct API
@@ -288,7 +288,7 @@ The AI SDK middleware abstracts away the complexity of manual profile management
   <Tab title="With AI SDK (Simple)">
     ```typescript
     // Simple setup
-    const model = withEngram(openai("gpt-4"), {
+    const model = withSmaran(openai("gpt-4"), {
       containerTag: "user-123",
       customId: "conv-1",
     })
@@ -304,7 +304,7 @@ The AI SDK middleware abstracts away the complexity of manual profile management
   <Tab title="Without AI SDK (Complex)">
     ```typescript
     // Manual profile fetching
-    const profileRes = await fetch('https://api.engram.ai/v4/profile', {
+    const profileRes = await fetch('https://api.smaran.ai/v4/profile', {
       method: 'POST',
       headers: { /* ... */ },
       body: JSON.stringify({ containerTag: "user-123" })
@@ -328,9 +328,9 @@ The AI SDK middleware abstracts away the complexity of manual profile management
 
 ## Limitations
 
-- **Beta Feature**: The `withEngram` middleware is currently in beta
+- **Beta Feature**: The `withSmaran` middleware is currently in beta
 - **Container Tag Required**: You must provide a valid container tag
-- **API Key Required**: Ensure `ENGRAM_API_KEY` is set in your environment
+- **API Key Required**: Ensure `SMARAN_API_KEY` is set in your environment
 
 ## Next Steps
 
@@ -343,11 +343,11 @@ The AI SDK middleware abstracts away the complexity of manual profile management
     Add explicit memory operations to your agents
   </Card>
   
-  <Card title="API Reference" icon="code" href="https://api.engram.ai/v3/reference#tag/profile">
+  <Card title="API Reference" icon="code" href="https://api.smaran.ai/v3/reference#tag/profile">
     Explore the underlying profile API
   </Card>
   
-  <Card title="NPM Package" icon="npm" href="https://www.npmjs.com/package/@engram/tools">
+  <Card title="NPM Package" icon="npm" href="https://www.npmjs.com/package/@smaran/tools">
     View the package on NPM
   </Card>
 </CardGroup>

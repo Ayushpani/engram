@@ -1,6 +1,6 @@
 ---
 title: "Changelog"
-description: "New updates and improvements to Engram"
+description: "New updates and improvements to Smaran"
 ---
 
 <Update label="April 13, 2026" tags={["Integrations", "API"]}>
@@ -13,11 +13,11 @@ New Google Drive connections default to **folder and file** scope: after OAuth, 
 
 <Update label="March 18, 2026" tags={["API", "SDK", "Console", "CLI"]}>
 
-### Engram CLI
+### Smaran CLI
 
 New command-line tool for managing memories, documents, profiles, tags, connectors, and API keys directly from the terminal.
 
-### `@engram/tools` v1.4.1
+### `@smaran/tools` v1.4.1
 
 Now exposes raw `searchResults` in `MemoryPromptData`, giving full control over how retrieved memories are formatted in prompts.
 
@@ -41,9 +41,9 @@ New dedicated documents browser in the console for viewing, filtering, and manag
 
 New `DELETE` endpoint to disable scoped API keys programmatically.
 
-### `engram-agent-framework` Python Package
+### `smaran-agent-framework` Python Package
 
-Official Python package for using Engram with Microsoft's Agent Framework — memory tools and middleware out of the box.
+Official Python package for using Smaran with Microsoft's Agent Framework — memory tools and middleware out of the box.
 
 ### Interactive Memory Graph in MCP
 
@@ -70,7 +70,7 @@ The MCP server now includes an interactive graph visualization app for exploring
 
 ### Configurable Vector Stores
 
-Bring your own vector store — Engram now supports pluggable vector backends beyond the default.
+Bring your own vector store — Smaran now supports pluggable vector backends beyond the default.
 
 ### List Memories Endpoint
 
@@ -80,9 +80,9 @@ New `GET /v3/documents` endpoint with pagination, filtering by container tag, st
 
 <Update label="February 26, 2026" tags={["API", "Console"]}>
 
-### Self-Hostable Engram
+### Self-Hostable Smaran
 
-Run the full Engram stack on your own infrastructure with Docker.
+Run the full Smaran stack on your own infrastructure with Docker.
 
 ### Console v2
 
@@ -96,9 +96,9 @@ The previous cap of 120 memories per container tag has been removed. Store unlim
 
 <Update label="February 22, 2026" tags={["API", "SDK", "CLI"]}>
 
-### Engram Skill for Claude Code
+### Smaran Skill for Claude Code
 
-Install with `npx skills add engramai/skills` — teaches Claude to proactively recommend and implement Engram when building AI apps. Includes TypeScript and Python examples.
+Install with `npx skills add smaranai/skills` — teaches Claude to proactively recommend and implement Smaran when building AI apps. Includes TypeScript and Python examples.
 
 ### API Improvements
 
@@ -163,7 +163,7 @@ New auth system for external tool integrations, enabling secure plugin-to-API co
 
 Enterprise tier now available in the console.
 
-### `@engram/tools` — Strict Mode
+### `@smaran/tools` — Strict Mode
 
 Strict mode support for OpenAI function calling, ensuring schema-validated tool calls.
 
@@ -189,13 +189,13 @@ Create and customize spaces with emoji identifiers in Nova.
 
 ### Gmail Connector
 
-New connector to sync Gmail threads into Engram. Threads are stored in R2 for reliable processing of large mailboxes.
+New connector to sync Gmail threads into Smaran. Threads are stored in R2 for reliable processing of large mailboxes.
 
-### `engram-pipecat` Python Package
+### `smaran-pipecat` Python Package
 
 New SDK for Pipecat voice AI pipelines, including Gemini Live speech-to-speech support.
 
-### `@engram/tools` — Prompt Templates
+### `@smaran/tools` — Prompt Templates
 
 Customize how memory context is formatted in AI SDK integrations with the new `promptTemplate` option.
 
@@ -224,13 +224,13 @@ Complete rewrite of `@smaran/memory-graph` with improved visualization and perfo
 
 <Update label="December 24, 2025" tags={["SDK"]}>
 
-### `@engram/tools` — AI SDK v5/v6
+### `@smaran/tools` — AI SDK v5/v6
 
 Now supports both Vercel AI SDK v5 and v6 with automatic version detection.
 
 ### Conversation Support in SDKs
 
-`engram` (TypeScript) and `engram-openai-sdk` (Python) now support the conversations API for multi-turn chat with memory.
+`smaran` (TypeScript) and `smaran-openai-sdk` (Python) now support the conversations API for multi-turn chat with memory.
 
 ### MemoryBench
 
@@ -268,7 +268,7 @@ Connection syncs now produce detailed logs visible in the console.
 
 <Update label="December 5, 2025" tags={["SDK"]}>
 
-### `@engram/tools` — Browser API Key Support
+### `@smaran/tools` — Browser API Key Support
 
 `apiKey` can now be passed via options instead of relying on `process.env`, enabling browser-based usage.
 
@@ -302,11 +302,11 @@ New package for building interactive graph visualizations of memory connections,
 
 ### OpenAI Responses API Support
 
-`@engram/tools` OpenAI integration now supports the Responses API.
+`@smaran/tools` OpenAI integration now supports the Responses API.
 
-### `engram-openai-sdk` — Python Middleware
+### `smaran-openai-sdk` — Python Middleware
 
-New `withEngram` middleware for the Python OpenAI SDK, enabling transparent memory injection into OpenAI API calls.
+New `withSmaran` middleware for the Python OpenAI SDK, enabling transparent memory injection into OpenAI API calls.
 
 ### Browser Extension Webpage Capture
 
@@ -324,21 +324,21 @@ Memory creation now uses bulk inserts for significantly faster batch ingestion.
 
 New `string_contains` filter type for partial string matching, `ignoreCase` option for case-insensitive operations, and improved negation support. Enhanced SQL injection protection.
 
-### `withEngram` for OpenAI SDK
+### `withSmaran` for OpenAI SDK
 
-New `withEngram` wrapper for the OpenAI TypeScript SDK — transparent memory injection with automatic assistant response capture.
+New `withSmaran` wrapper for the OpenAI TypeScript SDK — transparent memory injection with automatic assistant response capture.
 
 ### Zapier & n8n Integration Pages
 
-New integration guides for connecting Engram with Zapier and n8n automation workflows.
+New integration guides for connecting Smaran with Zapier and n8n automation workflows.
 
 </Update>
 
 <Update label="October 10, 2025" tags={["SDK", "API", "Console"]}>
 
-### `@engram/tools` — AI SDK `withEngram`
+### `@smaran/tools` — AI SDK `withSmaran`
 
-New `withEngram` language model wrapper for Vercel AI SDK that automatically injects memory context and captures assistant responses.
+New `withSmaran` language model wrapper for Vercel AI SDK that automatically injects memory context and captures assistant responses.
 
 ### Raycast Extension
 
@@ -353,7 +353,7 @@ New `/v4/profile` endpoint for retrieving AI-generated user profiles derived fro
 - **DOCX support** — Word documents can now be ingested.
 - **Project selection for connectors** — assign Google Drive, Notion, and OneDrive connections to specific projects.
 - **Multiple models in consumer chat** — model switcher with system prompt improvements.
-- **Organization settings** — configure Engram behavior (chunking, extraction, memory limits) per org.
+- **Organization settings** — configure Smaran behavior (chunking, extraction, memory limits) per org.
 
 </Update>
 
@@ -389,7 +389,7 @@ New console design with dark/light mode, org switcher, billing invoices, space s
 
 Complete rewrite with comprehensive API references, cookbook recipes, and production-ready examples for TypeScript, Python, and cURL.
 
-### `@engram/tools` Package
+### `@smaran/tools` Package
 
 New tools package for native Vercel AI SDK and OpenAI integration with memory tools and infinite chat. Plus `openai-python-sdk` for Python middleware.
 
@@ -419,7 +419,7 @@ Browser extension now integrates directly with Claude.ai and t3.chat for automat
 
 ### Waitlist Removed
 
-Engram is now open to all users — no more waitlist.
+Smaran is now open to all users — no more waitlist.
 
 </Update>
 
@@ -481,7 +481,7 @@ New endpoint for deleting multiple memories at once.
 
 ### Self-Host Support
 
-Initial self-hosting support — run Engram on your own infrastructure.
+Initial self-hosting support — run Smaran on your own infrastructure.
 
 </Update>
 
@@ -609,7 +609,7 @@ New `/v3/` endpoints replacing v2 — cleaner routes, updated memory endpoint, a
 
 ### OneDrive Connector
 
-Initial OneDrive integration for syncing files into Engram.
+Initial OneDrive integration for syncing files into Smaran.
 
 ### Connections Architecture
 
@@ -655,7 +655,7 @@ New endpoints for programmatic Google Drive integration and file syncing.
 
 <Update label="April 22, 2025" tags={["API", "MCP"]}>
 
-### Engram MCP Server
+### Smaran MCP Server
 
 First version of the MCP server for AI model integrations.
 
@@ -689,7 +689,7 @@ New ingestion workflow with status tracking: `queued` → `extracting` → `chun
 
 ### Connections System
 
-First version of the connectors architecture — sync external data sources into Engram.
+First version of the connectors architecture — sync external data sources into Smaran.
 
 ### Tag-Based Filtering
 
@@ -703,7 +703,7 @@ Request tracking, error counts, and usage metrics per organization.
 
 <Update label="March 18, 2025" tags={["API"]}>
 
-### Engram API v2
+### Smaran API v2
 
 The platform begins — Cloudflare Workers API with auth, ingestion workflows, vector search, and organization support. Built on Hono, Drizzle ORM, and Cloudflare D1/Hyperdrive.
 
@@ -711,7 +711,7 @@ The platform begins — Cloudflare Workers API with auth, ingestion workflows, v
 
 <Update label="January 20, 2025" tags={["Console"]}>
 
-### Engram v2 Release
+### Smaran v2 Release
 
 Major release of the consumer web app with new import tools (CSV, Markdown/Obsidian), improved hybrid search with date relevancy, batch delete, and space management (edit/delete names).
 
@@ -723,7 +723,7 @@ First version of the documentation site with API reference, getting started guid
 
 <Update label="August 16, 2024" tags={["Console"]}>
 
-### Engram v1 — Major Update
+### Smaran v1 — Major Update
 
 New consumer app version with canvas/note editor, text-to-speech on AI answers, PWA support, improved Telegram bot with Markdown, and memory queue processing. Extension gets drag-and-dismiss features.
 
@@ -733,7 +733,7 @@ New consumer app version with canvas/note editor, text-to-speech on AI answers, 
 
 ### ProductHunt Launch
 
-Engram launches on ProductHunt. Features at launch: shareable spaces, Twitter thread import, AI chat with citations, onboarding flow, recommended items, chat history, and keyboard shortcuts.
+Smaran launches on ProductHunt. Features at launch: shareable spaces, Twitter thread import, AI chat with citations, onboarding flow, recommended items, chat history, and keyboard shortcuts.
 
 </Update>
 
@@ -755,7 +755,7 @@ Backend migrated from Next.js API routes to Hono on Cloudflare Workers. Landing 
 
 <Update label="April 11, 2024" tags={["Console"]}>
 
-### Engram v1 Launch
+### Smaran v1 Launch
 
 First public release — spaces, chat with AI, Twitter bookmarks import, Chrome extension with save-from-page, notes editor, and search across all saved content.
 
@@ -763,7 +763,7 @@ First public release — spaces, chat with AI, Twitter bookmarks import, Chrome 
 
 <Update label="February 21, 2024" tags={["Console"]}>
 
-### Engram is Born
+### Smaran is Born
 
 Initial monorepo setup with auth, Chrome extension, AI chat with citations using OpenAI embeddings, and the first version of the web app.
 

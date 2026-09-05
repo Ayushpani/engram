@@ -4,12 +4,12 @@ description: "Give your AI assistants persistent memory with the Model Context P
 icon: "brain-circuit"
 ---
 
-Engram MCP Server 4.0 gives AI assistants (Claude, Cursor, Windsurf, etc.) persistent memory across conversations. Built on Cloudflare Workers with Durable Objects for scalable, persistent connections.
+Smaran MCP Server 4.0 gives AI assistants (Claude, Cursor, Windsurf, etc.) persistent memory across conversations. Built on Cloudflare Workers with Durable Objects for scalable, persistent connections.
 
 ## Quick Install
 
 ```bash
-npx -y install-mcp@latest https://mcp.engram.ai/mcp --client claude --oauth=yes
+npx -y install-mcp@latest https://mcp.smaran.ai/mcp --client claude --oauth=yes
 ```
 
 Replace `claude` with your MCP client: `cursor`, `windsurf`, `vscode`, etc.
@@ -21,8 +21,8 @@ Add to your MCP client config:
 ```json
 {
   "mcpServers": {
-    "engram": {
-      "url": "https://mcp.engram.ai/mcp"
+    "smaran": {
+      "url": "https://mcp.smaran.ai/mcp"
     }
   }
 }
@@ -32,13 +32,13 @@ The server uses **OAuth** by default. Your client will discover the authorizatio
 
 ### API Key Authentication (Alternative)
 
-If you prefer API keys over OAuth, get one from [app.engram.ai](https://app.engram.ai) and pass it in the `Authorization` header:
+If you prefer API keys over OAuth, get one from [app.smaran.ai](https://app.smaran.ai) and pass it in the `Authorization` header:
 
 ```json
 {
   "mcpServers": {
-    "engram": {
-      "url": "https://mcp.engram.ai/mcp",
+    "smaran": {
+      "url": "https://mcp.smaran.ai/mcp",
       "headers": {
         "Authorization": "Bearer sm_your_api_key_here"
       }
@@ -56,8 +56,8 @@ Scope all operations to a specific project with `x-sm-project`:
 ```json
 {
   "mcpServers": {
-    "engram": {
-      "url": "https://mcp.engram.ai/mcp",
+    "smaran": {
+      "url": "https://mcp.smaran.ai/mcp",
       "headers": {
         "x-sm-project": "your-project-id"
       }
@@ -96,15 +96,15 @@ Get the current logged-in user's information. Returns `{ userId, email, name, cl
 
 | URI | Description |
 |-----|-------------|
-| `engram://profile` | User profile with stable preferences and recent activity |
-| `engram://projects` | List of available memory projects |
+| `smaran://profile` | User profile with stable preferences and recent activity |
+| `smaran://projects` | List of available memory projects |
 
 ## Prompts
 
 ### `context`
 
 Inject user profile and preferences as system context for AI conversations. Returns a formatted message with the user's stable preferences and recent activity.
-You can access this in Cursor and Claude Code by just doing /context, which will give the LLMs just enough context to use and query engram more.
+You can access this in Cursor and Claude Code by just doing /context, which will give the LLMs just enough context to use and query smaran more.
 **Purpose:** Unlike the `recall` tool (which searches for specific information) or the `profile` resource (which returns raw data), the `context` prompt provides a pre-formatted system message designed for context injection at the start of conversations.
 
 | Parameter | Type | Required | Description |
@@ -123,7 +123,7 @@ You can access this in Cursor and Claude Code by just doing /context, which will
 - Use `recall` tool when you need to search for specific information
 - Use `profile` resource when you need raw profile data for custom processing
 
-<Card title="MCP Server Source Code" icon="github" href="https://github.com/engramai/engram/tree/main/apps/mcp">
+<Card title="MCP Server Source Code" icon="github" href="https://github.com/smaranai/smaran/tree/main/apps/mcp">
   View the open-source implementation
 </Card>
 

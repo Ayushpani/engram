@@ -1,11 +1,11 @@
 ---
 title: "Agno"
 sidebarTitle: "Agno"
-description: "Add persistent memory to Agno agents with Engram"
+description: "Add persistent memory to Agno agents with Smaran"
 icon: "brain"
 ---
 
-Agno agents are stateless by default. Each conversation starts fresh. Engram changes that - your agents can remember users, recall past conversations, and build on previous interactions.
+Agno agents are stateless by default. Each conversation starts fresh. Smaran changes that - your agents can remember users, recall past conversations, and build on previous interactions.
 
 ## What you can do
 
@@ -18,18 +18,18 @@ Agno agents are stateless by default. Each conversation starts fresh. Engram cha
 Install the packages:
 
 ```bash
-pip install agno engram python-dotenv
+pip install agno smaran python-dotenv
 ```
 
 Set up your environment:
 
 ```bash
 # .env
-ENGRAM_API_KEY=your-engram-api-key
+SMARAN_API_KEY=your-smaran-api-key
 OPENAI_API_KEY=your-openai-api-key
 ```
 
-<Note>Get your Engram API key from [console.engram.ai](https://console.engram.ai).</Note>
+<Note>Get your Smaran API key from [console.smaran.ai](https://console.smaran.ai).</Note>
 
 ## Basic integration
 
@@ -38,12 +38,12 @@ Fetch user context before running an agent, then store the interaction after.
 ```python
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
-from engram import Engram
+from smaran import Smaran
 from dotenv import load_dotenv
 
 load_dotenv()
 
-memory = Engram()
+memory = Smaran()
 
 def get_user_context(user_id: str, query: str) -> str:
     """Pull user profile and relevant memories."""
@@ -100,7 +100,7 @@ def chat(user_id: str, message: str) -> str:
 
 ### User profiles
 
-Engram keeps two buckets of user info:
+Smaran keeps two buckets of user info:
 
 - **Static facts**: Things that stay consistent (name, preferences, expertise)
 - **Dynamic context**: What they're focused on lately
@@ -153,14 +153,14 @@ An assistant that actually knows who it's talking to. Preferences stick around. 
 ```python
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
-from engram import Engram
+from smaran import Smaran
 from dotenv import load_dotenv
 
 load_dotenv()
 
 class PersonalAssistant:
     def __init__(self):
-        self.memory = Engram()
+        self.memory = Smaran()
 
     def get_context(self, user_id: str, query: str) -> dict:
         """Fetch user profile and relevant history."""
@@ -248,9 +248,9 @@ Give your agent tools that can search and store memories directly.
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
 from agno.tools import tool
-from engram import Engram
+from smaran import Smaran
 
-memory = Engram()
+memory = Smaran()
 
 @tool
 def search_memory(query: str, user_id: str) -> str:
@@ -305,9 +305,9 @@ from agno.agent import Agent
 from agno.models.openai import OpenAIChat
 from agno.media import Image
 from pathlib import Path
-from engram import Engram
+from smaran import Smaran
 
-memory = Engram()
+memory = Smaran()
 
 def analyze_and_remember(user_id: str, image_path: str, question: str) -> str:
     """Analyze an image, answer a question, and store the context."""

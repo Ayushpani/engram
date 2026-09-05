@@ -14,9 +14,9 @@ import {
 	useCachedPromise,
 	useForm,
 } from "@raycast/utils"
-import { withEngram } from "./withEngram"
+import { withSmaran } from "./withSmaran"
 
-export default withEngram(Command)
+export default withSmaran(Command)
 
 function Command() {
 	const { isLoading, data: projects, mutate } = useCachedPromise(fetchProjects)

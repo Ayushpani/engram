@@ -3,9 +3,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from engram import Engram
+from smaran import Smaran
 
-client = Engram()
+client = Smaran()
 USER_ID = "docs-test-user-py"
 
 conversation = [

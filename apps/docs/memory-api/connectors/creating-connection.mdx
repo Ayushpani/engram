@@ -1,16 +1,16 @@
 ---
 title: 'Creating connections'
-description: 'Create a connection to sync your content with engram'
+description: 'Create a connection to sync your content with smaran'
 ---
 
 To create a connection, just make a `POST` request to `/v3/connections/{provider}`
 
 <CodeGroup>
 ```typescript Typescript
-import Engram from 'engram';
+import Smaran from 'smaran';
 
-const client = new Engram({
-  apiKey: process.env['ENGRAM_API_KEY'], // This is the default and can be omitted
+const client = new Smaran({
+  apiKey: process.env['SMARAN_API_KEY'], // This is the default and can be omitted
 });
 
 // For OAuth providers (notion, google-drive, onedrive)
@@ -27,7 +27,7 @@ console.debug(webCrawlerConnection.id); // authLink will be null
 ```python Python
 import requests
 
-url = "https://api.engram.ai/v3/connections/{provider}"
+url = "https://api.smaran.ai/v3/connections/{provider}"
 
 payload = {
     "redirectUrl": "<string>",
@@ -47,7 +47,7 @@ print(response.text)
 
 ```bash cURL
 curl --request POST \
-  --url https://api.engram.ai/v3/connections/{provider} \
+  --url https://api.smaran.ai/v3/connections/{provider} \
   --header 'Authorization: Bearer <token>' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -79,7 +79,7 @@ curl --request POST \
 
 ## Response
 
-engram sends a response with the following schema:
+smaran sends a response with the following schema:
 ```json
 {
   "id": "<string>",

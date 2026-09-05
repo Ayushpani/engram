@@ -1,62 +1,62 @@
-# Engram SDK Guide
+# Smaran SDK Guide
 
-Complete reference for the Engram SDK in TypeScript and Python.
+Complete reference for the Smaran SDK in TypeScript and Python.
 
 ## Installation
 
-Engram works with the following SDKs natively:
+Smaran works with the following SDKs natively:
 
 ### TypeScript/JavaScript
 ```bash
-npm install engram
+npm install smaran
 # or
-yarn add engram
+yarn add smaran
 # or
-pnpm add engram
+pnpm add smaran
 ```
 
-📦 View on npm: [https://www.npmjs.com/package/engram](https://www.npmjs.com/package/engram)
+📦 View on npm: [https://www.npmjs.com/package/smaran](https://www.npmjs.com/package/smaran)
 
 ### Python
 ```bash
-pip install engram
+pip install smaran
 # Or for async support with aiohttp
-pip install engram[aiohttp]
+pip install smaran[aiohttp]
 ```
 
-📦 View on PyPI: [https://pypi.org/project/engram/](https://pypi.org/project/engram/)
+📦 View on PyPI: [https://pypi.org/project/smaran/](https://pypi.org/project/smaran/)
 
 ### Other SDKs and Integrations
 
-Discover all available SDKs, community integrations, and framework-specific guides at [engram.ai/docs](https://engram.ai/docs)
+Discover all available SDKs, community integrations, and framework-specific guides at [smaran.ai/docs](https://smaran.ai/docs)
 
 ## Initialization
 
 ### TypeScript
 ```typescript
-import { Engram } from 'engram';
+import { Smaran } from 'smaran';
 
-const client = new Engram({
-  apiKey: process.env.ENGRAM_API_KEY, // Optional if env var is set
-  baseURL: 'https://api.engram.ai' // Optional, defaults to this
+const client = new Smaran({
+  apiKey: process.env.SMARAN_API_KEY, // Optional if env var is set
+  baseURL: 'https://api.smaran.ai' // Optional, defaults to this
 });
 ```
 
 ### Python
 ```python
-from engram import Engram
+from smaran import Smaran
 
 # Synchronous client
-client = Engram(
-    api_key=os.environ["ENGRAM_API_KEY"],  # Optional if env var is set
-    base_url="https://api.engram.ai"  # Optional, defaults to this
+client = Smaran(
+    api_key=os.environ["SMARAN_API_KEY"],  # Optional if env var is set
+    base_url="https://api.smaran.ai"  # Optional, defaults to this
 )
 
 # Asynchronous client
-from engram import AsyncEngram
+from smaran import AsyncSmaran
 
-async_client = AsyncEngram(
-    api_key=os.environ["ENGRAM_API_KEY"]
+async_client = AsyncSmaran(
+    api_key=os.environ["SMARAN_API_KEY"]
 )
 ```
 
@@ -64,7 +64,7 @@ async_client = AsyncEngram(
 
 ### `add()` - Store Memories
 
-Add content to Engram for processing and memory extraction.
+Add content to Smaran for processing and memory extraction.
 
 #### TypeScript
 ```typescript
@@ -435,7 +435,7 @@ await client.add({
 });
 ```
 
-The `entityContext` helps Engram understand what type of information to extract and prioritize.
+The `entityContext` helps Smaran understand what type of information to extract and prioritize.
 
 ### Container Tag Patterns
 
@@ -473,11 +473,11 @@ await client.add({
 ### Vercel AI SDK
 
 ```typescript
-import { Engram } from 'engram';
+import { Smaran } from 'smaran';
 import { openai } from '@ai-sdk/openai';
 import { generateText } from 'ai';
 
-const memory = new Engram();
+const memory = new Smaran();
 
 async function chat(userId: string, message: string) {
   // 1. Get context
@@ -506,11 +506,11 @@ async function chat(userId: string, message: string) {
 ### LangChain
 
 ```typescript
-import { Engram } from 'engram';
+import { Smaran } from 'smaran';
 import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 
-const memory = new Engram();
+const memory = new Smaran();
 const llm = new ChatOpenAI({ model: 'gpt-4' });
 
 async function chatWithMemory(userId: string, userMessage: string) {
@@ -541,10 +541,10 @@ async function chatWithMemory(userId: string, userMessage: string) {
 ### CrewAI
 
 ```python
-from engram import Engram
+from smaran import Smaran
 from crewai import Agent, Task, Crew
 
-memory = Engram()
+memory = Smaran()
 
 def create_memory_enhanced_agent(user_id: str):
     # Get user context
@@ -650,6 +650,6 @@ try {
 
 ## Support
 
-- **Documentation**: [engram.ai/docs](https://engram.ai/docs)
-- **SDK Issues**: [github.com/engramai/engram](https://github.com/engramai/engram)
-- **Console**: [console.engram.ai](https://console.engram.ai)
+- **Documentation**: [smaran.ai/docs](https://smaran.ai/docs)
+- **SDK Issues**: [github.com/smaranai/smaran](https://github.com/smaranai/smaran)
+- **Console**: [console.smaran.ai](https://console.smaran.ai)

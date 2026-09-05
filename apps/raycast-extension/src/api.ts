@@ -51,15 +51,15 @@ export interface SearchResponse {
 	total: number
 }
 
-const API_BASE_URL = "https://api.engram.ai"
+const API_BASE_URL = "https://api.smaran.ai"
 
-class EngramAPIError extends Error {
+class SmaranAPIError extends Error {
 	constructor(
 		message: string,
 		public status?: number,
 	) {
 		super(message)
-		this.name = "EngramAPIError"
+		this.name = "SmaranAPIError"
 	}
 }
 
@@ -96,7 +96,7 @@ async function makeAuthenticatedRequest<T>(
 		if (!response.ok) {
 			if (response.status === 401) {
 				throw new AuthenticationError(
-					"Invalid API key. Please check your API key in preferences. Get a new one from https://engram.link/raycast",
+					"Invalid API key. Please check your API key in preferences. Get a new one from https://smaran.link/raycast",
 				)
 			}
 
@@ -110,11 +110,11 @@ async function makeAuthenticatedRequest<T>(
 				// Ignore JSON parsing errors, use default message
 			}
 
-			throw new EngramAPIError(errorMessage, response.status)
+			throw new SmaranAPIError(errorMessage, response.status)
 		}
 
 		if (!response.headers.get("content-type")?.includes("application/json")) {
-			throw new EngramAPIError("Invalid response format from API")
+			throw new SmaranAPIError("Invalid response format from API")
 		}
 
 		const data = (await response.json()) as T
@@ -122,13 +122,13 @@ async function makeAuthenticatedRequest<T>(
 	} catch (err) {
 		if (
 			err instanceof AuthenticationError ||
-			err instanceof EngramAPIError
+			err instanceof SmaranAPIError
 		) {
 			throw err
 		}
 
 		// Handle network errors or other fetch errors
-		throw new EngramAPIError(
+		throw new SmaranAPIError(
 			`Network error: ${err instanceof Error ? err.message : "Unknown error"}`,
 		)
 	}
@@ -160,7 +160,7 @@ export async function addProject(request: AddProjectRequest): Promise<Project> {
 	await showToast({
 		style: Toast.Style.Success,
 		title: "Project Added",
-		message: "Successfully added project to Engram",
+		message: "Successfully added project to Smaran",
 	})
 
 	return response
@@ -176,7 +176,7 @@ export async function addMemory(request: AddMemoryRequest): Promise<Memory> {
 		await showToast({
 			style: Toast.Style.Success,
 			title: "Memory Added",
-			message: "Successfully added memory to Engram",
+			message: "Successfully added memory to Smaran",
 		})
 
 		return response

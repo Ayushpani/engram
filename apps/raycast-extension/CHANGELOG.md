@@ -1,4 +1,4 @@
-# Engram Changelog
+# Smaran Changelog
 
 ## [Quick Add from Selection] - 2025-11-05
 
@@ -15,5 +15,5 @@
 
 ## [Initial Version] - 2025-10-02
 
-- Added Engram integration with Add Memory and Search Memories commands
+- Added Smaran integration with Add Memory and Search Memories commands
 - Added project organization support for memories

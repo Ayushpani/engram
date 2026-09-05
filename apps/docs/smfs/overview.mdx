@@ -5,7 +5,7 @@ description: "Memory your agent can grep."
 icon: "database"
 ---
 
-**SMFS** mounts your Engram container as a real directory. Agents read it with `ls`, `cat`, and `grep`. No SDK to learn, no client to wire up, no embeddings to think about.
+**SMFS** mounts your Smaran container as a real directory. Agents read it with `ls`, `cat`, and `grep`. No SDK to learn, no client to wire up, no embeddings to think about.
 
 SMFS is open source and free for everyone.
 
@@ -18,9 +18,9 @@ The catch: a filesystem on its own isn't great for memory. Search means walking 
 SMFS fixes the catch. The shell is real, but underneath:
 
 - **Semantic `grep` by default.** One call surfaces what matters across the whole container, ranked by meaning. Pass any flag and you fall through to the real `grep` for exact matches.
-- **Memory paths get distilled.** Files marked as memory paths are extracted and indexed by Engram. They don't bloat the model's context.
+- **Memory paths get distilled.** Files marked as memory paths are extracted and indexed by Smaran. They don't bloat the model's context.
 - **Virtual `profile.md`.** A live digest of the container at the mount root. The model can `cat profile.md` for a one-shot summary instead of walking every file.
-- **Bidirectional sync** runs in the background. Local reads hit cache; writes push to Engram.
+- **Bidirectional sync** runs in the background. Local reads hit cache; writes push to Smaran.
 
 You get filesystem ergonomics without paying the filesystem tax in tokens.
 
@@ -33,7 +33,7 @@ Pick by where your agent runs.
     For agents and tools with a real filesystem. Claude Code, Cursor, devcontainers, Docker, Codespaces. NFSv3 on macOS, FUSE on Linux.
   </Card>
   <Card title="Bash Tool (TypeScript & Python)" icon="terminal" href="/smfs/bash-tool">
-    For agents running serverless or at the edge. Cloudflare Workers, AWS Lambda, Vercel, Modal. A virtual bash where the filesystem is your container. Available as [`@engram/bash`](/smfs/bash-tool) for TypeScript and [`engram-bash`](/smfs/bash-tool-python) for Python.
+    For agents running serverless or at the edge. Cloudflare Workers, AWS Lambda, Vercel, Modal. A virtual bash where the filesystem is your container. Available as [`@smaran/bash`](/smfs/bash-tool) for TypeScript and [`smaran-bash`](/smfs/bash-tool-python) for Python.
   </Card>
 </CardGroup>
 

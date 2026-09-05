@@ -13,7 +13,7 @@ pub struct DedupResult {
 /// cached embeddings. Embeddings are provided as flat f32 arrays (row-major).
 ///
 /// This runs entirely in WASM on the client side. Embedding generation itself
-/// is handled server-side by the Engram API before calling this function.
+/// is handled server-side by the Smaran API before calling this function.
 #[wasm_bindgen]
 pub fn is_duplicate(
     new_embedding: &[f32],

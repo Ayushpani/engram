@@ -1,6 +1,6 @@
 ---
 title: "Query Rewriting"
-description: "Query Rewriting in engram"
+description: "Query Rewriting in smaran"
 icon: "blend"
 ---
 
@@ -10,14 +10,14 @@ Query Rewriting is a feature that allows you to rewrite queries to make them mor
 
 ### Usage
 
-In engram, you can enable query rewriting by setting the `rewriteQuery` parameter to `true` in the search API.
+In smaran, you can enable query rewriting by setting the `rewriteQuery` parameter to `true` in the search API.
 
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/search \
+curl https://api.smaran.ai/v3/search \
   --request POST \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   --header 'Content-Type: application/json' \
   -d '{
     "q": "What is the capital of France?",
@@ -43,7 +43,7 @@ client.search.create(
 
 ### Notes and limitations
 
-- engram generates multiple rewrites, and runs the search through all of them.
+- smaran generates multiple rewrites, and runs the search through all of them.
 - The results are then merged and returned to you.
 - There is no additional costs associated with query rewriting.
 - While query rewriting makes the quality much better, it also **incurs additional latency**.

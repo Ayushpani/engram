@@ -1,6 +1,6 @@
-import Engram from "supermemory"
+import Smaran from "supermemory"
 
-const client = new Engram()
+const client = new Smaran()
 const USER_ID = "dhravya"
 
 const conversation = [

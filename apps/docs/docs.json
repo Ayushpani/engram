@@ -5,7 +5,7 @@
 			"defaults": "required",
 			"languages": ["javascript", "python", "curl"]
 		},
-		"openapi": "https://api.engram.ai/v3/openapi"
+		"openapi": "https://api.smaran.ai/v3/openapi"
 	},
 	"colors": {
 		"dark": "#1E3A8A",
@@ -28,9 +28,9 @@
 	},
 	"footer": {
 		"socials": {
-			"github": "https://github.com/engramai",
-			"linkedin": "https://linkedin.com/company/engramai",
-			"x": "https://x.com/engram"
+			"github": "https://github.com/smaranai",
+			"linkedin": "https://linkedin.com/company/smaranai",
+			"x": "https://x.com/smaran"
 		}
 	},
 	"icons": {
@@ -40,16 +40,16 @@
 		"dark": "/logo/dark.svg",
 		"light": "/logo/light.svg"
 	},
-	"name": "engram | Memory API for the AI era",
+	"name": "smaran | Memory API for the AI era",
 	"navbar": {
 		"links": [
 			{
-				"href": "mailto:support@engram.com",
+				"href": "mailto:support@smaran.com",
 				"label": "Support"
 			}
 		],
 		"primary": {
-			"href": "https://console.engram.ai",
+			"href": "https://console.smaran.ai",
 			"label": "Dashboard",
 			"type": "button"
 		}
@@ -61,7 +61,7 @@
 				"anchors": [
 					{
 						"anchor": "Your Dashboard",
-						"href": "https://console.engram.ai",
+						"href": "https://console.smaran.ai",
 						"icon": "play"
 					},
 					{
@@ -86,7 +86,7 @@
 								]
 							},
 							{
-								"group": "Using engram",
+								"group": "Using smaran",
 								"pages": [
 									"add-memories",
 									"search",
@@ -133,15 +133,15 @@
 						]
 					},
 					{
-						"anchor": "Engram MCP",
+						"anchor": "Smaran MCP",
 						"icon": "terminal",
 						"pages": [
-							"engram-mcp/mcp",
-							"engram-mcp/setup",
+							"smaran-mcp/mcp",
+							"smaran-mcp/setup",
 							{
 								"group": "Setups",
 								"icon": "layers",
-								"pages": ["engram-mcp/claude-desktop"]
+								"pages": ["smaran-mcp/claude-desktop"]
 							}
 						]
 					},
@@ -176,7 +176,7 @@
 					{
 						"anchor": "API Integrations",
 						"pages": [
-							"integrations/engram-sdk",
+							"integrations/smaran-sdk",
 							"integrations/ai-sdk",
 							"integrations/openai",
 							"integrations/langgraph",
@@ -226,7 +226,7 @@
 					{
 						"anchor": "API Reference",
 						"icon": "unplug",
-						"openapi": "https://api.engram.ai/v3/openapi"
+						"openapi": "https://api.smaran.ai/v3/openapi"
 					}
 				],
 				"tab": "API Reference"
@@ -281,7 +281,7 @@
 									"cookbook/document-qa",
 									"cookbook/customer-support",
 									"cookbook/ai-sdk-integration",
-									"cookbook/perplexity-engram",
+									"cookbook/perplexity-smaran",
 									"cookbook/chat-with-gdrive"
 								]
 							}
@@ -329,12 +329,12 @@
 			"source": "/memory-vs-rag"
 		},
 		{
-			"destination": "/integrations/engram-sdk",
+			"destination": "/integrations/smaran-sdk",
 			"permanent": true,
 			"source": "/memory-api/sdks/overview"
 		},
 		{
-			"destination": "/integrations/engram-sdk",
+			"destination": "/integrations/smaran-sdk",
 			"permanent": true,
 			"source": "/memory-api/sdks/native"
 		},

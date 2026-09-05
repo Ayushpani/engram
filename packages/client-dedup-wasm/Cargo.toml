@@ -2,7 +2,7 @@
 name = "client-dedup-wasm"
 version = "0.1.0"
 edition = "2021"
-description = "Client-side WASM deduplication and semantic similarity engine for Engram"
+description = "Client-side WASM deduplication and semantic similarity engine for Smaran"
 
 [lib]
 crate-type = ["cdylib"]

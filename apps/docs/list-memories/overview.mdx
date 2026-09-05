@@ -5,17 +5,17 @@ sidebarTitle: "Overview"
 ---
 
 
-Retrieve paginated memories with filtering and sorting options from your Engram account.
+Retrieve paginated memories with filtering and sorting options from your Smaran account.
 
 ## Quick Start
 
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Engram from 'engram';
+    import Smaran from 'smaran';
 
-    const client = new Engram({
-      apiKey: process.env.ENGRAM_API_KEY!
+    const client = new Smaran({
+      apiKey: process.env.SMARAN_API_KEY!
     });
 
     const memories = await client.documents.list({ limit: 10 });
@@ -24,18 +24,18 @@ Retrieve paginated memories with filtering and sorting options from your Engram 
   </Tab>
   <Tab title="Python">
     ```python
-    from engram import Engram
+    from smaran import Smaran
     import os
 
-    client = Engram(api_key=os.environ.get("ENGRAM_API_KEY"))
+    client = Smaran(api_key=os.environ.get("SMARAN_API_KEY"))
     memories = client.documents.list(limit=10)
     print(f"Found {len(memories.memories)} memories")
     ```
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/documents/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/documents/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"limit": 10}'
     ```

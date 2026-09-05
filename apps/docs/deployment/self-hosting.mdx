@@ -1,10 +1,10 @@
 ---
 title: 'Self Hosting'
-description: 'Deploy your own instance of the engram API on Cloudflare Workers'
+description: 'Deploy your own instance of the smaran API on Cloudflare Workers'
 ---
 
 <Warning>
-This guide is intended for **enterprise customers only** who have specifically opted for self-hosting as part of their enterprise plan. If you're on a standard plan, please use our hosted API at [console.engram.ai](https://console.engram.ai).
+This guide is intended for **enterprise customers only** who have specifically opted for self-hosting as part of their enterprise plan. If you're on a standard plan, please use our hosted API at [console.smaran.ai](https://console.smaran.ai).
 </Warning>
 
 ## Prerequisites
@@ -13,12 +13,12 @@ Before you start, you'll need to gather several API keys and set up accounts wit
 
 ### Enterprise Deployment Package
 
-Your enterprise deployment package is provided by the engram team and contains:
+Your enterprise deployment package is provided by the smaran team and contains:
 - Your unique Host ID (`NEXT_PUBLIC_HOST_ID`)
 - The compiled JavaScript bundle
 - The deployment script
 
-Contact your engram enterprise representative to receive your deployment package.
+Contact your smaran enterprise representative to receive your deployment package.
 
 ### Cloudflare
 
@@ -72,7 +72,7 @@ postgresql://username:password@hostname:port/database
 2. Sign in or create an account
 3. Navigate to **API Keys** in the left sidebar
 4. Click **"Create new secret key"**
-5. Name your key (e.g., "engram Self-Hosted")
+5. Name your key (e.g., "smaran Self-Hosted")
 6. Copy the key and store it securely
 7. Add billing information if you haven't already
 
@@ -135,7 +135,7 @@ postgresql://username:password@hostname:port/database
 1. Go to [resend.com](https://resend.com) and create an account
 2. Navigate to **API Keys**
 3. Click **"Create API Key"**
-4. Name your key (e.g., "engram Production")
+4. Name your key (e.g., "smaran Production")
 5. Copy the key for `RESEND_API_KEY`
 6. Verify your sending domain in the **Domains** section
 
@@ -175,12 +175,12 @@ postgresql://username:password@hostname:port/database
 
 ## Setup deployment files
 
-Extract the deployment package provided by the engram team to your preferred directory:
+Extract the deployment package provided by the smaran team to your preferred directory:
 
 ```bash
 # Extract the deployment package
-$ unzip engram-enterprise-deployment.zip
-$ cd engram-deployment
+$ unzip smaran-enterprise-deployment.zip
+$ cd smaran-deployment
 ```
 
 ---
@@ -203,7 +203,7 @@ Below is a quick reference.
 | Name | Required? | Description |
 |------|-----------|-------------|
 | `NODE_ENV` | ✅ | `development`, `staging` or `production`. |
-| `NEXT_PUBLIC_HOST_ID` | ✅ | Your unique Host ID provided by the engram team. |
+| `NEXT_PUBLIC_HOST_ID` | ✅ | Your unique Host ID provided by the smaran team. |
 | `BETTER_AUTH_SECRET` | ✅ | Random 32-byte string – run `openssl rand -base64 32`. |
 | `BETTER_AUTH_URL` | ✅ | Public base URL for the API (no trailing `/`). Example: `https://api.example.com`. |
 | `DATABASE_URL` | ✅ | Postgres connection string (e.g. `postgres://user:pass@host:5432/db`). |
@@ -238,6 +238,6 @@ $ bun ./deploy.ts
 
 ## Updating Your Deployment
 
-To update your engram deployment, follow the same process as the initial deployment described in the **Deploy** section above. You can reuse your existing `.env` file and add/remove any new environment variables as needed.
+To update your smaran deployment, follow the same process as the initial deployment described in the **Deploy** section above. You can reuse your existing `.env` file and add/remove any new environment variables as needed.
 
 ---

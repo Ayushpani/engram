@@ -1,10 +1,10 @@
 ---
-title: 'Upgrading @engram/tools to v2.0.0'
-description: 'Migrate your code from @engram/tools 1.4.x to 2.0.0 — config-object signature, customId, and new defaults'
+title: 'Upgrading @smaran/tools to v2.0.0'
+description: 'Migrate your code from @smaran/tools 1.4.x to 2.0.0 — config-object signature, customId, and new defaults'
 sidebarTitle: 'Tools: v1.4 → 2.0'
 ---
 
-`@engram/tools` v2.0.0 unifies the API across all four integrations (Vercel AI SDK, OpenAI, Mastra, VoltAgent) around a single config-object signature and a consistent conversation-grouping concept. This guide walks you through the breaking changes.
+`@smaran/tools` v2.0.0 unifies the API across all four integrations (Vercel AI SDK, OpenAI, Mastra, VoltAgent) around a single config-object signature and a consistent conversation-grouping concept. This guide walks you through the breaking changes.
 
 <Note>
   This release is **breaking**. Update calls and re-test before bumping in
@@ -15,7 +15,7 @@ sidebarTitle: 'Tools: v1.4 → 2.0'
 
 | Area                  | v1.4.x                                                | v2.0.0                                                      |
 | --------------------- | ----------------------------------------------------- | ----------------------------------------------------------- |
-| Signature             | `withEngram(model, "user-123", { ... })`         | `withEngram(model, { containerTag: "user-123", ... })` |
+| Signature             | `withSmaran(model, "user-123", { ... })`         | `withSmaran(model, { containerTag: "user-123", ... })` |
 | Conversation grouping | `conversationId` (Vercel/OpenAI), `threadId` (Mastra) | **`customId`** everywhere                                   |
 | `customId`            | Optional                                              | **Required** — throws if missing or empty                   |
 | `containerTag`        | Positional argument                                   | **Required** field on options object                        |
@@ -25,16 +25,16 @@ sidebarTitle: 'Tools: v1.4 → 2.0'
 ## Install
 
 ```bash
-npm install @engram/tools@^2.0.0
+npm install @smaran/tools@^2.0.0
 ```
 
 ## 1. Vercel AI SDK
 
 ```typescript
 // v1.4.x
-import { withEngram } from '@engram/tools/ai-sdk';
+import { withSmaran } from '@smaran/tools/ai-sdk';
 
-const model = withEngram(openai('gpt-4'), 'user-123', {
+const model = withSmaran(openai('gpt-4'), 'user-123', {
   conversationId: 'conv-456',
   mode: 'full',
 });
@@ -42,9 +42,9 @@ const model = withEngram(openai('gpt-4'), 'user-123', {
 
 ```typescript
 // v2.0.0
-import { withEngram } from '@engram/tools/ai-sdk';
+import { withSmaran } from '@smaran/tools/ai-sdk';
 
-const model = withEngram(openai('gpt-4'), {
+const model = withSmaran(openai('gpt-4'), {
   containerTag: 'user-123',
   customId: 'conv-456',
   mode: 'full',
@@ -60,18 +60,18 @@ const model = withEngram(openai('gpt-4'), {
 
 ```typescript
 // v1.4.x
-import { withEngram } from '@engram/tools/openai';
+import { withSmaran } from '@smaran/tools/openai';
 
-const client = withEngram(openai, 'user-123', {
+const client = withSmaran(openai, 'user-123', {
   conversationId: 'conv-456',
 });
 ```
 
 ```typescript
 // v2.0.0
-import { withEngram } from '@engram/tools/openai';
+import { withSmaran } from '@smaran/tools/openai';
 
-const client = withEngram(openai, {
+const client = withSmaran(openai, {
   containerTag: 'user-123',
   customId: 'conv-456',
 });
@@ -86,15 +86,15 @@ Processor constructors and factory functions both moved to a single options argu
 ```typescript
 // v1.4.x
 import {
-  EngramInputProcessor,
-  createEngramOutputProcessor,
-} from '@engram/tools/mastra';
+  SmaranInputProcessor,
+  createSmaranOutputProcessor,
+} from '@smaran/tools/mastra';
 
-const input = new EngramInputProcessor('user-123', {
+const input = new SmaranInputProcessor('user-123', {
   mode: 'full',
 });
 
-const output = createEngramOutputProcessor('user-123', {
+const output = createSmaranOutputProcessor('user-123', {
   threadId: 'conv-456',
   addMemory: 'always',
 });
@@ -103,17 +103,17 @@ const output = createEngramOutputProcessor('user-123', {
 ```typescript
 // v2.0.0
 import {
-  EngramInputProcessor,
-  createEngramOutputProcessor,
-} from '@engram/tools/mastra';
+  SmaranInputProcessor,
+  createSmaranOutputProcessor,
+} from '@smaran/tools/mastra';
 
-const input = new EngramInputProcessor({
+const input = new SmaranInputProcessor({
   containerTag: 'user-123',
   customId: 'conv-456',
   mode: 'full',
 });
 
-const output = createEngramOutputProcessor({
+const output = createSmaranOutputProcessor({
   containerTag: 'user-123',
   customId: 'conv-456',
 });
@@ -139,7 +139,7 @@ If you were relying on `verbose: false` implicitly while passing `verbose: true`
 Across all four integrations, `addMemory` now defaults to `"always"`. If your v1.4.x code relied on the old default of `"never"`, set it explicitly:
 
 ```typescript
-const model = withEngram(openai('gpt-4'), {
+const model = withSmaran(openai('gpt-4'), {
   containerTag: 'user-123',
   customId: 'conv-456',
   addMemory: 'never', // preserve v1.4.x behavior
@@ -154,12 +154,12 @@ In v1.4.x the Vercel middleware fell back to `client.add` with a synthesized `cu
 
 <Steps>
   <Step title="Bump the dependency">
-    `npm install @engram/tools@^2.0.0`
+    `npm install @smaran/tools@^2.0.0`
   </Step>
-  <Step title="Find every withEngram / processor call">
-    Grep your codebase for `withEngram(`, `EngramInputProcessor`,
-    `EngramOutputProcessor`, `createEngramProcessor`,
-    `createEngramOutputProcessor`.
+  <Step title="Find every withSmaran / processor call">
+    Grep your codebase for `withSmaran(`, `SmaranInputProcessor`,
+    `SmaranOutputProcessor`, `createSmaranProcessor`,
+    `createSmaranOutputProcessor`.
   </Step>
   <Step title="Move containerTag into the options object">
     Drop the positional `containerTag` argument and add it to the options
@@ -185,4 +185,4 @@ In v1.4.x the Vercel middleware fell back to `client.add` with a synthesized `cu
 - [Mastra integration](/integrations/mastra)
 - [VoltAgent integration](/integrations/voltagent)
 
-If you hit something this guide does not cover, open an issue on [GitHub](https://github.com/engramai/engram).
+If you hit something this guide does not cover, open an issue on [GitHub](https://github.com/smaranai/smaran).

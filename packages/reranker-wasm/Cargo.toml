@@ -2,7 +2,7 @@
 name = "reranker-wasm"
 version = "0.1.0"
 edition = "2021"
-description = "WASM-compatible scoring utilities for the Engram Edge Reranker"
+description = "WASM-compatible scoring utilities for the Smaran Edge Reranker"
 
 [lib]
 crate-type = ["cdylib"]

@@ -1,15 +1,15 @@
 ---
 title: "LangGraph"
 sidebarTitle: "LangGraph"
-description: "Add persistent memory to LangGraph agents with Engram"
+description: "Add persistent memory to LangGraph agents with Smaran"
 icon: "/images/langgraph.svg"
 ---
 
-Build stateful agents with LangGraph that remember context across sessions. Engram handles memory storage and retrieval while LangGraph manages your graph-based conversation flow.
+Build stateful agents with LangGraph that remember context across sessions. Smaran handles memory storage and retrieval while LangGraph manages your graph-based conversation flow.
 
 ## Overview
 
-This guide shows how to integrate Engram with LangGraph to create agents that:
+This guide shows how to integrate Smaran with LangGraph to create agents that:
 
 - Maintain user context through automatic profiling
 - Store and retrieve relevant memories at each node
@@ -21,18 +21,18 @@ This guide shows how to integrate Engram with LangGraph to create agents that:
 Install the required packages:
 
 ```bash
-pip install langgraph langchain-openai engram python-dotenv
+pip install langgraph langchain-openai smaran python-dotenv
 ```
 
 Configure your environment:
 
 ```bash
 # .env
-ENGRAM_API_KEY=your-engram-api-key
+SMARAN_API_KEY=your-smaran-api-key
 OPENAI_API_KEY=your-openai-api-key
 ```
 
-<Note>Get your Engram API key from [console.engram.ai](https://console.engram.ai).</Note>
+<Note>Get your Smaran API key from [console.smaran.ai](https://console.smaran.ai).</Note>
 
 ## Basic integration
 
@@ -44,13 +44,13 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage
-from engram import Engram
+from smaran import Smaran
 from dotenv import load_dotenv
 
 load_dotenv()
 
 llm = ChatOpenAI(model="gpt-4o")
-memory = Engram()
+memory = Smaran()
 
 class State(TypedDict):
     messages: Annotated[list, add_messages]
@@ -112,7 +112,7 @@ print(result["messages"][-1].content)
 
 ### User profiles
 
-Engram automatically builds user profiles from stored memories:
+Smaran automatically builds user profiles from stored memories:
 
 - **Static facts**: Long-term information (preferences, expertise, background)
 - **Dynamic context**: Recent activity and current focus
@@ -175,7 +175,7 @@ from langgraph.graph.message import add_messages
 from langgraph.checkpoint.memory import MemorySaver
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage
-from engram import Engram
+from smaran import Smaran
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -183,7 +183,7 @@ load_dotenv()
 class SupportAgent:
     def __init__(self):
         self.llm = ChatOpenAI(model="gpt-4o", temperature=0.3)
-        self.memory = Engram()
+        self.memory = Smaran()
         self.app = self._build_graph()
 
     def _build_graph(self):
@@ -390,7 +390,7 @@ results = memory.search.memories(
 
 ### Combining session and long-term memory
 
-LangGraph's checkpointer handles within-session state. Engram handles cross-session memory. Use both:
+LangGraph's checkpointer handles within-session state. Smaran handles cross-session memory. Use both:
 
 ```python
 from langgraph.checkpoint.memory import MemorySaver
@@ -400,7 +400,7 @@ checkpointer = MemorySaver()
 app = graph.compile(checkpointer=checkpointer)
 
 # Long-term memory (persists across sessions)
-# Handled by Engram in your nodes
+# Handled by Smaran in your nodes
 ```
 
 ---

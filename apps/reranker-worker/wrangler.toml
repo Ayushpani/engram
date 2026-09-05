@@ -1,4 +1,4 @@
-name = "engram-edge-reranker"
+name = "smaran-edge-reranker"
 main = "src/index.ts"
 compatibility_date = "2024-05-20"
 

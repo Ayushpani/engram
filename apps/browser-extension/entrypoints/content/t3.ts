@@ -26,8 +26,8 @@ export function initializeT3() {
 	}
 
 	setTimeout(() => {
-		console.log("Adding engram icon to T3 input")
-		addEngramIconToT3Input()
+		console.log("Adding smaran icon to T3 input")
+		addSmaranIconToT3Input()
 		setupT3AutoFetch()
 	}, 2000)
 
@@ -55,9 +55,9 @@ function setupT3RouteChangeDetection() {
 	const checkForRouteChange = () => {
 		if (window.location.href !== currentUrl) {
 			currentUrl = window.location.href
-			console.log("T3 route changed, re-adding engram icon")
+			console.log("T3 route changed, re-adding smaran icon")
 			setTimeout(() => {
-				addEngramIconToT3Input()
+				addSmaranIconToT3Input()
 				setupT3AutoFetch()
 			}, 1000)
 		}
@@ -93,7 +93,7 @@ function setupT3RouteChangeDetection() {
 			t3ObserverThrottle = setTimeout(() => {
 				try {
 					t3ObserverThrottle = null
-					addEngramIconToT3Input()
+					addSmaranIconToT3Input()
 					setupT3AutoFetch()
 				} catch (error) {
 					console.error("Error in T3 observer callback:", error)
@@ -116,7 +116,7 @@ function setupT3RouteChangeDetection() {
 	}
 }
 
-function addEngramIconToT3Input() {
+function addSmaranIconToT3Input() {
 	const targetContainers = document.querySelectorAll(
 		".flex.min-w-0.items-center.gap-2",
 	)
@@ -126,7 +126,7 @@ function addEngramIconToT3Input() {
 		return
 	}
 
-	if (container.hasAttribute("data-engram-icon-added")) {
+	if (container.hasAttribute("data-smaran-icon-added")) {
 		return
 	}
 
@@ -134,31 +134,31 @@ function addEngramIconToT3Input() {
 		`#${ELEMENT_IDS.T3_INPUT_BAR_ELEMENT}`,
 	)
 	if (existingIcon) {
-		container.setAttribute("data-engram-icon-added", "true")
+		container.setAttribute("data-smaran-icon-added", "true")
 		return
 	}
 
-	const engramIcon = createT3InputBarElement(async () => {
+	const smaranIcon = createT3InputBarElement(async () => {
 		await getRelatedMemoriesForT3(POSTHOG_EVENT_KEY.T3_CHAT_MEMORIES_SEARCHED)
 	})
 
-	engramIcon.id = `${ELEMENT_IDS.T3_INPUT_BAR_ELEMENT}-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
+	smaranIcon.id = `${ELEMENT_IDS.T3_INPUT_BAR_ELEMENT}-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
 
-	container.setAttribute("data-engram-icon-added", "true")
+	container.setAttribute("data-smaran-icon-added", "true")
 
-	container.insertBefore(engramIcon, container.firstChild)
+	container.insertBefore(smaranIcon, container.firstChild)
 }
 
 async function getRelatedMemoriesForT3(actionSource: string) {
 	try {
 		let userQuery = ""
 
-		const engramContainer = document.querySelector(
-			'[data-engram-icon-added="true"]',
+		const smaranContainer = document.querySelector(
+			'[data-smaran-icon-added="true"]',
 		)
-		if (engramContainer?.parentElement?.previousElementSibling) {
+		if (smaranContainer?.parentElement?.previousElementSibling) {
 			const textareaElement =
-				engramContainer.parentElement.previousElementSibling.querySelector(
+				smaranContainer.parentElement.previousElementSibling.querySelector(
 					"textarea",
 				)
 			userQuery = textareaElement?.value || ""
@@ -221,12 +221,12 @@ async function getRelatedMemoriesForT3(actionSource: string) {
 
 		if (response?.success && response?.data) {
 			let textareaElement = null
-			const engramContainer = document.querySelector(
-				'[data-engram-icon-added="true"]',
+			const smaranContainer = document.querySelector(
+				'[data-smaran-icon-added="true"]',
 			)
-			if (engramContainer?.parentElement?.previousElementSibling) {
+			if (smaranContainer?.parentElement?.previousElementSibling) {
 				textareaElement =
-					engramContainer.parentElement.previousElementSibling.querySelector(
+					smaranContainer.parentElement.previousElementSibling.querySelector(
 						"textarea",
 					)
 			}
@@ -682,12 +682,12 @@ async function setupT3AutoFetch() {
 
 	if (
 		!textareaElement ||
-		textareaElement.hasAttribute("data-engram-auto-fetch")
+		textareaElement.hasAttribute("data-smaran-auto-fetch")
 	) {
 		return
 	}
 
-	textareaElement.setAttribute("data-engram-auto-fetch", "true")
+	textareaElement.setAttribute("data-smaran-auto-fetch", "true")
 
 	const handleInput = () => {
 		if (t3DebounceTimeout) {

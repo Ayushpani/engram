@@ -1,10 +1,10 @@
 ---
 title: "GitHub Connector"
-description: "Connect GitHub repositories to sync documentation files into your Engram knowledge base"
+description: "Connect GitHub repositories to sync documentation files into your Smaran knowledge base"
 icon: "github"
 ---
 
-Connect GitHub repositories to sync documentation files into your Engram knowledge base with OAuth authentication, webhook support, and automatic incremental syncing.
+Connect GitHub repositories to sync documentation files into your Smaran knowledge base with OAuth authentication, webhook support, and automatic incremental syncing.
 
 <Warning>
 The GitHub connector requires a **Scale Plan** or **Enterprise Plan**.
@@ -17,10 +17,10 @@ The GitHub connector requires a **Scale Plan** or **Enterprise Plan**.
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Engram from 'engram';
+    import Smaran from 'smaran';
 
-    const client = new Engram({
-      apiKey: process.env.ENGRAM_API_KEY!
+    const client = new Smaran({
+      apiKey: process.env.SMARAN_API_KEY!
     });
 
     const connection = await client.connections.create('github', {
@@ -40,10 +40,10 @@ The GitHub connector requires a **Scale Plan** or **Enterprise Plan**.
   </Tab>
   <Tab title="Python">
     ```python
-    from engram import Engram
+    from smaran import Smaran
     import os
 
-    client = Engram(api_key=os.environ.get("ENGRAM_API_KEY"))
+    client = Smaran(api_key=os.environ.get("SMARAN_API_KEY"))
 
     connection = client.connections.create(
         'github',
@@ -63,8 +63,8 @@ The GitHub connector requires a **Scale Plan** or **Enterprise Plan**.
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/connections/github" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/github" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "redirectUrl": "https://yourapp.com/auth/github/callback",
@@ -166,12 +166,12 @@ Unlike other connectors, GitHub requires repository selection before syncing beg
   <Tab title="cURL">
     ```bash
     # List available repositories
-    curl -X GET "https://api.engram.ai/v3/connections/{connectionId}/resources?page=1&per_page=100" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY"
+    curl -X GET "https://api.smaran.ai/v3/connections/{connectionId}/resources?page=1&per_page=100" \
+      -H "Authorization: Bearer $SMARAN_API_KEY"
 
     # Configure selected repositories
-    curl -X POST "https://api.engram.ai/v3/connections/{connectionId}/configure" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/{connectionId}/configure" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "resources": [
@@ -194,7 +194,7 @@ Unlike other connectors, GitHub requires repository selection before syncing beg
 <Warning>
 **API-First Design:**
 
-Engram provides the API endpoints to list and configure repositories. As a Engram customer, you need to build the UI in your application where your end-users can:
+Smaran provides the API endpoints to list and configure repositories. As a Smaran customer, you need to build the UI in your application where your end-users can:
 1. View their available GitHub repositories
 2. Select which repositories to sync
 3. Confirm the selection
@@ -212,7 +212,7 @@ The GitHub connector syncs documentation and text files with the following exten
 - **AsciiDoc**: `.adoc`
 - **Org-mode**: `.org`
 
-Files are indexed as `github_markdown` document type in Engram.
+Files are indexed as `github_markdown` document type in Smaran.
 
 <Note>
 Only text-based documentation files are synced. Binary files, images, and code files (`.js`, `.py`, `.go`, etc.) are excluded by default to focus on searchable documentation content.
@@ -220,22 +220,22 @@ Only text-based documentation files are synced. Binary files, images, and code f
 
 ## Incremental Sync with Webhooks
 
-The GitHub connector automatically sets up webhooks for real-time incremental syncing. When files are pushed or deleted in configured repositories, Engram is notified immediately.
+The GitHub connector automatically sets up webhooks for real-time incremental syncing. When files are pushed or deleted in configured repositories, Smaran is notified immediately.
 
 <Note>
-**Batch Processing:** Webhook events are processed in batches with a 10-minute delay to optimize performance and prevent excessive syncing during rapid commits. This means changes pushed to your repository will be reflected in Engram within approximately 10 minutes.
+**Batch Processing:** Webhook events are processed in batches with a 10-minute delay to optimize performance and prevent excessive syncing during rapid commits. This means changes pushed to your repository will be reflected in Smaran within approximately 10 minutes.
 </Note>
 
 ### How It Works
 
 1. **Webhook Setup**: When you configure repositories, a webhook is automatically installed in each repository
 2. **Push Events**: When commits are pushed to the default branch, changed documentation files are synced
-3. **Delete Events**: When documentation files are deleted, they're removed from your Engram knowledge base
+3. **Delete Events**: When documentation files are deleted, they're removed from your Smaran knowledge base
 4. **Incremental Updates**: Only changed files are processed, keeping sync fast and efficient
 
 ### Webhook Security
 
-Webhooks are secured using HMAC-SHA256 signature validation with constant-time comparison. Engram automatically validates that webhook events come from GitHub before processing them. Each repository gets a unique webhook secret for maximum security.
+Webhooks are secured using HMAC-SHA256 signature validation with constant-time comparison. Smaran automatically validates that webhook events come from GitHub before processing them. Each repository gets a unique webhook secret for maximum security.
 
 <Tabs>
   <Tab title="TypeScript">
@@ -261,8 +261,8 @@ Webhooks are secured using HMAC-SHA256 signature validation with constant-time c
   <Tab title="cURL">
     ```bash
     # Get connection details including webhook status
-    curl -X POST "https://api.engram.ai/v3/connections/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{}'
     ```
@@ -314,8 +314,8 @@ Webhooks are secured using HMAC-SHA256 signature validation with constant-time c
   <Tab title="cURL">
     ```bash
     # List all GitHub connections for specific container tags
-    curl -X POST "https://api.engram.ai/v3/connections/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123"],
@@ -376,8 +376,8 @@ You can update which repositories are synced at any time:
   <Tab title="cURL">
     ```bash
     # Update repository configuration
-    curl -X POST "https://api.engram.ai/v3/connections/{connectionId}/configure" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/{connectionId}/configure" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "resources": [
@@ -401,7 +401,7 @@ You can update which repositories are synced at any time:
 When you update the repository configuration:
 - New repositories are added and synced immediately
 - Removed repositories have their webhooks deleted
-- Existing documents from removed repositories remain in Engram unless you delete them manually
+- Existing documents from removed repositories remain in Smaran unless you delete them manually
 </Note>
 
 ### Delete Connection
@@ -437,8 +437,8 @@ When you update the repository configuration:
   <Tab title="cURL">
     ```bash
     # Delete by connection ID
-    curl -X DELETE "https://api.engram.ai/v3/connections/{connectionId}" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY"
+    curl -X DELETE "https://api.smaran.ai/v3/connections/{connectionId}" \
+      -H "Authorization: Bearer $SMARAN_API_KEY"
     ```
   </Tab>
 </Tabs>
@@ -448,7 +448,7 @@ Deleting a GitHub connection will:
 - Stop all future syncs from configured repositories
 - Remove all webhooks from the repositories
 - Revoke the OAuth authorization
-- **Permanently delete all synced documents** from your Engram knowledge base (unless you pass `deleteDocuments=false` as a query parameter to keep them)
+- **Permanently delete all synced documents** from your Smaran knowledge base (unless you pass `deleteDocuments=false` as a query parameter to keep them)
 </Warning>
 
 ### Manual Sync
@@ -486,12 +486,12 @@ Trigger a manual synchronization for all configured repositories:
   <Tab title="cURL">
     ```bash
     # Trigger sync for all GitHub connections
-    curl -X POST "https://api.engram.ai/v3/connections/github/import" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY"
+    curl -X POST "https://api.smaran.ai/v3/connections/github/import" \
+      -H "Authorization: Bearer $SMARAN_API_KEY"
 
     # Trigger sync for specific container tags
-    curl -X POST "https://api.engram.ai/v3/connections/github/import" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/github/import" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123"]
@@ -542,8 +542,8 @@ For white-label deployments or custom branding, configure your own GitHub OAuth 
   <Tab title="cURL">
     ```bash
     # Update organization settings
-    curl -X PATCH "https://api.engram.ai/v3/settings" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X PATCH "https://api.smaran.ai/v3/settings" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "githubCustomKeyEnabled": true,
@@ -552,8 +552,8 @@ For white-label deployments or custom branding, configure your own GitHub OAuth 
       }'
 
     # Get current settings
-    curl -X GET "https://api.engram.ai/v3/settings" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY"
+    curl -X GET "https://api.smaran.ai/v3/settings" \
+      -H "Authorization: Bearer $SMARAN_API_KEY"
     ```
   </Tab>
 </Tabs>
@@ -563,9 +563,9 @@ For white-label deployments or custom branding, configure your own GitHub OAuth 
 
 1. Go to GitHub Settings → Developer settings → OAuth Apps
 2. Click "New OAuth App"
-3. Set Authorization callback URL to: `https://api.engram.ai/v3/connections/auth/callback/github`
+3. Set Authorization callback URL to: `https://api.smaran.ai/v3/connections/auth/callback/github`
 4. Copy the Client ID and generate a Client Secret
-5. Configure them in Engram using the settings API above
+5. Configure them in Smaran using the settings API above
 
-After configuration, all new GitHub connections will use your custom OAuth app instead of Engram's default app.
+After configuration, all new GitHub connections will use your custom OAuth app instead of Smaran's default app.
 </Note>

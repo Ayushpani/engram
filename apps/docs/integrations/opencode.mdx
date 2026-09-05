@@ -1,36 +1,36 @@
 ---
 title: "OpenCode"
 sidebarTitle: "OpenCode"
-description: "OpenCode Engram Plugin — persistent memory across coding sessions"
+description: "OpenCode Smaran Plugin — persistent memory across coding sessions"
 icon: "/images/opencode-logo.png"
 ---
 
 <Warning>
-This integration requires the **Engram Pro plan**. [Upgrade here](https://console.engram.ai/billing).
+This integration requires the **Smaran Pro plan**. [Upgrade here](https://console.smaran.ai/billing).
 </Warning>
 
-[OpenCode-Engram](https://github.com/engramai/opencode-engram) is an OpenCode plugin that gives your AI persistent memory across sessions. Your agent remembers what you worked on — across sessions, across projects.
+[OpenCode-Smaran](https://github.com/smaranai/opencode-smaran) is an OpenCode plugin that gives your AI persistent memory across sessions. Your agent remembers what you worked on — across sessions, across projects.
 
 ## Get Your API Key
 
-Create a Engram API key from the [API Keys](https://console.engram.ai/keys) page, then add it to your shell profile so it persists across sessions:
+Create a Smaran API key from the [API Keys](https://console.smaran.ai/keys) page, then add it to your shell profile so it persists across sessions:
 
 <Tabs>
   <Tab title="macOS / Linux (zsh)">
     ```bash
-    echo 'export ENGRAM_API_KEY="sm_..."' >> ~/.zshrc
+    echo 'export SMARAN_API_KEY="sm_..."' >> ~/.zshrc
     source ~/.zshrc
     ```
   </Tab>
   <Tab title="macOS / Linux (bash)">
     ```bash
-    echo 'export ENGRAM_API_KEY="sm_..."' >> ~/.bashrc
+    echo 'export SMARAN_API_KEY="sm_..."' >> ~/.bashrc
     source ~/.bashrc
     ```
   </Tab>
   <Tab title="Windows (PowerShell)">
     ```powershell
-    [System.Environment]::SetEnvironmentVariable("ENGRAM_API_KEY", "sm_...", "User")
+    [System.Environment]::SetEnvironmentVariable("SMARAN_API_KEY", "sm_...", "User")
     ```
     Restart your terminal after running this.
   </Tab>
@@ -39,20 +39,20 @@ Create a Engram API key from the [API Keys](https://console.engram.ai/keys) page
 ## Install the Plugin
 
 ```bash
-bunx opencode-engram@latest install
+bunx opencode-smaran@latest install
 ```
 
 For LLM agents (non-interactive):
 
 ```bash
-bunx opencode-engram@latest install --no-tui
+bunx opencode-smaran@latest install --no-tui
 ```
 
 Ensure your `~/.config/opencode/opencode.jsonc` contains:
 
 ```json
 {
-  "plugin": ["opencode-engram"]
+  "plugin": ["opencode-smaran"]
 }
 ```
 
@@ -85,17 +85,17 @@ Once installed, the plugin runs automatically:
 
 ## Commands
 
-### /engram-init
+### /smaran-init
 
 Explore and index your codebase structure into memory:
 
 ```
-/engram-init
+/smaran-init
 ```
 
 ## Tools
 
-The agent has access to a `engram` tool with these modes:
+The agent has access to a `smaran` tool with these modes:
 
 | Mode | Parameters | Function |
 |------|------------|----------|
@@ -107,11 +107,11 @@ The agent has access to a `engram` tool with these modes:
 
 ## Configuration
 
-Create `~/.config/opencode/engram.jsonc`:
+Create `~/.config/opencode/smaran.jsonc`:
 
 ```jsonc
 {
-  "apiKey": "sm_...",              // Or use ENGRAM_API_KEY env var
+  "apiKey": "sm_...",              // Or use SMARAN_API_KEY env var
   "similarityThreshold": 0.6,      // Minimum match score (0-1)
   "maxMemories": 5,                // Memories per injection
   "maxProjectMemories": 10,        // Project memory listings
@@ -127,13 +127,13 @@ Create `~/.config/opencode/engram.jsonc`:
 View plugin activity:
 
 ```bash
-tail -f ~/.opencode-engram.log
+tail -f ~/.opencode-smaran.log
 ```
 
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="GitHub Repository" icon="github" href="https://github.com/engramai/opencode-engram">
+  <Card title="GitHub Repository" icon="github" href="https://github.com/smaranai/opencode-smaran">
     Source code, issues, and detailed README.
   </Card>
 

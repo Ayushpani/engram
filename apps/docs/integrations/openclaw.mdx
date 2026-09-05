@@ -1,22 +1,22 @@
 ---
 title: "OpenClaw"
 sidebarTitle: "OpenClaw"
-description: "OpenClaw Engram Plugin — works across Telegram, WhatsApp, Discord, Slack, and more"
+description: "OpenClaw Smaran Plugin — works across Telegram, WhatsApp, Discord, Slack, and more"
 icon: "/images/openclaw-logo.jpg"
 ---
 
 <Warning>
-This integration requires the **Engram Pro plan**. [Upgrade here](https://console.engram.ai/billing).
+This integration requires the **Smaran Pro plan**. [Upgrade here](https://console.smaran.ai/billing).
 </Warning>
 
-[OpenClaw](https://github.com/engramai/openclaw-engram) is a multi-platform AI messaging gateway that connects to WhatsApp, Telegram, Discord, Slack, iMessage, and other messaging channels. The Engram plugin gives OpenClaw memory across every channel.
+[OpenClaw](https://github.com/smaranai/openclaw-smaran) is a multi-platform AI messaging gateway that connects to WhatsApp, Telegram, Discord, Slack, iMessage, and other messaging channels. The Smaran plugin gives OpenClaw memory across every channel.
 
 ## Install the Plugin
 
 Get started by installing the plugin with a single command.
 
 ```bash
-openclaw plugins install @engram/openclaw-engram
+openclaw plugins install @smaran/openclaw-smaran
 ```
 
 Restart OpenClaw after installing.
@@ -26,17 +26,17 @@ Restart OpenClaw after installing.
 Run the setup command and enter your API key when prompted.
 
 ```bash
-openclaw engram setup
+openclaw smaran setup
 ```
 
-Enter your API key from [console.engram.ai](https://console.engram.ai). That's it.
+Enter your API key from [console.smaran.ai](https://console.smaran.ai). That's it.
 
 <AccordionGroup>
   <Accordion title="Advanced Setup">
     Configure all options interactively with the advanced setup command:
 
     ```bash
-    openclaw engram setup-advanced
+    openclaw smaran setup-advanced
     ```
 
     This lets you configure: container tag, auto-recall, auto-capture, capture mode, custom container tags, and more.
@@ -49,8 +49,8 @@ Enter your API key from [console.engram.ai](https://console.engram.ai). That's i
 
 Once installed, the plugin runs automatically with zero interaction.
 
-- **Auto-Recall** — Before every AI turn, Engram is queried for relevant memories and the user's profile. These are injected as context so the AI sees preferences, facts, and semantically similar past conversations.
-- **Auto-Capture** — After every AI turn, the conversation exchange is sent to Engram for extraction and long-term storage. Engram handles deduplication and profile building.
+- **Auto-Recall** — Before every AI turn, Smaran is queried for relevant memories and the user's profile. These are injected as context so the AI sees preferences, facts, and semantically similar past conversations.
+- **Auto-Capture** — After every AI turn, the conversation exchange is sent to Smaran for extraction and long-term storage. Smaran handles deduplication and profile building.
 - **Custom Container Tags** — When enabled via advanced setup, define custom memory containers (e.g., `work`, `personal`, `bookmarks`). The AI automatically picks the right container based on your instructions.
 
 ## Features
@@ -61,10 +61,10 @@ The AI can use these tools autonomously during conversations.
 
 | Tool | Description |
 |------|-------------|
-| `engram_store` | Save information to long-term memory. |
-| `engram_search` | Search memories by query with similarity scores. |
-| `engram_forget` | Delete a memory by query or ID. |
-| `engram_profile` | View the user profile — persistent facts and recent context. |
+| `smaran_store` | Save information to long-term memory. |
+| `smaran_search` | Search memories by query with similarity scores. |
+| `smaran_forget` | Delete a memory by query or ID. |
+| `smaran_profile` | View the user profile — persistent facts and recent context. |
 
 ### Slash Commands
 
@@ -80,12 +80,12 @@ Users can interact with memory directly in chat.
 Manage your memory from the terminal.
 
 ```bash
-openclaw engram setup              # Configure API key
-openclaw engram setup-advanced     # Configure all options
-openclaw engram status             # View current configuration
-openclaw engram search <query>     # Search memories
-openclaw engram profile            # View user profile
-openclaw engram wipe               # Delete all memories (requires confirmation)
+openclaw smaran setup              # Configure API key
+openclaw smaran setup-advanced     # Configure all options
+openclaw smaran status             # View current configuration
+openclaw smaran search <query>     # Search memories
+openclaw smaran profile            # View user profile
+openclaw smaran wipe               # Delete all memories (requires confirmation)
 ```
 
 <AccordionGroup>
@@ -94,7 +94,7 @@ openclaw engram wipe               # Delete all memories (requires confirmation)
 
     | Key | Type | Default | Description |
     |-----|------|---------|-------------|
-    | `apiKey` | `string` | — | Engram API key. |
+    | `apiKey` | `string` | — | Smaran API key. |
     | `containerTag` | `string` | `openclaw_{hostname}` | Root memory namespace. |
     | `autoRecall` | `boolean` | `true` | Inject relevant memories before every AI turn. |
     | `autoCapture` | `boolean` | `true` | Store conversation content after every turn. |
@@ -112,10 +112,10 @@ openclaw engram wipe               # Delete all memories (requires confirmation)
     {
       "plugins": {
         "entries": {
-          "openclaw-engram": {
+          "openclaw-smaran": {
             "enabled": true,
             "config": {
-              "apiKey": "${ENGRAM_OPENCLAW_API_KEY}",
+              "apiKey": "${SMARAN_OPENCLAW_API_KEY}",
               "containerTag": "my_memory",
               "autoRecall": true,
               "autoCapture": true,
@@ -141,20 +141,20 @@ openclaw engram wipe               # Delete all memories (requires confirmation)
 ## FAQ
 
 <AccordionGroup>
-  <Accordion title="How do I install OpenClaw with Engram?">
+  <Accordion title="How do I install OpenClaw with Smaran?">
     1. Install the plugin:
 
     ```bash
-    openclaw plugins install @engram/openclaw-engram
+    openclaw plugins install @smaran/openclaw-smaran
     ```
 
     2. Run the setup wizard:
 
     ```bash
-    openclaw engram setup
+    openclaw smaran setup
     ```
 
-    3. When prompted, paste your API key from [console.engram.ai](https://console.engram.ai). The key starts with `sm_`.
+    3. When prompted, paste your API key from [console.smaran.ai](https://console.smaran.ai). The key starts with `sm_`.
 
     4. Restart OpenClaw to activate the plugin:
 
@@ -165,17 +165,17 @@ openclaw engram wipe               # Delete all memories (requires confirmation)
     5. Verify the connection:
 
     ```bash
-    openclaw engram status
+    openclaw smaran status
     ```
 
-    That's it — Engram is now connected and will automatically recall and capture memories across all your channels.
+    That's it — Smaran is now connected and will automatically recall and capture memories across all your channels.
   </Accordion>
 
-  <Accordion title="I have Twitter bookmarks in a separate container. How do I use them with Engram?">
+  <Accordion title="I have Twitter bookmarks in a separate container. How do I use them with Smaran?">
     Use the advanced setup to enable custom container tags and add a read-only Twitter bookmarks container.
 
     ```bash
-    openclaw engram setup-advanced
+    openclaw smaran setup-advanced
     ```
 
     When prompted, enter:
@@ -205,7 +205,7 @@ openclaw engram wipe               # Delete all memories (requires confirmation)
     Use custom container tags to route memories by channel. Run the advanced setup:
 
     ```bash
-    openclaw engram setup-advanced
+    openclaw smaran setup-advanced
     ```
 
     When prompted, enter:
@@ -234,13 +234,13 @@ openclaw engram wipe               # Delete all memories (requires confirmation)
     Ask the OpenClaw agent directly in any chat. No terminal needed.
 
     ```
-    What are all the available configurations for the Engram plugin advanced mode?
+    What are all the available configurations for the Smaran plugin advanced mode?
     ```
 
     The agent will list every option. Then tell it what you want:
 
     ```
-    Set up my Engram plugin with these settings:
+    Set up my Smaran plugin with these settings:
     - Auto recall: true
     - Auto capture: true
     - Enable custom container tags: true
@@ -265,7 +265,7 @@ openclaw engram wipe               # Delete all memories (requires confirmation)
 
     Automatic per-channel separation is not supported yet. If you need this, let us know — with enough requests, we'll implement it right away.
 
-    <Card title="Request this feature" icon="mail" href="mailto:support@engram.com?subject=Feature%20Request%3A%20Per-Channel%20Container%20Tags&body=Hey%2C%0A%0AMy%20name%20is%20%5Byour%20name%5D.%20I%20just%20saw%20that%20you%20offer%20custom%20plugins.%0A%0AThis%20is%20my%20use%20case%3A%20%5Bdescribe%20your%20use%20case%5D%0A%0AI%20would%20love%20to%20have%20separate%20container%20tags%20for%20each%20channel%20so%20my%20session%20memories%20are%20automatically%20isolated.%0A%0AThanks!">
+    <Card title="Request this feature" icon="mail" href="mailto:support@smaran.com?subject=Feature%20Request%3A%20Per-Channel%20Container%20Tags&body=Hey%2C%0A%0AMy%20name%20is%20%5Byour%20name%5D.%20I%20just%20saw%20that%20you%20offer%20custom%20plugins.%0A%0AThis%20is%20my%20use%20case%3A%20%5Bdescribe%20your%20use%20case%5D%0A%0AI%20would%20love%20to%20have%20separate%20container%20tags%20for%20each%20channel%20so%20my%20session%20memories%20are%20automatically%20isolated.%0A%0AThanks!">
       Email us with your use case.
     </Card>
   </Accordion>
@@ -274,11 +274,11 @@ openclaw engram wipe               # Delete all memories (requires confirmation)
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="GitHub Repository" icon="github" href="https://github.com/engramai/openclaw-engram">
+  <Card title="GitHub Repository" icon="github" href="https://github.com/smaranai/openclaw-smaran">
     Source code, issues, and detailed README.
   </Card>
 
   <Card title="Claude Memory Tool" icon="brain" href="/integrations/claude-memory">
-    Use Claude's native memory tool with Engram as backend.
+    Use Claude's native memory tool with Smaran as backend.
   </Card>
 </CardGroup>

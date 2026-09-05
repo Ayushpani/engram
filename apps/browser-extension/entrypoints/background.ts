@@ -77,9 +77,9 @@ export default defineBackground(() => {
 	}
 
 	/**
-	 * Save memory to engram API
+	 * Save memory to smaran API
 	 */
-	const saveMemoryToEngram = async (
+	const saveMemoryToSmaran = async (
 		data: MemoryData,
 		actionSource: string,
 	): Promise<{ success: boolean; data?: unknown; error?: string }> => {
@@ -195,7 +195,7 @@ export default defineBackground(() => {
 			if (message.action === MESSAGE_TYPES.SAVE_MEMORY) {
 				;(async () => {
 					try {
-						const result = await saveMemoryToEngram(
+						const result = await saveMemoryToSmaran(
 							message.data as MemoryData,
 							message.actionSource || "unknown",
 						)
@@ -244,7 +244,7 @@ export default defineBackground(() => {
 							content: messageData.prompt,
 						}
 
-						const result = await saveMemoryToEngram(
+						const result = await saveMemoryToSmaran(
 							memoryData,
 							`prompt_capture_${messageData.platform}`,
 						)

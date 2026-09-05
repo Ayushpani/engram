@@ -41,14 +41,14 @@ Handle large memory collections efficiently using pagination to process data in 
   <Tab title="cURL">
     ```bash
     # Get first page
-    curl -X POST "https://api.engram.ai/v3/documents/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/documents/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"limit": 20, "page": 1}'
 
     # Get next page
-    curl -X POST "https://api.engram.ai/v3/documents/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/documents/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"limit": 20, "page": 2}'
     ```
@@ -95,8 +95,8 @@ Handle large memory collections efficiently using pagination to process data in 
     # Manual pagination with bash loop
     for page in {1..5}; do
       echo "=== Page $page ==="
-      curl -X POST "https://api.engram.ai/v3/documents/list" \
-        -H "Authorization: Bearer $ENGRAM_API_KEY" \
+      curl -X POST "https://api.smaran.ai/v3/documents/list" \
+        -H "Authorization: Bearer $SMARAN_API_KEY" \
         -H "Content-Type: application/json" \
         -d "{\"page\": $page, \"limit\": 20}" | \
         jq '.memories | length'

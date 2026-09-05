@@ -1,32 +1,32 @@
 ---
-title: "Overview — What is Engram?"
+title: "Overview — What is Smaran?"
 sidebarTitle: "Overview"
 icon: "book-open"
 ---
 
-Engram is the long-term and short-term memory and context infrastructure for AI agents. It is the [state of the art](https://engram.ai/research) across multiple different benchmarks, like LongMemEval and LoCoMo.
+Smaran is the long-term and short-term memory and context infrastructure for AI agents. It is the [state of the art](https://smaran.ai/research) across multiple different benchmarks, like LongMemEval and LoCoMo.
 
-With engram, developers can provide perfect recall about their users to build AI agents that are more intelligent, more personalized, and more consistent. Additionally, *engram* has all the pieces of the context stack built in:
+With smaran, developers can provide perfect recall about their users to build AI agents that are more intelligent, more personalized, and more consistent. Additionally, *smaran* has all the pieces of the context stack built in:
 - [Agent memory](/concepts/graph-memory)
 - [Content extraction](/concepts/content-types)
 - [Connectors and syncing](/connectors/overview)
 - [Managed RAG platform](/concepts/super-rag)
 
-All this, coming together, makes engram the best abstraction to provide to agents.
+All this, coming together, makes smaran the best abstraction to provide to agents.
 
 ## How does it work? (at a glance)
 
 ![](/images/232.png)
 
-- You send Engram text, files, and chats.
-- Engram [intelligently indexes them](/concepts/how-it-works) and builds a semantic understanding graph on top of an entity (e.g., a user, a document, a project, an organization).
+- You send Smaran text, files, and chats.
+- Smaran [intelligently indexes them](/concepts/how-it-works) and builds a semantic understanding graph on top of an entity (e.g., a user, a document, a project, an organization).
 - At query time, we fetch only the most relevant context and pass it to your models.
 
-## Engram is context engineering.
+## Smaran is context engineering.
 
 #### Ingestion and Extraction
 
-Engram handles all the extraction, for [any data type that you have](/concepts/content-types).
+Smaran handles all the extraction, for [any data type that you have](/concepts/content-types).
 - Text
 - Conversations
 - Files (PDF, Images, Docs)
@@ -40,7 +40,7 @@ We offer three ways to add context to your LLMs:
 
 ![memory graph](/images/memory-graph.png)
 
-Engram learns and builds the memory for the user. These are extracted facts about the user, that:
+Smaran learns and builds the memory for the user. These are extracted facts about the user, that:
 - [Evolve on top of existing context about the user](/concepts/graph-memory), **in real time**
 - Handle **knowledge updates, temporal changes, forgetfulness**
 - Creates a **user profile** as the default context provider for the LLM.
@@ -50,7 +50,7 @@ _This can then be provided to the LLM, to give more contextual, personalized res
 #### User profiles
 
 Having the latest, evolving context about the user allows us to also create a [**User Profile**](/concepts/user-profiles). This is a combination of static and dynamic facts about the user, that the agent should **always know**
-Developers can configure engram with what static and dynamic contents are, depending on their use case.
+Developers can configure smaran with what static and dynamic contents are, depending on their use case.
 
 - Static: Information that the agent should **always** know.
 - Dynamic: **Episodic** information, about last few conversations etc.

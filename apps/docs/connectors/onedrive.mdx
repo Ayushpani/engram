@@ -5,7 +5,7 @@ icon: "microsoft"
 ---
 
 
-Connect OneDrive to automatically sync Word documents, Excel spreadsheets, and PowerPoint presentations into your Engram knowledge base. Supports both personal and business accounts with scheduled synchronization.
+Connect OneDrive to automatically sync Word documents, Excel spreadsheets, and PowerPoint presentations into your Smaran knowledge base. Supports both personal and business accounts with scheduled synchronization.
 
 ## Quick Setup
 
@@ -14,10 +14,10 @@ Connect OneDrive to automatically sync Word documents, Excel spreadsheets, and P
 <CodeGroup>
 
 ```typescript Typescript
-import Engram from 'engram';
+import Smaran from 'smaran';
 
-const client = new Engram({
-  apiKey: process.env.ENGRAM_API_KEY!
+const client = new Smaran({
+  apiKey: process.env.SMARAN_API_KEY!
 });
 
 const connection = await client.connections.create('onedrive', {
@@ -38,10 +38,10 @@ window.location.href = connection.authLink;
 ```
 
 ```python Python
-from engram import Engram
+from smaran import Smaran
 import os
 
-client = Engram(api_key=os.environ.get("ENGRAM_API_KEY"))
+client = Smaran(api_key=os.environ.get("SMARAN_API_KEY"))
 
 connection = client.connections.create(
     'onedrive',
@@ -62,8 +62,8 @@ print(f'Redirect to: {connection.auth_link}')
 ```
 
 ```bash cURL
-curl -X POST "https://api.engram.ai/v3/connections/onedrive" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/connections/onedrive" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "redirectUrl": "https://yourapp.com/auth/onedrive/callback",
@@ -119,8 +119,8 @@ After user grants permissions, Microsoft redirects to your callback URL. The con
     ```
   ```bash cURL
     # Get connections by provider and tags
-    curl -X POST "https://api.engram.ai/v3/connections/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123", "onedrive-sync"],
@@ -128,8 +128,8 @@ After user grants permissions, Microsoft redirects to your callback URL. The con
       }'
 
     # List synced Office documents
-    curl -X POST "https://api.engram.ai/v3/documents/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/documents/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "containerTags": ["user-123", "onedrive-sync"],
@@ -191,8 +191,8 @@ Webhooks lead to real-time syncing of changes in documents. You may also manuall
     ```
   ```bash cURL
     # Trigger manual sync
-    curl -X POST "https://api.engram.ai/v3/connections/onedrive/import" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/onedrive/import" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"containerTags": ["user-123"]}'
     ```
@@ -231,12 +231,12 @@ print('Deleted OneDrive connection for user')
 
 ```bash cURL
 # Delete by connection ID
-curl -X DELETE "https://api.engram.ai/v3/connections/connection_id_123" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY"
+curl -X DELETE "https://api.smaran.ai/v3/connections/connection_id_123" \
+  -H "Authorization: Bearer $SMARAN_API_KEY"
 
 # Delete by provider and container tags
-curl -X DELETE "https://api.engram.ai/v3/connections/onedrive" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X DELETE "https://api.smaran.ai/v3/connections/onedrive" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"containerTags": ["user-123"]}'
 ```
@@ -247,7 +247,7 @@ curl -X DELETE "https://api.engram.ai/v3/connections/onedrive" \
 Deleting a connection will:
 - Stop all future syncs from OneDrive
 - Remove the OAuth authorization
-- Keep existing synced documents in Engram (they won't be deleted)
+- Keep existing synced documents in Smaran (they won't be deleted)
 </Note>
 
 ## Advanced Configuration
@@ -290,8 +290,8 @@ For production deployments, configure your own Microsoft application:
     ```
   ```bash cURL
     # Update organization settings
-    curl -X PATCH "https://api.engram.ai/v3/settings" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X PATCH "https://api.smaran.ai/v3/settings" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "onedriveCustomKeyEnabled": true,
@@ -340,8 +340,8 @@ Control which OneDrive documents get synced:
     ```
   ```bash cURL
     # Configure filtering for Office documents
-    curl -X PATCH "https://api.engram.ai/v3/settings" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X PATCH "https://api.smaran.ai/v3/settings" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "shouldLLMFilter": true,

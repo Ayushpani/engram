@@ -1,9 +1,9 @@
 ---
 title: "File Upload"
-description: "Upload PDFs, images, and other files to Engram"
+description: "Upload PDFs, images, and other files to Smaran"
 ---
 
-Upload files directly to Engram for automatic content extraction and processing.
+Upload files directly to Smaran for automatic content extraction and processing.
 
 ## Upload a PDF
 
@@ -35,8 +35,8 @@ print(response['id'])
 ```
 
 ```bash cURL
-curl -X POST "https://api.engram.ai/v3/documents/file" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents/file" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -F "file=@document.pdf" \
   -F "containerTags=documents"
 
@@ -69,8 +69,8 @@ with open('screenshot.png', 'rb') as file:
 ```
 
 ```bash cURL
-curl -X POST "https://api.engram.ai/v3/documents/file" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents/file" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -F "file=@screenshot.png" \
   -F "containerTags=images"
 ```
@@ -88,7 +88,7 @@ const formData = new FormData();
 formData.append('file', fileInput.files[0]);
 formData.append('containerTags', 'uploads');
 
-const response = await fetch('https://api.engram.ai/v3/documents/file', {
+const response = await fetch('https://api.smaran.ai/v3/documents/file', {
   method: 'POST',
   headers: {
     'Authorization': `Bearer ${API_KEY}`
@@ -106,7 +106,7 @@ function handleUpload(file: File) {
   formData.append('file', file);
   formData.append('containerTags', 'uploads');
 
-  return fetch('https://api.engram.ai/v3/documents/file', {
+  return fetch('https://api.smaran.ai/v3/documents/file', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${API_KEY}` },
     body: formData
@@ -116,8 +116,8 @@ function handleUpload(file: File) {
 
 ```bash cURL
 # Browser uploads use FormData, same as file upload
-curl -X POST "https://api.engram.ai/v3/documents/file" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents/file" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -F "file=@document.pdf" \
   -F "containerTags=uploads"
 ```
@@ -160,8 +160,8 @@ for file_path in files:
 ```bash cURL
 # Upload each file separately with delays
 for file in *.pdf; do
-  curl -X POST "https://api.engram.ai/v3/documents/file" \
-    -H "Authorization: Bearer $ENGRAM_API_KEY" \
+  curl -X POST "https://api.smaran.ai/v3/documents/file" \
+    -H "Authorization: Bearer $SMARAN_API_KEY" \
     -F "file=@$file" \
     -F "containerTags=batch"
 

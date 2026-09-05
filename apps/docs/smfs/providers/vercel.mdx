@@ -11,7 +11,7 @@ your code actually runs:
   etc.): you can mount SMFS as a real filesystem on the server.
 - **Vercel Functions / serverless / edge**: there's no long-lived process to
   hold a FUSE mount, so use the [Bash Tool](/smfs/bash-tool)
-  (`@engram/bash`) instead. The container becomes the filesystem; no mount
+  (`@smaran/bash`) instead. The container becomes the filesystem; no mount
   needed.
 
 ## How it works
@@ -27,26 +27,26 @@ graph LR
     subgraph Your Server
         Agent["Claude Agent"] -->|"cat, ls, echo"| Mount["./memory<br/>(SMFS mount)"]
     end
-    Mount -->|sync| SM["Engram"]
+    Mount -->|sync| SM["Smaran"]
 ```
 
 ### Vercel Functions / serverless (Bash Tool)
 
-The agent runs inside `generateText` and accesses memory through `@engram/bash`,
-which proxies bash commands to your Engram container over HTTP. No mount,
+The agent runs inside `generateText` and accesses memory through `@smaran/bash`,
+which proxies bash commands to your Smaran container over HTTP. No mount,
 no FUSE, no long-lived process required.
 
 ```mermaid
 graph LR
     subgraph Vercel Function
-        AI["generateText()"] -->|"bash tool"| Bash["@engram/bash"]
+        AI["generateText()"] -->|"bash tool"| Bash["@smaran/bash"]
     end
-    Bash -->|HTTPS| SM["Engram"]
+    Bash -->|HTTPS| SM["Smaran"]
 ```
 
 ## Prerequisites
 
-- A [Engram API key](https://engram.ai)
+- A [Smaran API key](https://smaran.ai)
 - An [Anthropic API key](https://console.anthropic.com)
 - For Pattern A only: SMFS installed on your server (`curl -fsSL https://smfs.ai/install | bash`)
 
@@ -60,7 +60,7 @@ is a Claude agent running on a long-lived server you control.
 Start the mount once when your server boots — not per-request:
 
 ```bash
-smfs login --key $ENGRAM_API_KEY
+smfs login --key $SMARAN_API_KEY
 smfs mount my_agent --path ./memory
 ```
 
@@ -102,25 +102,25 @@ python3 agent.py
 
 ## Pattern B: Vercel AI SDK + Bash Tool (serverless-friendly)
 
-`@engram/bash` exposes your Engram container as a single agent tool
+`@smaran/bash` exposes your Smaran container as a single agent tool
 — `run_bash(command)` — without mounting anything. It runs anywhere TypeScript
 runs, including Vercel Functions, edge runtimes, and Lambda.
 
 ```bash
-npm install @engram/bash ai @ai-sdk/anthropic zod
+npm install @smaran/bash ai @ai-sdk/anthropic zod
 ```
 
 ```typescript api/agent.ts
 import { generateText, tool } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
-import { createBash } from "@engram/bash";
+import { createBash } from "@smaran/bash";
 import { z } from "zod";
 
 export async function POST(req: Request) {
   const { prompt } = await req.json();
 
   const { bash, toolDescription } = await createBash({
-    apiKey: process.env.ENGRAM_API_KEY!,
+    apiKey: process.env.SMARAN_API_KEY!,
     containerTag: "my_agent",
   });
 
@@ -164,6 +164,6 @@ memory path configuration, and other framework integrations.
   Use `--ephemeral` if you don't need a local cache on the server.
 - **Pattern B**: configure memory paths once at startup with
   `configureMemoryPaths(["/notes/", "/journal.md"])` to control which files
-  get distilled into Engram memories.
+  get distilled into Smaran memories.
 - Both: use `smfs grep 'query'` (Pattern A) or `sgrep 'query'` inside the
   bash tool (Pattern B) for semantic search across all files.

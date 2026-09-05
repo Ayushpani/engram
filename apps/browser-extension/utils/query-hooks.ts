@@ -1,5 +1,5 @@
 /**
- * React Query hooks for engram API
+ * React Query hooks for smaran API
  */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {

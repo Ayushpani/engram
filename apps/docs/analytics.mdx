@@ -1,14 +1,14 @@
 ---
 title: "Analytics & Monitoring"
-description: "Observe usage, errors, and logs to monitor your Engram integration"
+description: "Observe usage, errors, and logs to monitor your Smaran integration"
 icon: "chart-line"
 ---
 
-Monitor your Engram usage with detailed analytics on API calls, errors, and performance metrics.
+Monitor your Smaran usage with detailed analytics on API calls, errors, and performance metrics.
 
 ## Overview
 
-The Analytics API provides comprehensive insights into your Engram usage:
+The Analytics API provides comprehensive insights into your Smaran usage:
 
 - **Usage Statistics**: Track API calls by type, hourly trends, and per-API key breakdown
 - **Error Monitoring**: Identify top error types and patterns
@@ -43,9 +43,9 @@ Get comprehensive usage statistics including hourly breakdowns and per-key metri
 
 ```typescript TypeScript
 // Get usage for the last 24 hours
-const usage = await fetch('https://api.engram.ai/v3/analytics/usage?period=24h', {
+const usage = await fetch('https://api.smaran.ai/v3/analytics/usage?period=24h', {
   headers: {
-    'Authorization': `Bearer ${ENGRAM_API_KEY}`
+    'Authorization': `Bearer ${SMARAN_API_KEY}`
   }
 });
 
@@ -58,9 +58,9 @@ from datetime import datetime, timedelta
 
 # Get usage for the last 7 days
 response = requests.get(
-    'https://api.engram.ai/v3/analytics/usage',
+    'https://api.smaran.ai/v3/analytics/usage',
     params={'period': '7d'},
-    headers={'Authorization': f'Bearer {ENGRAM_API_KEY}'}
+    headers={'Authorization': f'Bearer {SMARAN_API_KEY}'}
 )
 
 data = response.json()
@@ -68,8 +68,8 @@ data = response.json()
 
 ```bash cURL
 # Get usage for a specific date range
-curl -X GET "https://api.engram.ai/v3/analytics/usage?from=2024-01-01T00:00:00Z&to=2024-01-31T23:59:59Z" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY"
+curl -X GET "https://api.smaran.ai/v3/analytics/usage?from=2024-01-01T00:00:00Z&to=2024-01-31T23:59:59Z" \
+  -H "Authorization: Bearer $SMARAN_API_KEY"
 ```
 
 </CodeGroup>
@@ -136,9 +136,9 @@ Same as usage endpoint - supports `from`, `to`, `period`, `page`, and `limit`.
 
 ```typescript TypeScript
 // Get errors from the last 24 hours
-const errors = await fetch('https://api.engram.ai/v3/analytics/errors?period=24h', {
+const errors = await fetch('https://api.smaran.ai/v3/analytics/errors?period=24h', {
   headers: {
-    'Authorization': `Bearer ${ENGRAM_API_KEY}`
+    'Authorization': `Bearer ${SMARAN_API_KEY}`
   }
 });
 
@@ -148,8 +148,8 @@ const data = await errors.json();
 ```python Python
 # Monitor errors and alert on spikes
 response = requests.get(
-    'https://api.engram.ai/v3/analytics/errors?period=1h',
-    headers={'Authorization': f'Bearer {ENGRAM_API_KEY}'}
+    'https://api.smaran.ai/v3/analytics/errors?period=1h',
+    headers={'Authorization': f'Bearer {SMARAN_API_KEY}'}
 )
 
 data = response.json()
@@ -157,8 +157,8 @@ data = response.json()
 
 ```bash cURL
 # Get errors for the last 7 days
-curl -X GET "https://api.engram.ai/v3/analytics/errors?period=7d" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY"
+curl -X GET "https://api.smaran.ai/v3/analytics/errors?period=7d" \
+  -H "Authorization: Bearer $SMARAN_API_KEY"
 ```
 
 </CodeGroup>
@@ -220,9 +220,9 @@ Same as usage endpoint, plus optional filters:
 
 ```typescript TypeScript
 // Get recent failed requests
-const logs = await fetch('https://api.engram.ai/v3/analytics/logs?period=1h&statusCode=500', {
+const logs = await fetch('https://api.smaran.ai/v3/analytics/logs?period=1h&statusCode=500', {
   headers: {
-    'Authorization': `Bearer ${ENGRAM_API_KEY}`
+    'Authorization': `Bearer ${SMARAN_API_KEY}`
   }
 });
 
@@ -232,12 +232,12 @@ const data = await logs.json();
 ```python Python
 # Debug specific API key usage
 response = requests.get(
-    'https://api.engram.ai/v3/analytics/logs',
+    'https://api.smaran.ai/v3/analytics/logs',
     params={
         'keyId': 'key_abc123',
         'period': '24h'
     },
-    headers={'Authorization': f'Bearer {ENGRAM_API_KEY}'}
+    headers={'Authorization': f'Bearer {SMARAN_API_KEY}'}
 )
 
 logs = response.json()['logs']
@@ -246,8 +246,8 @@ logs = response.json()['logs']
 
 ```bash cURL
 # Get all logs for debugging
-curl -X GET "https://api.engram.ai/v3/analytics/logs?period=1h&limit=50" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY"
+curl -X GET "https://api.smaran.ai/v3/analytics/logs?period=1h&limit=50" \
+  -H "Authorization: Bearer $SMARAN_API_KEY"
 ```
 
 </CodeGroup>

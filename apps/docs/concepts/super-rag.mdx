@@ -1,15 +1,15 @@
 ---
 title: "SuperRAG (Managed RAG as a service)"
 sidebarTitle: "SuperRAG"
-description: "Engram provides a managed RAG solution - extraction, indexing, storing, and retrieval."
+description: "Smaran provides a managed RAG solution - extraction, indexing, storing, and retrieval."
 icon: "bolt"
 ---
 
-Engram doesn't just store your content—it transforms it into optimized, searchable knowledge. Every upload goes through an intelligent pipeline that extracts, chunks, and indexes content in the ideal way for its type.
+Smaran doesn't just store your content—it transforms it into optimized, searchable knowledge. Every upload goes through an intelligent pipeline that extracts, chunks, and indexes content in the ideal way for its type.
 
 ## Automatic Content Intelligence
 
-When you add content, Engram:
+When you add content, Smaran:
 
 1. **Detects the content type** — PDF, code, markdown, images, video, etc.
 2. **Extracts content optimally** — Uses type-specific extraction (OCR for images, transcription for audio)
@@ -18,7 +18,7 @@ When you add content, Engram:
 5. **Builds relationships** — Connects new knowledge to existing memories
 
 ```typescript
-// Just add content — Engram handles the rest
+// Just add content — Smaran handles the rest
 await client.add({
   content: pdfBase64,
   contentType: "pdf",
@@ -32,7 +32,7 @@ No chunking strategies to configure. No embedding models to choose. It just work
 
 ## Smart Chunking by Content Type
 
-Different content types need different chunking strategies. Engram applies the optimal approach automatically:
+Different content types need different chunking strategies. Smaran applies the optimal approach automatically:
 
 ### Documents (PDF, DOCX)
 
@@ -49,7 +49,7 @@ PDFs and documents are chunked by **semantic sections** — headers, paragraphs,
 
 ### Code
 
-Code is chunked using [code-chunk](https://github.com/engramai/code-chunk), our open-source library that understands AST (Abstract Syntax Tree) boundaries:
+Code is chunked using [code-chunk](https://github.com/smaranai/code-chunk), our open-source library that understands AST (Abstract Syntax Tree) boundaries:
 
 - Functions and methods stay intact
 - Classes are chunked by method
@@ -79,7 +79,7 @@ See [Content Types](/concepts/content-types) for the full list of supported form
 
 ## Hybrid Memory + RAG
 
-Engram combines the best of both approaches in every search:
+Smaran combines the best of both approaches in every search:
 
 <CardGroup cols={2}>
   <Card title="Traditional RAG" icon="magnifying-glass">
@@ -154,7 +154,7 @@ const results = await client.search({
 | Static embeddings | Relationship-aware graph |
 | Generic search | Rerank + query rewriting |
 
-You focus on building your product. Engram handles the RAG complexity.
+You focus on building your product. Smaran handles the RAG complexity.
 
 ---
 

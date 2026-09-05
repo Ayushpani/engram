@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 		}
 
 		const response = await fetch(
-			"https://api.engram.ai/v3/documents/documents",
+			"https://api.smaran.ai/v3/documents/documents",
 			{
 				method: "POST",
 				headers: {

@@ -3,7 +3,7 @@ title: "Cloudflare"
 description: "Give your AI agent persistent memory inside a Cloudflare Container using SMFS"
 ---
 
-Mount a Engram container inside a
+Mount a Smaran container inside a
 [Cloudflare Container](https://developers.cloudflare.com/containers/) so your
 agent can read and write memory using standard filesystem commands.
 
@@ -22,7 +22,7 @@ graph LR
     subgraph Cloudflare Container
         Agent["Claude Agent"] -->|"cat, ls, echo"| Mount["/memory<br/>(SMFS mount)"]
     end
-    Mount -->|sync| SM["Engram"]
+    Mount -->|sync| SM["Smaran"]
 ```
 
 ### Agent outside the container
@@ -36,12 +36,12 @@ graph LR
     subgraph Container ["Cloudflare Container"]
         Mount["/memory<br/>(SMFS mount)"]
     end
-    Mount -->|sync| SM["Engram"]
+    Mount -->|sync| SM["Smaran"]
 ```
 
 ## Prerequisites
 
-- A [Engram API key](https://engram.ai)
+- A [Smaran API key](https://smaran.ai)
 - An [Anthropic API key](https://console.anthropic.com)
 - A [Cloudflare account](https://dash.cloudflare.com) with Containers enabled (Workers Paid plan)
 - [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/)
@@ -87,7 +87,7 @@ ENTRYPOINT ["/entrypoint.sh"]
 #!/bin/bash
 set -e
 
-smfs login --key "$ENGRAM_API_KEY"
+smfs login --key "$SMARAN_API_KEY"
 smfs mount my_agent --ephemeral --path /memory --foreground &
 sleep 3
 
@@ -130,7 +130,7 @@ export class MyAgentContainer extends Container {
   // Forward Worker secrets into the container at start time.
   // `this.env` is the Worker env object, populated from wrangler secrets.
   envVars = {
-    ENGRAM_API_KEY: this.env.ENGRAM_API_KEY,
+    SMARAN_API_KEY: this.env.SMARAN_API_KEY,
     ANTHROPIC_API_KEY: this.env.ANTHROPIC_API_KEY,
   };
 }
@@ -146,7 +146,7 @@ export default {
 
 interface Env {
   MY_CONTAINER: DurableObjectNamespace<MyAgentContainer>;
-  ENGRAM_API_KEY: string;
+  SMARAN_API_KEY: string;
   ANTHROPIC_API_KEY: string;
 }
 ```
@@ -177,7 +177,7 @@ interface Env {
 ```
 
 ```bash
-wrangler secret put ENGRAM_API_KEY
+wrangler secret put SMARAN_API_KEY
 wrangler secret put ANTHROPIC_API_KEY
 wrangler deploy
 ```
@@ -228,7 +228,7 @@ gunicorn against the Flask app instead of `python3 agent.py`:
 #!/bin/bash
 set -e
 
-smfs login --key "$ENGRAM_API_KEY"
+smfs login --key "$SMARAN_API_KEY"
 smfs mount my_agent --ephemeral --path /memory --foreground &
 sleep 3
 
@@ -266,7 +266,7 @@ import { Container, getContainer } from "@cloudflare/containers";
 export class ExecContainer extends Container {
   defaultPort = 8080;
   envVars = {
-    ENGRAM_API_KEY: this.env.ENGRAM_API_KEY,
+    SMARAN_API_KEY: this.env.SMARAN_API_KEY,
   };
 }
 
@@ -288,7 +288,7 @@ export default {
 
 interface Env {
   MY_CONTAINER: DurableObjectNamespace<ExecContainer>;
-  ENGRAM_API_KEY: string;
+  SMARAN_API_KEY: string;
 }
 ```
 
@@ -318,7 +318,7 @@ interface Env {
 ```
 
 ```bash
-wrangler secret put ENGRAM_API_KEY
+wrangler secret put SMARAN_API_KEY
 wrangler deploy
 ```
 
@@ -327,7 +327,7 @@ wrangler deploy
 ## Tips
 
 - Use `--ephemeral` for container mounts — keeps the cache in memory only, but
-  writes still push to Engram
+  writes still push to Smaran
 - Use `smfs grep 'query'` for semantic search across all files
 - Worker secrets aren't automatically visible inside the container. Pass each
   one through the `envVars` field on your `Container` subclass (see the Worker

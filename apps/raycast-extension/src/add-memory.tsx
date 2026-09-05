@@ -11,14 +11,14 @@ import {
 import { useState, useEffect } from "react"
 import { addMemory, fetchProjects } from "./api"
 import { usePromise } from "@raycast/utils"
-import { withEngram } from "./withEngram"
+import { withSmaran } from "./withSmaran"
 
 interface FormValues {
 	content: string
 	project: string
 }
 
-export default withEngram(Command)
+export default withSmaran(Command)
 function Command() {
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [initialContent, setInitialContent] = useState("")

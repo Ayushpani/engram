@@ -4,7 +4,7 @@ description: "Crawl and sync websites automatically with scheduled recrawling an
 icon: "globe"
 ---
 
-Connect websites to automatically crawl and sync web pages into your Engram knowledge base. The web crawler respects robots.txt rules, includes SSRF protection, and automatically recrawls sites on a schedule.
+Connect websites to automatically crawl and sync web pages into your Smaran knowledge base. The web crawler respects robots.txt rules, includes SSRF protection, and automatically recrawls sites on a schedule.
 
 <Warning>
 The web crawler connector requires a **Scale Plan** or **Enterprise Plan**.
@@ -17,10 +17,10 @@ The web crawler connector requires a **Scale Plan** or **Enterprise Plan**.
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Engram from 'engram';
+    import Smaran from 'smaran';
 
-    const client = new Engram({
-      apiKey: process.env.ENGRAM_API_KEY!
+    const client = new Smaran({
+      apiKey: process.env.SMARAN_API_KEY!
     });
 
     const connection = await client.connections.create('web-crawler', {
@@ -40,10 +40,10 @@ The web crawler connector requires a **Scale Plan** or **Enterprise Plan**.
   </Tab>
   <Tab title="Python">
     ```python
-    from engram import Engram
+    from smaran import Smaran
     import os
 
-    client = Engram(api_key=os.environ.get("ENGRAM_API_KEY"))
+    client = Smaran(api_key=os.environ.get("SMARAN_API_KEY"))
 
     connection = client.connections.create(
         'web-crawler',
@@ -63,8 +63,8 @@ The web crawler connector requires a **Scale Plan** or **Enterprise Plan**.
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST "https://api.engram.ai/v3/connections/web-crawler" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/web-crawler" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "redirectUrl": "https://yourapp.com/callback",
@@ -133,8 +133,8 @@ Unlike other connectors, the web crawler doesn't require OAuth authentication. T
   <Tab title="cURL">
     ```bash
     # Get connection details by provider and tags
-    curl -X POST "https://api.engram.ai/v3/connections/web-crawler/connection" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/web-crawler/connection" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"containerTags": ["user-123", "website-sync"]}'
 
@@ -148,8 +148,8 @@ Unlike other connectors, the web crawler doesn't require OAuth authentication. T
     # }
 
     # List synced documents
-    curl -X POST "https://api.engram.ai/v3/connections/web-crawler/documents" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/web-crawler/documents" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"containerTags": ["user-123", "website-sync"]}'
 
@@ -230,8 +230,8 @@ The recrawl schedule is automatically assigned when the connection is created. S
   <Tab title="cURL">
     ```bash
     # List all connections
-    curl -X POST "https://api.engram.ai/v3/connections/list" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X POST "https://api.smaran.ai/v3/connections/list" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"containerTags": ["user-123"]}'
 
@@ -283,12 +283,12 @@ Remove a web crawler connection when no longer needed:
   <Tab title="cURL">
     ```bash
     # Delete by connection ID
-    curl -X DELETE "https://api.engram.ai/v3/connections/connection_id_123" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY"
+    curl -X DELETE "https://api.smaran.ai/v3/connections/connection_id_123" \
+      -H "Authorization: Bearer $SMARAN_API_KEY"
 
     # Delete by provider and container tags
-    curl -X DELETE "https://api.engram.ai/v3/connections/web-crawler" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X DELETE "https://api.smaran.ai/v3/connections/web-crawler" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"containerTags": ["user-123"]}'
     ```
@@ -298,7 +298,7 @@ Remove a web crawler connection when no longer needed:
 <Note>
 Deleting a connection will:
 - Stop all future crawls from the website
-- Keep existing synced documents in Engram (they won't be deleted)
+- Keep existing synced documents in Smaran (they won't be deleted)
 - Remove the connection configuration
 </Note>
 
@@ -346,8 +346,8 @@ Control which web pages get synced using the settings API:
   <Tab title="cURL">
     ```bash
     # Configure intelligent filtering for web content
-    curl -X PATCH "https://api.engram.ai/v3/settings" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+    curl -X PATCH "https://api.smaran.ai/v3/settings" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "shouldLLMFilter": true,

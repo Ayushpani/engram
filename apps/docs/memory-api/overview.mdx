@@ -1,11 +1,11 @@
 ---
 title: "Quickstart - 5 mins"
-description: "Learn how to integrate engram into your application"
+description: "Learn how to integrate smaran into your application"
 ---
 
 ## Authentication
 
-Head to [engram's Developer Platform](https://console.engram.ai) built to help you monitor and manage every aspect of the API.
+Head to [smaran's Developer Platform](https://console.smaran.ai) built to help you monitor and manage every aspect of the API.
 
 All API requests require authentication using an API key. Include your API key as follows:
 
@@ -16,17 +16,17 @@ Authorization: Bearer YOUR_API_KEY
 ```
 
 ```typescript Typescript
-// npm install engram
+// npm install smaran
 
-const client = new engram({
+const client = new smaran({
   apiKey: "YOUR_API_KEY",
 });
 ```
 
 ```python Python
-# pip install engram
+# pip install smaran
 
-client = engram(
+client = smaran(
     api_key="YOUR_API_KEY",
 )
 ```
@@ -35,20 +35,20 @@ client = engram(
 
 ## Installing the clients
 
-You can use engram through the APIs, or using our SDKs
+You can use smaran through the APIs, or using our SDKs
 
 <CodeGroup>
 
 ```bash cURL
-https://api.engram.ai/v3
+https://api.smaran.ai/v3
 ```
 
 ```bash Typescript
-npm i engram
+npm i smaran
 ```
 
 ```bash Python
-pip install engram
+pip install smaran
 ```
 
 </CodeGroup>
@@ -58,10 +58,10 @@ pip install engram
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/documents \
+curl https://api.smaran.ai/v3/documents \
   --request POST \
   --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   -d '{"content": "This is the content of my first memory."}'
 ```
 
@@ -79,14 +79,14 @@ client.memory.add(
 
 </CodeGroup>
 
-This will add a new memory to your engram account.
+This will add a new memory to your smaran account.
 
 Try it out in the API Reference tab.
 
 ## Content Processing
 
 <Accordion title="Processing steps" icon="sparkles">
-  When you add content to engram, it goes through several processing steps:
+  When you add content to smaran, it goes through several processing steps:
 
     1. **Queued**: Initial state when content is submitted
     2. **Extracting**: Content is being extracted from the source
@@ -111,10 +111,10 @@ Try it out in the API Reference tab.
 <CodeGroup>
 
 ```bash cURL
-curl https://api.engram.ai/v3/search \
+curl https://api.smaran.ai/v3/search \
   --request POST \
   --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer ENGRAM_API_KEY' \
+  --header 'Authorization: Bearer SMARAN_API_KEY' \
   -d '{"q": "This is the content of my first memory."}'
 ```
 
@@ -134,9 +134,9 @@ client.search.execute(
 
 Try it out in the API Reference tab.
 
-You can do a lot more with engram, and we will walk through everything you need to.
+You can do a lot more with smaran, and we will walk through everything you need to.
 
-Next, explore the features available in engram
+Next, explore the features available in smaran
 
 <CardGroup cols={2}>
   <Card title="Adding memories" icon="plus" href="/memory-api/creation/adding-memories">

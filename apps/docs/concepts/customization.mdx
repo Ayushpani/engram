@@ -1,15 +1,15 @@
 ---
 title: "Customizing for Your Use Case"
 sidebarTitle: "Customization"
-description: "Configure Engram's behavior for your specific application"
+description: "Configure Smaran's behavior for your specific application"
 icon: "settings-2"
 ---
 
-Configure how Engram processes and retrieves content for your specific use case.
+Configure how Smaran processes and retrieves content for your specific use case.
 
 ## Filter Prompts
 
-Tell Engram what content matters during ingestion. This helps filter and prioritize what gets indexed.
+Tell Smaran what content matters during ingestion. This helps filter and prioritize what gets indexed.
 
 ```typescript
 // Example: Brand guidelines assistant
@@ -117,7 +117,7 @@ await client.settings.update({
 | Citations & references | `256-512` | Precise source attribution |
 | Q&A / Support | `512-1024` | Balanced context |
 | Long-form analysis | `1024-2048` | More context per chunk |
-| Default | `-1` | Engram's optimized default |
+| Default | `-1` | Smaran's optimized default |
 
 <Note>
 Smaller chunks generate more memories per document. Larger chunks provide more context but may reduce precision.
@@ -127,12 +127,12 @@ Smaller chunks generate more memories per document. Larger chunks provide more c
 
 ## Connector Branding
 
-Show "Log in to **YourApp**" instead of "Log in to Engram" when users connect external services. See [Connectors Overview](/connectors/overview) for the full list of supported integrations.
+Show "Log in to **YourApp**" instead of "Log in to Smaran" when users connect external services. See [Connectors Overview](/connectors/overview) for the full list of supported integrations.
 
 <AccordionGroup>
   <Accordion title="Google Drive">
     1. Create OAuth credentials in [Google Cloud Console](https://console.cloud.google.com/)
-    2. Redirect URI: `https://api.engram.ai/v3/connections/google-drive/callback`
+    2. Redirect URI: `https://api.smaran.ai/v3/connections/google-drive/callback`
 
     ```typescript
     await client.settings.update({
@@ -144,7 +144,7 @@ Show "Log in to **YourApp**" instead of "Log in to Engram" when users connect ex
   </Accordion>
   <Accordion title="Notion">
     1. Create integration at [Notion Developers](https://developers.notion.com/)
-    2. Redirect URI: `https://api.engram.ai/v3/connections/notion/callback`
+    2. Redirect URI: `https://api.smaran.ai/v3/connections/notion/callback`
 
     ```typescript
     await client.settings.update({
@@ -156,7 +156,7 @@ Show "Log in to **YourApp**" instead of "Log in to Engram" when users connect ex
   </Accordion>
   <Accordion title="OneDrive">
     1. Register app in [Azure Portal](https://portal.azure.com/)
-    2. Redirect URI: `https://api.engram.ai/v3/connections/onedrive/callback`
+    2. Redirect URI: `https://api.smaran.ai/v3/connections/onedrive/callback`
 
     ```typescript
     await client.settings.update({

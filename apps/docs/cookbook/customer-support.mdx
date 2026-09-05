@@ -17,7 +17,7 @@ A customer support bot that:
 ## Prerequisites
 
 - Node.js 18+ or Python 3.8+
-- Engram API key
+- Smaran API key
 - OpenAI API key
 - Customer database or CRM integration
 - Basic understanding of customer support workflows
@@ -29,10 +29,10 @@ A customer support bot that:
 <Tabs>
   <Tab title="Next.js">
     ```typescript lib/customer-context.ts
-    import { Engram } from 'engram'
+    import { Smaran } from 'smaran'
 
-    const client = new Engram({
-      apiKey: process.env.ENGRAM_API_KEY!
+    const client = new Smaran({
+      apiKey: process.env.SMARAN_API_KEY!
     })
 
     interface Customer {
@@ -196,7 +196,7 @@ A customer support bot that:
 
   <Tab title="Python">
     ```python customer_context.py
-    from engram import Engram
+    from smaran import Smaran
     import os
     from typing import Dict, List, Any, Optional
     from datetime import datetime
@@ -222,7 +222,7 @@ A customer support bot that:
 
     class CustomerContextManager:
         def __init__(self):
-            self.client = Engram(api_key=os.getenv("ENGRAM_API_KEY"))
+            self.client = Smaran(api_key=os.getenv("SMARAN_API_KEY"))
 
         def _get_container_tag(self, customer_id: str) -> str:
             return f"customer_{customer_id}"

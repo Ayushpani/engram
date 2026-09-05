@@ -16,10 +16,10 @@ Update existing memories by their ID when you know the specific memory you want 
 <CodeGroup>
 
 ```typescript Typescript
-import Engram from 'engram';
+import Smaran from 'smaran';
 
-const client = new Engram({
-  apiKey: process.env.ENGRAM_API_KEY!
+const client = new Smaran({
+  apiKey: process.env.SMARAN_API_KEY!
 });
 
 // Update by memory ID
@@ -33,10 +33,10 @@ console.log(updated.id); // "memory_id_123"
 ```
 
 ```python Python
-from engram import Engram
+from smaran import Smaran
 import os
 
-client = Engram(api_key=os.environ.get("ENGRAM_API_KEY"))
+client = Smaran(api_key=os.environ.get("SMARAN_API_KEY"))
 
 # Update by memory ID
 updated = client.documents.update(
@@ -50,8 +50,8 @@ print(f"ID: {updated.id}")  # "memory_id_123"
 ```
 
 ```bash cURL
-curl -X PATCH "https://api.engram.ai/v3/documents/memory_id_123" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X PATCH "https://api.smaran.ai/v3/documents/memory_id_123" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "content": "Updated content here",
@@ -72,10 +72,10 @@ Use `customId` for idempotent operations where the same `customId` with `add()` 
 <CodeGroup>
 
 ```typescript Typescript
-import Engram from 'engram';
+import Smaran from 'smaran';
 
-const client = new Engram({
-  apiKey: process.env.ENGRAM_API_KEY!
+const client = new Smaran({
+  apiKey: process.env.SMARAN_API_KEY!
 });
 
 const customId = 'user-note-001';
@@ -98,10 +98,10 @@ const updated = await client.add({
 ```
 
 ```python Python
-from engram import Engram
+from smaran import Smaran
 import os
 
-client = Engram(api_key=os.environ.get("ENGRAM_API_KEY"))
+client = Smaran(api_key=os.environ.get("SMARAN_API_KEY"))
 
 custom_id = 'user-note-001'
 
@@ -127,8 +127,8 @@ print(f'Same memory? {created.id == updated.id}')  # True
 
 ```bash cURL
 # First call - creates memory
-curl -X POST "https://api.engram.ai/v3/documents" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "content": "Initial content",
@@ -139,8 +139,8 @@ curl -X POST "https://api.engram.ai/v3/documents" \
 # Response: {"id": "mem_abc123", "status": "queued", "customId": "user-note-001"}
 
 # Second call - updates existing (same customId)
-curl -X POST "https://api.engram.ai/v3/documents" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X POST "https://api.smaran.ai/v3/documents" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "content": "Updated content",
@@ -194,8 +194,8 @@ except Exception as e:
 ```
 
 ```bash cURL
-curl -X DELETE "https://api.engram.ai/v3/documents/memory_id_123" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY"
+curl -X DELETE "https://api.smaran.ai/v3/documents/memory_id_123" \
+  -H "Authorization: Bearer $SMARAN_API_KEY"
 
 # Response: 204 No Content (success)
 # Response: 404 Not Found (memory doesn't exist)
@@ -252,8 +252,8 @@ print(f'Bulk delete result: {result}')
 ```
 
 ```bash cURL
-curl -X DELETE "https://api.engram.ai/v3/documents/bulk" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X DELETE "https://api.smaran.ai/v3/documents/bulk" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "ids": [
@@ -310,8 +310,8 @@ print(f'Bulk delete by tags result: {result}')
 ```
 
 ```bash cURL
-curl -X DELETE "https://api.engram.ai/v3/documents/bulk" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X DELETE "https://api.smaran.ai/v3/documents/bulk" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "containerTags": ["user-123", "project-old", "archived-content"]
@@ -383,8 +383,8 @@ print(f'Active memories: {len(active_memories.memories)}')
 
 ```bash cURL
 # Soft delete using metadata
-curl -X PATCH "https://api.engram.ai/v3/documents/memory_id" \
-  -H "Authorization: Bearer $ENGRAM_API_KEY" \
+curl -X PATCH "https://api.smaran.ai/v3/documents/memory_id" \
+  -H "Authorization: Bearer $SMARAN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "metadata": {
@@ -488,8 +488,8 @@ for ((i=0; i<${#MEMORY_IDS[@]}; i+=BATCH_SIZE)); do
     echo "Processing batch $((i/BATCH_SIZE + 1))"
 
     response=$(curl -s -X DELETE \
-      "https://api.engram.ai/v3/documents/bulk" \
-      -H "Authorization: Bearer $ENGRAM_API_KEY" \
+      "https://api.smaran.ai/v3/documents/bulk" \
+      -H "Authorization: Bearer $SMARAN_API_KEY" \
       -H "Content-Type: application/json" \
       -d "{\"ids\": $batch_json}")
 

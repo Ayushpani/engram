@@ -10,13 +10,13 @@ import {
 } from "@raycast/api"
 import type { ComponentType } from "react"
 
-export function withEngram<P extends object>(Component: ComponentType<P>) {
-	return function EngramWrappedComponent(props: P) {
+export function withSmaran<P extends object>(Component: ComponentType<P>) {
+	return function SmaranWrappedComponent(props: P) {
 		const { isLoading, data } = usePromise(fetchSettings, [], {
 			failureToastOptions: {
 				title: "Invalid API Key",
 				message:
-					"Invalid API key. Please check your API key in preferences. Get a new one from https://engram.link/raycast",
+					"Invalid API key. Please check your API key in preferences. Get a new one from https://smaran.link/raycast",
 			},
 		})
 
@@ -28,7 +28,7 @@ export function withEngram<P extends object>(Component: ComponentType<P>) {
 					<List.EmptyView
 						icon={Icon.ExclamationMark}
 						title="API Key Required"
-						description="Please configure your Engram API key to search memories"
+						description="Please configure your Smaran API key to search memories"
 						actions={
 							<ActionPanel>
 								<Action
